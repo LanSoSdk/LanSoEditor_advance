@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+   
+    <!-- 
+    <item>
+        <shape android:shape="oval" >
+            <corners android:radius="90dip"/>
+            <solid android:color="@android:color/white" />
+            <size android:width="170dp" android:height="170dp"/>
+        </shape>
+    </item>
+     -->
+	<item android:bottom="8dp" android:right="8dp" android:top="8dp" android:left="8dp" >
+	    <selector xmlns:android="http://schemas.android.com/apk/res/android">
+	        
+	        <!-- 按下去的颜色 -->
+	        <item android:state_pressed="true">
+				
+				<shape android:shape="oval" >
+		            <corners android:radius="90dip"/>
+		            <solid android:color="@color/orange500" />
+		            <size android:width="162dp" android:height="162dp"/>
+		              <stroke android:width="2dp" android:color="@color/white"/>
+        		</shape>
+        		
+			</item>
+			
+	        <!-- 显示的颜色 -->
+	        <item >
+		       
+	         <shape android:shape="oval" >
+		            <corners android:radius="90dip"/>
+		            <solid android:color="@color/gold" />
+		            <size android:width="162dp" android:height="162dp"/>
+		              <stroke android:width="2dp" android:color="@color/white"/>
+        		</shape>
+		        
+	            
+	        </item>
+	        
+	        
+		</selector>
+	</item>
+	
+</layer-list>

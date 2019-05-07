@@ -1,0 +1,77 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="说明:竖屏显示的视频转横屏:对应代码在:VideoV2HActivity.java中."/>
+
+
+          <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_vertical2h_drawpadview"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dip"
+            android:layout_height="0dip"
+            android:layout_weight="2"/>
+          <TextView 
+				    android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/red"
+				    android:text="此5个效果仅是举例, 架构型SDK,容器和图层,可以任意叠加布局."/>
+        <LinearLayout
+    	    android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+			<Button
+				android:id="@+id/id_vertical2h_nobg"
+				android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/button_onlypress_bg"
+				android:layout_marginLeft="20dip" android:layout_marginRight="20dip" android:text="无背景" android:textColor="@color/red"/>
+
+			<LinearLayout
+		           android:layout_width="match_parent" 
+		           android:layout_height="wrap_content"
+		           android:orientation="horizontal">
+		           <Button 
+		               android:id="@+id/id_vertical2h_bitmapbg" android:text="图片背景" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/red"/>
+		            <Button 
+		               android:id="@+id/id_vertical2h_videobg" android:text="视频背景" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/red"/>
+		             <Button 
+		               android:id="@+id/id_vertical2h_blurbg" android:text="背景虚化" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/red"/>
+				</LinearLayout>
+             
+		        <LinearLayout
+		           android:layout_width="match_parent"
+		           android:layout_height="wrap_content"
+		           android:orientation="horizontal">
+
+		           <Button
+		               android:id="@+id/id_vertical2h_3rowbg" android:text="三列视频" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/red"/>
+				</LinearLayout>
+
+
+			<Button
+				android:id="@+id/id_vertical2h_export"
+				android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/button_onlypress_bg"
+				android:layout_marginLeft="20dip" android:layout_marginRight="20dip" android:text="导出(后台处理)" android:textColor="@color/red"/>
+
+
+		</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

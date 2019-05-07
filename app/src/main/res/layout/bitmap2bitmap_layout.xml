@@ -1,0 +1,146 @@
+<RelativeLayout
+    android:id="@+id/id_DrawPad_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/red">
+   
+    <!-- 这里暂定高度是480dip, 您可以任意布局. -->
+       <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_bmp2bmp_drawpadview"
+            android:layout_width="wrap_content"
+            android:layout_height="480dp"
+           android:layout_centerHorizontal="true"
+            />
+        <com.lansosdk.box.ViewLayerRelativeLayout
+	        android:id="@+id/id_bmp2bmp_gllayout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:background="@android:color/transparent" >
+	        
+			<com.example.advanceDemo.view.ImageTouchView
+			        android:id="@+id/id_bmp2bmp_switcher"
+			        android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			        android:layout_centerInParent="true"
+			        android:scaleType="matrix" />
+		  	    <com.example.advanceDemo.view.StickerView 
+		  	        android:id="@+id/id_bmp2bmp_stickview"
+		  	        android:layout_width="match_parent"
+		  	        android:layout_height="match_parent"
+		        	android:layout_centerInParent="true"
+		  	        />
+		  	     <com.example.advanceDemo.view.TextStickerView 
+		  	         android:id="@+id/id_bmp2bmp_textstickview"
+		  	        android:layout_width="match_parent"
+		  	        android:layout_height="match_parent"
+		        	android:layout_centerInParent="true"
+		  	        />
+   	 </com.lansosdk.box.ViewLayerRelativeLayout>
+   	 
+        <ScrollView 
+           	android:layout_below="@id/id_bmp2bmp_drawpadview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                
+                
+                 <LinearLayout
+	       	android:id="@+id/id_bmp2bmp_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+		  	     
+             <Button 
+	        	android:id="@+id/id_bmp2bmp_btnfilter"
+		         android:layout_width="0dip"
+		         android:layout_weight="1"
+		         android:layout_height="wrap_content"
+		         android:layout_margin="5dip"
+		         android:background="@drawable/button_btn_bg"
+		         android:text="滤镜"/>
+             
+             <Button 
+		        android:id="@+id/id_bmp2bmp_addstick"
+		         android:layout_width="0dip"
+		         android:layout_weight="1"
+		         android:layout_height="wrap_content"
+		         android:layout_margin="5dip"
+		         android:background="@drawable/button_btn_bg"
+		         android:text="贴纸"/>
+             
+		      <Button 
+		          android:id="@+id/id_bmp2bmp_addtext"
+		         android:layout_width="0dip"
+		         android:layout_weight="1"
+		         android:layout_height="wrap_content"
+		         android:layout_margin="5dip"
+		         android:background="@drawable/button_btn_bg"
+		         android:text="文字"/>
+        </LinearLayout>
+        
+   
+          <LinearLayout 
+              android:id="@+id/id_bmp2bmp_filterseek_layout"
+              android:layout_below="@id/id_bmp2bmp_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+              <TextView 
+                  android:layout_width="0dip"
+                  android:layout_weight="2"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:text="滤镜调节"/>
+              
+                <SeekBar 
+			      android:id="@+id/id_bmp2bmp_filter_seekbar"
+			      android:layout_width="0dip"
+			      android:layout_weight="6"
+                  android:layout_gravity="center_vertical"
+			      android:layout_height="wrap_content"
+			      android:layout_margin="5dip"/>
+          </LinearLayout>
+          <Button
+              android:id="@+id/id_bmp2bmp_export_btn"
+              android:layout_below="@id/id_bmp2bmp_filterseek_layout" 
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="40dip"
+              android:layout_marginRight="40dip"
+              android:background="@drawable/button_btn_bg"
+              android:text="导出图片"/>
+          
+            </LinearLayout>
+        </ScrollView>
+          <!-- 显示图片 -->
+          <RelativeLayout 
+              android:id="@+id/id_bmp2bmp_showlayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:visibility="gone"
+              android:background="@color/black">
+               <ImageView 
+		        android:id="@+id/id_bmp2bmp_showimg_iv"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:layout_centerInParent="true"
+		        android:scaleType="centerInside"
+		        />
+              <Button 
+		        android:id="@+id/id_bmp2bmp_showimg_btn"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@null"
+                  android:textColor="@color/red"
+                  android:textSize="20dip"
+                  android:text="关闭"/>
+          </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+     
+     <com.example.advanceDemo.view.FilterView
+            android:id="@+id/video_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+   <Button 
+            android:id="@+id/id_filter_saveplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看实时保存画面"
+            android:layout_margin="5dip"
+            android:layout_centerInParent="true"/>
+    <LinearLayout 
+        android:id="@+id/id_player_control_linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+          <Button
+            android:id="@+id/id_player_btnselectfilter"
+            android:layout_width="match_parent"
+            android:layout_margin="20dip"
+            android:layout_height="wrap_content"
+            android:text="选择滤镜效果."/>
+        
+          <LinearLayout 
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+              
+              <TextView 
+                  android:layout_width="0dip"
+                  android:layout_weight="2"
+                  android:layout_height="wrap_content"
+                  android:text="滤镜调节"/>
+              
+                <SeekBar 
+			      android:id="@+id/id_player_seekbar1"
+			      android:layout_width="0dip"
+			      android:layout_weight="6"
+			      android:layout_height="wrap_content"
+			      android:layout_margin="5dip"/>
+          </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

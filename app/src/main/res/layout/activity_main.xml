@@ -1,0 +1,126 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" 
+    android:layout_width="match_parent"
+     android:layout_height="match_parent"
+    android:background="#FFA500"
+    android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFA500"
+    android:orientation="vertical" >
+
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请选择视频文件"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"/>
+    
+    <LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    
+         <Button
+             android:id="@+id/id_main_use_default_videobtn"
+             android:layout_width="0dip"
+             android:layout_weight="5"
+             android:layout_height="60dip"
+             android:background="@drawable/rect_button_bg"
+             android:text="使用默认演示视频"
+             />
+         <ImageView
+             android:id="@+id/id_main_select_video"
+             android:layout_width="0dip"
+             android:layout_weight="2"
+             android:layout_height="60dip"
+             android:src="@drawable/ic_menu_archive"
+             />
+	</LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_main_tvvideo"/>
+    
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFA500"
+    android:orientation="vertical" >
+
+
+     <RelativeLayout  android:id="@+id/id_mainlist_camerarecord" style="@style/main_item_reletivelayout2">
+           	 <TextView   android:text="摄像头录制" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+	
+     	
+     <RelativeLayout  android:id="@+id/id_mainlist_somelayer" style="@style/main_item_reletivelayout2">
+           	 <TextView   android:text="图层" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+
+    <RelativeLayout  android:id="@+id/id_mainlist_changjing" style="@style/main_item_reletivelayout2">
+           	 <TextView   android:text="场景举例" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+	
+         
+      <RelativeLayout  android:id="@+id/id_mainlist_douyin" style="@style/main_item_reletivelayout2">
+           	 <TextView   android:text="抖音  效果" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+
+		<RelativeLayout  android:id="@+id/id_mainlist_weishang" style="@style/main_item_reletivelayout2">
+			<TextView   android:text="AE动效/微商  效果" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/>
+		</RelativeLayout>
+
+		<RelativeLayout  android:id="@+id/id_mainlist_gamevideo" style="@style/main_item_reletivelayout2">
+			<TextView   android:text="游戏视频  效果" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/>
+		</RelativeLayout>
+
+		<RelativeLayout  android:id="@+id/id_mainlist_videoonedo" style="@style/main_item_reletivelayout2">
+			<TextView   android:text="常见处理" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/>
+		</RelativeLayout>
+
+		<RelativeLayout  android:id="@+id/id_mainlist_bitmaps" style="@style/main_item_reletivelayout2">
+				 <TextView   android:text="图片/声音容器" style="@style/main_item_textview"/>
+				<TextView  style="@style/main_item_arrow"/>
+		</RelativeLayout>
+
+		<RelativeLayout  android:id="@+id/id_mainlist_videoplay" style="@style/main_item_reletivelayout2">
+			 <TextView   android:text="直接播放" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/>
+		</RelativeLayout>
+</LinearLayout>
+ 
+     
+   
+	
+		
+
+	
+    <RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="150dip"
+	        android:gravity="center_vertical"
+	        android:background="#FFFFFF"
+	        android:layout_marginTop="20dip"
+	         >
+	         <TextView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="10dip"
+		        android:text="@string/adv_hint5"
+		        android:textColor="#0000ff"/>
+	</RelativeLayout>
+
+</LinearLayout>
+</ScrollView>

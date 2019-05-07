@@ -1,0 +1,49 @@
+<RelativeLayout
+    android:id="@+id/id_DrawPad_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+     
+	<com.example.advanceDemo.view.MarkArrowView
+            android:id="@+id/markarrow_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+	
+	 <LinearLayout 
+          android:id="@+id/id_markarrow_saveplay"
+        android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/corners_btn_orange_bg"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="50dip"
+          android:orientation="vertical">
+		  	  
+           <TextView 
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="视频已经为您实时生成, 请点击预览"
+              android:layout_margin="5dip"
+              android:textColor="@color/red"
+              />
+          <ImageView 
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:src="@drawable/play2"/>
+      </LinearLayout>
+      	   
+      	  
+      	<TextView 
+      	    android:layout_width="match_parent"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/video_remark"
+      	    android:textSize="20sp"
+      	    android:textColor="@color/red"
+      	    android:gravity="center_horizontal"
+      	    android:layout_margin="10dip"
+      	    android:layout_alignParentBottom="true"/>  
+</RelativeLayout>

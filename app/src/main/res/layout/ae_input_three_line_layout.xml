@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="8"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/id_aeinput_textlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="请输入3行文字:"
+                android:textSize="20sp"
+                android:textColor="@color/red"/>
+
+            <EditText
+                android:id="@+id/id_aeinput_et1"
+                android:layout_margin="10dip"
+                android:background="@drawable/corners_bg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp50"
+                android:hint="第一行文字"/>
+            <EditText
+                android:id="@+id/id_aeinput_et2"
+                android:layout_margin="10dip"
+                android:background="@drawable/corners_bg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp50"
+                android:hint="第二行文字"/>
+            <EditText
+                android:id="@+id/id_aeinput_et3"
+                android:layout_margin="10dip"
+                android:background="@drawable/corners_bg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp50"
+                android:hint="第三行文字"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/id_aeinput_btnselect"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="20dip"
+            android:layout_centerInParent="true"
+            android:text="请选择视频"
+            android:visibility="gone"
+            android:background="@drawable/button_btn_bg" />
+
+        <TextView
+            android:id="@+id/id_aeinput_tvWordHint"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="20dip"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:text="替换文字, 为演示方便,直接代码中固定,实际可修改"/>
+
+        <LinearLayout
+            android:id="@+id/id_aeinput_imagelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="用图片展示:"
+                android:textSize="20sp"
+                android:textColor="@color/red"/>
+            <ImageView
+                android:id="@+id/id_aeinput_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/id_aeinput_start"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="开始处理"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dip"
+        android:background="@drawable/button_btn_bg"/>
+</LinearLayout>

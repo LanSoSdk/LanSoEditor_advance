@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+  	android:background="@color/white_40" >
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:text="DrawPad是一个容器, 内部可以放任意图层,并调节图层的各种动作.\n这里仅仅是常见举例,更丰富的功能请查看我们其他举例."
+        android:textColor="@color/red"/>
+    
+      <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+         >
+	       <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+	        	 <include 
+				       layout="@layout/onedo_music_merge"/>
+		        <include 
+				       layout="@layout/onedo_scale_merge"/>
+		         <include 
+				       layout="@layout/onedo_compress_merge"/>
+		         <include 
+				       layout="@layout/onedo_cutduration_merge"/>
+		         <include 
+				       layout="@layout/onedo_crop_merge"/>
+		         <include 
+				       layout="@layout/onedo_filter_merge"/>
+		        <include 
+				       layout="@layout/onedo_logo_merge"/>
+		          
+		        <include 
+				       layout="@layout/onedo_addword_merge"/>
+
+		        <RelativeLayout 
+	           		android:layout_width="match_parent"
+	           		android:layout_height="100dip">
+		            
+		            <Button
+		                android:id="@+id/id_onedo_start_process" 
+		                android:layout_width="match_parent"
+		                android:layout_margin="10dip"
+		                android:layout_height="60dip"
+		                android:layout_centerInParent="true"
+            			android:background="@drawable/rect_button_bg"
+		                android:text="开始处理"/>
+		        </RelativeLayout>
+		           
+	   	  </LinearLayout>
+	   	  
+	    
+     </ScrollView>
+
+      
+</LinearLayout>

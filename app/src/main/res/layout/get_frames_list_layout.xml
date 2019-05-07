@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFA500"
+    android:orientation="vertical" >
+    
+   <RelativeLayout  android:id="@+id/id_getframe_testtime" style="@style/main_item_reletivelayout">
+           	 <TextView   android:text="测试获取所有帧的速度[真实时间]" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+	
+    <RelativeLayout  android:id="@+id/id_getframe_get25frame" style="@style/main_item_reletivelayout">
+           	 <TextView   android:text="平均获取25帧" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+	
+     <RelativeLayout  android:id="@+id/id_getframe_get60frame" style="@style/main_item_reletivelayout">
+           	 <TextView   android:text="平均获取60帧" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+	
+      <RelativeLayout  android:id="@+id/id_getframe_allframe" style="@style/main_item_reletivelayout">
+           	 <TextView   android:text="获取视频中的所有帧" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+	
+        <RelativeLayout  android:id="@+id/id_getframe_bmpedit" style="@style/main_item_reletivelayout">
+           	 <TextView   android:text="图片编辑" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/> 
+	</RelativeLayout>
+      
+	 <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="以下因比较简单,不再写界面,可见每个类中 最后演示代码(持续更新...)\n有: \n图片容器:BitmapPadExecute;\n图片多滤镜效果:BitmapGetFilters\n声音容器:AudioPadExecute;\n声音拼接:AudioConcat;\n视频编解码AVDecode/AVEncoder;等等;
+        "/>
+</LinearLayout>
+</ScrollView>

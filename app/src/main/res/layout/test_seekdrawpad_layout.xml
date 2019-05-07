@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/red">
+
+
+    <com.lansosdk.videoeditor.AEPlayerView
+        android:id="@+id/id_testseek_preview"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+        android:layout_height="0dip"
+        android:layout_weight="2"/>
+    <SeekBar
+        android:id="@+id/id_testseek_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/id_testseek_btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂停"/>
+        <Button
+            android:id="@+id/id_testseek_btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="恢复"/>
+
+    </LinearLayout>
+
+</LinearLayout>

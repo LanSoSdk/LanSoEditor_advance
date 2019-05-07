@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fan.camerafilter.widget.AutoFitTextureView
+        android:id="@+id/id_padview"
+        android:layout_width="1080px"
+        android:layout_height="1080px"/>
+
+
+     <LinearLayout
+		          android:id="@+id/id_cameralayer_saveplay"
+		         android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:background="@drawable/corners_btn_orange_bg"
+		          android:layout_centerHorizontal="true"
+		          android:layout_marginTop="50dip"
+		          android:orientation="vertical">
+
+		           <TextView
+		              android:layout_width="wrap_content"
+		              android:layout_height="wrap_content"
+		              android:text="视频已经为您实时生成, 请点击预览"
+		              android:layout_margin="5dip"
+		              android:textColor="@color/red"/>
+		          <ImageView
+		              android:layout_width="wrap_content"
+		              android:layout_height="wrap_content"
+		              android:layout_gravity="center"
+		              android:src="@drawable/play2"/>
+		      </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/filter_normal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:text="@string/filter_normal"
+            android:gravity="center"/>
+
+        <!--<android.support.v7.widget.AppCompatButton-->
+        <!--android:id="@+id/filter_blend"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:text="@string/filter_blend"-->
+        <!--android:gravity="center"/>-->
+
+        <Button
+            android:id="@+id/filter_tone_curve"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:text="@string/filter_tone_curve"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/filter_soft_light"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:text="@string/filter_soft_light"
+            android:gravity="center"/>
+
+
+        <Button
+            android:id="@+id/record"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:text="@string/record_start"
+            android:gravity="center"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

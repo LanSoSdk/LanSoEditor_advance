@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        applicationId "com.lansoeditor.advanceDemo"
+        minSdkVersion 18
+        targetSdkVersion 26
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.2.4'
+
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+
+    implementation project(':LanSongSDK')
+
+
+
+    //一下jar均为来自网络的开源库, 仅用作demo的效果演示, 不属于sdk的一部分;
+//    implementation files('libs/android-support-v7-recyclerview.jar')
+    implementation 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    implementation 'com.android.support:cardview-v7:26.0.0-alpha1'
+    implementation files('libs/PermissionsManager.jar')
+    implementation files('libs/textsurface.jar')
+    implementation files('libs/particlelibrary.jar')
+    implementation 'com.github.warkiz.widget:indicatorseekbar:1.2.9'
+
+
+}

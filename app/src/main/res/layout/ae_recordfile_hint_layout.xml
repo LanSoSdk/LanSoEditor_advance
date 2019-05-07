@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_40"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:text="此功能暂时不公共开放, 可联系我们,索取相关文件"
+        android:textColor="@color/red"
+        android:layout_margin="@dimen/dp5"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="使用场景:"
+            android:textColor="@color/red"
+            android:layout_margin="@dimen/dp5"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/white_40"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_margin="5dp"
+            android:textSize="15sp"
+            android:text="炫酷,高大上,特定的场景视频中;\n常见的有:微商水印相机, 熊猫动态壁纸,壁纸多多,小柿饼等." />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="专业版客户:"
+            android:textColor="@color/red"
+            android:layout_margin="@dimen/dp5"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/white_40"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_margin="5dp"
+            android:textSize="15sp"
+            android:text="如需要,请联系我们.\n我们把支持AE模板的SDK包发给您" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="意向者:"
+            android:textColor="@color/red"
+            android:layout_margin="@dimen/dp5"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/white_40"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_margin="5dp"
+            android:textSize="15sp"
+            android:text="如需要,请联系我们.\n我们把相关测试文件发给您." />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/id_ae_recordfile_startbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_btn_bg"
+        android:layout_margin="@dimen/dp20"
+        android:text="开始预览录制的视频"/>
+
+
+</LinearLayout>

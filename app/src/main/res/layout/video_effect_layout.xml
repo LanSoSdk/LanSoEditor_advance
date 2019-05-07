@@ -1,0 +1,105 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+   
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+          <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_videoeffect_drawpadview"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dip"
+            android:layout_height="0dip"
+            android:layout_weight="2"/>
+          <TextView 
+				    android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/red"
+				    android:text="此9个效果仅是举例, 架构型SDK,画面和图层,可以任意叠加布局."/>
+        <LinearLayout
+    	    android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+				<Button
+					android:id="@+id/id_videoeffect_noeffect"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="wrap_content"
+					android:background="@drawable/button_onlypress_bg"
+					android:layout_marginLeft="20dip"
+					android:layout_marginRight="20dip"
+					android:text="无效果" android:textColor="@color/white"/>
+				<Button
+					android:id="@+id/id_videoeffect_export"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="wrap_content"
+					android:background="@drawable/button_onlypress_bg"
+					android:layout_marginLeft="20dip"
+					android:layout_marginRight="20dip"
+					android:text="导出"
+					android:textColor="@color/red"/>
+			</LinearLayout>
+
+
+
+		       <LinearLayout 
+		           android:layout_width="match_parent" 
+		           android:layout_height="wrap_content"
+		           android:orientation="horizontal">
+		           <Button 
+		               android:id="@+id/id_videoeffect_outbody" android:text="灵魂出窍" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+		            <Button 
+		               android:id="@+id/id_videoeffect_coloredge" android:text="抖动" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+		             <Button 
+		               android:id="@+id/id_videoeffect_cuowei" android:text="错位" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+				</LinearLayout>
+             
+		        <LinearLayout 
+		           android:layout_width="match_parent" 
+		           android:layout_height="wrap_content"
+		           android:orientation="horizontal">
+		           
+		           <Button 
+		               android:id="@+id/id_videoeffect_image_mirror" android:text="镜像" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+		            <Button 
+		               android:id="@+id/id_videoeffect_bg_blur" android:text="背景虚化" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+		             <Button 
+		               android:id="@+id/id_videoeffect_16sublay" android:text="16方框" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+				</LinearLayout>
+				
+		         <LinearLayout 
+		           android:layout_width="match_parent" 
+		           android:layout_height="wrap_content"
+		           android:orientation="horizontal">
+		           
+		           <Button 
+		               android:id="@+id/id_videoeffect_invert" android:text="负片" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+		            <Button 
+		               android:id="@+id/id_videoeffect_fudiao" android:text="浮雕" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+		             <Button 
+		               android:id="@+id/id_videoeffect_toon" android:text="卡通" android:background="@drawable/button_onlypress_bg"
+		               android:layout_width="0dip" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/white"/>
+				</LinearLayout>
+         </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

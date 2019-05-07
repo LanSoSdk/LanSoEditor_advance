@@ -1,0 +1,96 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+     android:layout_height="match_parent"
+    android:background="#FFA500"
+    android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="合作后,我们提供:
+        \n 1.详细的AE模板转换说明;
+        \n 2.多种模板,每个模板包括(AE原工程,SDK处理代码);
+        \n 3,SDK细节修改,更好对接;
+        \n 4.复杂的效果,协同处理 "/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFA500"
+        android:orientation="vertical" >
+
+         <RelativeLayout  android:id="@+id/id_aemain_aobama" style="@style/main_item_reletivelayout2">
+                 <TextView   android:text="奥巴马举牌" style="@style/main_item_textview"/>
+                <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+
+         <RelativeLayout  android:id="@+id/id_aemain_xiaohuangya" style="@style/main_item_reletivelayout2">
+                 <TextView   android:text="小黄鸭" style="@style/main_item_textview"/>
+                <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+        <RelativeLayout  android:id="@+id/id_aemain_zhemehaokan" style="@style/main_item_reletivelayout2">
+                 <TextView   android:text="怎么这么好看" style="@style/main_item_textview"/>
+                <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+        <RelativeLayout  android:id="@+id/id_aemain_xianzi" style="@style/main_item_reletivelayout2">
+            <TextView   android:text="紫霞仙子" style="@style/main_item_textview"/>
+            <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+        <RelativeLayout  android:id="@+id/id_aemain_kuaishan" style="@style/main_item_reletivelayout2">
+            <TextView   android:text="文字快闪" style="@style/main_item_textview"/>
+            <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+        <RelativeLayout  android:id="@+id/id_aemain_videobtimap" style="@style/main_item_reletivelayout2">
+        <TextView   android:text="替换视频" style="@style/main_item_textview"/>
+        <TextView  style="@style/main_item_arrow"/>
+    </RelativeLayout>
+
+
+        <RelativeLayout  android:id="@+id/id_aemain_bitmapxy" style="@style/main_item_reletivelayout2">
+            <TextView   android:text="图片坐标(开发者辅助代码)" style="@style/main_item_textview"/>
+            <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+        <!--<RelativeLayout  android:id="@+id/id_aemain_zhankai" style="@style/main_item_reletivelayout2">-->
+            <!--<TextView   android:text="视频展开" style="@style/main_item_textview"/>-->
+            <!--<TextView  style="@style/main_item_arrow"/>-->
+        <!--</RelativeLayout>-->
+
+    </LinearLayout>
+
+
+
+
+
+
+
+    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="150dip"
+	        android:gravity="center_vertical"
+	        android:background="#FFFFFF"
+	        android:layout_marginTop="20dip"
+	         >
+	         <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="10dip"
+		        android:text="@string/adv_hint5"
+		        android:textColor="#0000ff"/>
+	</RelativeLayout>
+
+</LinearLayout>
+</ScrollView>

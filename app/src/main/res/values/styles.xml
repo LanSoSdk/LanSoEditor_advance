@@ -1,0 +1,98 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
+	    <item name="windowNoTitle">true</item>
+	    <item name="windowActionBar">false</item>
+	    <item name="android:windowFullscreen">true</item>
+	    <item name="android:windowContentOverlay">@null</item>
+	</style>
+    
+        <style name="AppTheme2" parent="AppBaseTheme">
+             <item name="android:windowNoTitle">true</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+        
+     <style name="main_item_reletivelayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dip</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/function_item_btn_bg</item>
+        <item name="android:layout_marginTop">20dip</item>
+    </style>
+    
+
+    <style name="main_item_reletivelayout2">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dip</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/mainlist_item_btn_bg</item>
+        <item name="android:layout_marginTop">20dip</item>
+         <item name="android:layout_marginLeft">6dip</item>
+          <item name="android:layout_marginRight">6dip</item>
+    </style>
+           	  
+     <style name="main_item_textview">
+              <item name="android:layout_centerInParent">true</item>
+              <item name="android:layout_width">match_parent</item>
+              <item name="android:layout_height">wrap_content</item>
+              <item name="android:gravity">center</item>
+              <item name="android:textStyle">bold</item>
+              <item name="android:textSize">18sp</item>
+              <item name="android:textColor">@color/red</item>
+              
+    	</style>
+     <style name="main_item_arrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:background">@drawable/right_arrow</item>
+    </style>	
+    
+         <declare-styleable name="RippleView">
+        <attr name="pressed" format="reference"/>
+        <attr name="normal" format="reference"/>
+    </declare-styleable>
+    
+         
+          	
+            
+    <style name="NumberProgressBar_Default">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+
+        <item name="progress_max">100</item>
+        <item name="progress_current">0</item>
+
+        <item name="progress_unreached_color">#CCCCCC</item>
+        <item name="progress_reached_color">#FF0000</item>
+
+        <item name="progress_text_size">10sp</item>
+        <item name="progress_text_color">#3498DB</item>
+
+        <item name="progress_reached_bar_height">6dp</item>
+        <item name="progress_unreached_bar_height">3dp</item>
+    </style>
+			
+    
+</resources>

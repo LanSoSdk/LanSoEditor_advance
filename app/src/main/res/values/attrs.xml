@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="match">
+        <attr name="text" format="string" />
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+    </declare-styleable>
+    
+    
+       <declare-styleable name="SlidingLayer">
+        <attr name="shadowDrawable" format="boolean"/>
+        <attr name="shadowWidth" format="dimension"/>
+        <attr name="closeOnTapEnabled" format="boolean"/>
+        <attr name="openOnTapEnabled" format="boolean"/>
+        <attr name="offsetWidth" format="dimension" />
+        <attr name="stickTo" format="enum">
+            <enum name="auto" value="0"/>
+            <enum name="right" value="-1"/>
+            <enum name="left" value="-2"/>
+            <enum name="middle" value="-3"/>
+            <enum name="top" value="-4"/>
+            <enum name="bottom" value="-5"/>
+        </attr>
+    </declare-styleable>
+    
+       
+    <declare-styleable name="CameraProgressBar">
+        <attr name="scale" format="float"/>
+        <attr name="isLongScale" format="boolean"/>
+        <attr name="progressWidth" format="dimension"/>
+        <attr name="innerRadio" format="dimension"/>
+        <attr name="innerColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="outerColor" format="color"/>
+        <attr name="progressColor" format="color"/>
+        <attr name="maxProgress" format="integer"/>
+        <attr name="progress" format="integer"/>
+    </declare-styleable>
+    
+    <declare-styleable name="NumberProgressBar">
+        <attr name="progress_current" format="integer"/>
+        <attr name="progress_max" format="integer"/>
+
+        <attr name="progress_unreached_color" format="color"/>
+        <attr name="progress_reached_color" format="color"/>
+
+        <attr name="progress_reached_bar_height" format="dimension"/>
+        <attr name="progress_unreached_bar_height" format="dimension"/>
+
+        <attr name="progress_text_size" format="dimension"/>
+        <attr name="progress_text_color" format="color"/>
+
+        <attr name="progress_text_offset" format="dimension"/>
+
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Themes">
+        <attr name="numberProgressBarStyle" format="reference"/>
+    </declare-styleable>
+</resources>

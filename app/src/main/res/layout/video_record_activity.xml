@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#222222"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <Button
+            android:id="@+id/quitBtn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/close_bn" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/recorder_flashlight"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/video_record_light_off_normal"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/recorder_frontcamera"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/video_record_switch_camera"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/cameraPreviewArea"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+
+            <com.example.advanceDemo.view.VideoPreviewView
+                android:id="@+id/recorder_surface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@+id/recorder_handl_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" >
+
+                <com.example.advanceDemo.view.VideoFocusView
+                    android:id="@+id/video_focus_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+            
+        </FrameLayout>
+
+        <View
+            android:id="@+id/recorder_surface_mask1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <View
+            android:id="@+id/recorder_surface_mask2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <com.example.advanceDemo.view.VideoProgressView
+            android:id="@+id/recorder_progress"
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/recorder_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <Button
+            android:id="@+id/recorder_cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/video_record_backspace"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/recorder_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/video_record_start_btn_selector" />
+
+        <Button
+            android:id="@+id/recorder_next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/video_record_ok"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</LinearLayout>

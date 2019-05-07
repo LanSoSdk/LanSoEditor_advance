@@ -1,0 +1,66 @@
+<RelativeLayout
+    android:id="@+id/id_DrawPad_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+   
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+          <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_drawpad_drawpadview"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dip"
+            android:layout_height="0dip"
+            android:layout_weight="2"/>
+        <ScrollView 
+    	    android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1">
+    	
+	       <LinearLayout 
+	           android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/corners_btn_orange_bg"
+	           android:layout_alignParentBottom="true" android:layout_marginBottom="10dip" android:orientation="vertical" android:padding="5dip">
+			 	
+	           	 <!-- 旋转 -->
+				 	<LinearLayout  android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+		              <TextView android:layout_width="0dip" android:layout_weight="2" android:layout_height="wrap_content" android:text="旋转"/>
+		                <SeekBar android:id="@+id/id_DrawPad_skbar_rotate" android:layout_width="0dip" android:layout_weight="6" android:layout_height="wrap_content"
+					      android:layout_margin="5dip"/>
+		          	</LinearLayout>
+          		 <!-- X缩放 -->
+				 	<LinearLayout  android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+		              <TextView android:layout_width="0dip" android:layout_weight="2" android:layout_height="wrap_content" android:text="X缩放"/>
+		                <SeekBar android:id="@+id/id_DrawPad_skbar_scaleX" android:layout_width="0dip" android:layout_weight="6" android:layout_height="wrap_content"
+					      android:layout_margin="5dip"/>
+		          	</LinearLayout>
+		          	<!-- Y缩放-->
+				 	<LinearLayout  android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+		              <TextView android:layout_width="0dip" android:layout_weight="2" android:layout_height="wrap_content" android:text="XY缩放"/>
+		                <SeekBar android:id="@+id/id_DrawPad_skbar_scaleXY" android:layout_width="0dip" android:layout_weight="6" android:layout_height="wrap_content"
+					      android:layout_margin="5dip"/>
+		          	</LinearLayout>
+				 	
+		      	<!-- X方向 -->
+				 	<LinearLayout  android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+		              <TextView android:layout_width="0dip" android:layout_weight="2" android:layout_height="wrap_content" android:text="水平移动"/>
+		                <SeekBar android:id="@+id/id_DrawPad_skbar_moveX" android:layout_width="0dip" android:layout_weight="6" android:layout_height="wrap_content"
+					      android:layout_margin="5dip"/>
+		          	</LinearLayout>
+		         	<!-- Y方向 --> 	
+		         <LinearLayout  android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+		              <TextView android:layout_width="0dip" android:layout_weight="2" android:layout_height="wrap_content" android:text="垂直移动"/>
+		                <SeekBar android:id="@+id/id_DrawPad_skbar_moveY" 
+		                    android:layout_width="0dip" android:layout_weight="6" android:layout_height="wrap_content"
+					      android:layout_margin="5dip"/>
+		          	</LinearLayout>
+             </LinearLayout>
+             </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

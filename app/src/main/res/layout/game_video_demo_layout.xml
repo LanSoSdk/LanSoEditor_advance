@@ -1,0 +1,122 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:match="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_DrawPad_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.lansosdk.videoeditor.DrawPadView2
+        android:id="@+id/id_gamevideo_drawpadview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/id_gamevideo_tvrecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"/>
+
+    <LinearLayout
+        android:id="@+id/id_gamevideo_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/id_gamevideo_startrecord"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/button_btn_bg"
+            android:text="开始录制" />
+
+        <Button
+            android:id="@+id/id_gamevideo_stoprecord"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/button_btn_bg"
+            android:text="停止录制" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/id_gamevideo_startpreview"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/button_btn_bg"
+            android:text="开始预览" />
+
+        <Button
+            android:id="@+id/id_gamevideo_pausepreview"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/button_btn_bg"
+            android:text="暂停预览" />
+
+        <Button
+            android:id="@+id/id_gamevideo_resumepreview"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/button_btn_bg"
+            android:text="恢复预览" />
+        <Button
+            android:id="@+id/id_gamevideo_videoconcat"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/button_btn_bg"
+            android:text="视频拼接" />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="缩放"/>
+
+            <SeekBar
+                android:id="@+id/id_gamevideo_seekbar1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="400"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="移动"/>
+
+            <SeekBar
+                android:id="@+id/id_gamevideo_seekbar2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="400"/>
+        </LinearLayout>
+
+
+</LinearLayout>

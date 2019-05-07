@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+    android:id="@+id/id_videoseek_back"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@null"
+            android:textColor="@color/white"
+    android:text="返回"/>
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="演示:编辑模式下的视频: 如丝般顺滑."
+        android:textColor="@color/white"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>
+
+
+    <com.lansosdk.videoeditor.TextureRenderView
+        android:id="@+id/id_videoseek_texturerenderview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+        android:layout_weight="3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip">
+            <LinearLayout
+                android:id="@+id/id_videoseek_thumbnail_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"/>
+
+            <com.example.advanceDemo.view.ThumbnailView
+                android:id="@+id/id_videoseek_thumbnailview"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="40dip"
+            android:layout_marginTop="20dip">
+
+            <CheckBox
+                android:id="@+id/id_videoseek_seekplayer_ckbox"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:gravity="center"
+                android:button="@null"
+                android:background="@drawable/checkbox_selector"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="预览播放 是否一起seek"
+                android:textColor="@color/white"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/id_videoseek_indicatorbar"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            app:isb_indicator_custom_top_content_layout="@layout/video_seek_thumb_topview"
+            app:isb_max="100.0"
+            app:isb_min="0"
+            app:isb_progress_value_float="true"
+            app:isb_track_progress_bar_size="3dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

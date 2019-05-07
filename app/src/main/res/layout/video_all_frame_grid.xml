@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+  
+   <GridView
+    android:id="@+id/gridview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:horizontalSpacing="4dip"
+    android:numColumns="3"
+    android:stretchMode="columnWidth"
+    android:verticalSpacing="4dip"
+    android:padding="4dip" /> 
+    
+     <TextView 
+        android:id="@+id/video_frame_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        />
+</RelativeLayout>
+

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">蓝松专业版DEMO</string>
+
+    <string name="message_granted">All permissions have been granted.</string>
+    <string name="message_denied">Permission \"%1$s\" has been denied.</string>
+
+     <string name="lansong_hint">杭州蓝松科技有限公司\n   专业的视频处理SDK开发团队.</string>
+    <string name="sdk_limit">SDK版本号是:%1$s\nSDK底层做了授权限制,【仅可在此demo中运行】,并有效时间到 \"%2$d\"年 \"%3$d\"月之前,请注意.</string>
+    	
+    <string name="adv_hint5">"此为蓝松短视频专业版SDK,商业收费授权合作的形式,价格可联系我们.  联系方式:\n QQ:1852600324\n 公司电话:0571-89052701\n email:support@lansongtech.com."</string>
+  	
+  	<string name="select_video">请选择视频</string>
+		
+    <string name="videoplay_hint">视频小知识:\n当前是等比例的显示到屏幕上, 目的是保持视频的宽高比一致,视频不变形;\n\n 或许会导致分辨率小的画面被放大了,画面质量下降,这是正常情况,只是播放的界面事情,不影响视频本身</string>
+	
+	<string name="drawpadexecute_demo_hint">此功能演示:后台视频编辑\n\n 流程:打开视频播放,向里面增加两个图片和一个UI,其中给一个图片移动位置,并在3秒处放大一倍,在6秒处消失,处理中实时的形成视频,可以用来预览和传输等</string>
+    	
+		
+	<string name="insert_audio_demo_hint">给在原有视频中插入一段音频.\n\n原理是: 把视频中的音频部分和另外的音频素材混淆,形成新的音频文件.</string>
+    	
+	
+    <string name="extract_video_frame_hint">此功能演示:提取视频中的每一帧给您\n\n 每处理一帧,该帧的bitmap格式画面和时间戳通过回调发给您,可指定开始时间和随时结束.指定提取间隔,指定平均获取几帧.\n</string>
+    
+    <string name="pictureset_execute_demo_hint">此功能演示:后台图片合成\n\n 流程:同时向DrawPad获取多个BitmapLayer,然后根据DrawPad的时间进度,依次操作多个BitmapLayer,从而实现图片动画效果,这里仅演示平移效果, 实际使用可以平移,缩放,旋转,闪烁混合使用.也可以增加ViewLayer,来呈现花样的动画.</string>
+    
+	<string name="filterLayer_execute_hint">此功能演示:后台视频滤镜处理, \n 缩放/压缩/精切裁剪/画面裁剪等均是这个功能,只是配置不同而已\n. 流程:建立DrawPad容器, 向里面增加视频图层, 开始处理.在3秒的时候切换一个滤镜,在6秒的时候, 切换另一个滤镜</string>
+    
+    <string name="videolayer_transform_hints">演示流程:先视频A, 3秒后图片B, 再3秒后出现视频C >=>3个合成在一起, 当前暂时不支持声音合成。\n\n但您可以对合成后的视频增加背景音乐 .</string>	
+    <string name="audiopad_execute_hint">此功能演示:后台音频容器的演示\n\n. 流程:</string>
+    	
+    
+    <string name="filterexecute_demo_hint">此功能演示:后台视频滤镜\n\n.适用在当不需要UI界面做滤镜预览的场合.比如不经过滤镜预览或没有预览完毕,就可以做视频滤镜处理,这样的场合使用.</string>
+	<string name="picture_set_realtime_hint">用多个 BitmapLayer图层 绘制到 DrawPad容器中, 并调试他们的各种动画,来实现影集的效果</string>
+	    
+	<string name="origal_width">提示:\n当前视频宽度小于屏幕宽度, 采取原尺寸显示,您可以在代码中修改为自适应屏幕宽度显示形式</string>
+	<string name="fix_width">提示:\n当前视频宽度大于或等于屏幕宽度, 采取自适应到屏幕宽度,您可以在代码中修改为原尺寸的显示形式</string>
+
+	<string name="file_not_exist">文件不存在</string>
+	
+	<string name="drawimage_hint1">原理:建立一个容器,先放视频图层, 再放UI图层.UI图层就是您的UI界面,你可以把各种炫酷的UI作为一层,叠加到视频上.
+	    \n这里演示的贴纸和文字,您可以实时增加,也可以暂停后增加</string>
+	
+	<string name="canvaslayer_hint1">VideoLayer + CanvasLayer 绘制到容器上</string>
+	
+	<string name="video_remark">滑动画面,进行标记\n\n VideoLayer + BitmapLayer 绘制到容器上 </string>
+	<string name="filter">滤镜</string>
+	
+	<string name="cuoluo_layout">错落布局图层演示:\n 建立一个正方形的容器, 上面显示视频图层, 下面左侧显示一个Gif图层, 右侧显示一个图片图层.\n(您也可以其他方式布局.仅为举例)</string>
+	<string name="vdieo2_layout">两个视频左右布局演示:\n 建立一个正方形的容器, 分别放两个视频图层.宽度缩放一倍,显示出来.\n(音频为了清晰不嘈杂,暂时用一个.如您需要两个都显示,可以直接混合合并.)</string>
+	
+	<string name="gaobai_hint">\n增加一个 ViewLayer(UI图层)到容器上.</string>
+		<string name="mvlayer_hint">\n增加一个 VideoLayer和 MVLayer图层 到  DrawPad 容器上.</string>
+		<string name="cameralayer_hint">\n增加一个 CameraLayer到  DrawPad 容器上.</string>
+		
+	   <string name="gaobai_1">认识你</string>
+<string name="gaobai_2">一定是命运的安排</string>
+<string name="gaobai_3">如果这是一场错误</string>
+<string name="gaobai_4">那我以后将不再相信命运</string>
+
+
+<string name="gaobai_5">如果不是</string>
+<string name="gaobai_6">难道至始至终</string>
+<string name="gaobai_7">都是我一个人在做梦</string>
+
+
+<string name="gaobai_8">从那一天</string>
+<string name="gaobai_9">我遇见了幸福</string>
+<string name="gaobai_10">那么地美丽</string>
+<string name="gaobai_11">那么地眩目</string>
+
+
+<string name="gaobai_12">仿佛</string>
+<string name="gaobai_13">做梦般的现实</string>
+<string name="gaobai_14">这不会只是一个</string>
+<string name="gaobai_15">真实感十足的梦境吧</string>
+
+
+
+<string name="gaobai_16">希望</string>
+<string name="gaobai_17">让我在你的身旁</string>
+<string name="gaobai_18">陪你细数秋风</string>
+<string name="gaobai_19">陪你夏夜听雨</string>
+<string name="gaobai_20">携手到白首</string>
+
+
+
+<string name="gaobai_end1">杭州蓝松科技</string>
+<string name="gaobai_end2">专业的视频处理开发团队</string>
+<string name="gaobai_end3">Demo演示 之《浪漫情诗》</string>
+
+<!-- ======================================================= -->
+
+		<string name="scaleexecute_demo_hint">此演示演示: 视频缩放\n\n 利用视频硬件加速来做视频缩放,把视频画面等比例缩小一半,处理完后,形成新视频.
+		    适用在用户自己拍摄了高清的画面,需要缩放后再传输的场合.\n</string>
+	<string name="demo_id_mediainfo">获取视频信息</string>
+	<string name="demo_id_avsplit">音视频分离</string>
+	<string name="demo_id_avmerge">合成音频/替换音频</string>
+	<string name="demo_id_cutaudio">音频剪切</string>
+	<string name="demo_id_cutvideo">视频剪切</string>
+	<string name="demo_id_concatvideo">视频拼接</string>
+	<string name="demo_id_audiodelaymix">音频延迟混合</string>
+	<string name="demo_id_audiovolumemix">音频音量控制混合</string>
+  
+	<!-- ========================================================================== -->
+	<string name="demo_more_avsplit">把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 </string>
+	<string name="demo_more_avmerge">合成音频/替换音频\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_cutaudio">演示截取音频的前20秒或时长的一半,形成新的音频文件\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_cutvideo">这里演示截取视频的前20秒或时长的一半,形成新的视频文件.</string>
+	<string name="demo_more_concatvideo">为了方便演示,需要您的视频大于20秒(或用默认视频).\n先把原视频从(0到1/3处)和(2/3到结束)截取成两段,然后拼接</string>
+	
+	
+	<string name="filter_normal">普通</string>
+    <string name="filter_blend">叠加</string>
+    <string name="filter_soft_light">柔和叠加</string>
+    <string name="filter_stack_blur">模糊</string>
+    <string name="filter_tone_curve">色调曲线</string>
+      <string name="record_start">开始录制</string>
+    <string name="record_stop">停止录制</string>
+    
+</resources>

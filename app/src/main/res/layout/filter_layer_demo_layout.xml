@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black" >
+    
+    <Button
+        android:id="@+id/id_filterLayer_demo_next"
+        android:layout_width="80dip"
+        android:layout_height="35dip"
+        android:background="@drawable/button_onlypress_bg"
+        android:textColor="@color/white"
+        android:layout_gravity="right"
+        android:text="后台执行" />
+
+         <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_filterLayer_demo_view"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dip"
+            android:layout_height="0dip"
+            android:layout_weight="2"/>
+      
+    <LinearLayout 
+        	android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+        	android:orientation="vertical"
+          	android:background="@drawable/corners_btn_orange_bg">
+          
+          <Button
+            android:id="@+id/id_filter_select"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="30dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_height="45dip"
+            android:textColor="@color/blue"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_btn_bg"
+            android:text="选择所有滤镜."/>
+          
+          <LinearLayout 
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+              <TextView 
+                  android:layout_width="0dip"
+                  android:layout_weight="2"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:text="滤镜调节"/>
+                <SeekBar 
+			      android:id="@+id/id_filter_seek1"
+			      android:layout_width="0dip"
+			      android:layout_weight="6"
+			      android:layout_height="wrap_content"
+			      android:layout_margin="5dip"/>
+          </LinearLayout>
+          
+           <com.example.advanceDemo.view.HorizontalListView
+            android:id="@+id/id_filterlayer_filterlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+          />
+    </LinearLayout>
+</LinearLayout>

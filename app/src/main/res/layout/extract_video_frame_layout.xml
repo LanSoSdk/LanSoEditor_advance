@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#009900">
+    
+
+    <Button 
+        android:id="@+id/id_extract_frame_btn"
+        android:layout_width="match_parent"
+        android:layout_margin="20dip"
+        android:layout_height="wrap_content"
+        android:text="开始处理源视频"
+        android:background="@drawable/function_item_btn_bg"
+        android:layout_centerInParent="true"/>
+
+    <Button 
+        android:id="@+id/id_extract_frame_btn2"
+        android:layout_width="match_parent"
+        android:layout_margin="20dip"
+        android:layout_height="wrap_content"
+        android:text="提取一帧"
+        android:background="@drawable/function_item_btn_bg"/>
+    
+    <TextView 
+        android:id="@+id/id_extract_frame_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dip"
+        android:textColor="@color/white"
+        android:textSize="18sp"/>
+    
+    <TextView  
+         android:id="@+id/id_extract_frame_progress_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_extract_frame_btn"
+        android:layout_marginTop="20dip"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"/>
+</RelativeLayout>

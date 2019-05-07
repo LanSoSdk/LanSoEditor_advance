@@ -1,0 +1,58 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+   
+      <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_twovideolayer_view"
+              android:layout_width="wrap_content"
+  			  android:layout_height="wrap_content"
+            />
+      <LinearLayout 
+          android:id="@+id/id_twovideolayer_saveplay"
+        android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/corners_btn_orange_bg"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="50dip"
+          android:orientation="vertical">
+		  	  
+           <TextView 
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="视频已经为您实时生成, 请点击预览"
+              android:layout_margin="5dip"
+              android:textColor="@color/red"
+              />
+          <ImageView 
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:src="@drawable/play2"/>
+      </LinearLayout>
+      	   
+    	
+      <LinearLayout 
+    	  android:layout_below="@+id/id_twovideolayer_view"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+          
+          <Button
+    	    android:id="@+id/id_twovideolayer_testbutton"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_centerInParent="true"
+    	    android:text="显示/隐藏" 
+    	    />
+    	<TextView 
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="\t把效果视频透明处理,并混合到原视频中\n\t 两个视频组成成 一个图层放到容器里\n\tTwoVideoLayer双视频图层 !"
+    	    android:textColor="@color/red"/>
+      </LinearLayout>
+    	
+</RelativeLayout>

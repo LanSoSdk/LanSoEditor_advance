@@ -1,0 +1,50 @@
+<RelativeLayout
+    android:id="@+id/id_DrawPad_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:match="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    
+   
+        <!-- DrawPad   -->
+         <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/id_viewLayer_DrawPad_view"
+            android:layout_width="320dp"
+            android:layout_height="180dp"
+            android:layout_centerInParent="true"/>
+     
+        <com.lansosdk.box.ViewLayerRelativeLayout
+            android:id="@+id/vlrl_viewLayer"
+            android:layout_width="320dp"
+            android:layout_height="180dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent">
+            
+            <WebView
+	            android:id="@+id/web_view"  
+	             android:layout_width="320dp"
+	            android:layout_height="180dp"
+	            android:layout_centerInParent="true"></WebView>
+            
+        </com.lansosdk.box.ViewLayerRelativeLayout>
+         <!-- 
+        <RelativeLayout
+            android:layout_width="320dp"
+            android:layout_height="180dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent">
+	          	  
+               <WebView
+	            android:id="@+id/web_view"  
+	             android:layout_width="320dp"
+	            android:layout_height="180dp"
+	            android:layout_centerInParent="true"></WebView>
+        </RelativeLayout>
+         -->
+        
+</RelativeLayout>

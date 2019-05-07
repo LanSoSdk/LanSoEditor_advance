@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    android:layout_gravity="center_vertical" 
+    android:orientation="vertical" 
+    android:layout_width="74.0dip" 
+    android:layout_height="84.0dip"
+    android:padding="5dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout 
+        android:layout_width="fill_parent" 
+        android:layout_height="64.0dip">
+        <ImageView 
+            android:id="@+id/id_filter_item_iv" 
+            android:layout_width="64.0dip" 
+            android:layout_height="64.0dip" 
+            android:scaleType="centerCrop" />
+    </FrameLayout>
+    <TextView 
+        android:id="@+id/id_filter_item_tv" 
+        android:layout_width="fill_parent" 
+        android:layout_height="20.0dip"
+        android:textColor="@color/blue" 
+        android:gravity="center"   />
+</LinearLayout>
