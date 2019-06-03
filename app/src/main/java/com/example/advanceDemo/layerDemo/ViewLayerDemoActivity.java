@@ -36,7 +36,6 @@ import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -122,15 +121,15 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
      * Step1: 设置DrawPad 容器的尺寸. 并设置是否实时录制容器上的内容.
      */
     private void initDrawPad() {
-        MediaInfo info = new MediaInfo(mVideoPath);
-        if (info.prepare()) {
 
-            int padWidth = 640;
-            int padHeight = 640;
+            int padWidth = mplayer.getVideoWidth();
+            int padHeight = mplayer.getVideoHeight();
             int frameRate = 25;
 
-            drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, frameRate);
-            drawPadView.setRealEncodeEnable(padWidth, padHeight, 2 * 1024 * 1024, (int) frameRate, editTmpPath);
+            drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, frameRate);  //设置自动刷新;
+
+
+            drawPadView.setRealEncodeEnable(padWidth, padHeight, (int) frameRate, editTmpPath);
 
             drawPadView.setOnDrawPadProgressListener(new onDrawPadProgressListener() {
                 @Override
@@ -148,7 +147,6 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
                     startDrawPad();
                 }
             });
-        }
     }
 
     /**
@@ -157,12 +155,10 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
     private void startDrawPad() {
         if (drawPadView.startDrawPad()) {
             // 给容器增加一个背景
-            BitmapLayer layer = drawPadView.addBitmapLayer(BitmapFactory
-                    .decodeResource(getResources(), R.drawable.videobg));
+            BitmapLayer layer = drawPadView.addBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.videobg));
             layer.setScaledValue(layer.getPadWidth(), layer.getPadHeight()); // 填充整个容器
 
-            mainVideoLayer = drawPadView.addMainVideoLayer(
-                    mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
+            mainVideoLayer = drawPadView.addMainVideoLayer(mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
             if (mainVideoLayer != null) {
                 mplayer.setSurface(new Surface(mainVideoLayer.getVideoTexture()));
             }
@@ -180,8 +176,16 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
             toastStop();
             if (LanSongFileUtil.fileExist(editTmpPath)) {
                 dstPath = AudioEditor.mergeAudioNoCheck(mVideoPath, editTmpPath, true);
-                findViewById(R.id.id_vview_realtime_saveplay).setVisibility(
-                        View.VISIBLE);
+
+
+                //LSTODO 这里一定要整理出DrawPadStickView, 贴纸!!!!
+                new AlertDialog.Builder(this).setTitle("提示").setMessage("当前为实时录制模式,已生成视频,点击播放")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this,dstPath);
+                            }
+                        }).show();
             }
         }
     }
@@ -198,14 +202,12 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
 
             viewLayerRelativeLayout.invalidate();// 刷新一下.
 
-            ViewGroup.LayoutParams params = viewLayerRelativeLayout
-                    .getLayoutParams();
+            ViewGroup.LayoutParams params = viewLayerRelativeLayout.getLayoutParams();
             params.height = mViewLayer.getPadHeight(); // 因为布局时, 宽度一致,
             // 这里调整高度,让他们一致.
             viewLayerRelativeLayout.setLayoutParams(params);
 
             // mViewLayer.switchFilterTo(new LanSongSepiaFilter());
-
             // UI图层的移动缩放旋转.
             // mViewLayer.setScale(0.5f);
             // mViewLayer.setRotate(60);
@@ -256,21 +258,7 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
 
         stickView = (StickerView) findViewById(R.id.id_vview_drawimage_stickview);
         textStickView = (TextStickerView) findViewById(R.id.id_vview_drawimage_textstickview);
-
         viewLayerRelativeLayout = (ViewLayerRelativeLayout) findViewById(R.id.id_vview_realtime_gllayout);
-
-        findViewById(R.id.id_vview_realtime_saveplay).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (LanSongFileUtil.fileExist(dstPath)) {
-                            DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstPath);
-                        } else {
-                            DemoUtil.showToast(ViewLayerDemoActivity.this, "目标文件不存在");
-                        }
-                    }
-                });
-        findViewById(R.id.id_vview_realtime_saveplay).setVisibility(View.GONE);
     }
 
     private void showWord() {

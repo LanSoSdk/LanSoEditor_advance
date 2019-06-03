@@ -36,7 +36,6 @@ import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -134,7 +133,7 @@ public class VideoLayerTransformActivity extends Activity {
         /**
          * 设置录制的参数.
          */
-        mDrawPad.setRealEncodeEnable(640, 640, (int)(1.5f*1024*1024), (int) 25, dstPath);
+        mDrawPad.setRealEncodeEnable(640, 640, (int) 25, dstPath);
 
         mDrawPad.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 25);// 25是帧率.
 

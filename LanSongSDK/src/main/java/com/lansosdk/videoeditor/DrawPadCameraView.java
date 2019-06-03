@@ -7,7 +7,6 @@ import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -23,7 +22,7 @@ import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPadCameraRunnable;
 import com.lansosdk.box.GifLayer;
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.MicLine;
@@ -56,7 +55,6 @@ public class DrawPadCameraView extends FrameLayout {
      * 把画面的宽度等于父view的宽度, 高度按照4:3的形式显示.
      */
     static final int AR_4_3_FIT_PARENT = 5;
-    private static final String TAG = LSLog.TAG;
     private static final boolean VERBOSE = false;
     private static boolean isCameraOpened = false;
     private int mVideoRotationDegree;
@@ -218,7 +216,7 @@ public class DrawPadCameraView extends FrameLayout {
      * 你完全可以重新按照你的界面需求来修改这个DrawPadView类.
      */
     public void setOnViewAvailable(onViewAvailable listener) {
-        mViewAvailable = listener;  //LSTODO查看下为什么这里在onCreate中不能执行;
+        mViewAvailable = listener; 
         if(mSurfaceTexture!=null){
             mViewAvailable.viewAvailable(this);
         }
@@ -278,7 +276,7 @@ public class DrawPadCameraView extends FrameLayout {
             encFrameRate = encFr;
             encodeOutput = outPath;
         } else {
-            Log.w(TAG, "enable real encode is error");
+            LSOLog.e(  "enable real encode is error");
         }
     }
     public void setExtCameraLayer(CameraLayer layer){
@@ -294,7 +292,7 @@ public class DrawPadCameraView extends FrameLayout {
             encFrameRate = encFr;
             encodeOutput = outPath;
         } else {
-            Log.w(TAG, "enable real encode is error");
+            LSOLog.e(  "enable real encode is error");
         }
     }
 
@@ -464,7 +462,7 @@ public class DrawPadCameraView extends FrameLayout {
                 && renderer.isRunning()) {
             renderer.toggleSnapShot(padWidth, padHeight);
         } else {
-            Log.e(TAG, "toggle snap shot failed!!!");
+            LSOLog.e( "toggle snap shot failed!!!");
         }
     }
 
@@ -473,7 +471,7 @@ public class DrawPadCameraView extends FrameLayout {
                 && renderer.isRunning()) {
             renderer.toggleSnapShot(width, height);
         } else {
-            Log.e(TAG, "toggle snap shot failed!!!");
+            LSOLog.e(  "toggle snap shot failed!!!");
         }
     }
 
@@ -545,7 +543,7 @@ public class DrawPadCameraView extends FrameLayout {
         boolean ret = false;
 
         if (isCameraOpened) {
-            Log.w(TAG,"DrawPad线程已经开启.,如果您是从下一个Activity返回的,请先stopDrawPad后,再次开启.");
+            LSOLog.e( "DrawPad线程已经开启.,如果您是从下一个Activity返回的,请先stopDrawPad后,再次开启.");
             return false;
         }
 
@@ -591,17 +589,14 @@ public class DrawPadCameraView extends FrameLayout {
                 renderer.setOutFrameInDrawPad(frameListenerInDrawPad);
                 renderer.setDrawPadRunTimeListener(drawpadRunTimeListener);
                 renderer.setDrawPadRecordCompletedListener(drawPadRecordCompletedListener);
-
                 renderer.setDrawPadErrorListener(drawPadErrorListener);
                 if (isRecordMic) {
                     renderer.setRecordMic(isRecordMic);
                 } else if (isRecordExtPcm) {
-                    renderer.setRecordExtraPcm(isRecordExtPcm, pcmChannels,
-                            pcmSampleRate, pcmBitRate);
+                    renderer.setRecordExtraPcm(isRecordExtPcm, pcmChannels,pcmSampleRate, pcmBitRate);
                 } else if (recordExtMp3 != null) {
-                    if (renderer
-                            .setRecordExtraMp3(recordExtMp3, recordOffsetUs) == null) {
-                        Log.e(TAG, "设置外部mp3音频错误, 请检查下您的音频文件是否正常.");
+                    if (renderer.setRecordExtraMp3(recordExtMp3, recordOffsetUs) == null) {
+                        LSOLog.e(  "设置外部mp3音频错误, 请检查下您的音频文件是否正常.");
                     }
                 }
 
@@ -616,17 +611,17 @@ public class DrawPadCameraView extends FrameLayout {
                 }
                 renderer.adjustEncodeSpeed(encodeSpeed);
 
-                Log.i(TAG, "starting run drawpad  thread...");
+                LSOLog.i(  "starting run drawpad  thread...");
                 ret = renderer.startDrawPad();
 
                 isCameraOpened = ret;
                 if (!ret) { // 用中文注释.
-                    Log.e(TAG,"开启 DrawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
+                    LSOLog.e( "开启 drawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
                                     + "请检测您 的代码或直接拷贝我们的代码过去,在我们代码基础上修改参数;\n");
                 } else {
 
 //                    if(slideFilterArray!=null){
-//                        renderer.getCameraLayer().setSlideFilterArray(slideFilterArray);
+//                        aeRenderer.getCameraLayer().setSlideFilterArray(slideFilterArray);
 //                    }
 
                     renderer.setDisplaySurface(mTextureRenderView, new Surface(
@@ -634,7 +629,7 @@ public class DrawPadCameraView extends FrameLayout {
                 }
             }
         } else {
-            Log.w(TAG, "开启 DrawPad 失败, 您设置的宽度和高度是:" + padWidth + " x "
+            LSOLog.w(  "开启 drawPad 失败, 您设置的宽度和高度是:" + padWidth + " x "
                     + padHeight);
         }
         return ret;
@@ -803,11 +798,11 @@ public class DrawPadCameraView extends FrameLayout {
     public AudioLine setRecordExtraMp3(String mp3Path, boolean endloop) {
         if (renderer != null) {
             if (renderer.isRecording()) {
-                Log.e(TAG, "DrawPad is recording. set mp3 Error!");
+                LSOLog.e( "drawPad is recording. set mp3 Error!");
             } else {
                 AudioLine line = renderer.setRecordExtraMp3(mp3Path, 0);
                 if (line == null) {
-                    Log.e(TAG, "设置外部mp3音频错误, 请检查下您的音频文件是否正常.");
+                    LSOLog.e(  "设置外部mp3音频错误, 请检查下您的音频文件是否正常.");
                 }
                 return line;
             }
@@ -833,12 +828,12 @@ public class DrawPadCameraView extends FrameLayout {
                                        long encodeOffsetUs) {
         if (renderer != null) {
             if (renderer.isRecording()) {
-                Log.e(TAG, "DrawPad is recording. set mp3 Error!");
+                LSOLog.e(  "drawPad is recording. set mp3 Error!");
             } else {
                 AudioLine line = renderer.setRecordExtraMp3(mp3Path,
                         encodeOffsetUs);
                 if (line == null) {
-                    Log.e(TAG, "设置外部mp3音频错误, 请检查下您的音频文件是否正常.");
+                    LSOLog.e(  "设置外部mp3音频错误, 请检查下您的音频文件是否正常.");
                     return null;
                 } else {
                     recordOffsetUs = encodeOffsetUs;
@@ -948,7 +943,6 @@ public class DrawPadCameraView extends FrameLayout {
             }
 
             isStoping.set(false);
-
             isCameraOpened = false;
         }
     }
@@ -1000,8 +994,8 @@ public class DrawPadCameraView extends FrameLayout {
         padWidth = width;
         padHeight = height;
         if (renderer != null) {
-            Log.w(TAG,
-                    "renderer maybe is running. your setting is not available!!");
+            LSOLog.e(
+                    "aeRenderer maybe is running. your setting is not available!!");
         }
     }
 
@@ -1089,7 +1083,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null && renderer.isRunning())
             return renderer.getCameraLayer();
         else {
-            Log.e(TAG, "getCameraLayer error render is not avalid");
+            LSOLog.e(  "getCameraLayer error render is not avalid");
             return null;
         }
     }
@@ -1098,7 +1092,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addVideoLayer(width, height, filter);
         else {
-            Log.e(TAG, "addVideoLayer error render is not avalid");
+            LSOLog.e( "addVideoLayer error render is not avalid");
             return null;
         }
     }
@@ -1114,11 +1108,11 @@ public class DrawPadCameraView extends FrameLayout {
             if (renderer != null)
                 return renderer.addBitmapLayer(bmp, null);
             else {
-                Log.e(TAG, "addBitmapLayer error render is not avalid");
+                LSOLog.e(  "addBitmapLayer error render is not avalid");
                 return null;
             }
         } else {
-            Log.e(TAG, "addBitmapLayer error, bitmap is null");
+            LSOLog.e(  "addBitmapLayer error, byteBuffer is null");
             return null;
         }
     }
@@ -1135,11 +1129,11 @@ public class DrawPadCameraView extends FrameLayout {
             if (renderer != null)
                 return renderer.addDataLayer(dataWidth, dataHeight);
             else {
-                Log.e(TAG, "addDataLayer error render is not avalid");
+                LSOLog.e(  "addDataLayer error render is not avalid");
                 return null;
             }
         } else {
-            Log.e(TAG, "addDataLayer error, data size is error");
+            LSOLog.e(  "addDataLayer error, data size is error");
             return null;
         }
     }
@@ -1154,7 +1148,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addGifLayer(gifPath);
         else {
-            Log.e(TAG, "addYUVLayer error! render is not avalid");
+            LSOLog.e( "addYUVLayer error! render is not avalid");
             return null;
         }
     }
@@ -1172,7 +1166,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addGifLayer(resId);
         else {
-            Log.e(TAG, "addGifLayer error! render is not avalid");
+            LSOLog.e(  "addGifLayer error! render is not avalid");
             return null;
         }
     }
@@ -1188,7 +1182,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addMVLayer(srcPath, maskPath);
         else {
-            Log.e(TAG, "addMVLayer error render is not avalid");
+            LSOLog.e( "addMVLayer error render is not avalid");
             return null;
         }
     }
@@ -1203,7 +1197,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addViewLayer();
         else {
-            Log.e(TAG, "addViewLayer error render is not avalid");
+            LSOLog.e( "addViewLayer error render is not avalid");
             return null;
         }
     }
@@ -1217,7 +1211,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addCanvasLayer();
         else {
-            Log.e(TAG, "addCanvasLayer error render is not avalid");
+            LSOLog.e(  "addCanvasLayer error render is not avalid");
             return null;
         }
     }
@@ -1238,7 +1232,7 @@ public class DrawPadCameraView extends FrameLayout {
         if (renderer != null)
             return renderer.addYUVLayer(width, height);
         else {
-            Log.e(TAG, "addYUVLayer error render is not avalid");
+            LSOLog.e( "addYUVLayer error render is not avalid");
             return null;
         }
     }
@@ -1251,7 +1245,7 @@ public class DrawPadCameraView extends FrameLayout {
             if (renderer != null)
                 renderer.removeLayer(layer);
             else {
-                Log.w(TAG, "removeLayer error render is not avalid");
+                LSOLog.e(  "removeLayer error render is not avalid");
             }
         }
     }

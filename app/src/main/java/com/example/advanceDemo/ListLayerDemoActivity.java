@@ -11,6 +11,7 @@ import com.example.advanceDemo.layerDemo.CanvasLayerDemoActivity;
 import com.example.advanceDemo.layerDemo.Demo1LayerMothedActivity;
 import com.example.advanceDemo.layerDemo.Demo2LayerMothedActivity;
 import com.example.advanceDemo.layerDemo.Demo3LayerFilterActivity;
+import com.example.advanceDemo.layerDemo.ExecuteCanvasLayerActivity;
 import com.example.advanceDemo.layerDemo.ExecuteVideoLayerActivity;
 import com.example.advanceDemo.layerDemo.MVLayerDemoActivity;
 import com.example.advanceDemo.layerDemo.TwoVideoLayerActivity;
@@ -39,6 +40,7 @@ public class ListLayerDemoActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_layer_mvlayerdemo).setOnClickListener(this);
         findViewById(R.id.id_layer_viewremark).setOnClickListener(this);
         findViewById(R.id.id_layer_twovideolayer).setOnClickListener(this);
+        findViewById(R.id.id_layer_canvaslayer_bg).setOnClickListener(this);
         findViewById(R.id.id_layer_drawpadpictureexecute).setOnClickListener(
                 this);
     }
@@ -64,6 +66,10 @@ public class ListLayerDemoActivity extends Activity implements OnClickListener {
             case R.id.id_layer_canvaslayerdemo:
                 startDemoActivity(CanvasLayerDemoActivity.class);
                 break;
+            case R.id.id_layer_canvaslayer_bg:
+                startDemoActivity(ExecuteCanvasLayerActivity.class);
+                break;
+
             case R.id.id_layer_mvlayerdemo:
                 startDemoActivity(MVLayerDemoActivity.class);
                 break;

@@ -74,7 +74,7 @@
 			<TextView  style="@style/main_item_arrow"/> 
 	</RelativeLayout>
 
-		<RelativeLayout  android:id="@+id/id_mainlist_weishang" style="@style/main_item_reletivelayout2">
+		<RelativeLayout  android:id="@+id/id_mainlist_ae" style="@style/main_item_reletivelayout2">
 			<TextView   android:text="AE动效/微商  效果" style="@style/main_item_textview"/>
 			<TextView  style="@style/main_item_arrow"/>
 		</RelativeLayout>

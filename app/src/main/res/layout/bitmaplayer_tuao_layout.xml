@@ -17,7 +17,7 @@
           android:id="@+id/id_DrawPad_saveplay"
          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/corners_btn_orange_bg"
+          android:background="@drawable/corners_button_orange_bg"
           android:layout_centerHorizontal="true"
           android:layout_marginTop="50dip"
           android:orientation="vertical">
@@ -41,7 +41,7 @@
     	    android:layout_height="wrap_content">
     	
 	       <LinearLayout 
-	           android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/corners_btn_orange_bg"
+	           android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/corners_button_orange_bg"
 	           android:layout_alignParentBottom="true" android:layout_marginBottom="10dip" android:orientation="vertical" android:padding="5dip">
 			 	
 	           	 <!-- 范围 -->

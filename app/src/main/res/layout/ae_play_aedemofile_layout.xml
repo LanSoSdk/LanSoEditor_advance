@@ -2,10 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/id_play_texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
 
-    <TextureView
-        android:id="@+id/id_aedemo_textureview"
+        <com.lansosdk.videoeditor.TextureRenderView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_aedemo_textureview"
+            android:layout_margin="20dip" />
+    </FrameLayout>
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="wrap_content"
+        android:text="这是录像文件,画面播放居中\n如您需要实际测试,请联系我们."
+        android:textSize="20dip"
+        android:textColor="@color/red"
+        android:background="@drawable/bg_info"/>
 </RelativeLayout>

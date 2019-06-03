@@ -109,7 +109,7 @@ public class MoreLayHeadSeekActivity extends Activity {
         skbTime.setMax((int) totalTimeUs);
 
 
-        drawPadView.setRealEncodeEnable(videoWidth, videoHeight, 1500000,25, dstPath);
+        drawPadView.setRealEncodeEnable(videoWidth, videoHeight,25, dstPath);
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 25);// 25是帧率.
         drawPadView.setDrawPadSize(videoWidth, videoHeight,new onDrawPadSizeChangedListener() {
                 @Override

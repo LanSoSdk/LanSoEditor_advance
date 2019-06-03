@@ -117,7 +117,7 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
     }
 
     /**
-     * 第一步: init DrawPad 初始化
+     * 第一步: init drawPad 初始化
      */
     private void initDrawPad(int w, int h) {
         drawPadView.setDrawPadSize(w,h, new onDrawPadSizeChangedListener() {
@@ -154,7 +154,7 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
     }
 
     /**
-     * Step3: stop DrawPad
+     * Step3: cancel drawPad
      */
     private void stopDrawPad() {
         if (drawPadView != null && drawPadView.isRunning()) {

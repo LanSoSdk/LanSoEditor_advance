@@ -23,7 +23,7 @@ import android.graphics.PointF;
 
 import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
 import com.lansosdk.box.BitmapLoader;
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 
 import com.lansosdk.LanSongFilter.LanSong3x3ConvolutionFilter;
 import com.lansosdk.LanSongFilter.LanSong3x3TextureSamplingFilter;
@@ -130,9 +130,9 @@ public class FilterLibrary {
 
         filterList.addFilter("1AMARO", FilterType.AMARO);
         filterList.addFilter("2RISE", FilterType.RISE);
-        filterList.addFilter("3HUDSON", FilterType.HUDSON);
+        filterList.addFilter("3HUDSON", FilterType.HUDSON);  //
         filterList.addFilter("4XPROII", FilterType.XPROII);
-        filterList.addFilter("5SIERRA", FilterType.SIERRA);
+        filterList.addFilter("5SIERRA", FilterType.SIERRA);  //
         filterList.addFilter("6LOMOFI", FilterType.LOMOFI);
         filterList.addFilter("7EARLYBIRD", FilterType.EARLYBIRD);
         filterList.addFilter("8SUTRO", FilterType.SUTRO);
@@ -480,7 +480,7 @@ public class FilterLibrary {
             case TOON:
                 return new LanSongToonFilter();
             default:
-                LSLog.w("No filter of that type!, return null");
+                LSOLog.w("No filter of that type!, return null");
                 return null;
 //                throw new IllegalStateException("No filter of that type!");
         }

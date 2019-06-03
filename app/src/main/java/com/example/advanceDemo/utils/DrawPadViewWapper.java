@@ -3,7 +3,6 @@ package com.example.advanceDemo.utils;
 import android.media.MediaPlayer;
 import android.view.Surface;
 
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.MediaInfo;
@@ -18,7 +17,6 @@ import java.io.IOException;
  */
 @Deprecated
 public class DrawPadViewWapper {
-    public final  static  String TAG= LSLog.TAG;
     DrawPadView drawPadView;
     String videopath;
     public MediaPlayer mediaPlayer;
@@ -66,7 +64,7 @@ public class DrawPadViewWapper {
             int height=mediaInfo.getHeight();
             editTmpPath=LanSongFileUtil.createMp4FileInBox();
 
-            drawPadView.setRealEncodeEnable(width, height,  (int)(mediaInfo.vBitRate*1.5f),(int) mediaInfo.vFrameRate, editTmpPath);
+            drawPadView.setRealEncodeEnable(width, height,(int) mediaInfo.vFrameRate, editTmpPath);
             drawPadView.setDrawPadSize(width, height,new onDrawPadSizeChangedListener() {
                 @Override
                 public void onSizeChanged(int viewWidth, int viewHeight) {
@@ -76,7 +74,7 @@ public class DrawPadViewWapper {
     }
 
     /**
-     * Step2: start DrawPad 开始运行这个容器.
+     * Step2: start drawPad 开始运行这个容器.
      */
     private void startDrawPad() {
 

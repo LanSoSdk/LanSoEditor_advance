@@ -11,7 +11,7 @@
     
     
    
-        <!-- DrawPad   -->
+        <!-- drawPad   -->
          <com.lansosdk.videoeditor.DrawPadView
             android:id="@+id/id_viewLayer_DrawPad_view"
             android:layout_width="320dp"

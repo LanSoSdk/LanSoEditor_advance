@@ -2,17 +2,17 @@ package com.lansosdk.videoeditor;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.util.Log;
-
-import com.lansosdk.box.LSLog;
+import android.os.Build;
+import android.os.Environment;
+import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LanSoEditorBox;
 
+import com.lansosdk.box.OnLanSongLogOutListener;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
+import java.util.Calendar;
 
 public class LanSoEditor {
 
@@ -20,9 +20,17 @@ public class LanSoEditor {
 
     public static void initSDK(Context context, String str) {
         loadLibraries(); // 拿出来单独加载库文件.
+
+
+
         initSo(context, str);
-        checkCPUName();
+//        String  cacheDir=getDiskCa˙cheDir(context)+"/lansongBox/";
+        LanSoEditor.setTempFileDir(Environment.getExternalStorageDirectory().getPath() + "/lansongBox/");
+
+
+        printSDKVersion();
     }
+
     public static void unInitSDK(){
         unInitSo();
     }
@@ -33,7 +41,7 @@ public class LanSoEditor {
      */
     public static void setTempFileDir(String tmpDir) {
         LanSoEditorBox.setTempFileDir(tmpDir);
-        LanSongFileUtil.TMP_DIR = tmpDir;
+        LanSongFileUtil.FileCacheDir = tmpDir;
     }
 
     /**
@@ -52,65 +60,140 @@ public class LanSoEditor {
             }
 
             LanSoEditorBox.setTempFileDir(tmpDir,prefix,subfix);
-            LanSongFileUtil.TMP_DIR = tmpDir;
+            LanSongFileUtil.FileCacheDir = tmpDir;
             LanSongFileUtil.mTmpFilePreFix=prefix;
             LanSongFileUtil.mTmpFileSubFix=subfix;
         }
     }
 
     /**
-     * 获取当前cpu的性能, 我们是根据市面上流行的cpu型号做的一一测试,得到的结果值. 如果返回0,则认为CPU的处理速度还可以.
-     * 如果是-1,则一些复杂的, 比如{@link LanSongBeautyAdvanceFilter}这样的操作,
-     * 会有点卡顿;比如后台处理可能耗时较长. 如果是-2 则认为cpu性能很低, 基本不能做美颜磨皮操作, 会很卡顿, 后台处理耗时会更长.
-     * <p>
-     * 可能比较偏门或2015年前的cpu很少测试,请注意.
-     *
-     * @return
+     * 设置SDK的log输出信息回调.
+     * 您可以保存到文本里或打印出来.
+     * @param listener
      */
+    public static void setSDKLogOutListener(OnLanSongLogOutListener listener){
+
+        if(listener!=null){
+            printSDKVersion();
+        }
+        LSOLog.setLogOutListener(listener);
+    }
+
+    /**
+     * 是否打开LSOLog的Log.d输出, 默认是打开的;
+     * @param is
+     */
+    public static void setSDKLogOutDebugInfo(boolean is){
+        LSOLog.setSDKLogOutDebugEnalbe(is);
+    }
+
+    //----------------------------------------------------------------------------------------
+    private static void printSDKVersion()
+    {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+
+        String nativeVersion="* \tnative version:"+VideoEditor.getSDKVersion()+ " ;  ABI: "+VideoEditor.getCurrentNativeABI()+ " ; type:"+VideoEditor.getLanSongSDKType()
+                + "; Limited time: year:"+VideoEditor.getLimitYear()+ " month:" +VideoEditor.getLimitMonth();
+
+        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+checkCPUName();
+
+
+        LSOLog.i("********************LanSongSDK**********************");
+        LSOLog.i("* ");
+        LSOLog.i(deviceInfo);
+        LSOLog.i(nativeVersion);
+        LSOLog.i("* \t"+ LanSoEditorBox.getBoxInfo());
+        LSOLog.i("* ");
+        LSOLog.i("*************************************************************");
+    }
+    private static String getAndroidVersion(){
+        switch (Build.VERSION.SDK_INT){
+            case 28:
+                return "Androdi-9.0";
+            case 27:
+                return "Androdi-8.1";
+            case 26:
+                return "Androdi-8.0";
+            case 25:
+                return "Androdi-7.1.1";
+            case 24:
+                return "Androdi-7.0";
+            case 23:
+                return "Androdi-6.0";
+            case 22:
+                return "Androdi-5.1";
+            case 21:
+                return "Androdi-5.0";
+            case 20:
+                return "Androdi-4.4W";
+            case 19:
+                return "Androdi-4.4";
+            case 18:
+                return "Androdi-4.3";
+            default:
+                return "unknow-API="+Build.VERSION.SDK_INT;
+        }
+    }
     public static int getCPULevel() {
         return LanSoEditorBox.getCPULevel();
     }
-
-
-//----------------------------------------------------------------------------------------
+    private static String getDiskCacheDir(Context context) {
+        String cachePath = null;
+        //  LanSoEditor.setTempFileDir(Environment.getExternalStorageDirectory().getPath() + "/lansongBox/");
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+            cachePath = context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
+        return cachePath;
+    }
     private static synchronized void loadLibraries() {
         if (isLoaded)
             return;
+
         System.loadLibrary("LanSongffmpeg");
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
 
-        LSLog.d("loaded native libraries......isQiLinSoC:"+VideoEditor.isQiLinSoc());
+        LSOLog.d("loaded native libraries.isQiLinSoC:"+VideoEditor.isQiLinSoc());
         isLoaded = true;
     }
 
     private static void initSo(Context context, String str) {
         nativeInit(context, context.getAssets(), str);
-        LanSoEditorBox.init();
+        LanSoEditorBox.init(context);
     }
     private static void unInitSo() {
         nativeUninit();
     }
 
+
+
+
     private static native void nativeInit(Context ctx, AssetManager ass,String filename);
     private static native void nativeUninit();
-    private static void checkCPUName() {
-//        String str1 = "/proc/cpuinfo";
-//        String str2 = "";
-//        try {
-//            FileReader fr = new FileReader(str1);
-////            BufferedReader localBufferedReader = new BufferedReader(fr, 8192);
-////            str2 = localBufferedReader.readLine();
-////            while (str2 != null) {
-////                if(str2.contains("SDM845")|| str2.contains("SDM835")){  //845的平台;
-////                    VideoEditor.isForceSoftWareEncoder=true;
-////                }
-////                str2 = localBufferedReader.readLine();
-////            }
-////            localBufferedReader.close();
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
+    private static String checkCPUName() {
+        String str1 = "/proc/cpuinfo";
+        String str2 = "";
+        try {
+            FileReader fr = new FileReader(str1);
+            BufferedReader localBufferedReader = new BufferedReader(fr, 8192);
+            str2 = localBufferedReader.readLine();
+            while (str2 != null) {
+                if(str2.contains("Hardware")){
+                    return str2;
+                }
+                str2 = localBufferedReader.readLine();
+            }
+            localBufferedReader.close();
+            return "unknown";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return " [get /proc/cpuinfo error]";
+        }
     }
 
     ////LSTODO 特定用户使用, 发布删除;

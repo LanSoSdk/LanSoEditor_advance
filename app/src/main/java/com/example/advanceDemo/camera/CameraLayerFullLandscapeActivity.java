@@ -157,7 +157,7 @@ public class CameraLayerFullLandscapeActivity extends AppCompatActivity
     }
 
     /**
-     * Step1: 开始运行 DrawPad 容器
+     * Step1: 开始运行 drawPad 容器
      */
     private void initDrawPad() {
         /**

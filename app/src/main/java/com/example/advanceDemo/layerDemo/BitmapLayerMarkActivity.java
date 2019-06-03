@@ -21,7 +21,6 @@ import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -53,7 +52,6 @@ public class BitmapLayerMarkActivity extends Activity {
         mContext = getApplicationContext();
 
         mVideoPath = getIntent().getStringExtra("videopath");
-
         markView = (MarkArrowView) findViewById(R.id.markarrow_view);
         playVideo = (LinearLayout) findViewById(R.id.id_markarrow_saveplay);
         playVideo.setOnClickListener(new OnClickListener() {
@@ -120,17 +118,13 @@ public class BitmapLayerMarkActivity extends Activity {
     }
 
     /**
-     * Step1: 初始化 DrawPad 容器
+     * Step1: 初始化 drawPad 容器
      */
     private void initDrawPad() {
         MediaInfo info = new MediaInfo(mVideoPath);
         if (info.prepare()) {
-            // mMarkView.setUseMainVideoPts(true);
-            markView.setRealEncodeEnable(480, 480, 1000000,
-                    (int) info.vFrameRate, editTmpPath);
-            markView.setDrawPadSize(480, 480,
-                    new onDrawPadSizeChangedListener() {
-
+            markView.setRealEncodeEnable(480, 480,(int) info.vFrameRate, editTmpPath);
+            markView.setDrawPadSize(480, 480,new onDrawPadSizeChangedListener() {
                         @Override
                         public void onSizeChanged(int viewWidth, int viewHeight) {
                             // TODO Auto-generated method stub
@@ -145,9 +139,7 @@ public class BitmapLayerMarkActivity extends Activity {
      */
     private void startDrawPad() {
         markView.startDrawPad();
-
-        mLayerMain = markView.addMainVideoLayer(mplayer.getVideoWidth(),
-                mplayer.getVideoHeight(), null);
+        mLayerMain = markView.addMainVideoLayer(mplayer.getVideoWidth(),mplayer.getVideoHeight(), null);
         if (mLayerMain != null) {
             mplayer.setSurface(new Surface(mLayerMain.getVideoTexture()));
         }
@@ -160,7 +152,6 @@ public class BitmapLayerMarkActivity extends Activity {
     private void stopDrawPad() {
         if (markView != null && markView.isRunning()) {
             markView.stopDrawPad();
-
             toastStop();
 
             if (LanSongFileUtil.fileExist(editTmpPath)) {

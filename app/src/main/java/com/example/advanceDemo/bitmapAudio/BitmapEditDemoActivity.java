@@ -43,9 +43,9 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
     private Bitmap srcBmp = null;
     private DrawPadView drawPadView;
     private BitmapLayer bmpLayer = null;
-    private FilterAdjuster mFilterAdjuster;
-    private SeekBar AdjusterFilter;
-    private ViewLayer mViewLayer = null;
+    private FilterAdjuster filterAdjuster;
+    private SeekBar adjusterFilter;
+    private ViewLayer viewLayer = null;
     private ViewLayerRelativeLayout viewLayerRelativeLayout;
     private ImageTouchView imgeTouchView;
     private StickerView stickView;
@@ -61,7 +61,7 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
 
         initView();
 
-        String bmpPath = CopyFileFromAssets.copyAssets(getApplicationContext(),"t14.jpg");
+        String bmpPath = CopyFileFromAssets.copyAssets(getApplicationContext(), "t14.jpg");
         srcBmp = BitmapFactory.decodeFile(bmpPath);
     }
 
@@ -80,7 +80,6 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
     @Override
     protected void onPause() {
         super.onPause();
-
         drawPadView.stopDrawPad();
     }
 
@@ -90,13 +89,12 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
     private void initDrawPad() {
         // 设置为自动刷新模式, 帧率为25
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 30);
-        drawPadView.setDrawPadSize(srcBmp.getWidth(), srcBmp.getHeight(),
-                new onDrawPadSizeChangedListener() {
-                    @Override
-                    public void onSizeChanged(int viewWidth, int viewHeight) {
-                        startDrawPad();
-                    }
-                });
+        drawPadView.setDrawPadSize(srcBmp.getWidth(), srcBmp.getHeight(), new onDrawPadSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int viewWidth, int viewHeight) {
+                startDrawPad();
+            }
+        });
     }
 
     /**
@@ -118,23 +116,23 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
      */
     private void addViewLayer() {
         if (drawPadView != null && drawPadView.isRunning()) {
-            mViewLayer = drawPadView.addViewLayer();
+            viewLayer = drawPadView.addViewLayer();
 
             // 绑定
             ViewGroup.LayoutParams params = viewLayerRelativeLayout
                     .getLayoutParams();
-            params.width = mViewLayer.getPadWidth();
-            params.height = mViewLayer.getPadHeight();
+            params.width = viewLayer.getPadWidth();
+            params.height = viewLayer.getPadHeight();
             viewLayerRelativeLayout.setLayoutParams(params);
 
-            setLayout(imgeTouchView, mViewLayer.getPadWidth(),
-                    mViewLayer.getPadHeight());
-            setLayout(stickView, mViewLayer.getPadWidth(),
-                    mViewLayer.getPadHeight());
-            setLayout(textStickView, mViewLayer.getPadWidth(),
-                    mViewLayer.getPadHeight());
 
-            viewLayerRelativeLayout.bindViewLayer(mViewLayer);
+            setLayout(imgeTouchView, viewLayer.getPadWidth(), viewLayer.getPadHeight());
+
+            setLayout(stickView, viewLayer.getPadWidth(), viewLayer.getPadHeight());
+
+            setLayout(textStickView, viewLayer.getPadWidth(), viewLayer.getPadHeight());
+
+            viewLayerRelativeLayout.bindViewLayer(viewLayer);
             viewLayerRelativeLayout.invalidate();
         }
     }
@@ -151,24 +149,19 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
      */
     private void selectFilter() {
         if (drawPadView != null && drawPadView.isRunning()) {
-            FilterLibrary.showDialog(this,
-                    new OnLanSongFilterChosenListener() {
+            FilterLibrary.showDialog(this, new OnLanSongFilterChosenListener() {
+                @Override
+                public void onLanSongFilterChosenListener(
+                        final LanSongFilter filter, String name) {
 
-                        @Override
-                        public void onLanSongFilterChosenListener(
-                                final LanSongFilter filter, String name) {
-
-                            if (bmpLayer != null) {
-                                bmpLayer.switchFilterTo(filter);
-                                mFilterAdjuster = new FilterAdjuster(filter);
-                                // 如果这个滤镜 可调, 显示可调节进度条.
-                                findViewById(R.id.id_bmp2bmp_filter_seekbar)
-                                        .setVisibility(
-                                                mFilterAdjuster.canAdjust() ? View.VISIBLE
-                                                        : View.GONE);
-                            }
-                        }
-                    });
+                    if (bmpLayer != null) {
+                        bmpLayer.switchFilterTo(filter);
+                        filterAdjuster = new FilterAdjuster(filter);
+                        // 如果这个滤镜 可调, 显示可调节进度条.
+                        findViewById(R.id.id_bmp2bmp_filter_seekbar).setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.GONE);
+                    }
+                }
+            });
         }
     }
 
@@ -189,26 +182,24 @@ public class BitmapEditDemoActivity extends Activity implements OnClickListener 
         findViewById(R.id.id_bmp2bmp_addtext).setOnClickListener(this);
 
         // 滤镜的设置.
-        AdjusterFilter = (SeekBar) findViewById(R.id.id_bmp2bmp_filter_seekbar);
-        AdjusterFilter
-                .setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        adjusterFilter = (SeekBar) findViewById(R.id.id_bmp2bmp_filter_seekbar);
+        adjusterFilter.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
 
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar,
-                                                  int progress, boolean fromUser) {
-                        if (mFilterAdjuster != null) {
-                            mFilterAdjuster.adjust(progress);
-                        }
-                    }
-                });
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (filterAdjuster != null) {
+                    filterAdjuster.adjust(progress);
+                }
+            }
+        });
         ivShowImg = (ImageView) findViewById(R.id.id_bmp2bmp_showimg_iv);
 
         findViewById(R.id.id_bmp2bmp_showlayout).setVisibility(View.GONE);

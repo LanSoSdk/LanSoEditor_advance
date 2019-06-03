@@ -22,12 +22,13 @@ import com.lansosdk.box.DrawPadUpdateMode;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
 import java.io.IOException;
+
+import static com.lansosdk.videoeditor.CopyFileFromAssets.copyAssets;
 
 
 public class TwoVideoLayoutActivity extends Activity {
@@ -76,7 +77,7 @@ public class TwoVideoLayoutActivity extends Activity {
      * 把视频1,2 都准备好.
      */
     private void startPlayVideo12() {
-        videoPath2 = CopyFileFromAssets.copyAssets(getApplicationContext(),"ping5s.mp4");
+        videoPath2 = copyAssets(getApplicationContext(),"ping5s.mp4");
 
         if (mVideoPath != null && videoPath2 != null) {
             mplayer1 = new MediaPlayer();
@@ -127,7 +128,7 @@ public class TwoVideoLayoutActivity extends Activity {
             mInfo = new MediaInfo(mVideoPath);
             if (mInfo.prepare()) {
                 drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH,  (int) mInfo.vFrameRate);
-                drawPadView.setRealEncodeEnable(640, 640, 1800*1024, (int) mInfo.vFrameRate, editTmpPath);
+                drawPadView.setRealEncodeEnable(640, 640, (int) mInfo.vFrameRate, editTmpPath);
                 drawPadView.setDrawPadSize(640,640, new onDrawPadSizeChangedListener() {
                     @Override
                     public void onSizeChanged(int viewWidth,int viewHeight) {
@@ -139,7 +140,7 @@ public class TwoVideoLayoutActivity extends Activity {
     }
 
     /**
-     * Step2: start DrawPad 开始运行这个容器.
+     * Step2: start drawPad 开始运行这个容器.
      */
     private void startDrawPad() {
         drawPadView.pauseDrawPad(); // 先标志线程在开启后,暂停.

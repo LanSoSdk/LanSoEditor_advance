@@ -28,7 +28,6 @@ import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.LanSongFileUtil;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.plattysoft.leonids.ParticleSystem;
 import com.plattysoft.leonids.modifiers.AlphaModifier;
@@ -111,7 +110,7 @@ public class ParticleDemoActivity extends Activity implements OnClickListener {
     }
 
     private void initDrawPad() {
-        drawPadView.setRealEncodeEnable(640, 640, 1500 * 1024, (int) mInfo.vFrameRate, editTmpPath);
+        drawPadView.setRealEncodeEnable(640, 640,(int) mInfo.vFrameRate, editTmpPath);
         drawPadView.setDrawPadSize(640, 640, new onDrawPadSizeChangedListener() {
             @Override
             public void onSizeChanged(int viewWidth, int viewHeight) {

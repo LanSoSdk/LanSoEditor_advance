@@ -27,7 +27,6 @@ import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.DrawPadView.onViewAvailable;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -148,12 +147,11 @@ public class MVLayerDemoActivity extends Activity {
     }
 
     /**
-     * Step1: 开始运行 DrawPad 容器
+     * Step1: 开始运行 drawPad 容器
      */
     private void initDrawPad() {
         // 设置使能 实时录制, 即把正在DrawPad中呈现的画面实时的保存下来,实现所见即所得的模式
-        mDrawPadView.setRealEncodeEnable(480, 480, 1000000,
-                (int) mInfo.vFrameRate, editTmpPath);
+        mDrawPadView.setRealEncodeEnable(480, 480,(int) mInfo.vFrameRate, editTmpPath);
         mDrawPadView.setOnDrawPadProgressListener(new onDrawPadProgressListener() {
 
             @Override

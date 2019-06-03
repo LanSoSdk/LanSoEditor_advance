@@ -19,7 +19,7 @@ import android.text.TextUtils;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -324,7 +324,8 @@ public class VideoPlayer  {
     }
     public void setSurface(Surface surface) {
         if (mScreenOnWhilePlaying && surface != null) {
-            LSLog.e("setScreenOnWhilePlaying(true) is ineffective for Surface");
+            LSOLog.e(
+                    "setScreenOnWhilePlaying(true) is ineffective for Surface");
         }
         mSurfaceHolder = null;
         _setVideoSurface(surface);
@@ -766,7 +767,8 @@ public class VideoPlayer  {
         public void handleMessage(Message msg) {
             VideoPlayer player = mWeakPlayer.get();
             if (player == null || player.mNativeMediaPlayer == 0) {
-                LSLog.e("VideoPlayer went away with unhandled events");
+                LSOLog.e(
+                        "VideoPlayer went away with unhandled events");
                 return;
             }
 
@@ -812,7 +814,7 @@ public class VideoPlayer  {
                 return;
 
             case MEDIA_ERROR:
-                LSLog.e( "Error (" + msg.arg1 + "," + msg.arg2 + ")");
+                LSOLog.e( "Error (" + msg.arg1 + "," + msg.arg2 + ")");
                 if (!player.notifyOnError(msg.arg1, msg.arg2)) {
                     player.notifyOnCompletion();
                 }
@@ -843,7 +845,7 @@ public class VideoPlayer  {
                  player.notifyFrameUpdate(msg.arg1);
                  break;
             default:
-                LSLog.e( "Unknown message type " + msg.what);
+                LSOLog.e( "Unknown message type " + msg.what);
             }
         }
     }

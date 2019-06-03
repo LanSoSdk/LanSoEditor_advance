@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.lansosdk.box.CameraLayer;
-import com.lansosdk.box.LSLog;
 
 import java.util.ArrayList;
 
@@ -16,7 +15,7 @@ import com.lansosdk.LanSongFilter.LanSongBeautyTuneFilter;
 import com.lansosdk.LanSongFilter.LanSongBeautyWhiteFilter;
 
 public class BeautyManager {
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG ="LanSongSDK";
     private boolean isTuneBeauting;
     private LanSongLookupFilter mlookupFilter;
     private LanSongBeautyTuneFilter beautyTuneFilter;

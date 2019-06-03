@@ -27,7 +27,6 @@ import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -118,23 +117,13 @@ public class LayerLayoutDemoActivity extends Activity {
         /**
          * 设置当前DrawPad的宽度和高度,并把宽度自动缩放到父view的宽度,然后等比例调整高度.
          */
-        drawPadView.setDrawPadSize(padWidth, padHeight,
-                new onDrawPadSizeChangedListener() {
-                    @Override
-                    public void onSizeChanged(int viewWidth, int viewHeight) {
-                        startDrawPad();
-                    }
-                });
-
-        drawPadView.setRealEncodeEnable(padWidth, padHeight, (int)(1.5f*1024*1024),
-                (int) mInfo.vFrameRate, editTmpPath);
-
-        drawPadView.setOnDrawPadProgressListener(new onDrawPadProgressListener() {
-                    @Override
-                    public void onProgress(DrawPad v, long currentTimeUs) {
-
-                    }
-                });
+        drawPadView.setDrawPadSize(padWidth, padHeight, new onDrawPadSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int viewWidth, int viewHeight) {
+                startDrawPad();
+            }
+        });
+        drawPadView.setRealEncodeEnable(padWidth, padHeight, (int) mInfo.vFrameRate, editTmpPath);
     }
 
     /**
@@ -148,14 +137,13 @@ public class LayerLayoutDemoActivity extends Activity {
                     .decodeResource(getResources(), R.drawable.videobg));
             layer.setScaledValue(layer.getPadWidth(), layer.getPadHeight()); // 填充整个屏幕.
 
-            videoLayer = drawPadView.addMainVideoLayer(mplayer.getVideoWidth(),mplayer.getVideoHeight(), null);
+            videoLayer = drawPadView.addMainVideoLayer(mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
             if (videoLayer != null) {
                 mplayer.setSurface(new Surface(videoLayer.getVideoTexture()));
                 mplayer.start();
 
                 videoLayer.setScale(0.8f);
-                videoLayer.setPosition(videoLayer.getPositionX(),
-                        videoLayer.getLayerHeight() / 2);
+                videoLayer.setPosition(videoLayer.getPositionX(),videoLayer.getLayerHeight() / 2.0f);
 
             }
             addBitmapLayer();
@@ -192,9 +180,8 @@ public class LayerLayoutDemoActivity extends Activity {
 
             bmpLayer.setScaledValue(bmpLayer.getPadWidth() * 0.3f, bmpLayer.getPadHeight() * 0.3f);
 
-            bmpLayer.setPosition(bmpLayer.getPadWidth() * 3 / 4, bmpLayer.getPadHeight() * 3 / 4);
+            bmpLayer.setPosition(bmpLayer.getPadWidth() * 3.0f / 4.0f, bmpLayer.getPadHeight() * 3.0f / 4.0f);
             bmpLayer.setRotate(360 - 45); // 设置的角度是逆时针旋转的.
-
 
 //			int layW = bmpLayer.getLayerWidth();
 //			int layH = bmpLayer.getLayerHeight();
@@ -228,7 +215,7 @@ public class LayerLayoutDemoActivity extends Activity {
     }
 
     /**
-     * Step3: stop DrawPad
+     * Step3: cancel drawPad
      */
     private void stopDrawPad() {
         if (drawPadView != null && drawPadView.isRunning()) {
@@ -237,7 +224,7 @@ public class LayerLayoutDemoActivity extends Activity {
             toastStop();
 
             if (LanSongFileUtil.fileExist(editTmpPath)) {
-                dstPath= AudioEditor.mergeAudioNoCheck(videoPath, editTmpPath, true);
+                dstPath = AudioEditor.mergeAudioNoCheck(videoPath, editTmpPath, true);
                 playVideo.setVisibility(View.VISIBLE);
             } else {
                 Log.e(TAG, " player completion, but file:" + editTmpPath

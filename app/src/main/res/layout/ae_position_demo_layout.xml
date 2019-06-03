@@ -16,7 +16,6 @@
         android:layout_height="960dp"
         android:background="#FF0000"/>
 
-
     <TextView
         android:id="@+id/id_aepostion_textview"
         android:layout_width="wrap_content"

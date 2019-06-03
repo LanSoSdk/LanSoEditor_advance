@@ -1,8 +1,6 @@
 package com.lansosdk.videoeditor;
 
-import android.util.Log;
-
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,16 +89,10 @@ public class AudioEditor {
     }
 
     /**
-     * LSTODO增加静音举例.
-     * @param filelength
-     * @param channel
-     * @param sampleRate
-     * @param bitperSample
-     * @return
      */
-    public static byte[] getWavheader(int filelength, int channel, int sampleRate, int bitperSample) {
+    public static byte[] getWavheader(int filelength, int channel, int sampleRate) {
         byte header[] = new byte[44];
-        VideoEditor.createWavHeader(filelength, channel, sampleRate, bitperSample, header);
+        VideoEditor.createWavHeader(filelength, channel, sampleRate, 16, header);
         return header;
     }
 
@@ -158,11 +150,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executePcmConvertSamplerate 失败, 请查看打印信息");
+                LSOLog.e("executePcmConvertSamplerate 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executePcmConvertSamplerate 执行失败, 文件不存在");
+            LSOLog.e("executePcmConvertSamplerate 执行失败, 文件不存在");
             return null;
         }
     }
@@ -206,11 +198,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executeConvertToWav 失败, 请查看打印信息");
+                LSOLog.e("executeConvertToWav 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executeConvertToWav 执行失败, 文件不存在");
+            LSOLog.e("executeConvertToWav 执行失败, 文件不存在");
             return null;
         }
     }
@@ -256,11 +248,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executeConvertToWav 失败, 请查看打印信息");
+                LSOLog.e("executeConvertToWav 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executeConvertToWav 执行失败, 文件不存在");
+            LSOLog.e("executeConvertToWav 执行失败, 文件不存在");
             return null;
         }
     }
@@ -305,11 +297,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executeConvertWavToMp3 失败, 请查看打印信息");
+                LSOLog.e("executeConvertWavToMp3 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executeConvertWavToMp3 执行失败, 文件不存在");
+            LSOLog.e("executeConvertWavToMp3 执行失败, 文件不存在");
             return null;
         }
     }
@@ -357,11 +349,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executeConvertWavToM4a 失败, 请查看打印信息");
+                LSOLog.e("executeConvertWavToM4a 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executeConvertWavToM4a 执行失败, 文件不存在");
+            LSOLog.e("executeConvertWavToM4a 执行失败, 文件不存在");
             return null;
         }
     }
@@ -411,11 +403,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executeConvertM4aToMp3 失败, 请查看打印信息");
+                LSOLog.e("executeConvertM4aToMp3 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executeConvertM4aToMp3 执行失败, 文件不存在");
+            LSOLog.e("executeConvertM4aToMp3 执行失败, 文件不存在");
             return null;
         }
     }
@@ -465,11 +457,11 @@ public class AudioEditor {
             if(ret==0){
                 return dstPath;
             }else{
-                LSLog.e("executeConvertMp3ToM4a 失败, 请查看打印信息");
+                LSOLog.e("executeConvertMp3ToM4a 失败, 请查看打印信息");
                 return null;
             }
         }else{
-            LSLog.e("executeConvertMp3ToM4a 执行失败, 文件不存在");
+            LSOLog.e("executeConvertMp3ToM4a 执行失败, 文件不存在");
             return null;
         }
     }
@@ -625,8 +617,6 @@ public class AudioEditor {
     }
     /**
      * 音频裁剪,截取音频文件中的一段.
-     * 需要注意到是: 尽量保持裁剪文件的后缀名和源音频的后缀名一致.
-     *
      * @param srcFile   源音频
      * @param startS    开始时间,单位是秒. 可以有小数
      * @param durationS 裁剪的时长.
@@ -637,7 +627,7 @@ public class AudioEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstFile=LanSongFileUtil.createFileInBox(LanSongFileUtil.getFileSuffix(srcFile));
+            String dstFile=LanSongFileUtil.createM4AFileInBox();
 
             cmdList.add("-i");
             cmdList.add(srcFile);
@@ -648,8 +638,24 @@ public class AudioEditor {
             cmdList.add("-t");
             cmdList.add(String.valueOf(durationS));
 
+            cmdList.add("-vn");
+//            cmdList.add("-acodec");
+//            cmdList.add("copy");
+
+            //2019-04-26 09:32:40 强制为faac编码;
             cmdList.add("-acodec");
-            cmdList.add("copy");
+            cmdList.add("libfaac");
+
+            cmdList.add("-ac");
+            cmdList.add("2");
+
+            cmdList.add("-ar");
+            cmdList.add("44100");
+
+            cmdList.add("-b:a");
+            cmdList.add("128000");
+
+
             cmdList.add("-y");
             cmdList.add(dstFile);
 

@@ -72,10 +72,10 @@ public class BitmapLruCache {
     // }
     // return b;
     // }
-    // public synchronized void pushBitmap(long ptsUs, Bitmap bitmap) {
+    // public synchronized void pushBitmap(long ptsUs, Bitmap byteBuffer) {
     // String key="pts:" + ptsUs;
-    // if (key != null && bitmap != null && getBitmap(ptsUs) == null) {
-    // mMemCache.put(key, bitmap);
+    // if (key != null && byteBuffer != null && getBitmap(ptsUs) == null) {
+    // mMemCache.put(key, byteBuffer);
     // }
     // }
 
@@ -92,16 +92,16 @@ public class BitmapLruCache {
     // return getBitmapFromMemCache("pts:" + ptsUs);
     // }
     //
-    // private void addBitmapToMemCache(long ptsUs, Bitmap bitmap) {
-    // addBitmapToMemCache("pts:" + ptsUs, bitmap);
+    // private void addBitmapToMemCache(long ptsUs, Bitmap byteBuffer) {
+    // addBitmapToMemCache("pts:" + ptsUs, byteBuffer);
     // }
     // public static Bitmap getFromResource(Resources res, int resId) {
     // BitmapCache cache = BitmapCache.getInstance();
-    // Bitmap bitmap = cache.getBitmapFromMemCache(resId);
-    // if (bitmap == null) {
-    // bitmap = BitmapFactory.decodeResource(res, resId);
-    // cache.addBitmapToMemCache(resId, bitmap);
+    // Bitmap byteBuffer = cache.getBitmapFromMemCache(resId);
+    // if (byteBuffer == null) {
+    // byteBuffer = BitmapFactory.decodeResource(res, resId);
+    // cache.addBitmapToMemCache(resId, byteBuffer);
     // }
-    // return bitmap;
+    // return byteBuffer;
     // }
 }

@@ -11,19 +11,24 @@ import com.example.advanceDemo.bitmapAudio.DisplayFramesActivity;
 import com.example.advanceDemo.bitmapAudio.ExtractVideoFrameDemoActivity;
 import com.lansoeditor.advanceDemo.R;
 
-public class ListBitmapAudioActivity extends Activity implements OnClickListener {
+public class ListBitmapAudioActivity extends Activity implements
+        OnClickListener {
+
     String videoPath = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         videoPath = getIntent().getStringExtra("videopath");
+
         setContentView(R.layout.get_frames_list_layout);
 
         findViewById(R.id.id_getframe_testtime).setOnClickListener(this);
         findViewById(R.id.id_getframe_get25frame).setOnClickListener(this);
         findViewById(R.id.id_getframe_get60frame).setOnClickListener(this);
         findViewById(R.id.id_getframe_allframe).setOnClickListener(this);
+
         findViewById(R.id.id_getframe_bmpedit).setOnClickListener(this);
     }
 

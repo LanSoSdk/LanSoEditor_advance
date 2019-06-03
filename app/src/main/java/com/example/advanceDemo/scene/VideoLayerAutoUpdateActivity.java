@@ -110,7 +110,7 @@ public class VideoLayerAutoUpdateActivity extends Activity {
     private void initDrawPad() {
         MediaInfo info = new MediaInfo(mVideoPath);
         if (info.prepare()) {
-            drawPadView.setRealEncodeEnable(480, 480, 1000000, (int) info.vFrameRate, dstPath);
+            drawPadView.setRealEncodeEnable(480, 480, (int) info.vFrameRate, dstPath);
             drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 25);// 25是帧率.
 
             drawPadView.setDrawPadSize(480, 480, new onDrawPadSizeChangedListener() {

@@ -52,6 +52,12 @@
             <TextView  style="@style/main_item_arrow"/>
         </RelativeLayout>
 
+        <RelativeLayout  android:id="@+id/id_aemain_more_picture" style="@style/main_item_reletivelayout2">
+            <TextView   android:text="多张图片" style="@style/main_item_textview"/>
+            <TextView  style="@style/main_item_arrow"/>
+        </RelativeLayout>
+
+
         <RelativeLayout  android:id="@+id/id_aemain_videobtimap" style="@style/main_item_reletivelayout2">
         <TextView   android:text="替换视频" style="@style/main_item_textview"/>
         <TextView  style="@style/main_item_arrow"/>

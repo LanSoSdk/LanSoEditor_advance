@@ -135,7 +135,7 @@ public class CameraLayerFullPortWithMp3Activity extends Activity implements
     }
 
     /**
-     * Step1: 开始运行 DrawPad 容器
+     * Step1: 开始运行 drawPad 容器
      */
     private void initDrawPad() {
         /**

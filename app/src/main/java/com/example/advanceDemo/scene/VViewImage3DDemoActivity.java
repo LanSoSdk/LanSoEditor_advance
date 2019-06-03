@@ -24,9 +24,7 @@ import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.LanSongFileUtil;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
-import com.lansosdk.videoeditor.VideoEditor;
 
 import java.io.IOException;
 
@@ -132,8 +130,7 @@ public class VViewImage3DDemoActivity extends Activity {
 
     private void initDrawPad(MediaPlayer mp) {
         drawpadView.setUpdateMode(DrawPadUpdateMode.ALL_VIDEO_READY, 25);
-        drawpadView.setRealEncodeEnable(480, 480, 1200 * 1024,
-                (int) mInfo.vFrameRate, editTmpPath);
+        drawpadView.setRealEncodeEnable(480, 480, (int) mInfo.vFrameRate, editTmpPath);
         drawpadView.setDrawPadSize(480, 480,
                 new onDrawPadSizeChangedListener() {
 

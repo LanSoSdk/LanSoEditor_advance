@@ -134,14 +134,14 @@ public class CameraSubLayerDemo1Activity extends Activity implements
         super.onResume();
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,TAG);
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, TAG);
             mWakeLock.acquire();
         }
         startDrawPad();
     }
 
     /**
-     * Step1: 开始运行 DrawPad 容器
+     * Step1: 开始运行 drawPad 容器
      */
     private void initDrawPad() {
         int padWidth = 544;
@@ -150,7 +150,7 @@ public class CameraSubLayerDemo1Activity extends Activity implements
         /**
          * 设置录制时的一些参数.
          */
-        mDrawPadCamera.setRealEncodeEnable(padWidth, padHeight, bitrate,(int) 25, dstPath);
+        mDrawPadCamera.setRealEncodeEnable(padWidth, padHeight, bitrate, (int) 25, dstPath);
         /**
          * 录制的同时,录制外面的声音.
          */
@@ -192,66 +192,60 @@ public class CameraSubLayerDemo1Activity extends Activity implements
      * Step2: 开始运行 Drawpad线程.
      */
     private void startDrawPad() {
+        
         // 如果是屏幕比例大于16:9,则需要重新设置编码参数, 从而画面不变形
-        if (LanSongUtil.isFullScreenRatio(mDrawPadCamera.getViewWidth(),
-                mDrawPadCamera.getViewHeight())) {
-            mDrawPadCamera.setRealEncodeEnable(544, 1088, 3500 * 1024,
-                    (int) 25, dstPath);
+        if (LanSongUtil.isFullScreenRatio(mDrawPadCamera.getViewWidth(), mDrawPadCamera.getViewHeight())) {
+            mDrawPadCamera.setRealEncodeEnable(544, 1088, 3500 * 1024, 25, dstPath);
         }
         if (mDrawPadCamera.setupDrawpad()) {
-            cameraLayer = mDrawPadCamera.getCameraLayer();
             mDrawPadCamera.startPreview(); // 容器开始预览
+            cameraLayer = mDrawPadCamera.getCameraLayer();
+            if (cameraLayer != null) {
+                // 增加一个子图层;
+                SubLayer layer1 = cameraLayer.addSubLayer();
+                SubLayer layer2 = cameraLayer.addSubLayer();
+                SubLayer layer3 = cameraLayer.addSubLayer();
+                SubLayer layer4 = cameraLayer.addSubLayer();
 
-            // 增加一个子图层;
-            SubLayer layer1 = cameraLayer.addSubLayer();
-            SubLayer layer2 = cameraLayer.addSubLayer();
-            SubLayer layer3 = cameraLayer.addSubLayer();
-            SubLayer layer4 = cameraLayer.addSubLayer();
+                layer1.setScale(0.5f);
+                layer2.setScale(0.5f);
+                layer3.setScale(0.5f);
+                layer4.setScale(0.5f);
 
-            layer1.setScale(0.5f);
-            layer2.setScale(0.5f);
-            layer3.setScale(0.5f);
-            layer4.setScale(0.5f);
+                // 左上角为0,0;, 设置每个子图层中心点的位置
+                int x1 = layer1.getPadWidth() / 4;
+                int y1 = layer1.getPadHeight() / 4;
 
-            // 左上角为0,0;, 设置每个子图层中心点的位置
-            int x1 = layer1.getPadWidth() / 4;
-            int y1 = layer1.getPadHeight() / 4;
+                int x2 = layer2.getPadWidth() / 4;
+                int y2 = layer2.getPadHeight() * 3 / 4;
 
-            int x2 = layer2.getPadWidth() / 4;
-            int y2 = layer2.getPadHeight() * 3 / 4;
+                int x3 = layer3.getPadWidth() * 3 / 4;
+                int y3 = layer3.getPadHeight() / 4;
 
-            int x3 = layer3.getPadWidth() * 3 / 4;
-            int y3 = layer3.getPadHeight() / 4;
+                int x4 = layer4.getPadWidth() * 3 / 4;
+                int y4 = layer4.getPadHeight() * 3 / 4;
 
-            int x4 = layer4.getPadWidth() * 3 / 4;
-            int y4 = layer4.getPadHeight() * 3 / 4;
+                layer1.setPosition(x1, y1);
+                layer2.setPosition(x2, y2);
+                layer3.setPosition(x3, y3);
+                layer4.setPosition(x4, y4);
 
-            layer1.setPosition(x1, y1);
-            layer2.setPosition(x2, y2);
-            layer3.setPosition(x3, y3);
-            layer4.setPosition(x4, y4);
+                // 第一个增加一个边框
+                // layer1.setVisibleRect(0.02f,0.98f,0.02f,0.98f); //这里0.02和0.98,
+                // 是为了上下左右边框留出0.02的边框;
+                // layer1.setVisibleRectBorder(0.02f, 1.0f, 0.0f, 0.0f, 1.0f);
+                // //设置边框;
 
-            // 第一个增加一个边框
-            // layer1.setVisibleRect(0.02f,0.98f,0.02f,0.98f); //这里0.02和0.98,
-            // 是为了上下左右边框留出0.02的边框;
-            // layer1.setVisibleRectBorder(0.02f, 1.0f, 0.0f, 0.0f, 1.0f);
-            // //设置边框;
-
-            // 增加不同的滤镜来显示效果
-            layer1.switchFilterTo(new LanSongIF1977Filter(mContext));
-            layer2.switchFilterTo(new LanSongIFAmaroFilter(mContext));
-            layer3.switchFilterTo(new LanSongIFEarlybirdFilter(mContext));
-            layer4.switchFilterTo(new LanSongIFNashvilleFilter(mContext));
-
-
-
-
-            // 增加滤镜, 应该从当前图层就可以增加滤镜!!!!
+                // 增加不同的滤镜来显示效果
+                layer1.switchFilterTo(new LanSongIF1977Filter(mContext));
+                layer2.switchFilterTo(new LanSongIFAmaroFilter(mContext));
+                layer3.switchFilterTo(new LanSongIFEarlybirdFilter(mContext));
+                layer4.switchFilterTo(new LanSongIFNashvilleFilter(mContext));
+            }
         } else {
             Log.i(TAG, "建立drawpad线程失败.");
         }
     }
-
     /**
      * Step3: 停止容器, 停止后,为新的视频文件增加上音频部分.
      */

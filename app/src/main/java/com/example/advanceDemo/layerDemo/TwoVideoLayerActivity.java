@@ -21,7 +21,6 @@ import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -147,7 +146,7 @@ public class TwoVideoLayerActivity extends Activity {
     }
 
     /**
-     * Step1: init DrawPad 初始化
+     * Step1: init drawPad 初始化
      *
      * @param mp
      */
@@ -158,20 +157,14 @@ public class TwoVideoLayerActivity extends Activity {
         /**
          * 设置使能 实时录制, 即把正在DrawPad中呈现的画面实时的保存下来,实现所见即所得的模式
          */
-        mDrawPadView.setRealEncodeEnable(padWidth, padHeight, 1200 * 1000,
-                (int) mInfo.vFrameRate, editTmpPath);
-
+        mDrawPadView.setRealEncodeEnable(padWidth, padHeight, (int) mInfo.vFrameRate, editTmpPath);
         mDrawPadView.setUseMainVideoPts(true);
-
-        mDrawPadView.setDrawPadSize(padWidth, padHeight,
-                new onDrawPadSizeChangedListener() {
-
-                    @Override
-                    public void onSizeChanged(int viewWidth, int viewHeight) {
-                        // TODO Auto-generated method stub
-                        startDrawPad();
-                    }
-                });
+        mDrawPadView.setDrawPadSize(padWidth, padHeight, new onDrawPadSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int viewWidth, int viewHeight) {
+                startDrawPad();
+            }
+        });
     }
 
     /**
@@ -217,7 +210,7 @@ public class TwoVideoLayerActivity extends Activity {
     }
 
     /**
-     * Step3: stop DrawPad
+     * Step3: cancel drawPad
      */
     private void stopDrawPad() {
         if (mDrawPadView != null && mDrawPadView.isRunning()) {
@@ -229,7 +222,7 @@ public class TwoVideoLayerActivity extends Activity {
             // 增加音频
             if (LanSongFileUtil.fileExist(editTmpPath)) {
 
-                dstPath= AudioEditor.mergeAudioNoCheck(mVideoPath, editTmpPath, true);
+                dstPath = AudioEditor.mergeAudioNoCheck(mVideoPath, editTmpPath, true);
                 playVideo.setVisibility(View.VISIBLE);
             } else {
                 Log.e(TAG, " player completion, but file:" + editTmpPath

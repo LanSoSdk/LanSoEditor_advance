@@ -117,7 +117,7 @@ public class CameraLayerKTVDemoActivity extends Activity implements
 
         initView();
         initDrawPad();
-        DemoUtil.showHintDialog(CameraLayerKTVDemoActivity.this,
+        DemoUtil.showDialog(CameraLayerKTVDemoActivity.this,
                 "此功能 需要对着绿背景拍摄,类似演员在绿幕前表演,共3个图层, 最底层是场景视频,中间层是摄像机,上层是UI");
     }
 
@@ -139,7 +139,7 @@ public class CameraLayerKTVDemoActivity extends Activity implements
     }
 
     /**
-     * Step1: 开始运行 DrawPad 容器
+     * Step1: 开始运行 drawPad 容器
      */
     private void initDrawPad() {
         // 因手机屏幕是16:9;全屏模式,建议分辨率设置为960x544;

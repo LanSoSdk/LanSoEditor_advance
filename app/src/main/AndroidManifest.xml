@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lansoeditor.advanceDemo"
-    android:versionCode="3320"
-    android:versionName="3.3.2">
+    android:versionCode="3100"
+    android:versionName="3.1.0">
 
 
-    <uses-feature android:glEsVersion="0x00020000"/>
+    <uses-feature android:glEsVersion="0x00020000"></uses-feature>
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.autofocus" />
@@ -59,18 +59,22 @@
         </activity>
 
 
-        <activity android:name="com.example.advanceDemo.aeDemo.AERecordFileHintActivity"
-            android:screenOrientation="portrait"/>
 
-        <activity android:name="com.example.advanceDemo.aeDemo.PlayerAEDemoActivity"
+        <activity android:name="com.example.advanceDemo.aeDemo.AERecordFileHintActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.example.advanceDemo.aeDemo.PlayerAEDemoActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
 
 
         <!-- 列表 -->
-        <activity android:name="com.example.advanceDemo.ListLayerDemoActivity"/>
-        <activity android:name="com.example.advanceDemo.ListSceneDemoActivity"/>
+        <activity android:name="com.example.advanceDemo.ListLayerDemoActivity" />
+        <activity android:name="com.example.advanceDemo.ListSceneDemoActivity" />
+
 
 
         <!-- 录制类  -->
@@ -89,7 +93,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
-
         <activity
             android:name="com.example.advanceDemo.camera.CameraSubLayerDemo1Activity"
             android:screenOrientation="portrait"
@@ -104,6 +107,13 @@
             android:name="com.example.advanceDemo.camera.CameraLayerFullSegmentActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
+        <activity
+            android:name="com.example.advanceDemo.camera.CameraHePaiActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
+
 
         <activity
             android:name="com.example.advanceDemo.camera.CameraLayerFullLandscapeActivity"
@@ -125,20 +135,37 @@
             android:name="com.example.advanceDemo.DouYinDemoActivity"
             android:screenOrientation="portrait"/>
 
+
+        <activity
+            android:name="com.example.advanceDemo.scene.VideoH2VActivity"
+            android:screenOrientation="portrait"/>
+
+
         <activity android:name="com.example.advanceDemo.layerDemo.Demo2LayerMothedActivity"/>
         <activity android:name="com.example.advanceDemo.layerDemo.Demo3LayerFilterActivity"/>
 
 
+        <activity android:name="com.example.advanceDemo.scene.VideoSpeedDemoActivity"/>
 
         <activity android:name="com.example.advanceDemo.VideoOneDODemoActivity"/>
+
+
         <activity android:name="com.example.advanceDemo.layerDemo.BitmapLayerMarkActivity"/>
+
+
         <activity android:name="com.example.advanceDemo.layerDemo.TwoVideoLayerActivity"/>
+
         <activity android:name="com.example.advanceDemo.layerDemo.ExecuteTwoVideoLayerDemoActivity"/>
 
-        <activity android:name="com.example.advanceDemo.bitmapAudio.BitmapLayerFilterDemoActivity"/>
 
-        <activity android:name="com.example.advanceDemo.scene.VideoSeekActivity"
+
+        <activity android:name="com.example.advanceDemo.bitmapAudio.BitmapLayerFilterDemoActivity"/>
+        <activity android:name="com.example.advanceDemo.layerDemo.ExecuteCanvasLayerActivity"/>
+
+        <activity
+            android:name="com.example.advanceDemo.scene.VideoSeekActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
         </activity>
 
 
@@ -165,14 +192,7 @@
         <activity android:name="com.example.advanceDemo.scene.VViewImage3DDemoActivity"/>
 
 
-        <activity android:name="com.example.advanceDemo.scene.VideoSpeedDemoActivity"/>
-        <activity android:name="com.example.advanceDemo.scene.VideoConcatActivity"/>
-        <activity android:name="com.example.advanceDemo.scene.VideoH2VActivity"/>
-        <activity android:name="com.example.advanceDemo.scene.VideoV2HActivity"/>
-
-
         <!-- 图片/声音 其他类. -->
-        <activity android:name="com.example.advanceDemo.layerDemo.ExecuteCanvasLayerActivity"/>
 
         <activity android:name="com.example.advanceDemo.layerDemo.ExecuteVideoLayerActivity"/>
 
@@ -195,10 +215,24 @@
         <activity
             android:name="com.example.advanceDemo.utils.FileExplorerActivity"
             android:label="@string/select_video"/>
+
+
         <activity android:name="com.example.advanceDemo.scene.ExecuteBitmapLayerActivity"/>
         <activity android:name="com.example.advanceDemo.layerDemo.ViewLayerDemoActivity"/>
         <activity android:name="com.example.advanceDemo.layerDemo.ViewLayerOnlyActivity"/>
         <activity android:name="com.example.advanceDemo.layerDemo.MVLayerDemoActivity"/>
+
+
+        <!--合成类-->
+        <activity android:name="com.example.advanceDemo.scene.VideoV2HActivity" />
+
+        <activity android:name="com.example.advanceDemo.scene.VideoConcatAcvivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity android:name="com.example.advanceDemo.ReversePlayerActivity" />
+
+
     </application>
 
 </manifest>

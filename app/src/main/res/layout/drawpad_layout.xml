@@ -25,7 +25,7 @@
             android:layout_weight="1">
     	
 	       <LinearLayout 
-	           android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/corners_btn_orange_bg"
+	           android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/corners_button_orange_bg"
 	           android:layout_alignParentBottom="true" android:layout_marginBottom="10dip" android:orientation="vertical" android:padding="5dip">
 			 	
 	           	 <!-- 旋转 -->

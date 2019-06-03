@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.DrawPadConcatVideoRunnable;
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LSOVideoBody;
 import com.lansosdk.box.onDrawPadCompletedListener;
 import com.lansosdk.box.onDrawPadErrorListener;
@@ -62,7 +62,7 @@ public class DrawPadConcatVideo {
         if(renderer!=null){
             return renderer.getTotalDurationUs();
         }else{
-            LSLog.e("concatVideo getTotalDurationUs Error.");
+            LSOLog.e("concatVideo getTotalDurationUs Error.");
             return 1000L;
         }
     }
@@ -162,6 +162,7 @@ public class DrawPadConcatVideo {
         if(renderer!=null){
             return renderer.startDrawPad();
         }else{
+            LSOLog.e("DrawPadConcatvideo render is null. error!");
             return false;
         }
     }
@@ -197,13 +198,13 @@ public class DrawPadConcatVideo {
      LSOVideoBody body2=new LSOVideoBody("/sdcard/TEST_720P_15s.mp4");
      LSOVideoBody body3=new LSOVideoBody("/sdcard/he.mp4");
 
-     DrawPadConcatVideo concatVideo=new DrawPadConcatVideo(getApplicationContext(),
+     XDrawPadConcatVideo concatVideo=new XDrawPadConcatVideo(getApplicationContext(),
      Arrays.asList(body,body3,body2),dst);
 
 
      concatVideo.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
     @Override
-    public void onCompleted(DrawPad v) {
+    public void onLanSongSDKCompleted(drawPad v) {
 
     MediaInfo.checkFile(dst);
 
@@ -211,14 +212,14 @@ public class DrawPadConcatVideo {
     });
      concatVideo.setDrawPadProgressListener(new onDrawPadProgressListener() {
     @Override
-    public void onProgress(DrawPad v, long currentTimeUs) {
-    Log.e("LSTODO", "------------currentTimeUs: "+currentTimeUs);
+    public void onLanSongSDKProgress(drawPad v, long currentTimeUs) {
+    Log.e("TAG", "------------currentTimeUs: "+currentTimeUs);
     }
     });
      concatVideo.setDrawPadErrorListener(new onDrawPadErrorListener() {
     @Override
-    public void onError(DrawPad d, int what) {
-    Log.e("LSTODO", "------运行错误: ");
+    public void onError(drawPad d, int what) {
+    Log.e("TAG", "------运行错误: ");
     }
     });
      concatVideo.start();

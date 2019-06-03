@@ -1,8 +1,6 @@
 package com.lansosdk.videoeditor;
 
-import android.util.Log;
-
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 
 import java.io.File;
 
@@ -32,7 +30,6 @@ import java.io.File;
 public class MediaInfo {
     //
 
-    private static final String TAG = LSLog.TAG;
     private static final boolean VERBOSE = true;
     public final String filePath;
     public final String fileName; // 视频的文件名, 路径的最后一个/后的字符串.
@@ -179,8 +176,6 @@ public class MediaInfo {
             MediaInfo info = new MediaInfo(videoPath);
             return info.prepare() && info.isHaveVideo();
         } else {
-            if (VERBOSE)
-                Log.i(TAG, "video:" + videoPath + " not support");
             return false;
         }
     }
@@ -250,7 +245,7 @@ public class MediaInfo {
             }
         }
         if(noPrint==false){
-            Log.i(TAG, "当前文件的音视频信息是:" + ret);
+            LSOLog.i( "当前文件的音视频信息是:" + ret);
         }
         return ret;
     }
@@ -287,14 +282,14 @@ public class MediaInfo {
                 return isSupport();
             } else {
                 if (ret == -13) {
-                    Log.e(TAG, "MediaInfo执行失败，可能您没有打开读写文件授权导致的，我们提供了PermissionsManager类来检测,可参考使用");
+                    LSOLog.e( "MediaInfo执行失败，可能您没有打开读写文件授权导致的，我们提供了PermissionsManager类来检测,可参考使用");
                 } else {
-                    Log.e(TAG, "MediaInfo执行失败，" + prepareErrorInfo(filePath));
+                    LSOLog.e( "MediaInfo执行失败，" + prepareErrorInfo(filePath));
                 }
                 return false;
             }
         } else {
-            Log.e(TAG, "MediaInfo执行失败,你设置的文件不存在.您的设置是:"+filePath );
+            LSOLog.e( "MediaInfo执行失败,你设置的文件不存在.您的设置是:"+filePath );
             return false;
         }
     }
@@ -302,7 +297,6 @@ public class MediaInfo {
     /**
      * 获取当前视频在显示的时候, 图像的宽度;
      * 因为有些视频是90度或270度旋转显示的, 旋转的话, 就宽高对调了
-     *
      * @return
      */
     public int getWidth() {

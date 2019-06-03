@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +21,7 @@ import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.AudioLine;
 import com.lansosdk.box.CameraLayer;
 import com.lansosdk.box.DrawPad;
-import com.lansosdk.box.LSLog;
-import com.lansosdk.box.VideoConcat;
 import com.lansosdk.box.onDrawPadProgressListener;
-import com.lansosdk.box.onDrawPadRecordCompletedListener;
 import com.lansosdk.videoeditor.BeautyManager;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadCameraView;
@@ -34,7 +30,6 @@ import com.lansosdk.videoeditor.FilterLibrary;
 import com.lansosdk.videoeditor.FilterLibrary.OnLanSongFilterChosenListener;
 import com.lansosdk.videoeditor.LanSongUtil;
 import com.lansosdk.videoeditor.LanSongFileUtil;
-import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
 
 import java.util.ArrayList;
@@ -49,7 +44,6 @@ public class CameraLayerFullSegmentActivity extends Activity implements
 
     public static final long MIN_RECORD_TIME = 2 * 1000 * 1000; // 录制的最小时间
 
-    private static final String TAG = LSLog.TAG;
     VideoFocusView focusView;
     private DrawPadCameraView drawPadCamera;
     private CameraLayer mCameraLayer = null;
@@ -144,7 +138,7 @@ public class CameraLayerFullSegmentActivity extends Activity implements
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
-                    TAG);
+                    "wakeLock");
             mWakeLock.acquire();
         }
         new Handler().postDelayed(new Runnable() {
@@ -174,7 +168,7 @@ public class CameraLayerFullSegmentActivity extends Activity implements
     }
 
     /**
-     * 初始化 DrawPad 容器
+     * 初始化 drawPad 容器
      */
     private void initDrawPad() {
         int padWidth = 544;
@@ -330,7 +324,6 @@ public class CameraLayerFullSegmentActivity extends Activity implements
                         } else {
                             beautyLevel += 0.1f;
                             mBeautyMng.setWarmCool(beautyLevel);
-                            Log.i(TAG, "调色, 数值是:" + beautyLevel);
 
                             if (beautyLevel >= 1.0f) {
                                 mBeautyMng.deleteBeauty(drawPadCamera.getCameraLayer());

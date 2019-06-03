@@ -19,7 +19,7 @@ import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPadUpdateMode;
 import com.lansosdk.box.DrawPadViewRender2;
 import com.lansosdk.box.GifLayer;
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.TextureLayer;
@@ -58,7 +58,7 @@ public class DrawPadView2 extends FrameLayout {
      * 把画面的宽度等于父view的宽度, 高度按照4:3的形式显示.
      */
     static final int AR_4_3_FIT_PARENT = 5;
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG = "LanSongSDK";
     private static final boolean VERBOSE = false;
     private TextureRenderView mTextureRenderView;
     private DrawPadViewRender2 renderer;
@@ -199,7 +199,7 @@ public class DrawPadView2 extends FrameLayout {
      * 你完全可以重新按照你的界面需求来修改这个DrawPadView类.
      */
     public void setOnViewAvailable(onViewAvailable listener) {
-        mViewAvailable = listener;  //LSTODO查看下为什么这里在onCreate中不能执行;
+        mViewAvailable = listener;
         if(mSurfaceTexture!=null){
             mViewAvailable.viewAvailable(this);
         }
@@ -467,7 +467,7 @@ public class DrawPadView2 extends FrameLayout {
             renderer.resumeRefreshDrawPad();
             renderer.resumePreviewDrawPad();
         }else{
-            LSLog.e("当前容器没有创建或已经释放,请先调用setupDrawPad()建立容器,并增加图层.");
+            LSOLog.e("当前容器没有创建或已经释放,请先调用setupDrawPad()建立容器,并增加图层.");
         }
         isPausePreviewDrawPad = false;
     }
@@ -595,7 +595,7 @@ public class DrawPadView2 extends FrameLayout {
 
                 ret = renderer.startDrawPad();
                 if (!ret) {
-                    Log.e(TAG,"开启 DrawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
+                    Log.e(TAG,"开启 drawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
                             + "请检测您 的代码或参考本文件中的SurfaceCallback 这个类中的注释;\n");
                 }else {
                     Log.i(TAG,"Drawpad is running...");
@@ -620,7 +620,7 @@ public class DrawPadView2 extends FrameLayout {
         drawPadWidth = width;
         drawPadHeight = height;
         if (renderer != null) {
-            Log.w(TAG,"renderer maybe is running. your setting is not available!!");
+            Log.w(TAG,"aeRenderer maybe is running. your setting is not available!!");
         }
     }
 
@@ -749,7 +749,7 @@ public class DrawPadView2 extends FrameLayout {
                 return null;
             }
         } else {
-            Log.e(TAG, "addBitmapLayer error, bitmap is null");
+            Log.e(TAG, "addBitmapLayer error, byteBuffer is null");
             return null;
         }
     }
@@ -769,7 +769,7 @@ public class DrawPadView2 extends FrameLayout {
                 return null;
             }
         } else {
-            Log.e(TAG, "addBitmapLayer error, bitmap is null");
+            Log.e(TAG, "addBitmapLayer error, byteBuffer is null");
             return null;
         }
     }

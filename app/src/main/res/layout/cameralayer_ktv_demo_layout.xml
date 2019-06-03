@@ -34,7 +34,7 @@
 		          android:id="@+id/id_ktvdemo_saveplay"
 		         android:layout_width="wrap_content"
 		          android:layout_height="wrap_content"
-		          android:background="@drawable/corners_btn_orange_bg"
+		          android:background="@drawable/corners_button_orange_bg"
 		          android:layout_centerInParent="true"
 		          android:orientation="vertical">
 				  	  
@@ -103,7 +103,7 @@
     
       <LinearLayout 
 	           android:layout_width="match_parent" android:layout_height="wrap_content" 
-	           android:background="@drawable/corners_btn_orange_bg"
+	           android:background="@drawable/corners_button_orange_bg"
 	           android:layout_alignParentBottom="true" android:layout_marginBottom="10dip"
 	            android:orientation="vertical" android:padding="5dip">
 			 	

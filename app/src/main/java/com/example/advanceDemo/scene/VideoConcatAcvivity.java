@@ -34,7 +34,7 @@ import java.util.HashMap;
 /**
  * 多个视频拼接演示
  */
-public class VideoConcatActivity extends Activity {
+public class VideoConcatAcvivity extends Activity {
     private MediaPlayer firstPlayer,
             cachePlayer,
             currentPlayer;
@@ -201,7 +201,7 @@ public class VideoConcatActivity extends Activity {
             videoLayer.updateVideoSize(currentPlayer.getVideoWidth(),currentPlayer.getVideoHeight());
             currentPlayer.setSurface(playerSurface);
         } else{
-            Toast.makeText(VideoConcatActivity.this, "视频播放完毕..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VideoConcatAcvivity.this, "视频播放完毕..", Toast.LENGTH_SHORT).show();
         }
     }
     DrawPadConcatVideo concatVideo;
@@ -214,50 +214,45 @@ public class VideoConcatActivity extends Activity {
     private void export()
     {
         stopMediaPlayer();
-        try {
-            progressDialog.show(VideoConcatActivity.this);
-            ArrayList<LSOVideoBody> bodys=new ArrayList<>();
-            for(int i = 0; i< videoList.size(); i++) {
-                LSOVideoBody body = new LSOVideoBody(videoList.get(i));
-                bodys.add(body);
-            }
-
-            exportPath= LanSongFileUtil.createMp4FileInBox();
-
-            if(padWidth>0 && padHeight>0){
-                concatVideo=new DrawPadConcatVideo(getApplicationContext(),padWidth,padHeight,exportPath);
-                for (LSOVideoBody body: bodys){
-                    concatVideo.addVideo(body);
-                }
-            }else{
-                concatVideo=new DrawPadConcatVideo(getApplicationContext(),bodys,exportPath);
-            }
-            concatVideo.addBackGroundBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.videobg));
-            concatVideo.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
-                @Override
-                public void onCompleted(DrawPad v) {
-                    progressDialog.release();
-                    DemoUtil.startPlayDstVideo(VideoConcatActivity.this,exportPath);
-                }
-            });
-            concatVideo.setDrawPadProgressListener(new onDrawPadProgressListener() {
-                @Override
-                public void onProgress(DrawPad v, long currentTimeUs) {
-                    int percent=(int)((currentTimeUs*100)/concatVideo.getTotalDurationUs());
-                    progressDialog.setProgress(percent);
-                }
-            });
-            concatVideo.setDrawPadErrorListener(new onDrawPadErrorListener() {
-                @Override
-                public void onError(DrawPad d, int what) {
-                    Log.e("LSTODO", "------运行错误: "+what);
-                    progressDialog.release();
-                }
-            });
-            concatVideo.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+        progressDialog.show(VideoConcatAcvivity.this);
+        ArrayList<LSOVideoBody> bodys=new ArrayList<>();
+        for(int i = 0; i< videoList.size(); i++) {
+            LSOVideoBody body = new LSOVideoBody(videoList.get(i));
+            bodys.add(body);
         }
+
+        exportPath= LanSongFileUtil.createMp4FileInBox();
+
+        if(padWidth>0 && padHeight>0){
+            concatVideo=new DrawPadConcatVideo(getApplicationContext(),padWidth,padHeight,exportPath);
+            for (LSOVideoBody body: bodys){
+                concatVideo.addVideo(body);
+            }
+        }else{
+            concatVideo=new DrawPadConcatVideo(getApplicationContext(),bodys,exportPath);
+        }
+        concatVideo.addBackGroundBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.videobg));
+        concatVideo.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
+            @Override
+            public void onCompleted(DrawPad v) {
+                progressDialog.release();
+                DemoUtil.startPlayDstVideo(VideoConcatAcvivity.this,exportPath);
+            }
+        });
+        concatVideo.setDrawPadProgressListener(new onDrawPadProgressListener() {
+            @Override
+            public void onProgress(DrawPad v, long currentTimeUs) {
+                int percent=(int)((currentTimeUs*100)/concatVideo.getTotalDurationUs());
+                progressDialog.setProgress(percent);
+            }
+        });
+        concatVideo.setDrawPadErrorListener(new onDrawPadErrorListener() {
+            @Override
+            public void onError(DrawPad d, int what) {
+                progressDialog.release();
+            }
+        });
+        concatVideo.start();
     }
     private void getVideoUrls() {
         videoList.add(CopyFileFromAssets.copyAssets(getApplicationContext(),"dy_xialu2.mp4"));

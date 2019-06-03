@@ -192,7 +192,7 @@ public class CameraLayerFullPortActivity extends Activity implements
         filters.add(new LanSongIFLordKelvinFilter(getApplicationContext(), "16LORDKELVIN"));
         filters.add(new LanSongIF1977Filter(getApplicationContext(), "17if1977"));
     }
-    //Step1:初始化 DrawPad 容器
+    //Step1:初始化 drawPad 容器
     private void initDrawPad() {
         int padWidth = 544;
         int padHeight = 960;

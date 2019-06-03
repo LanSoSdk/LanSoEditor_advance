@@ -36,7 +36,8 @@ import java.io.InputStream;
  * 缓慢缩放呈现照片播放效果;旋转呈现欢快的炫酷效果等等.
  */
 
-public class Demo1LayerMothedActivity extends Activity implements OnSeekBarChangeListener {
+public class Demo1LayerMothedActivity extends Activity implements
+        OnSeekBarChangeListener {
     private static final String TAG = "Demo1LayerActivity";
     private String videoPath;
     private DrawPadView drawPadView;
@@ -173,7 +174,7 @@ public class Demo1LayerMothedActivity extends Activity implements OnSeekBarChang
 
                     //图层从容器的最左边移动到最右边
                     float percent=progress *1.0f/100f;//百分比;
-                    float posX=(videoLayer.getPadWidth()+videoLayer.getLayerWidth())*percent -videoLayer.getLayerWidth()/2;
+                    float posX=(videoLayer.getPadWidth()+videoLayer.getLayerWidth())*percent -videoLayer.getLayerWidth()/2.0f;
                     videoLayer.setPosition((int)posX, videoLayer.getPositionY());
 
                     //左侧移出容器如下
@@ -187,7 +188,7 @@ public class Demo1LayerMothedActivity extends Activity implements OnSeekBarChang
 
                     float percent=progress *1.0f/100f;  //百分比;
 
-                    float posY=(videoLayer.getPadHeight()+videoLayer.getLayerHeight())*percent -videoLayer.getLayerHeight()/2;
+                    float posY=(videoLayer.getPadHeight()+videoLayer.getLayerHeight())*percent -videoLayer.getLayerHeight()/2.0f;
                     videoLayer.setPosition(videoLayer.getPositionX(),posY);
                 }
                 break;

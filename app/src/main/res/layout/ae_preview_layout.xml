@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/red">
-
+    android:background="@color/black">
 
     <com.lansosdk.videoeditor.DrawPadAEPreview
         android:id="@+id/id_ae_preview2"
@@ -31,18 +30,20 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/id_ae_preview_next"
+                android:id="@+id/id_ae_preview_replace_picture"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="测试下一个"/>
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="替换图片"/>
 
             <Button
-                android:id="@+id/id_ae_preview_test1"
+                android:id="@+id/id_ae_preview_export_ae"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="测试按钮1"/>
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="后台处理(导出)"/>
 
         </LinearLayout>
 

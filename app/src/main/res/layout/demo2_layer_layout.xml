@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dip"
-            android:background="@drawable/corners_btn_orange_bg"
+            android:background="@drawable/corners_button_orange_bg"
             android:orientation="vertical"
             android:padding="5dip">
 
@@ -141,7 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dip"
-        android:background="@drawable/corners_btn_orange_bg"
+        android:background="@drawable/corners_button_orange_bg"
         android:orientation="vertical">
 
         <TextView

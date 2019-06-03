@@ -143,7 +143,7 @@ public class VideoV2HActivity extends Activity implements OnClickListener {
     }
 
     /**
-     * Step3: stop DrawPad
+     * Step3: cancel drawPad
      */
     private void stopDrawPad() {
         if (drawPadPreview != null && drawPadPreview.isRunning()) {
@@ -345,7 +345,7 @@ public class VideoV2HActivity extends Activity implements OnClickListener {
             public void onError(DrawPad d, int what) {
                 progressDialog.release();
                 drawPadExport.stopDrawPad();
-                DemoUtil.showHintDialog(VideoV2HActivity.this, "当前导出失败,请联系我们!");
+                DemoUtil.showDialog(VideoV2HActivity.this, "当前导出失败,请联系我们!");
             }
         });
 

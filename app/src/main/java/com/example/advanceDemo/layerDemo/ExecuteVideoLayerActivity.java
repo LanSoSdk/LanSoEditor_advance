@@ -25,7 +25,6 @@ import com.lansosdk.box.CanvasRunnable;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.GifLayer;
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.onDrawPadCompletedListener;
 import com.lansosdk.box.onDrawPadErrorListener;
@@ -50,7 +49,7 @@ import java.nio.IntBuffer;
  */
 public class ExecuteVideoLayerActivity extends Activity {
 
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG = "ExecuteVideoLayerActivity";
     GifLayer gifLayer;
     private String videoPath = null;
     private ProgressDialog mProgressDialog;
@@ -69,7 +68,7 @@ public class ExecuteVideoLayerActivity extends Activity {
      */
     private CanvasLayer mCanvasLayer = null;
     /**
-     * DrawPad, 用来执行图像处理的对象.
+     * drawPad, 用来执行图像处理的对象.
      */
     private DrawPadVideoExecute execute2 = null;
     /**
@@ -178,7 +177,7 @@ public class ExecuteVideoLayerActivity extends Activity {
             bitmapLayer = execute2.addBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
             bitmapLayer.setPosition(300, 200);
 
-            // 增加一个笑脸, add a bitmap
+            // 增加一个笑脸, add a byteBuffer
             execute2.addBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.xiaolian));
 
             // 你可以增加其他图层.
@@ -199,8 +198,8 @@ public class ExecuteVideoLayerActivity extends Activity {
         String audio = CopyFileFromAssets.copyAssets(getApplicationContext(), "chongjibo_a_music.mp3");
         String audio2 = CopyFileFromAssets.copyAssets(getApplicationContext(), "hongdou10s.mp3");
 
-       execute2.addSubAudio(audio,3*1000*1000);
-       execute2.addSubAudio(audio2);
+       execute2.addAudioLayer(audio,3*1000*1000);
+       execute2.addAudioLayer(audio2);
     }
 
     @Override

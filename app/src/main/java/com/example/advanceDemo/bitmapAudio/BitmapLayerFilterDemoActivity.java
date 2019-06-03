@@ -100,8 +100,7 @@ public class BitmapLayerFilterDemoActivity extends Activity {
         // 设置为自动刷新模式, 帧率为25
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 30);
         // 使能实时录制,并设置录制后视频的宽度和高度, 码率, 帧率,保存路径.
-        drawPadView.setRealEncodeEnable(480, 480, 1200 * 1000, (int) 30,
-                dstPath);
+        drawPadView.setRealEncodeEnable(480, 480, (int) 30,dstPath);
 
         drawPadView
                 .setOnDrawPadCompletedListener(new onDrawPadCompletedListener() {

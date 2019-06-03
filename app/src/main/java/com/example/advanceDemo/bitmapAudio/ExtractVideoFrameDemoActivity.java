@@ -189,7 +189,7 @@ public class ExtractVideoFrameDemoActivity extends Activity {
                         // bmp=null;
                         // }
                         // if(ptsUS>15*1000*1000){ // 你可以在指定的时间段停止.
-                        // mExtractFrame.stop(); //这里演示在15秒的时候停止.
+                        // mExtractFrame.cancel(); //这里演示在15秒的时候停止.
                         // }
                     }
                 });

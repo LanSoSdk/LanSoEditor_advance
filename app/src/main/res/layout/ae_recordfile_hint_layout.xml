@@ -38,7 +38,7 @@
             android:layout_weight="5"
             android:layout_margin="5dp"
             android:textSize="15sp"
-            android:text="炫酷,高大上,特定的场景视频中;\n常见的有:微商水印相机, 熊猫动态壁纸,壁纸多多,小柿饼等." />
+            android:text="炫酷,高大上,特定的场景视频中;\n常见的有:趣推,小柿饼,逗拍等." />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

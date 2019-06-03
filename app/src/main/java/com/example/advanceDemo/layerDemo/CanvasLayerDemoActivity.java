@@ -18,19 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.advanceDemo.VideoPlayerActivity;
+import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.view.ShowHeart;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.CanvasRunnable;
 import com.lansosdk.box.DrawPad;
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
-import com.lansosdk.box.onDrawPadThreadProgressListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -44,10 +42,10 @@ import java.io.IOException;
  */
 
 public class CanvasLayerDemoActivity extends Activity {
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG = "CanvasLayerDemo";
     ShowHeart mShowHeart;
     private String mVideoPath;
-    private DrawPadView mDrawPadView;
+    private DrawPadView drawPadView;
     private MediaPlayer mplayer = null;
     private VideoLayer mLayerMain = null;
     private CanvasLayer mCanvasLayer = null;
@@ -55,8 +53,6 @@ public class CanvasLayerDemoActivity extends Activity {
     private String dstPath = null;
     private LinearLayout playVideo;
     private MediaInfo mInfo = null;
-    private int frameCnt = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +65,7 @@ public class CanvasLayerDemoActivity extends Activity {
             Log.e(TAG, " video path is error.finish\n");
             finish();
         }
-        mDrawPadView = (DrawPadView) findViewById(R.id.id_canvaslayer_drawpadview);
+        drawPadView = (DrawPadView) findViewById(R.id.id_canvaslayer_drawpadview);
 
         playVideo = (LinearLayout) findViewById(R.id.id_canvasLayer_saveplay);
         playVideo.setOnClickListener(new OnClickListener() {
@@ -77,11 +73,9 @@ public class CanvasLayerDemoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (LanSongFileUtil.fileExist(dstPath)) {
-                    Intent intent = new Intent(CanvasLayerDemoActivity.this,VideoPlayerActivity.class);
-                    intent.putExtra("videopath", dstPath);
-                    startActivity(intent);
+                    DemoUtil.startPlayDstVideo(CanvasLayerDemoActivity.this,dstPath);
                 } else {
-                    Toast.makeText(CanvasLayerDemoActivity.this, "目标文件不存在",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CanvasLayerDemoActivity.this, "目标文件不存在", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -94,8 +88,6 @@ public class CanvasLayerDemoActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
-                // showHintDialog();
                 startPlayVideo();
             }
         }, 500);
@@ -115,7 +107,6 @@ public class CanvasLayerDemoActivity extends Activity {
                 e.printStackTrace();
             }
             mplayer.setOnPreparedListener(new OnPreparedListener() {
-
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     // TODO Auto-generated method stub
@@ -139,67 +130,53 @@ public class CanvasLayerDemoActivity extends Activity {
     }
 
     /**
-     * Step1: 初始化 DrawPad 容器
+     * Step1: 初始化 drawPad 容器
      */
     private void initDrawPad() {
-        mDrawPadView.setUseMainVideoPts(true);
+
+        int padWidth=640;
+        int padHeight=640;
+
+        drawPadView.setUseMainVideoPts(true);
 
         // 设置使能 实时录制, 即把正在DrawPad中呈现的画面实时的保存下来,实现所见即所得的模式
-        mDrawPadView.setRealEncodeEnable(480, 480, 1000000,
-                (int) mInfo.vFrameRate, editTmpPath);
+        drawPadView.setRealEncodeEnable(padWidth, padHeight, (int) mInfo.vFrameRate, editTmpPath);
         // 设置当前DrawPad的宽度和高度,并把宽度自动缩放到父view的宽度,然后等比例调整高度.
-        mDrawPadView.setDrawPadSize(480, 480,
-                new onDrawPadSizeChangedListener() {
+        drawPadView.setDrawPadSize(padWidth, padHeight, new onDrawPadSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int viewWidth, int viewHeight) {
+                // TODO Auto-generated method stub
+                // 开始DrawPad的渲染线程.
+                startDrawPad();
+            }
+        });
 
-                    @Override
-                    public void onSizeChanged(int viewWidth, int viewHeight) {
-                        // TODO Auto-generated method stub
-                        // 开始DrawPad的渲染线程.
-                        startDrawPad();
-                    }
-                });
-
-        mDrawPadView
-                .setOnDrawPadProgressListener(new onDrawPadProgressListener() {
-
-                    @Override
-                    public void onProgress(DrawPad v, long currentTimeUs) {
-                        // TODO Auto-generated method stub
-
-                        if (currentTimeUs > 20 * 1000 * 1000
-                                && mCanvasLayer != null) {
-                            mDrawPadView.removeLayer(mCanvasLayer);
-                            mCanvasLayer = null;
-                        }
-                    }
-                });
-        mDrawPadView.setOnDrawPadThreadProgressListener(new onDrawPadThreadProgressListener() {
-
-                    @Override
-                    public void onThreadProgress(DrawPad v, long currentTimeUs) {
-                        frameCnt++;
-                    }
-                });
+        drawPadView.setOnDrawPadProgressListener(new onDrawPadProgressListener() {
+            @Override
+            public void onProgress(DrawPad v, long currentTimeUs) {
+                // TODO Auto-generated method stub
+                if (currentTimeUs > 20 * 1000 * 1000 && mCanvasLayer != null) {
+                    drawPadView.removeLayer(mCanvasLayer);
+                    mCanvasLayer = null;
+                }
+            }
+        });
     }
 
     /**
      * Step2: 开始运行容器
      */
     private void startDrawPad() {
-        mDrawPadView.pauseDrawPad();
-        if (mDrawPadView.startDrawPad()) {
+        drawPadView.pauseDrawPad();
+        if (drawPadView.startDrawPad()) {
             // 增加一个主视频的 VideoLayer
-            mLayerMain = mDrawPadView.addMainVideoLayer(
-                    mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
+            mLayerMain = drawPadView.addMainVideoLayer(mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
             if (mLayerMain != null) {
                 mplayer.setSurface(new Surface(mLayerMain.getVideoTexture()));
             }
-
             mplayer.start();
-
             addCanvasLayer(); // 增加一个CanvasLayer
-
-            mDrawPadView.resumeDrawPad();
+            drawPadView.resumeDrawPad();
         }
     }
 
@@ -207,14 +184,12 @@ public class CanvasLayerDemoActivity extends Activity {
      * Step3: 停止容器,停止后,为新的视频文件增加上音频部分.
      */
     private void stopDrawPad() {
-        if (mDrawPadView != null && mDrawPadView.isRunning()) {
+        if (drawPadView != null && drawPadView.isRunning()) {
 
-            mDrawPadView.stopDrawPad();
-
+            drawPadView.stopDrawPad();
             toastStop();
-
             if (LanSongFileUtil.fileExist(editTmpPath)) {
-                dstPath= AudioEditor.mergeAudioNoCheck(mVideoPath, editTmpPath, true);
+                dstPath = AudioEditor.mergeAudioNoCheck(mVideoPath, editTmpPath, true);
                 playVideo.setVisibility(View.VISIBLE);
             } else {
                 Log.e(TAG, " player completion, but file:" + editTmpPath
@@ -224,34 +199,29 @@ public class CanvasLayerDemoActivity extends Activity {
     }
 
     private void addCanvasLayer() {
-        if (mDrawPadView == null)
+        if (drawPadView == null)
             return;
 
-        mCanvasLayer = mDrawPadView.addCanvasLayer();
+        mCanvasLayer = drawPadView.addCanvasLayer();
         if (mCanvasLayer != null) {
             /**
              * 在绘制一帧的时候, 是否清除上一帧绘制的 内容.
              */
             mCanvasLayer.setClearCanvas(false);
-
-            mShowHeart = new ShowHeart(CanvasLayerDemoActivity.this,
-                    mCanvasLayer.getPadWidth(), mCanvasLayer.getPadHeight());
+            mShowHeart = new ShowHeart(CanvasLayerDemoActivity.this,mCanvasLayer.getPadWidth(), mCanvasLayer.getPadHeight());
             /**
              * 这里增加两个 CanvasRunnable CanvasRunnable是把当前的一段代码放到 DrawPad线程中运行的一个类.
              * 类似GLSurfaceView的queueEvent
+             *addCanvasRunnable里面是一个List数组, 先放入的, 在绘制的时候, 先绘制;
              */
             mCanvasLayer.addCanvasRunnable(new CanvasRunnable() {
-
                 @Override
-                public void onDrawCanvas(CanvasLayer layer, Canvas canvas,
-                                         long currentTimeUs) {
+                public void onDrawCanvas(CanvasLayer layer, Canvas canvas,long currentTimeUs) {
                     Paint paint = new Paint();
                     paint.setColor(Color.RED);
                     paint.setAntiAlias(true);
                     paint.setTextSize(50);
-
-                    canvas.drawText("蓝松短视频演示之<任意绘制>", 20,
-                            mCanvasLayer.getPadHeight() - 200, paint);
+                    canvas.drawText("蓝松短视频演示之<任意绘制>", 20,mCanvasLayer.getPadHeight() - 200, paint);
                 }
             });
             /**
@@ -260,9 +230,7 @@ public class CanvasLayerDemoActivity extends Activity {
             mCanvasLayer.addCanvasRunnable(new CanvasRunnable() {
 
                 @Override
-                public void onDrawCanvas(CanvasLayer layer, Canvas canvas,
-                                         long currentTimeUs) {
-                    // TODO Auto-generated method stub
+                public void onDrawCanvas(CanvasLayer layer, Canvas canvas,long currentTimeUs) {
                     mShowHeart.drawTrack(canvas);
                 }
             });
@@ -283,20 +251,18 @@ public class CanvasLayerDemoActivity extends Activity {
             mplayer = null;
         }
 
-        if (mDrawPadView != null) {
-            mDrawPadView.stopDrawPad();
+        if (drawPadView != null) {
+            drawPadView.stopDrawPad();
         }
     }
 
     private void toastStop() {
-        Toast.makeText(getApplicationContext(), "录制已停止!!", Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(getApplicationContext(), "录制已停止!!", Toast.LENGTH_SHORT).show();
         Log.i(TAG, "录制已停止!!");
     }
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         LanSongFileUtil.deleteFile(dstPath);
         LanSongFileUtil.deleteFile(editTmpPath);

@@ -334,7 +334,7 @@ public class ImageTouchView extends ImageView {
 
     /**
      * @param bm
-     * @note set cover bitmap , which overlay on background.
+     * @note set cover byteBuffer , which overlay on background.
      */
     private void setCoverBitmap(Bitmap bitmap) {
         // setting paint

@@ -86,8 +86,7 @@ public class DisplayFramesActivity extends Activity {
         /**
          * 初始化.
          */
-        mExtractFrame = new ExtractVideoFrame(DisplayFramesActivity.this,
-                videoPath);
+        mExtractFrame = new ExtractVideoFrame(DisplayFramesActivity.this,videoPath);
         if (mInfo.vWidth * mInfo.vHeight > 960 * 540) {
             mExtractFrame.setBitmapWH(mInfo.vWidth / 2, mInfo.vHeight / 2); // 视频分辨率过大,则缩小一倍.
         }
@@ -95,14 +94,14 @@ public class DisplayFramesActivity extends Activity {
         if (mTpye == FRAME_TYPE_25) {
             // 25帧, 先检查用 内存释放够,如果不够,再用SD卡来缓存.
             mExtractFrame.setExtract25Frame();
-
-            long desireSize = mExtractFrame.getBitmapHeight()
-                    * mExtractFrame.getBitmapWidth() * 4 * 25;
+            long desireSize = mExtractFrame.getBitmapHeight()* mExtractFrame.getBitmapWidth() * 4 * 25;
             long cachesize = BitmapLruCache.getMaxCacheSize();
             if (desireSize > cachesize) {
                 mDiskCache = new MemoryDiskCache(getApplication());
+                Log.i(TAG, "写入到 硬盘.....");
             } else {
                 mLruCache = new BitmapLruCache();
+                Log.i(TAG, "写入到 memory....");
             }
         } else if (mTpye == FRAME_TYPE_60) {
             mExtractFrame.setExtract60Frame();
@@ -112,48 +111,34 @@ public class DisplayFramesActivity extends Activity {
             // 全部解码,则用DiskLruCache
             mDiskCache = new MemoryDiskCache(getApplication());
         }
-
-        if (mDiskCache != null) {
-            Log.i(TAG, "写入到 硬盘.....");
-        } else {
-            Log.i(TAG, "写入到 memory....");
-        }
-        /**
-         * 设置处理完成监听.
-         */
+        //设置处理完成监听.
         mExtractFrame.setOnExtractCompletedListener(new onExtractVideoFrameCompletedListener() {
 
-                    @Override
-                    public void onCompleted(ExtractVideoFrame v) {
-                        mImageAdapter.notifyDataSetChanged();
-                    }
-                });
-        /**
-         * 设置处理进度监听.
-         */
+            @Override
+            public void onCompleted(ExtractVideoFrame v) {
+                mImageAdapter.notifyDataSetChanged();
+            }
+        });
+        //设置处理进度监听.
         mExtractFrame.setOnExtractProgressListener(new onExtractVideoFrameProgressListener() {
 
-                    /**
-                     * 当前帧的画面回调,, ptsUS:当前帧的时间戳,单位微秒.
-                     */
-                    @Override
-                    public void onExtractBitmap(Bitmap bmp, long ptsUS) {
-                        if (mDiskCache != null) {
-                            mDiskCache.pushBitmap(bmp);
-                            count++;
-                            // if(count%10==0){
-                            mImageAdapter.notifyDataSetChanged();
-                            // }
-                        } else if (mLruCache != null) {
-                            mLruCache.pushBitmap(bmp);
-                            count++;
-                            // if(count%10==0){
-                            mImageAdapter.notifyDataSetChanged();
-                            // }
-                        }
-                    }
-                });
-
+            /**
+             * 当前帧的画面回调,, ptsUS:当前帧的时间戳,单位微秒.
+             */
+            @Override
+            public void onExtractBitmap(Bitmap bmp, long ptsUS) {
+                if (mDiskCache != null) {
+                    mDiskCache.pushBitmap(bmp);
+                    count++;
+                    mImageAdapter.notifyDataSetChanged();
+                } else if (mLruCache != null) {
+                    mLruCache.pushBitmap(bmp);
+                    count++;
+                    mImageAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+//        mExtractFrame.setExtractSomeFrame();  // 提取自定义的多少帧;
         /**
          * 开始执行. 或者你可以从指定地方开始解码.
          * mExtractFrame.start(10*1000*1000);则从视频的10秒处开始提取.
@@ -232,3 +217,37 @@ public class DisplayFramesActivity extends Activity {
         }
     }
 }
+/************************************************************************************************************************************************************
+
+ 一下是最简单的回调;
+
+ ExtractVideoFrame mExtractFrame;
+ private void testExtract()
+ {
+
+
+ mExtractFrame = new ExtractVideoFrame(ListMainActivity.this, SDCARD.file("d1.mp4"));
+
+ //        mExtractFrame.setExtractIntervalWithTimeUs(1*1000*1000);  //1秒钟一帧;  //ok
+ //        mExtractFrame.setExtractInterval(40); //间隔40帧提取一帧;
+ //        mExtractFrame.setExtractSomeFrame(40);  //一共提取40帧;
+
+ mExtractFrame.setOnExtractCompletedListener(new onExtractVideoFrameCompletedListener() {
+@Override public void onLanSongSDKCompleted(ExtractVideoFrame v) {
+
+}
+});
+ // 设置处理进度监听.
+ mExtractFrame.setOnExtractProgressListener(new onExtractVideoFrameProgressListener() {
+
+ //当前帧的画面回调,, ptsUS:当前帧的时间戳,单位微秒.
+ @Override public void onExtractBitmap(Bitmap bmp, long ptsUS) {
+ Log.e("TAG", "bmp is : "+bmp.getWidth()+ bmp.getHeight()+ " pts Us:"+ptsUS);
+ }
+ });
+
+ //开始执行. 或者你可以从指定地方开始解码.
+ // mExtractFrame.start(10*1000*1000);则从视频的10秒处开始提取.
+ mExtractFrame.start();
+ }
+ */

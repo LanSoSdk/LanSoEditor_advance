@@ -132,47 +132,8 @@ public class AVDecoder {
     }
     /**
      * 代码测试.
-     *
-     * 测试证明, 是可以多个线程同时解码的. private void testDecoder() { new Thread(new
-     * Runnable() {
-     *
-     * @Override public void run() { // TODO Auto-generated method stub
-     *           testDecoder2("/sdcard/480x480.mp4","/sdcard/480x480.yuv"); }
-     *           }).start();
-     *
-     *           new Thread(new Runnable() {
-     * @Override public void run() { // TODO Auto-generated method stub
-     *           testDecoder2("/sdcard/ping20s.mp4","/sdcard/ping20s.yuv"); }
-     *           }).start(); }
-     *
-     *
-   //2018年6月15日19:01:39 再次测试, 是按照顺序解码的, 如果发现解码顺序不对, 可能是视频中有B帧;
 
-    private void testDecoder3(String src) {
-    private void testDecoder3(String src) {
-    long decoderHandler;
-    IntBuffer mGLRgbBuffer;
 
-    int index=0;
-    MediaInfo gifInfo = new MediaInfo(src);
-    if (gifInfo.prepare()) {
-
-    long starttime = System.currentTimeMillis();
-    decoderHandler = AVDecoder.decoderInit(src);
-    mGLRgbBuffer = IntBuffer.allocate(gifInfo.vWidth * gifInfo.vHeight);
-
-    Log.i(TAG,"RGBA时间戳是:---->开始");
-    index=0;
-    while (!AVDecoder.decoderIsEnd(decoderHandler)) {
-    mGLRgbBuffer.position(0);
-    long time=AVDecoder.decoderFrame(decoderHandler, -1, mGLRgbBuffer.array());
-    Log.i(TAG,"RGBA时间戳是:---->"+time);
-    index++;
-    }
-    AVDecoder.decoderRelease(decoderHandler);
-    Log.i(TAG, "RGBA 解码用时:" + (System.currentTimeMillis() - starttime));
-    }
-    }
 
      */
 }

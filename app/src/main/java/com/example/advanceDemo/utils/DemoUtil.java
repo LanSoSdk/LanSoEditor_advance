@@ -10,7 +10,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.advanceDemo.ListMainActivity;
 import com.example.advanceDemo.VideoPlayerActivity;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.LanSoEditorBox;
@@ -50,13 +49,13 @@ public class DemoUtil {
 
         Log.e("LSDelete", ": limitYear"+limitYear +" limitMonth:"+limitMonth);
         if(year>limitYear || month>=limitMonth){
-            DemoUtil.showHintDialog(activity, "SDK 已经过期,请联系我们更新.(time out.)");
+            DemoUtil.showDialog(activity, "SDK 已经过期,请联系我们更新.(time out.)");
         }else{
             String timeHint = activity.getResources().getString(R.string.sdk_limit);
             String version = VideoEditor.getSDKVersion() + ";\n BOX:" + LanSoEditorBox.VERSION_BOX;
             version += dm.widthPixels + " x" + dm.heightPixels;
             timeHint = String.format(timeHint, version, limitYear, limitMonth);
-            DemoUtil.showHintDialog(activity, timeHint);
+            DemoUtil.showDialog(activity, timeHint);
         }
     }
 
@@ -107,7 +106,8 @@ public class DemoUtil {
         Log.i("x", str);
     }
 
-    public static void showHintDialog(Activity aty, int stringId) {
+    public static void showDialog(Activity aty, int stringId) {
+        try {
         new AlertDialog.Builder(aty).setTitle("提示").setMessage(stringId)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
@@ -115,16 +115,23 @@ public class DemoUtil {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
-    public static void showHintDialog(Activity aty, String str) {
-        new AlertDialog.Builder(aty).setTitle("提示").setMessage(str)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    public static void showDialog(Activity aty, String str) {
+        try {
+            new AlertDialog.Builder(aty).setTitle("提示").setMessage(str)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void pushBitmap(Bitmap bmp) {

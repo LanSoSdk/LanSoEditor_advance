@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 
 import com.example.advanceDemo.scene.VideoH2VActivity;
 import com.example.advanceDemo.scene.VideoV2HActivity;
-import com.example.advanceDemo.scene.VideoConcatActivity;
+import com.example.advanceDemo.scene.VideoConcatAcvivity;
 import com.example.advanceDemo.scene.VideoSpeedDemoActivity;
 import com.example.advanceDemo.scene.ExecuteAllDrawpadActivity;
 import com.example.advanceDemo.scene.ExecuteBitmapLayerActivity;
@@ -106,7 +106,7 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
                 startDemoActivity(VideoV2HActivity.class);
                 break;
             case  R.id.id_screne_concat:
-                startDemoActivity(VideoConcatActivity.class);
+                startDemoActivity(VideoConcatAcvivity.class);
                 break;
             case R.id.id_screne_videoreverse:
                 showHintDialog("此功能演示在合作后提供");

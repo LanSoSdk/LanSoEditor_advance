@@ -340,7 +340,7 @@ public class VideoH2VActivity extends Activity implements OnClickListener {
             public void onError(DrawPad d, int what) {
                 progressDialog.release();
                 drawPadExport.stopDrawPad();
-                DemoUtil.showHintDialog(VideoH2VActivity.this, "当前导出失败,请联系我们!");
+                DemoUtil.showDialog(VideoH2VActivity.this, "当前导出失败,请联系我们!");
             }
         });
 

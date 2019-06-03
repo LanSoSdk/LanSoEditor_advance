@@ -5,6 +5,7 @@
 
 
     <FrameLayout
+        android:id="@+id/id_play_texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
@@ -27,4 +28,5 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue" />
     </LinearLayout>
+
 </RelativeLayout>

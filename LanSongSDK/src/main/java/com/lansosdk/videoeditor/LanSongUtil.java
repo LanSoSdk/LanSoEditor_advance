@@ -37,11 +37,11 @@ public class LanSongUtil {
      */
     public static void hideBottomUIMenu(Activity act) {
         // 隐藏虚拟按键，并且全屏
-        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower
+        if (Build.VERSION.SDK_INT < 19) { // lower
             // api
             View v = act.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
-        } else if (Build.VERSION.SDK_INT >= 19) {
+        } else {
             // for new api versions.
             View decorView = act.getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION

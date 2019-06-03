@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.Surface;
 
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 
 import java.io.IOException;
 
@@ -109,7 +109,7 @@ public class VPlayer {
    }
     public void prepareAsync() {
         if (mUri == null) {
-            LSLog.e("mUri==mull, open video error.");
+            LSOLog.e("mUri==mull, open video error.");
             return;
         }
         AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
@@ -132,12 +132,12 @@ public class VPlayer {
             mMediaPlayer.prepareAsync();
             mCurrentState = STATE_PREPARING;
         } catch (IOException ex) {
-            LSLog.e( "Unable to open content: " + mUri);
+            LSOLog.e( "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
         } catch (IllegalArgumentException ex) {
-            LSLog.e( "Unable to open content: " + mUri);
+            LSOLog.e( "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;

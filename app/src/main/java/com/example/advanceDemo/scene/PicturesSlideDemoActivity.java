@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +15,6 @@ import com.example.advanceDemo.VideoPlayerActivity;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.DrawPadUpdateMode;
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.MoveAnimation;
@@ -44,7 +42,6 @@ import java.io.IOException;
  * 视频标记就是一个典型的BitmapLayer的使用场景.
  */
 public class PicturesSlideDemoActivity extends Activity {
-    private static final String TAG = LSLog.TAG;
     boolean isSwitched = false;
     boolean isDestorying = false; // 是否正在销毁, 因为销毁会停止DrawPad
     private DrawPadView drawPadView;
@@ -97,7 +94,7 @@ public class PicturesSlideDemoActivity extends Activity {
         int width=720;
         int height=720;
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 30);
-        drawPadView.setRealEncodeEnable(width, height, 3*1024*1024, (int) 30, dstPath);
+        drawPadView.setRealEncodeEnable(width, height,(int) 30, dstPath);
 
         drawPadView.setOnDrawPadCompletedListener(new DrawPadCompleted());
         drawPadView.setOnDrawPadProgressListener(new DrawPadProgressListener());

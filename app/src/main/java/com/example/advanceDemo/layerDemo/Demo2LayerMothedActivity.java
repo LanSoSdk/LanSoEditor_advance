@@ -20,13 +20,11 @@ import android.widget.Toast;
 import com.example.advanceDemo.VideoPlayerActivity;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.BitmapLayer;
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -46,7 +44,7 @@ import java.io.IOException;
  */
 public class Demo2LayerMothedActivity extends Activity implements
         OnSeekBarChangeListener {
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG = "Demo2LayerMothedActivity";
     boolean isFirstRemove = false;
     boolean isDestorying = false; // 是否正在销毁, 因为销毁会停止DrawPad
     int RotateCnt = 0;
@@ -122,7 +120,7 @@ public class Demo2LayerMothedActivity extends Activity implements
         if (mInfo.prepare()) {
             int width=mInfo.getWidth();
             int height=mInfo.getHeight();
-            drawPadView.setRealEncodeEnable(width, height,  (int)(mInfo.vBitRate*1.5f),(int) mInfo.vFrameRate, editTmpPath);
+            drawPadView.setRealEncodeEnable(width, height,(int) mInfo.vFrameRate, editTmpPath);
 
             /**
              * 设置当前DrawPad的宽度和高度,并把宽度自动缩放到父view的宽度,然后等比例调整高度.
@@ -138,7 +136,7 @@ public class Demo2LayerMothedActivity extends Activity implements
     }
 
     /**
-     * Step2: start DrawPad 开始运行这个容器.
+     * Step2: start drawPad 开始运行这个容器.
      */
     private void startDrawPad() {
         if (drawPadView.startDrawPad()) {

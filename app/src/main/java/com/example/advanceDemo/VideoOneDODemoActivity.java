@@ -25,14 +25,14 @@ import android.widget.Toast;
 import com.example.advanceDemo.view.RangeSeekBar;
 import com.example.advanceDemo.view.RangeSeekBar.OnRangeSeekBarChangeListener;
 import com.lansoeditor.advanceDemo.R;
+import com.lansosdk.box.OnLanSongSDKCompletedListener;
+import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.FilterLibrary;
 import com.lansosdk.videoeditor.FilterLibrary.OnLanSongFilterChosenListener;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.VideoOneDo;
-import com.lansosdk.videoeditor.onVideoOneDoCompletedListener;
-import com.lansosdk.videoeditor.onVideoOneDoProgressListener;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -103,20 +103,19 @@ public class VideoOneDODemoActivity extends Activity implements
         }
         videoOneDo = new VideoOneDo(getApplicationContext(), videoPath);
 
-        videoOneDo.setOnVideoOneDoProgressListener(new onVideoOneDoProgressListener() {
+        videoOneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
 
             @Override
-            public void onProgress(VideoOneDo v, float percent) {
+            public void onLanSongSDKProgress(long ptsUs, int percent) {
                 if (progressDialog != null) {
-                    progressDialog.setMessage("正在处理中..."
-                            + String.valueOf(percent * 100) + "%");
+                    progressDialog.setMessage("正在处理中..." +percent+ " %");
                 }
             }
         });
-        videoOneDo.setOnVideoOneDoCompletedListener(new onVideoOneDoCompletedListener() {
+        videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
 
             @Override
-            public void onCompleted(VideoOneDo v, String dstVideo) {
+            public void onLanSongSDKCompleted(String dstVideo) {
                 dstPath = dstVideo;
                 isRunning = false;
                 cancelProgressDialog();
@@ -149,7 +148,6 @@ public class VideoOneDODemoActivity extends Activity implements
             switchBackImage(R.id.id_oendo_filter_switch, isFilterEnable);
         }
 
-        // 横屏OK
         if (isCropEnable) { // 是否画面裁剪
             // //这里为了代码清晰, 取视频中间的2/3画面为裁剪, 实际您可以任意裁剪.
             int startX = mInfo.getWidth() / 6; // 中间2/3,则裁剪掉1/3, 则左上角是一半,为1/6;
@@ -162,7 +160,6 @@ public class VideoOneDODemoActivity extends Activity implements
         }
 
         if (isAddLogoEnable) { // 增加logo
-
             Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.ls_logo);
             videoOneDo.setLogo(bmp, VideoOneDo.LOGO_POSITION_RIGHT_TOP);
         }
@@ -400,3 +397,13 @@ public class VideoOneDODemoActivity extends Activity implements
      * mProgressDialog.setMessage("正在处理中..."+String.valueOf(percent)+"%"); }
      */
 }
+
+/**
+ 举例:
+
+
+
+
+
+
+ */

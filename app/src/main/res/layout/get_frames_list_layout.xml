@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="以下因比较简单,不再写界面,可见每个类中 最后演示代码(持续更新...)\n有: \n图片容器:BitmapPadExecute;\n图片多滤镜效果:BitmapGetFilters\n声音容器:AudioPadExecute;\n声音拼接:AudioConcat;\n视频编解码AVDecode/AVEncoder;等等;
+        android:text="以下因比较简单,不再写界面,可见每个类中 最后演示代码(持续更新...)\n图片多滤镜效果:BitmapGetFilters\n声音容器:AudioPadExecute;\n声音拼接:AudioConcat;\n视频编解码AVDecode/AVEncoder;等等;
         "/>
 </LinearLayout>
 </ScrollView>

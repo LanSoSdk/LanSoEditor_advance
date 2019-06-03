@@ -87,6 +87,8 @@ public class ExecuteAllDrawpadActivity extends Activity {
 
         isExecuting = true;
         drawPadExecute = new DrawPadAllExecute(mContext, 640, 640, 25, 1024 * 1024, dstPath);
+
+
         drawPadExecute.setDrawPadErrorListener(new onDrawPadErrorListener() {
             @Override
             public void onError(DrawPad d, int what) {

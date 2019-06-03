@@ -41,7 +41,7 @@ public class CameraSubLayerDemo2Activity extends Activity implements
 
     private static final int RECORD_CAMERA_MIN = 2 * 1000 * 1000; // 定义最小2秒
 
-    private static final String TAG = "CameraSubLayer2";
+    private static final String TAG = "CameraSubLayerDemo2Activity";
 
     private DrawPadCameraView mDrawPadCamera;
 
@@ -106,7 +106,8 @@ public class CameraSubLayerDemo2Activity extends Activity implements
 
         initView();
         mProgressBar.setMaxProgress(RECORD_CAMERA_MAX / 1000);
-        mProgressBar.setOnProgressTouchListener(new CameraProgressBar.OnProgressTouchListener() {
+        mProgressBar
+                .setOnProgressTouchListener(new CameraProgressBar.OnProgressTouchListener() {
                     @Override
                     public void onClick(CameraProgressBar progressBar) {
 
@@ -135,7 +136,8 @@ public class CameraSubLayerDemo2Activity extends Activity implements
         super.onResume();
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,TAG);
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+                    TAG);
             mWakeLock.acquire();
         }
         startDrawPad();
@@ -145,7 +147,7 @@ public class CameraSubLayerDemo2Activity extends Activity implements
     }
 
     /**
-     * Step1: 开始运行 DrawPad 容器
+     * Step1: 开始运行 drawPad 容器
      */
     private void initDrawPad() {
         int padWidth = 544;

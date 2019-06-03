@@ -14,7 +14,7 @@ import com.lansosdk.videoeditor.DrawPadView;
 /**
  * 继承自DrawPadView, 用来演示在视频中做标记的功能.
  * <p>
- * 原理是: 根据onTouch事件, 按下时,从DrawPad中获取一个BitmapLayer, 移动时,把获取到BitmapLayer实时的移动坐标.
+ * 原理是: 根据onTouch事件, 按下时,从DrawPad中增加一个BitmapLayer, 移动时,把获取到BitmapLayer实时的移动坐标.
  * 抬起时,从DrawPad中删除BitmapLayer
  */
 public class MarkArrowView extends DrawPadView {
@@ -61,9 +61,9 @@ public class MarkArrowView extends DrawPadView {
             case MotionEvent.ACTION_UP:
                 // Log.i("test","ACTION_UP:"+event.getX()+" Y:"+event.getY());
                 // 当抬起时, 删除这个Layer
-                // if(bitmap!=null){
-                // bitmap.setVisibility(AeLayer.INVISIBLE);
-                // removeLayer(bitmap);
+                // if(byteBuffer!=null){
+                // byteBuffer.setVisibility(AeLayer.INVISIBLE);
+                // removeLayer(byteBuffer);
                 // }
                 break;
         }

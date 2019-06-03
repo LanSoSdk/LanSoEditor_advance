@@ -3,8 +3,6 @@ package com.lansosdk.videoeditor;
 import android.content.Context;
 import android.util.Log;
 
-import com.lansosdk.box.LSLog;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,7 +19,7 @@ import java.util.List;
  * www.lansongtech.com
  */
 public class LanSongLogCollector implements Runnable {
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG = "LanSongSDK";
 
 
     private Process process;

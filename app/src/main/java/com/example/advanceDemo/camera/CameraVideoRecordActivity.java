@@ -23,11 +23,8 @@ import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.AudioLine;
 import com.lansosdk.box.CameraLayer;
 import com.lansosdk.box.DrawPad;
-import com.lansosdk.box.LSLog;
-import com.lansosdk.box.VideoConcat;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadProgressListener;
-import com.lansosdk.box.onDrawPadRecordCompletedListener;
 import com.lansosdk.videoeditor.BeautyManager;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadCameraView;
@@ -51,7 +48,7 @@ public class CameraVideoRecordActivity extends Activity implements
 
     public static final long MIN_RECORD_TIME = 2 * 1000 * 1000; // 录制的最小时间
 
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG ="CameraVideoRecordActivity";
     VideoFocusView focusView;
     private DrawPadCameraView drawPadCamera;
     private CameraLayer cameraLayer = null;

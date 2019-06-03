@@ -37,3 +37,15 @@ public class LSOProgressDialog {
         }
     }
 }
+
+/**
+ progressDialog = new LSOProgressDialog();
+ progressDialog.show(this);
+
+ .....
+ progressDialog.setProgress
+ ......
+
+ progressDialog.release();
+
+ */

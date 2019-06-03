@@ -9,6 +9,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,10 +24,11 @@ import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.view.FilterDemoAdapter;
 import com.example.advanceDemo.view.HorizontalListView;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.LanSongFilter.LanSongDeleteLogoFilter;
 import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
 import com.lansosdk.box.BitmapGetFilters;
 import com.lansosdk.box.DrawPadUpdateMode;
+import com.lansosdk.box.OnLanSongSDKCompletedListener;
+import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.box.onGetFiltersOutFrameListener;
@@ -38,8 +40,6 @@ import com.lansosdk.videoeditor.FilterLibrary.OnLanSongFilterChosenListener;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.VideoOneDo;
-import com.lansosdk.videoeditor.onVideoOneDoCompletedListener;
-import com.lansosdk.videoeditor.onVideoOneDoProgressListener;
 
 import java.io.IOException;
 import java.nio.IntBuffer;
@@ -79,35 +79,35 @@ public class Demo3LayerFilterActivity extends Activity {
     private String dstPath = null;
     private FilterDemoAdapter listAdapter;
     private HorizontalListView listFilterView;
-    private ArrayList<LanSongFilter> filters=new ArrayList<>();
-    private  int filterIndex=0;
+    private ArrayList<LanSongFilter> filters = new ArrayList<>();
+    private int filterIndex = 0;
 
     private FilterAdjuster mFilterAdjuster;
 
     // -------------------------------------------------后台执行.
     private ProgressDialog progressDialog;
     private VideoOneDo videoOneDo;
-    private void createFilters()
-    {
+
+    private void createFilters() {
         filters.add(new LanSongFilter("无"));
         filters.add(new LanSongBeautyAdvanceFilter("美颜"));
-        filters.add(new LanSongIFAmaroFilter(getApplicationContext(),"1AMARO"));
-        filters.add(new LanSongIFRiseFilter(getApplicationContext(),"2RISE"));
-        filters.add(new LanSongIFHudsonFilter(getApplicationContext(),"3HUDSON"));
-        filters.add(new LanSongIFXproIIFilter(getApplicationContext(),"4XPROII"));
-        filters.add(new LanSongIFSierraFilter(getApplicationContext(),"5SIERRA"));
-        filters.add(new LanSongIFLomofiFilter(getApplicationContext(),"6LOMOFI"));
-        filters.add(new LanSongIFEarlybirdFilter(getApplicationContext(),"7EARLYBIRD"));
-        filters.add(new LanSongIFSutroFilter(getApplicationContext(),"8SUTRO"));
-        filters.add(new LanSongIFToasterFilter(getApplicationContext(),"9TOASTER"));
-        filters.add(new LanSongIFBrannanFilter(getApplicationContext(),"10BRANNAN"));
-        filters.add(new LanSongIFInkwellFilter(getApplicationContext(),"11INKWELL"));
-        filters.add(new LanSongIFWaldenFilter(getApplicationContext(),"12WALDEN"));
-        filters.add(new LanSongIFHefeFilter(getApplicationContext(),"13HEFE"));
-        filters.add(new LanSongIFValenciaFilter(getApplicationContext(),"14VALENCIA"));
-        filters.add(new LanSongIFNashvilleFilter(getApplicationContext(),"15NASHVILLE"));
-        filters.add(new LanSongIFLordKelvinFilter(getApplicationContext(),"16LORDKELVIN"));
-        filters.add(new LanSongIF1977Filter(getApplicationContext(),"17if1977"));
+        filters.add(new LanSongIFAmaroFilter(getApplicationContext(), "1AMARO")); //苦味
+        filters.add(new LanSongIFRiseFilter(getApplicationContext(), "2RISE")); //玫瑰
+        filters.add(new LanSongIFHudsonFilter(getApplicationContext(), "3HUDSON"));  //天蓝
+        filters.add(new LanSongIFXproIIFilter(getApplicationContext(), "4XPROII"));  //甘菊
+        filters.add(new LanSongIFSierraFilter(getApplicationContext(), "5SIERRA")); //常青树
+        filters.add(new LanSongIFLomofiFilter(getApplicationContext(), "6LOMOFI")); //湛蓝
+        filters.add(new LanSongIFEarlybirdFilter(getApplicationContext(), "7EARLYBIRD")); //早起
+        filters.add(new LanSongIFSutroFilter(getApplicationContext(), "8SUTRO")); //枫树
+        filters.add(new LanSongIFToasterFilter(getApplicationContext(), "9TOASTER"));  //收获
+        filters.add(new LanSongIFBrannanFilter(getApplicationContext(), "10BRANNAN"));//布兰南
+        filters.add(new LanSongIFInkwellFilter(getApplicationContext(), "11INKWELL"));  //黑白
+        filters.add(new LanSongIFWaldenFilter(getApplicationContext(), "12WALDEN"));  //华尔兹
+        filters.add(new LanSongIFHefeFilter(getApplicationContext(), "13HEFE"));  //黄昏
+        filters.add(new LanSongIFValenciaFilter(getApplicationContext(), "14VALENCIA"));  //零点
+        filters.add(new LanSongIFNashvilleFilter(getApplicationContext(), "15NASHVILLE"));  //乳酪
+        filters.add(new LanSongIFLordKelvinFilter(getApplicationContext(), "16LORDKELVIN"));//金黄
+        filters.add(new LanSongIF1977Filter(getApplicationContext(), "17if1977"));  //粉红
     }
 
     @Override
@@ -141,11 +141,13 @@ public class Demo3LayerFilterActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
         }
+
         if (videoOneDo != null) {
             videoOneDo.release();
             videoOneDo = null;
@@ -190,6 +192,7 @@ public class Demo3LayerFilterActivity extends Activity {
             }
         });
     }
+
     /**
      * 第二步:开始运行
      */
@@ -226,8 +229,10 @@ public class Demo3LayerFilterActivity extends Activity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 if (videoLayer != null) { //切换滤镜
-                    videoLayer.switchFilterTo(filters.get(arg2));
-                    filterIndex=arg2;
+                    LanSongFilter filter=filters.get(arg2);
+                    videoLayer.switchFilterTo(filter);
+                    filterIndex = arg2;
+                    Log.e("LSDelete", "----切换的是: "+ filter.getFilterName());
                 }
             }
         });
@@ -263,6 +268,7 @@ public class Demo3LayerFilterActivity extends Activity {
     }
 
     // -----------------获取第一张图片, 并获取所有图片滤镜的异步执行------------------------
+
     /**
      * 选择滤镜效果,
      */
@@ -326,30 +332,27 @@ public class Demo3LayerFilterActivity extends Activity {
     }
 
 
+    private int bitmapIndex = 0;
 
-    private int bitmapIndex=0;
     /**
      * 获取一张图片的所有滤镜效果;
      */
     private void getBitmapFilters(Bitmap bmp, float angle) {
 
-        BitmapGetFilters getFilter = new BitmapGetFilters(getApplicationContext(), bmp,filters);
-
+        BitmapGetFilters getFilter = new BitmapGetFilters(getApplicationContext(), bmp, filters);
         // 如果图片太大了,则把滤镜后的图片缩小一倍输出.
         if (bmp.getWidth() * bmp.getHeight() > 480 * 480) {
             getFilter.setScaleWH(bmp.getWidth() / 2, bmp.getHeight() / 2);
         }
         getFilter.setRorate(angle);
-
         getFilter.setDrawpadOutFrameListener(new onGetFiltersOutFrameListener() {
-                    @Override
-                    public void onOutFrame(BitmapGetFilters v, Object obj) {
-                        Bitmap bmp2 = (Bitmap) obj;
-                        bitmaps.add(new NameBitmap(filters.get(bitmapIndex).getFilterName(),bmp2));
-                        bitmapIndex++;
-                    }
-                });
-
+            @Override
+            public void onOutFrame(BitmapGetFilters v, Object obj) {
+                Bitmap bmp2 = (Bitmap) obj;
+                bitmaps.add(new NameBitmap(filters.get(bitmapIndex).getFilterName(), bmp2));
+                bitmapIndex++;
+            }
+        });
         getFilter.start();// 开始线程.
         getFilter.waitForFinish();// 等待执行完毕, 您也可以不用等待,用[完成监听]来判断是否结束.
     }
@@ -366,21 +369,16 @@ public class Demo3LayerFilterActivity extends Activity {
         videoOneDo = new VideoOneDo(getApplicationContext(), mVideoPath);
 
         videoOneDo.setFilter(filters.get(filterIndex));
-        videoOneDo.setOnVideoOneDoProgressListener(new onVideoOneDoProgressListener() {
-
+        videoOneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
             @Override
-            public void onProgress(VideoOneDo v, float percent) {
-                if (progressDialog != null) {
-                    percent = percent * 100;
-                    progressDialog.setMessage("正在后台处理:" + percent+ " %");
-                }
+            public void onLanSongSDKProgress(long ptsUs, int percent) {
+                progressDialog.setMessage("正在后台处理:" + percent + " %");
             }
         });
-        videoOneDo.setOnVideoOneDoCompletedListener(new onVideoOneDoCompletedListener() {
+        videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
 
             @Override
-            public void onCompleted(VideoOneDo v, String dstVideo) {
-
+            public void onLanSongSDKCompleted(String dstVideo) {
                 if (progressDialog != null) {
                     progressDialog.cancel();
                     progressDialog = null;
@@ -389,28 +387,25 @@ public class Demo3LayerFilterActivity extends Activity {
                 videoOneDo.release();
                 videoOneDo = null;
 
-                if(LanSongFileUtil.fileExist(dstVideo)){
-                    DemoUtil.startPlayDstVideo(Demo3LayerFilterActivity.this,dstVideo);
-                }else{
-                    DemoUtil.showHintDialog(Demo3LayerFilterActivity.this,"生成的文件错误,请联系我们");
+                if (LanSongFileUtil.fileExist(dstVideo)) {
+                    DemoUtil.startPlayDstVideo(Demo3LayerFilterActivity.this, dstVideo);
+                } else {
+                    DemoUtil.showDialog(Demo3LayerFilterActivity.this, "生成的文件错误,请联系我们");
                 }
             }
         });
         if (videoOneDo.start()) {
             progressDialog.show();
         } else {
-            Toast.makeText(getApplicationContext(), "后台运行失败,请查看打印信息",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "后台运行失败,请查看打印信息", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public class GetBitmapFiltersTask extends
-            AsyncTask<Object, Object, Boolean> {
+    public class GetBitmapFiltersTask extends AsyncTask<Object, Object, Boolean> {
         private String video;
-
         public GetBitmapFiltersTask(String videoPath) {
             video = videoPath;
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -425,21 +420,22 @@ public class Demo3LayerFilterActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean result) {
 
-                listAdapter = new FilterDemoAdapter(Demo3LayerFilterActivity.this, bitmaps);
-                listAdapter.notifyDataSetChanged();
-                listFilterView.setAdapter(listAdapter);
+            listAdapter = new FilterDemoAdapter(Demo3LayerFilterActivity.this, bitmaps);
+            listAdapter.notifyDataSetChanged();
+            listFilterView.setAdapter(listAdapter);
         }
     }
 
-    private ArrayList<NameBitmap> bitmaps=new ArrayList<>();
+    private ArrayList<NameBitmap> bitmaps = new ArrayList<>();
 
-    public class NameBitmap{
+    public class NameBitmap {
 
         public String name;
         public Bitmap bitmap;
-        public NameBitmap(String name,Bitmap bmp){
-            this.name=name;
-            this.bitmap=bmp;
+
+        public NameBitmap(String name, Bitmap bmp) {
+            this.name = name;
+            this.bitmap = bmp;
         }
     }
 }

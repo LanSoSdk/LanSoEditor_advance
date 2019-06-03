@@ -15,7 +15,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.DrawPadUpdateMode;
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.DrawPadView;
@@ -28,7 +27,7 @@ import com.lansosdk.videoplayer.VideoPlayer.OnPlayerSeekCompleteListener;
 
 public class VideoSpeedDemoActivity extends Activity implements
         OnClickListener, OnSeekBarChangeListener {
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG ="VideoSpeedDemoActivity";
     private final static int GET_VIDEO_PROGRESS = 101;
     private final static int UPDATE_PROGRESS_TIME = 100;
     boolean isDestorying = false; // 是否正在销毁, 因为销毁会停止DrawPad
@@ -241,7 +240,7 @@ public class VideoSpeedDemoActivity extends Activity implements
                 case GET_VIDEO_PROGRESS:
 
                     if (mplayer != null) {
-                        // Log.i(TAG,"get video progress------当前进度是:"+mplayer.getCurrentPosition());
+                        // Log.i(TAG,"get video progress------当前进度是:"+mplayer.setVF());
                         float progress = (float) (mplayer.getCurrentPosition())
                                 / (float) mplayer.getDuration();
                         skProgress.setProgress((int) (progress * 100));

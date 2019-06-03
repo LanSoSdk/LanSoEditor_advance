@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     
-        <!-- DrawPad -->
+        <!-- drawPad -->
       <com.lansosdk.videoeditor.DrawPadView
             android:id="@+id/id_viewLayer_DrawPad_view"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
           android:id="@+id/id_viewLayer_saveplay"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/corners_btn_orange_bg"
+          android:background="@drawable/corners_button_orange_bg"
           android:layout_centerHorizontal="true"
           android:layout_marginTop="50dip"
           android:orientation="vertical">

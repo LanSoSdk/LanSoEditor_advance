@@ -1,15 +1,12 @@
 package com.lansosdk.videoeditor;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.lansosdk.box.LSLog;
-import com.lansosdk.box.LanSoEditorBox;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 public class CopyFileFromAssets {
@@ -23,13 +20,13 @@ public class CopyFileFromAssets {
     public static String copyAssets(Context context, String assetsName) {
 
         String filePath;
-        if(LanSongFileUtil.TMP_DIR!=null && LanSongFileUtil.TMP_DIR.endsWith("/")==false){
-            filePath = LanSongFileUtil.TMP_DIR + "/" + assetsName;
+        if(LanSongFileUtil.FileCacheDir !=null && !LanSongFileUtil.FileCacheDir.endsWith("/")){
+            filePath = LanSongFileUtil.FileCacheDir + "/" + assetsName;
         }else{
-            filePath = LanSongFileUtil.TMP_DIR +  assetsName;
+            filePath = LanSongFileUtil.FileCacheDir +  assetsName;
         }
 
-        File dir = new File(LanSongFileUtil.TMP_DIR);
+        File dir = new File(LanSongFileUtil.FileCacheDir);
         // 如果目录不中存在，创建这个目录
         if (!dir.exists())
             dir.mkdirs();
@@ -46,7 +43,7 @@ public class CopyFileFromAssets {
                 fos.close();
                 is.close();
             } else {
-                Log.i("copyFile","CopyFileFromAssets.copyAssets() is work. file existe:"+filePath);
+                Log.i("copyFile","CopyFileFromAssets.copyAssets() is not work. file existe:"+filePath);
             }
             return filePath;
         } catch (Exception e) {
@@ -54,7 +51,53 @@ public class CopyFileFromAssets {
         }
         return null;
     }
+    public static String copyAssets(Context context,String dirName, String assetsName,String dstFileName) {
 
+
+        String dir = LanSongFileUtil.getPath() +  dirName;
+        File dirFile = new File(dir);
+        // 如果目录不中存在，创建这个目录
+        if (!dirFile.exists())
+            dirFile.mkdirs();
+
+        String  dstName=dir+"/"+dstFileName;
+        try {
+            if (!(new File(dstName)).exists()) { // 如果不存在.
+                InputStream is = context.getAssets().open(assetsName);
+                FileOutputStream fos = new FileOutputStream(dstName);
+                byte[] buffer = new byte[7168];
+                int count = 0;
+                while ((count = is.read(buffer)) > 0) {
+                    fos.write(buffer, 0, count);
+                }
+                fos.close();
+                is.close();
+            } else {
+                Log.i("copyFile","CopyFileFromAssets.copyAssets() is not work. file existe:"+dstName);
+            }
+            return dstName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static Bitmap copyAsset2Bmp(Context context, String assetsName){
+        String path=copyAssets(context,assetsName);
+        if(LanSongFileUtil.fileExist(path)){
+            return BitmapFactory.decodeFile(path);
+        }else{
+            return null;
+        }
+    }
+
+    public static Bitmap copyShanChu2Bmp(Context context, String assetsName){
+        String path=copyShanChu(context,assetsName);
+        if(LanSongFileUtil.fileExist(path)){
+            return BitmapFactory.decodeFile(path);
+        }else{
+            return null;
+        }
+    }
     /**
      * 调试代码用的一些需要是删除的文件;
      *
@@ -66,17 +109,17 @@ public class CopyFileFromAssets {
 
         String filePath;
 
-        if(LanSongFileUtil.TMP_DIR==null) {
-            LanSongFileUtil.TMP_DIR="/sdcard/lansongBox/";
+        if(LanSongFileUtil.FileCacheDir ==null) {
+            LanSongFileUtil.FileCacheDir ="/sdcard/lansongBox/";
         }
 
-            if(LanSongFileUtil.TMP_DIR.endsWith("/")==false){
-                filePath = LanSongFileUtil.TMP_DIR + "/" + assetsName;
+            if(LanSongFileUtil.FileCacheDir.endsWith("/")==false){
+                filePath = LanSongFileUtil.FileCacheDir + "/" + assetsName;
             }else{
-                filePath = LanSongFileUtil.TMP_DIR +  assetsName;
+                filePath = LanSongFileUtil.FileCacheDir +  assetsName;
             }
 
-        File dir = new File(LanSongFileUtil.TMP_DIR);
+        File dir = new File(LanSongFileUtil.FileCacheDir);
         // 如果目录不中存在，创建这个目录
         if (!dir.exists())
             dir.mkdirs();
@@ -106,96 +149,4 @@ public class CopyFileFromAssets {
         return null;
     }
 
-    public static String forceCopyShanChu(Context context, String assetsName) {
-
-        String filePath;
-
-        if(LanSongFileUtil.TMP_DIR==null) {
-            LanSongFileUtil.TMP_DIR="/sdcard/lansongBox/";
-        }
-
-        if(LanSongFileUtil.TMP_DIR.endsWith("/")==false){
-            filePath = LanSongFileUtil.TMP_DIR + "/" + assetsName;
-        }else{
-            filePath = LanSongFileUtil.TMP_DIR +  assetsName;
-        }
-
-
-        File dir = new File(LanSongFileUtil.TMP_DIR);
-        // 如果目录不中存在，创建这个目录
-        if (!dir.exists())
-            dir.mkdirs();
-
-        try {
-            File  file=new File(filePath);
-
-            if (file.exists()) { // 如果不存在.
-                file.delete();
-            }
-
-
-                String str="000shanchu/"+assetsName;
-                InputStream is = context.getAssets().open(str);
-                FileOutputStream fos = new FileOutputStream(filePath);
-                byte[] buffer = new byte[7168];
-                int count = 0;
-                while ((count = is.read(buffer)) > 0) {
-                    fos.write(buffer, 0, count);
-                }
-                fos.close();
-                is.close();
-                Log.i("copyFile","CopyFileFromAssets.copyAssets() is  success. file save to:"+filePath);
-            return filePath;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public static void copyFile(String srcFile, String dstPath) {
-
-        // 如果目录不中存在，创建这个目录
-        try {
-            if (!(new File(dstPath)).exists()) { // 如果不存在.
-                InputStream is = new FileInputStream(srcFile);
-                FileOutputStream fos = new FileOutputStream(dstPath);
-                byte[] buffer = new byte[7168];
-                int count = 0;
-                while ((count = is.read(buffer)) > 0) {
-                    fos.write(buffer, 0, count);
-                }
-                fos.close();
-                is.close();
-            } else {
-                Log.i("copyFile",
-                        "CopyFileFromAssets.copyFile() is not work. file existe!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String copyResId(Context mContext, int resId) {
-        String str2 = mContext.getResources().getString(resId);
-        String str3 = str2.substring(str2.lastIndexOf("/") + 1);
-
-        String filePath = LanSoEditorBox.getTempFileDir() + "/" + str3;
-
-        try {
-            if (!(new File(filePath)).exists()) {
-                InputStream is = mContext.getResources().openRawResource(resId);
-                FileOutputStream fos = new FileOutputStream(filePath);
-                byte[] buffer = new byte[7168];
-                int count = 0;
-                while ((count = is.read(buffer)) > 0) {
-                    fos.write(buffer, 0, count);
-                }
-                fos.close();
-                is.close();
-            }
-            return filePath;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 27
+//    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.lansoeditor.advanceDemo"
         minSdkVersion 18
-        targetSdkVersion 26
+        targetSdkVersion 27
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7
@@ -27,8 +27,9 @@ dependencies {
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
 
-    implementation project(':LanSongSDK')
 
+    //发布或导出到test/publish的时候,   下面两行屏蔽,然后点击右上角的Sync Now
+    implementation project(':LanSongSDK')
 
 
     //一下jar均为来自网络的开源库, 仅用作demo的效果演示, 不属于sdk的一部分;
@@ -38,6 +39,7 @@ dependencies {
     implementation files('libs/PermissionsManager.jar')
     implementation files('libs/textsurface.jar')
     implementation files('libs/particlelibrary.jar')
+
     implementation 'com.github.warkiz.widget:indicatorseekbar:1.2.9'
 
 

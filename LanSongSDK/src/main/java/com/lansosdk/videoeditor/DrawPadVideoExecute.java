@@ -9,10 +9,10 @@ import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPadVideoRunnable;
 import com.lansosdk.box.GifLayer;
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.LSOTimeRange;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
-import com.lansosdk.box.TimeRange;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadCompletedListener;
 import com.lansosdk.box.onDrawPadErrorListener;
@@ -131,7 +131,7 @@ public class DrawPadVideoExecute {
         }
     }
     /**
-     * DrawPad
+     * drawPad
      * 每执行完一帧画面,会调用这个Listener,返回的timeUs是当前画面的时间戳(微妙),
      * 可以利用这个时间戳来做一些变化,比如在几秒处缩放, 在几秒处平移等等.从而实现一些动画效果.
      *
@@ -268,11 +268,11 @@ public class DrawPadVideoExecute {
      * @param srcPath
      * @return
      */
-    public AudioLayer addSubAudio(String srcPath) {
+    public AudioLayer addAudioLayer(String srcPath) {
         if (render != null && !render.isRunning()) {
-            return render.addSubAudio(srcPath);
+            return render.addAudioLayer(srcPath);
         } else {
-            LSLog.e("addSubAudio error, DrawPad is :"+toString());
+            LSOLog.e("addAudioLayer error, drawPad is :"+toString());
             return null;
         }
     }
@@ -284,11 +284,11 @@ public class DrawPadVideoExecute {
      * @param startFromPadTimeUs 从主音频的什么时间开始增加
      * @return
      */
-    public AudioLayer addSubAudio(String srcPath, long startFromPadTimeUs) {
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadTimeUs) {
         if (render != null && !render.isRunning()) {
-            return render.addSubAudio(srcPath, startFromPadTimeUs, -1);
+            return render.addAudioLayer(srcPath, startFromPadTimeUs, -1);
         } else {
-            LSLog.e("addSubAudio error, DrawPad is :"+toString());
+            LSOLog.e("addAudioLayer error, drawPad is :"+toString());
             return null;
         }
     }
@@ -303,12 +303,12 @@ public class DrawPadVideoExecute {
      * @param durationUs     把这段声音多长插入进去.
      * @return 返回一个AudioLayer对象;
      */
-    public AudioLayer addSubAudio(String srcPath, long startFromPadUs,
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
                                   long durationUs) {
         if (render != null && !render.isRunning()) {
-            return render.addSubAudio(srcPath, startFromPadUs, durationUs);
+            return render.addAudioLayer(srcPath, startFromPadUs, durationUs);
         } else {
-            LSLog.e("addSubAudio error, DrawPad is :"+toString());
+            LSOLog.e("addAudioLayer error, drawPad is :"+toString());
             return null;
         }
     }
@@ -323,13 +323,13 @@ public class DrawPadVideoExecute {
      * @param durationUs       增加多少, 时长.
      * @return
      */
-    public AudioLayer addSubAudio(String srcPath, long startFromPadUs,
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
                                   long startAudioTimeUs, long durationUs) {
         if (render != null && !render.isRunning()) {
-            return render.addSubAudio(srcPath, startFromPadUs,
+            return render.addAudioLayer(srcPath, startFromPadUs,
                     startAudioTimeUs, durationUs);
         } else {
-            LSLog.e("addSubAudio error, DrawPad is :"+toString());
+            LSOLog.e("addAudioLayer error, drawPad is :"+toString());
             return null;
         }
     }
@@ -345,7 +345,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeFreeze(startTimeUs, endTimeUs);
         } else {
-            LSLog.e("addTimeFreeze error, DrawPad is :"+toString());
+            LSOLog.e("addTimeFreeze error, drawPad is :"+toString());
         }
     }
 
@@ -367,7 +367,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeStretch(rate, startTimeUs, endTimeUs);
         } else {
-            LSLog.e("addTimeStretch error,DrawPad is :"+toString());
+            LSOLog.e("addTimeStretch error,drawPad is :"+toString());
         }
     }
 
@@ -386,7 +386,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeRepeat(startUs, endUs, loopcnt);
         } else {
-            LSLog.e("addTimeRepeat error, DrawPad is :"+toString());
+            LSOLog.e("addTimeRepeat error, drawPad is :"+toString());
         }
     }
 
@@ -394,11 +394,11 @@ public class DrawPadVideoExecute {
      * 增加时间拉伸
      * 在给视频图层设置一个时间快慢的效果
      */
-    public void addTimeStretch(List<TimeRange> list) {
+    public void addTimeStretch(List<LSOTimeRange> list) {
         if (render != null && !render.isRunning()) {
             render.addTimeStretch(list);
         } else {
-            LSLog.e("addTimeStretch error,DrawPad is :"+toString());
+            LSOLog.e("addTimeStretch error,drawPad is :"+toString());
         }
     }
 
@@ -406,11 +406,11 @@ public class DrawPadVideoExecute {
      * 时间冻结
      * 在给视频图层设置一个时间冻结的效果
      */
-    public void addTimeFreeze(List<TimeRange> list) {
+    public void addTimeFreeze(List<LSOTimeRange> list) {
         if (render != null && !render.isRunning()) {
             render.addTimeFreeze(list);
         } else {
-            LSLog.e("addTimeFreeze error, DrawPad is :"+toString());
+            LSOLog.e("addTimeFreeze error, drawPad is :"+toString());
         }
     }
 
@@ -418,11 +418,11 @@ public class DrawPadVideoExecute {
      * 时间重复.
      * 在给视频图层设置一个时间重复的效果
      */
-    public void addTimeRepeat(List<TimeRange> list) {
+    public void addTimeRepeat(List<LSOTimeRange> list) {
         if (render != null && !render.isRunning()) {
             render.addTimeRepeat(list);
         } else {
-            LSLog.e("addTimeRepeat error, DrawPad is :"+toString());
+            LSOLog.e("addTimeRepeat error, drawPad is :"+toString());
         }
     }
 
@@ -434,7 +434,7 @@ public class DrawPadVideoExecute {
         if (render != null && render.isRunning()) {
             return render.addBitmapLayer(bmp, null);
         } else {
-            LSLog.e("add bitmap layer error. DrawPad is :"+toString());
+            LSOLog.e("add byteBuffer layer error. drawPad is :"+toString());
             return null;
         }
     }
@@ -458,6 +458,10 @@ public class DrawPadVideoExecute {
 
     /**
      * 向DrawPad容器里增加另一个视频
+     *
+     * [仅适用在增加背景视频和对画面要求不高的场合,比如背景动画等;
+     *
+     * 增加后, 暂时不会增加音量;
      * @param videoPath  视频的完整路径;
      * @param filter 视频滤镜 ,如果不增加滤镜,则赋值为null
      * @return
@@ -607,8 +611,6 @@ public class DrawPadVideoExecute {
 
     /**
      * DrawPad是否在运行
-     *
-     * @return
      */
     public boolean isRunning() {
         if (render != null) {

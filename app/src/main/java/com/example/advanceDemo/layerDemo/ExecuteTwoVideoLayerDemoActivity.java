@@ -24,7 +24,6 @@ import com.lansosdk.box.CanvasRunnable;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.DrawPadTwoVideoExecute;
-import com.lansosdk.box.LSLog;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.TwoVideoLayer;
 import com.lansosdk.box.onDrawPadCompletedListener;
@@ -32,7 +31,6 @@ import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadThreadProgressListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
@@ -40,7 +38,7 @@ import java.nio.IntBuffer;
 
 public class ExecuteTwoVideoLayerDemoActivity extends Activity {
 
-    private static final String TAG = LSLog.TAG;
+    private static final String TAG ="Demo2LayerMothedActivity";
     String videoPath = null;
     ProgressDialog mProgressDialog;
     int videoDuration;
@@ -168,7 +166,7 @@ public class ExecuteTwoVideoLayerDemoActivity extends Activity {
                     getResources(), R.drawable.ic_launcher), null);
             bitmapLayer.setPosition(300, 200);
 
-            // 增加一个笑脸, add a bitmap
+            // 增加一个笑脸, add a byteBuffer
             mDrawPad.addBitmapLayer(BitmapFactory.decodeResource(
                     getResources(), R.drawable.xiaolian), null);
             mDrawPad.resumeRecordDrawPad();

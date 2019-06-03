@@ -22,7 +22,6 @@ import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.AudioEditor;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
-import com.lansosdk.videoeditor.LanSongMergeAV;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
 import su.levenetc.android.textsurface.TextSurface;
@@ -97,9 +96,7 @@ public class ViewLayerOnlyActivity extends Activity implements IEndListener {
     private void initDrawPad() {
         // 设置为自动刷新模式, 帧率为25
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, 25);
-        // 使能实时录制,并设置录制后视频的宽度和高度, 码率,
-        // 帧率,保存路径.//因为视频就是一些文字,没有剧烈的画面运动,这里把码率设置小一些为600k
-        drawPadView.setRealEncodeEnable(640, 640, 2 * 1024 * 1024, (int) 25, editorTmpPath);
+        drawPadView.setRealEncodeEnable(640, 640, 25, editorTmpPath);
         drawPadView.setOnDrawPadCompletedListener(new DrawPadCompleted());
         drawPadView.setDrawPadSize(640, 640, new onDrawPadSizeChangedListener() {
             @Override

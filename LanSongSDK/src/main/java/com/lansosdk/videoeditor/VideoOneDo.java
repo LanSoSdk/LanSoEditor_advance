@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.lansosdk.box.AudioLayer;
 import com.lansosdk.box.AudioPad;
@@ -13,9 +12,11 @@ import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.CanvasRunnable;
 import com.lansosdk.box.DrawPad;
-import com.lansosdk.box.LSLog;
+import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LayerShader;
-import com.lansosdk.box.TimeRange;
+import com.lansosdk.box.OnLanSongSDKCompletedListener;
+import com.lansosdk.box.OnLanSongSDKProgressListener;
+import com.lansosdk.box.LSOTimeRange;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onAudioPadProgressListener;
 import com.lansosdk.box.onDrawPadCompletedListener;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lansosdk.LanSongFilter.LanSongFilter;
+import com.lansosdk.box.OnLanSongSDKErrorListener;
 
 /**
  * 用DrawPadVideoExecute2对常见视频的封装.
@@ -54,8 +56,6 @@ public class VideoOneDo {
     public final static int VIDEOONEDO_ERROR_DSTERROR = 6001;
     public final static int VIDEOONEDO_ERROR_SRCFILE = 6002;
     public final static int VIDEOONEDO_ERROR_DRAWPAD = 6003;
-    private static final String TAG = LSLog.TAG;
-
     private String inputPath = null;
     private MediaInfo mediaInfo;
     private long padDurationUs = 0;// drawpad处理后的视频时长.
@@ -89,7 +89,7 @@ public class VideoOneDo {
     protected String textAdd = null;
     // -------------------音频参数--------------------
     private String bgMusicPath = null;
-    private MediaInfo bgMusicInfo;
+    private MediaInfo bgMusicInfo=null;
     private boolean isMixBgMusic; // 是否要混合背景音乐.
     private long bgMusicStartUs = 0;
     private long bgMusicEndUs = 0;
@@ -97,13 +97,13 @@ public class VideoOneDo {
 
     private float inputVideoVolume = 1.0f;
     private ArrayList<String> deleteArray = new ArrayList<String>();
-    private List<TimeRange> timeStretchArray = null;
-    private List<TimeRange> timeFreezeArray = null;
-    private List<TimeRange> timeRepeatArray = null;
-    private boolean isEditModeVideo;
-    private onVideoOneDoProgressListener monVideoOneDoProgressListener;
-    private onVideoOneDoCompletedListener monVideoOneDOCompletedListener = null;
-    private onVideoOneDoErrorListener monVideoOneDoErrorListener = null;
+    private List<LSOTimeRange> timeStretchArray = null;
+    private List<LSOTimeRange> timeFreezeArray = null;
+    private List<LSOTimeRange> timeRepeatArray = null;
+    private boolean isEditModeVideo=false;
+    private OnLanSongSDKProgressListener onProgressListener;
+    private OnLanSongSDKCompletedListener onCompletedListener = null;
+    private OnLanSongSDKErrorListener onErrorListener = null;
 
     /**
      * 构造方法
@@ -125,7 +125,7 @@ public class VideoOneDo {
         context = ctx;
         mediaInfo = new MediaInfo(inputPath);
         if (!mediaInfo.prepare()) {
-            LSLog.w("视频输入错误, 信息是:"+ mediaInfo.toString());
+            LSOLog.w("视频输入错误, 信息是:"+ mediaInfo.toString());
             mediaInfo =null;
         }
     }
@@ -144,7 +144,7 @@ public class VideoOneDo {
         if (bgMusicInfo.prepare() && bgMusicInfo.isHaveAudio()) {
             bgMusicPath = path;
         } else {
-            Log.e(TAG, "设置背景音乐出错, 音频文件有误.请查看" + bgMusicInfo.toString());
+            LSOLog.e(  "设置背景音乐出错, 音频文件有误.请查看" + bgMusicInfo.toString());
             bgMusicPath = null;
             bgMusicInfo = null;
         }
@@ -182,6 +182,8 @@ public class VideoOneDo {
                                    float mainVolume, float bgVolume) {
         setBackGroundMusic(path, isMix, bgVolume);
         inputVideoVolume = mainVolume;
+
+
     }
 
     /**
@@ -247,15 +249,15 @@ public class VideoOneDo {
             if(timeUs > startTimeUs && timeUs< getVdieoDurationUs()){
                 cutDurationUs = timeUs - startTimeUs;
                 if (cutDurationUs < 1000 * 1000) {
-                    LSLog.w("警告: 你设置的最终时间小于1秒,可能只有几帧的时间.请注意!");
+                    LSOLog.w("警告: 你设置的最终时间小于1秒,可能只有几帧的时间.请注意!");
                 }
             }else if(timeUs>getVdieoDurationUs()){
                 cutDurationUs=getVdieoDurationUs();
             }else{
-                LSLog.e("VideoOneDo: setEndPostion ERROR: 时间小于开始时间,无效");
+                LSOLog.e("VideoOneDo: setEndPostion ERROR: 时间小于开始时间,无效");
             }
         }else{
-            LSLog.e("VideoOneDo: setEndPostion ERROR: 时间必须大于0");
+            LSOLog.e("VideoOneDo: setEndPostion ERROR: 时间必须大于0");
         }
     }
 
@@ -263,7 +265,7 @@ public class VideoOneDo {
     /**
      * 截取视频中的多长时间.
      * <p>
-     * 等于 setEndPostion() - setStartPostion();
+     * 等于 setEndPostion() - setStartPostionUs();
      * 单位微秒
      *
      * @param timeUs
@@ -272,12 +274,11 @@ public class VideoOneDo {
         if (timeUs > 0 && timeUs<(getVdieoDurationUs()- startTimeUs)) {
             cutDurationUs = timeUs;
             if (cutDurationUs < 1000 * 1000) {
-                LSLog.w("警告: 你设置的最终时间小于1秒,可能只有几帧的时间.请注意!");
+                LSOLog.w("警告: 你设置的最终时间小于1秒,可能只有几帧的时间.请注意!");
             }
         }else{
-            LSLog.w( "剪切时长无效,恢复为0...");
+            LSOLog.w( "剪切时长无效,恢复为0...");
         }
-
     }
 
     /**
@@ -300,11 +301,11 @@ public class VideoOneDo {
             cropWidth = cropW;
             cropHeight = cropH;
             if(cropW%16!=0 || cropH%16!=0){
-                LSLog.w("您要裁剪的宽高不是16的倍数,可能会出现黑边");
+                LSOLog.w("您要裁剪的宽高不是16的倍数,可能会出现黑边");
             }
 
         }else{
-            LSLog.e("VideoOneDo setCropRect error.");
+            LSOLog.e("VideoOneDo setCropRect error.");
         }
 
     }
@@ -382,9 +383,9 @@ public class VideoOneDo {
      */
     public void addTimeStretch(long startTimeUs, long endTimeUs, float speed) {
         if (timeStretchArray == null) {
-            timeStretchArray = new ArrayList<TimeRange>();
+            timeStretchArray = new ArrayList<LSOTimeRange>();
         }
-        timeStretchArray.add(new TimeRange(startTimeUs, endTimeUs, speed));
+        timeStretchArray.add(new LSOTimeRange(startTimeUs, endTimeUs, speed));
     }
 
     /**
@@ -392,7 +393,7 @@ public class VideoOneDo {
      *
      * @param timearray
      */
-    public void addTimeStretch(List<TimeRange> timearray) {
+    public void addTimeStretch(List<LSOTimeRange> timearray) {
         timeStretchArray = timearray;
     }
 
@@ -406,12 +407,12 @@ public class VideoOneDo {
      */
     public void addTimeFreeze(long startTimeUs, long endTimeUs) {
         if (timeFreezeArray == null) {
-            timeFreezeArray = new ArrayList<TimeRange>();
+            timeFreezeArray = new ArrayList<LSOTimeRange>();
         }
-        timeFreezeArray.add(new TimeRange(startTimeUs, endTimeUs));
+        timeFreezeArray.add(new LSOTimeRange(startTimeUs, endTimeUs));
     }
 
-    public void addTimeFreeze(List<TimeRange> list) {
+    public void addTimeFreeze(List<LSOTimeRange> list) {
         timeFreezeArray = list;
     }
 
@@ -426,25 +427,25 @@ public class VideoOneDo {
      */
     public void addTimeRepeat(long startUs, long endUs, int loopcnt) {
         if (timeRepeatArray == null) {
-            timeRepeatArray = new ArrayList<TimeRange>();
+            timeRepeatArray = new ArrayList<LSOTimeRange>();
         }
-        timeRepeatArray.add(new TimeRange(startUs, endUs, loopcnt));
+        timeRepeatArray.add(new LSOTimeRange(startUs, endUs, loopcnt));
     }
 
-    public void addTimeRepeat(List<TimeRange> list) {
+    public void addTimeRepeat(List<LSOTimeRange> list) {
         timeRepeatArray = list;
     }
 
-    public void setOnVideoOneDoProgressListener(onVideoOneDoProgressListener li) {
-        monVideoOneDoProgressListener = li;
+    public void setOnVideoOneDoProgressListener(OnLanSongSDKProgressListener li) {
+        onProgressListener = li;
     }
 
-    public void setOnVideoOneDoCompletedListener(onVideoOneDoCompletedListener li) {
-        monVideoOneDOCompletedListener = li;
+    public void setOnVideoOneDoCompletedListener(OnLanSongSDKCompletedListener li) {
+        onCompletedListener = li;
     }
 
-    public void setOnVideoOneDoErrorListener(onVideoOneDoErrorListener li) {
-        monVideoOneDoErrorListener = li;
+    public void setOnVideoOneDoErrorListener(OnLanSongSDKErrorListener li) {
+        onErrorListener = li;
     }
     /**
      * 开始执行, 内部会开启一个线程去执行. 开启成功,返回true. 失败返回false;
@@ -452,7 +453,7 @@ public class VideoOneDo {
      * @return
      */
     public boolean start() {
-        if (isExecuting && mediaInfo ==null)
+        if (isExecuting || mediaInfo ==null)
             return false;
 
         if (!mediaInfo.isHaveAudio()) {
@@ -466,12 +467,12 @@ public class VideoOneDo {
             padDurationUs-=startTimeUs;
         }
 
-        isExecuting = true;
-        if (isOnlyDoMusic() && bgMusicInfo != null) { // 如果仅有音频,则用音频容器即可.没有必要把视频执行一遍;
-            return startAudioPad();
+        if (isOnlyDoMusic() && bgMusicInfo == null) { // 如果仅有音频,则用音频容器即可.没有必要把视频执行一遍;
+            isExecuting= startAudioPad();
         } else {
-            return startDrawPad();
+            isExecuting= startDrawPad();
         }
+        return isExecuting;
     }
 
     protected boolean startDrawPad() {
@@ -480,14 +481,13 @@ public class VideoOneDo {
         drawPad = new DrawPadVideoExecute(context, inputPath, drawpadDstPath);
         drawPad.setStartTimeUs(startTimeUs);
 
-
         drawPad.setDurationTimeUs(padDurationUs);
 
 
         drawPad.setVideoFilter(videoFilter);
         if (videoBitRate > 0) {
             drawPad.setRecordBitrate(videoBitRate);
-            if(isCheckBitrate==false){
+            if(!isCheckBitrate){
                 drawPad.setNotCheckBitRate();
             }
         }
@@ -509,9 +509,8 @@ public class VideoOneDo {
 
             @Override
             public void onError(DrawPad d, int what) {
-                if (monVideoOneDoErrorListener != null) {
-                    monVideoOneDoErrorListener.oError(VideoOneDo.this,
-                            VIDEOONEDO_ERROR_DRAWPAD);
+                if (onErrorListener != null) {
+                    onErrorListener.onLanSongSDKError(VIDEOONEDO_ERROR_DRAWPAD);
                 }
             }
         });
@@ -522,15 +521,9 @@ public class VideoOneDo {
             @Override
             public void onProgress(DrawPad v, long currentTimeUs) {
 
-                if (monVideoOneDoProgressListener != null) {
-                    float percent = currentTimeUs * 1.0f / (float) padDurationUs;
-
-                    int  pp2=(int)(percent * 100);
-                    float b = (float)pp2 / 100f;
-
-                    if (b < 1.0f && monVideoOneDoProgressListener != null && isExecuting) {
-                        monVideoOneDoProgressListener.onProgress(VideoOneDo.this, b);
-                    }
+                if (onProgressListener != null) {
+                    int percent = (int)(currentTimeUs * 100 /padDurationUs);
+                    onProgressListener.onLanSongSDKProgress(currentTimeUs,percent);
                 }
             }
         });
@@ -574,11 +567,11 @@ public class VideoOneDo {
             addCanvasLayer(); // 增加文字图层.
 
             if(cropWidth>0 && cropHeight>0){
-                if(cropX==0 && isNotCheckPadSize==false &&cropX%16 >=8){
+                if(cropX==0 && !isNotCheckPadSize &&cropX%16 >=8){
                         cropX=4;  //LSFIXME
                 }
                 videoLayer.setScaledValue(mediaInfo.getWidth(),mediaInfo.getHeight());
-                videoLayer.setPosition(mediaInfo.getWidth()/2-cropX,mediaInfo.getHeight()/2-cropY);
+                videoLayer.setPosition(mediaInfo.getWidth()/2.0f-cropX,mediaInfo.getHeight()/2.0f-cropY);
             }else{
                 videoLayer.setScaledValue(videoLayer.getPadWidth(), videoLayer.getPadHeight());
             }
@@ -595,13 +588,13 @@ public class VideoOneDo {
         }
         MediaInfo info = new MediaInfo(drawpadDstPath);
         if (info.prepare()) {
-            if (monVideoOneDOCompletedListener != null && isExecuting) {
-                monVideoOneDOCompletedListener.onCompleted(VideoOneDo.this,drawpadDstPath);
+            if (onCompletedListener != null && isExecuting) {
+                onCompletedListener.onLanSongSDKCompleted(drawpadDstPath);
             }
         } else {
-            Log.e(TAG, "VideoOneDo执行错误!!!");
-            if (monVideoOneDoErrorListener != null && isExecuting) {
-                monVideoOneDoErrorListener.oError(this, VIDEOONEDO_ERROR_DSTERROR);
+            LSOLog.e( "VideoOneDo执行错误!!!");
+            if (onErrorListener != null && isExecuting) {
+                onErrorListener.onLanSongSDKError(VIDEOONEDO_ERROR_DSTERROR);
             }
         }
         isExecuting = false;
@@ -611,8 +604,8 @@ public class VideoOneDo {
         if (isExecuting) {
             isExecuting = false;
 
-            monVideoOneDOCompletedListener = null;
-            monVideoOneDoProgressListener = null;
+            onCompletedListener = null;
+            onProgressListener = null;
             if (drawPad != null) {
                 drawPad.stopDrawPad();
                 drawPad = null;
@@ -652,7 +645,7 @@ public class VideoOneDo {
             }
             return du;
         }else{
-            LSLog.w("获取视频时长错误...");
+            LSOLog.w("获取视频时长错误...");
             return 1000;
         }
     }
@@ -667,24 +660,20 @@ public class VideoOneDo {
                 int w = logoBmpLayer.getLayerWidth();
                 int h = logoBmpLayer.getLayerHeight();
                 if (logoPosition == LOGO_POSITION_LELF_TOP) { // 左上角.
-
-                    logoBmpLayer.setPosition(w / 2, h / 2); // setPosition设置的是当前中心点的方向;
-
+                    logoBmpLayer.setPosition(w / 2.0f, h / 2.0f); // setPosition设置的是当前中心点的方向;
                 } else if (logoPosition == LOGO_POSITION_LEFT_BOTTOM) { // 左下角
-
-                    logoBmpLayer.setPosition(w / 2, logoBmpLayer.getPadHeight()
-                            - h / 2);
+                    logoBmpLayer.setPosition(w / 2.0f, logoBmpLayer.getPadHeight()
+                            - h / 2.0f);
                 } else if (logoPosition == LOGO_POSITION_RIGHT_TOP) { // 右上角
-
                     logoBmpLayer.setPosition(
-                            logoBmpLayer.getPadWidth() - w / 2, h / 2);
+                            logoBmpLayer.getPadWidth() - w / 2.0f, h / 2.0f);
 
                 } else if (logoPosition == LOGO_POSITION_RIGHT_BOTTOM) { // 右下角
                     logoBmpLayer.setPosition(
-                            logoBmpLayer.getPadWidth() - w / 2,
-                            logoBmpLayer.getPadHeight() - h / 2);
+                            logoBmpLayer.getPadWidth() - w / 2.0f,
+                            logoBmpLayer.getPadHeight() - h / 2.0f);
                 } else {
-                    Log.w(TAG, "logo默认居中显示");
+                    LSOLog.e( "logo默认居中显示");
                 }
             }
         }
@@ -698,7 +687,6 @@ public class VideoOneDo {
             canvasLayer = drawPad.addCanvasLayer();
 
             canvasLayer.addCanvasRunnable(new CanvasRunnable() {
-
                 @Override
                 public void onDrawCanvas(CanvasLayer layer, Canvas canvas,
                                          long currentTimeUs) {
@@ -722,9 +710,9 @@ public class VideoOneDo {
              */
             AudioLayer source = null;
             if (bgMusicEndUs > bgMusicStartUs && bgMusicStartUs > 0) {
-                source = drawPad.addSubAudio(bgMusicPath,0,bgMusicStartUs,bgMusicEndUs - bgMusicStartUs);
+                source = drawPad.addAudioLayer(bgMusicPath,0,bgMusicStartUs,bgMusicEndUs - bgMusicStartUs);
             } else {
-                source = drawPad.addSubAudio(bgMusicPath);
+                source = drawPad.addAudioLayer(bgMusicPath);
             }
 
             if(source!=null){
@@ -757,6 +745,7 @@ public class VideoOneDo {
                 && cropX == 0 && cropY == 0 && cropWidth == 0
                 && cropHeight == 0 && videoFilter == null && logoBitmap == null
                 && scaleWidth == 0 && scaleHeight == 0
+                && videoBitRate==0
                 && textAdd == null
                 && timeStretchArray == null && timeFreezeArray == null
                 && timeRepeatArray == null
@@ -797,13 +786,10 @@ public class VideoOneDo {
 
                 @Override
                 public void onProgress(AudioPad v, long currentTimeUs) {
-                    if (monVideoOneDoProgressListener != null) {
-                        float time = (float) currentTimeUs / 1000000f;
-                        float percent = time / (float) mediaInfo.aDuration;
-                        float b = (float) (Math.round(percent * 100)) / 100; // 保留两位小数.
-
-                        if (b < 1.0f && monVideoOneDoProgressListener != null && isExecuting) {
-                            monVideoOneDoProgressListener.onProgress(VideoOneDo.this, b);
+                    if (onProgressListener != null) {
+                        if (onProgressListener != null && isExecuting) {
+                            int percent = (int)(currentTimeUs*100 /(mediaInfo.aDuration*1000*1000));
+                            onProgressListener.onLanSongSDKProgress(currentTimeUs,percent);
                         }
                     }
                 }
@@ -811,9 +797,9 @@ public class VideoOneDo {
             audioPad.setOnAudioPadCompletedListener(new AudioPadExecute.onAudioPadExecuteCompletedListener() {
                 @Override
                 public void onCompleted(String path) {
-                    if (monVideoOneDOCompletedListener != null && isExecuting) {
+                    if (onCompletedListener != null && isExecuting) {
                         isExecuting = false;
-                        monVideoOneDOCompletedListener.onCompleted(VideoOneDo.this, path);
+                        onCompletedListener.onLanSongSDKCompleted(path);
                     }
 
                 }
@@ -829,16 +815,17 @@ public class VideoOneDo {
     }
     /**
      * 举例
-     *  VideoOneDo oneDo= null;
+
+     VideoOneDo oneDo= null;
      oneDo = new VideoOneDo(getApplicationContext(),"/sdcard/d1.mp4");
-     oneDo.setOnVideoOneDoProgressListener(new onVideoOneDoProgressListener() {
+     oneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
     @Override
-    public void onProgress(VideoOneDo v, float percent) {
+    public void onLanSongSDKProgress(VideoOneDo v, float percent) {
     }
     });
-     oneDo.setOnVideoOneDoCompletedListener(new onVideoOneDoCompletedListener() {
+     oneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
     @Override
-    public void onCompleted(VideoOneDo v, String dstVideo) {
+    public void onLanSongSDKCompleted(VideoOneDo v, String dstVideo) {
 
     Intent intent = new Intent(ListMainActivity.this, VideoPlayerActivity.class);
     intent.putExtra("videopath", dstVideo);
@@ -846,8 +833,8 @@ public class VideoOneDo {
     }
     });
 
-     oneDo.setStartPostion(3*1000*1000);
-     oneDo.setCutDuration(2*1000*1000);
+     oneDo.setStartPostionUs(3*1000*1000);
+     oneDo.setCutDurationUs(2*1000*1000);
 
      LanSongFilter filter=new LanSongIF1977Filter(getApplicationContext());
      oneDo.setFilter(filter);

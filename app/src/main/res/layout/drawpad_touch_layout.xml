@@ -17,7 +17,7 @@
           android:id="@+id/id_markarrow_saveplay"
         android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/corners_btn_orange_bg"
+          android:background="@drawable/corners_button_orange_bg"
           android:layout_centerHorizontal="true"
           android:layout_marginTop="50dip"
           android:orientation="vertical">
