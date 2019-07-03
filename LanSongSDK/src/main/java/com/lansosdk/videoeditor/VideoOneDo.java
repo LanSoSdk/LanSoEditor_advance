@@ -30,21 +30,10 @@ import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 
 /**
- * 用DrawPadVideoExecute2对常见视频的封装.
- * 调用步骤:
- *
- * //第一步:创建对象,并设置各种set;
- * videoOneDo=new  VideoOneDo(getApplicationContext(), inputPath);
- *  videoOneDo.setCropRect(cropX, cropY, cropW, cropH); //裁剪
- * videoOneDo.setLogo(bmp, VideoOneDo.LOGO_POSITION_RIGHT_TOP); //加logo
- *
- * //第二步设置各种回调
- * videoOneDo.setOnVideoOneDoProgressListener(进度监听);
- * videoOneDo.setOnVideoOneDoCompletedListener(完成监听, 返回处理后的结果);
- *
- * //第三步:开始
- * videoOneDo.start(); //开启另一个线程,成功返回true, 失败返回false
+ * 已废弃,不再使用.
+ * 请使用VideoOneDo2;
  */
+@Deprecated
 public class VideoOneDo {
 
     public final static int LOGO_POSITION_LELF_TOP = 0;
@@ -71,6 +60,8 @@ public class VideoOneDo {
     private VideoLayer videoLayer = null;
     private BitmapLayer logoBmpLayer = null;
     private CanvasLayer canvasLayer = null;
+
+    private List<LanSongFilter> videoFilters =null;
 
     protected Context context;
 
@@ -182,8 +173,6 @@ public class VideoOneDo {
                                    float mainVolume, float bgVolume) {
         setBackGroundMusic(path, isMix, bgVolume);
         inputVideoVolume = mainVolume;
-
-
     }
 
     /**
@@ -323,7 +312,7 @@ public class VideoOneDo {
         }
     }
     /**
-     * 这里仅仅是举例,用一个滤镜.如果你要增加多个滤镜,可以判断处理进度,来不断切换滤镜
+     * 设置单个滤镜
      *
      * @param filter
      */
@@ -332,7 +321,18 @@ public class VideoOneDo {
     }
 
     /**
-     * 设置logo的位置, 这里仅仅是举例,您可以拷贝这个代码, 自行定制各种功能.
+     * 设置级联滤镜,
+     * 级联滤镜流程是: 视频源--->滤镜1--->滤镜2--->滤镜3--->移动旋转缩放操作;
+     * @param filters
+     */
+    public void setFilterList(List<LanSongFilter> filters) {
+        this.videoFilters =filters;
+    }
+
+    /**
+     * 设置logo的位置,
+     *
+     * 这里仅仅是举例,您可以拷贝这个代码, 自行定制各种功能.
      *
      * 原理: 增加一个图片图层到容器DrawPad中, 设置他的位置.
      *
@@ -467,7 +467,7 @@ public class VideoOneDo {
             padDurationUs-=startTimeUs;
         }
 
-        if (isOnlyDoMusic() && bgMusicInfo == null) { // 如果仅有音频,则用音频容器即可.没有必要把视频执行一遍;
+        if (isOnlyDoMusic() && bgMusicInfo == null) { // 如果仅有音频
             isExecuting= startAudioPad();
         } else {
             isExecuting= startDrawPad();
@@ -485,6 +485,7 @@ public class VideoOneDo {
 
 
         drawPad.setVideoFilter(videoFilter);
+
         if (videoBitRate > 0) {
             drawPad.setRecordBitrate(videoBitRate);
             if(!isCheckBitrate){
@@ -563,11 +564,17 @@ public class VideoOneDo {
         if (drawPad.startDrawPad()) {
             videoLayer = drawPad.getMainVideoLayer();
 
+            if(videoFilters!=null){
+                videoLayer.switchFilterList(videoFilters);
+            }
+
+
+
             addBitmapLayer(); // 增加图片图层
             addCanvasLayer(); // 增加文字图层.
 
             if(cropWidth>0 && cropHeight>0){
-                if(cropX==0 && !isNotCheckPadSize &&cropX%16 >=8){
+                if(!isNotCheckPadSize &&cropX%16 >=8){
                         cropX=4;  //LSFIXME
                 }
                 videoLayer.setScaledValue(mediaInfo.getWidth(),mediaInfo.getHeight());

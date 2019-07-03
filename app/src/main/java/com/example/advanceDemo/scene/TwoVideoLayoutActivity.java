@@ -28,7 +28,7 @@ import com.lansosdk.videoeditor.LanSongFileUtil;
 
 import java.io.IOException;
 
-import static com.lansosdk.videoeditor.CopyFileFromAssets.copyAssets;
+import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAssets;
 
 
 public class TwoVideoLayoutActivity extends Activity {

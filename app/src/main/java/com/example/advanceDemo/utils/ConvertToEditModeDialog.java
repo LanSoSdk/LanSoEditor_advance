@@ -8,7 +8,6 @@ import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.videoeditor.MediaInfo;
-import com.lansosdk.videoeditor.VideoOneDo;
 import com.lansosdk.videoeditor.VideoOneDo2;
 
 import java.io.IOException;
@@ -23,7 +22,6 @@ public class ConvertToEditModeDialog {
     private boolean isRunning;
 
     private VideoOneDo2 videoOneDo2;
-    private VideoOneDo videoOneDo;
     private MediaInfo mediaInfo;
 
     public interface onConvertToEditModeDialogListener {
@@ -41,13 +39,7 @@ public class ConvertToEditModeDialog {
         convertToEditModeDialogListener=listener;
         mediaInfo=new MediaInfo(src);
         if(mediaInfo.prepare())
-        {
-            if(VideoOneDo2.checkSupport(mediaInfo)){
-                useVideoOneDo2(activity,src);
-            }else{
-                useVideoOneDo(activity,src);
-            }
-        }
+            useVideoOneDo2(activity,src);
     }
     //使用VideoOneDo2
     private void useVideoOneDo2(Activity activity, String src)
@@ -86,48 +78,11 @@ public class ConvertToEditModeDialog {
             e.printStackTrace();
         }
     }
-    //使用VideoOneDo
-    private void useVideoOneDo(Activity activity, String src)
-    {
-        videoOneDo = new VideoOneDo(activity,src);
-        videoOneDo.setEditModeVideo();
-        videoOneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
-            @Override
-            public void onLanSongSDKProgress(long ptsUs, int percent) {
-                if (progressDialog != null) {
-                    progressDialog.setMessage("转换编辑模式1..." + percent + "%");
-                }
-            }
-        });
-        videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
-            @Override
-            public void onLanSongSDKCompleted(String dstVideo) {
-                if(videoOneDo2!=null){
-                    videoOneDo2.release();
-                    videoOneDo2=null;
-                }
-                cancelProgressDialog();
-                if(convertToEditModeDialogListener!=null){
-                    convertToEditModeDialogListener.onConvertCompleted(dstVideo);
-                }
-            }
-        });
-        videoOneDo.setOnVideoOneDoErrorListener(new OnLanSongSDKErrorListener() {
-            @Override
-            public void onLanSongSDKError(int errorCode) {
-                Log.e("LSDelete", ": ");
-            }
-        });
-    }
-
     public void start() {
         if (!isRunning) {
-            if(videoOneDo!=null){
-                videoOneDo.start();
-            }else if(videoOneDo2!=null){
+            if(videoOneDo2!=null){
                 videoOneDo2.start();
             }
-
             showProgressDialog();
             isRunning=true;
         }
@@ -138,10 +93,6 @@ public class ConvertToEditModeDialog {
             if(videoOneDo2!=null){
                 videoOneDo2.release();
                 videoOneDo2=null;
-            }
-            if(videoOneDo!=null){
-                videoOneDo.release();
-                videoOneDo=null;
             }
             isRunning=false;
         }

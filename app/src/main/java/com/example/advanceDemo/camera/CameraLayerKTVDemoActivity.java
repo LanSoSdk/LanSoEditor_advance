@@ -29,7 +29,7 @@ import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.ViewLayer;
 import com.lansosdk.box.ViewLayerRelativeLayout;
 import com.lansosdk.box.onDrawPadProgressListener;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadCameraView;
 import com.lansosdk.videoeditor.DrawPadCameraView.onViewAvailable;
 import com.lansosdk.videoeditor.LanSongFileUtil;

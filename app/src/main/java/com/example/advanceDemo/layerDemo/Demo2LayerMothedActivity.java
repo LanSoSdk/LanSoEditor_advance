@@ -50,7 +50,7 @@ public class Demo2LayerMothedActivity extends Activity implements
     int RotateCnt = 0;
     private String mVideoPath;
     private DrawPadView drawPadView;
-    private MediaPlayer mplayer = null;
+    private MediaPlayer mediaPlayer = null;
     private VideoLayer videoLayer = null;
     private String editTmpPath = null;
     private String dstPath = null;
@@ -84,28 +84,28 @@ public class Demo2LayerMothedActivity extends Activity implements
 
     private void startPlayVideo() {
         if (mVideoPath != null) {
-            mplayer = new MediaPlayer();
+            mediaPlayer = new MediaPlayer();
             try {
-                mplayer.setDataSource(mVideoPath);
+                mediaPlayer.setDataSource(mVideoPath);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            mplayer.setOnPreparedListener(new OnPreparedListener() {
+            mediaPlayer.setOnPreparedListener(new OnPreparedListener() {
 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     initDrawPad(mp);
                 }
             });
-            mplayer.setOnCompletionListener(new OnCompletionListener() {
+            mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     stopDrawPad();
                 }
             });
-            mplayer.prepareAsync();
+            mediaPlayer.prepareAsync();
         } else {
             finish();
             return;
@@ -149,10 +149,10 @@ public class Demo2LayerMothedActivity extends Activity implements
             /**
              *  增加视频图层;
              */
-            videoLayer = drawPadView.addVideoLayer(mplayer.getVideoWidth(),mplayer.getVideoHeight(), null);
+            videoLayer = drawPadView.addVideoLayer(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight(), null);
             if (videoLayer != null) {
-                mplayer.setSurface(new Surface(videoLayer.getVideoTexture()));
-                mplayer.start();
+                mediaPlayer.setSurface(new Surface(videoLayer.getVideoTexture()));
+                mediaPlayer.start();
             }
 
         }
@@ -178,10 +178,10 @@ public class Demo2LayerMothedActivity extends Activity implements
         super.onDestroy();
 
         isDestorying = true;
-        if (mplayer != null) {
-            mplayer.stop();
-            mplayer.release();
-            mplayer = null;
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
 
         if (drawPadView != null) {
@@ -284,6 +284,11 @@ public class Demo2LayerMothedActivity extends Activity implements
                      * @param center 圆的中心点位置, 范围0--1.0f;, 最上角为0,0,右下角为1,1;, 居中则是new PointF(0.5f,0.5f);
                      */
                     optionLayer.setVisibleCircle(radius, new PointF(0.5f, 0.5f));
+                    /**
+                     * 设置可见圆形的四周的边框颜色和厚度.
+                     *     第一个参数是: 厚度,最大是1.0, 最小是0.0, 推荐是0.01f
+                     *     后面4个参数分别是:R,G,B,A 4个颜色分量   RGBA分量中的Red 范围是0.0f---1.0f
+                     */
                     optionLayer.setVisibleCircleeBorder(0.01f, 1.0f, 0.0f, 0.0f,1.0f);
                 }
                 break;

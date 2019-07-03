@@ -7,15 +7,19 @@ import android.util.Log;
 
 import com.lansosdk.box.CameraLayer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.LanSongFilter.LanSongLookupFilter;
 import com.lansosdk.LanSongFilter.LanSongBeautyTuneFilter;
 import com.lansosdk.LanSongFilter.LanSongBeautyWhiteFilter;
+import com.lansosdk.box.LSOLog;
 
 public class BeautyManager {
-    private static final String TAG ="LanSongSDK";
     private boolean isTuneBeauting;
     private LanSongLookupFilter mlookupFilter;
     private LanSongBeautyTuneFilter beautyTuneFilter;
@@ -39,11 +43,7 @@ public class BeautyManager {
 
             ArrayList<LanSongFilter> filters = new ArrayList<LanSongFilter>();
 
-//			boolean isR9s=false;
-//			if(Build.MODEL!=null){
-//				isR9s=Build.MODEL.contains("OPPO R9s");
-//			}
-//			
+//
             if (LanSoEditor.getCPULevel() >= 0) {
                 beautyTuneFilter = new LanSongBeautyTuneFilter();
                 beautyWhiteFilter = null;
@@ -57,22 +57,21 @@ public class BeautyManager {
 
             camlayer.setBeautyBrightness(1); // 设置亮度;
 
-            String bmpStr = CopyFileFromAssets.copyAssets(mContext, "lansongbeauty.png");
+            String bmpStr = copyAssets(mContext, "lansongbeauty.png");
             if (bmpStr != null) {
                 mlookupFilter = new LanSongLookupFilter(0.22f);
                 Bitmap bmp = BitmapFactory.decodeFile(bmpStr);
                 mlookupFilter.setBitmap(bmp);
                 filters.add(mlookupFilter);
             } else {
-                Log.e(TAG, "无法获取lansongbeauty图片文件");
+                LSOLog.e("无法获取lansongbeauty图片文件");
             }
 
             camlayer.switchFilterList(filters);
         } else {
-            Log.e(TAG, "add beauty error. camlayer is null");
+            LSOLog.e( "add beauty error. camlayer is null");
         }
     }
-
     /**
      * 删除美颜
      *
@@ -86,7 +85,7 @@ public class BeautyManager {
             beautyWhiteFilter = null;
             isTuneBeauting = false;
         } else {
-            Log.e(TAG, "delete beauty error. camlayer is null");
+            LSOLog.e("delete beauty error. camlayer is null");
         }
     }
 
@@ -148,5 +147,69 @@ public class BeautyManager {
 
     public LanSongLookupFilter getLookupFilter() {
         return mlookupFilter;
+    }
+
+
+    /**
+     * 获取美颜滤镜;
+     * @param ctx 语境
+     * @return
+     */
+    public static List<LanSongFilter> getBeaufulFilters(Context ctx) {
+        List<LanSongFilter> filters = new ArrayList<LanSongFilter>();
+
+        if (LanSoEditor.getCPULevel() >= 0) {
+            LanSongBeautyTuneFilter beautyTuneFilter = new LanSongBeautyTuneFilter();
+            filters.add(beautyTuneFilter);
+        } else {
+            LanSongBeautyWhiteFilter beautyWhiteFilter = new LanSongBeautyWhiteFilter();
+            filters.add(beautyWhiteFilter);
+        }
+
+        String bmpStr = copyAssets(ctx, "lansongbeauty.png");
+        if (bmpStr != null) {
+            LanSongLookupFilter  lookupFilter = new LanSongLookupFilter(0.22f);
+            Bitmap bmp = BitmapFactory.decodeFile(bmpStr);
+            lookupFilter.setBitmap(bmp);
+            filters.add(lookupFilter);
+        } else {
+            LSOLog.e("无法获取lansongbeauty图片文件");
+        }
+        return filters;
+    }
+
+    public static String copyAssets(Context context, String assetsName) {
+
+        String filePath;
+        if(LanSongFileUtil.FileCacheDir !=null && !LanSongFileUtil.FileCacheDir.endsWith("/")){
+            filePath = LanSongFileUtil.FileCacheDir + "/" + assetsName;
+        }else{
+            filePath = LanSongFileUtil.FileCacheDir +  assetsName;
+        }
+
+        File dir = new File(LanSongFileUtil.FileCacheDir);
+        // 如果目录不中存在，创建这个目录
+        if (!dir.exists())
+            dir.mkdirs();
+        try {
+            if (!(new File(filePath)).exists()) { // 如果不存在.
+//                InputStream is = mContext.getResources().getAssets().open(assetsName);  //原来的
+                InputStream is = context.getAssets().open(assetsName);
+                FileOutputStream fos = new FileOutputStream(filePath);
+                byte[] buffer = new byte[7168];
+                int count = 0;
+                while ((count = is.read(buffer)) > 0) {
+                    fos.write(buffer, 0, count);
+                }
+                fos.close();
+                is.close();
+            } else {
+                Log.i("copyFile","copyAssets() is not work. file existe:"+filePath);
+            }
+            return filePath;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

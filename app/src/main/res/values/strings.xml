@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">蓝松专业版演示</string>
+    <string name="app_name">蓝松DEMO</string>
 
     <string name="message_granted">All permissions have been granted.</string>
     <string name="message_denied">Permission \"%1$s\" has been denied.</string>
@@ -41,7 +41,7 @@
 	
 	<string name="drawimage_hint1">原理:建立一个容器,先放视频图层, 再放UI图层.UI图层就是您的UI界面,你可以把各种炫酷的UI作为一层,叠加到视频上.
 	    \n这里演示的贴纸和文字,您可以实时增加,也可以暂停后增加</string>
-	
+
 	<string name="canvaslayer_hint1">VideoLayer + CanvasLayer 绘制到容器上</string>
 	
 	<string name="video_remark">滑动画面,进行标记\n\n VideoLayer + BitmapLayer 绘制到容器上 </string>

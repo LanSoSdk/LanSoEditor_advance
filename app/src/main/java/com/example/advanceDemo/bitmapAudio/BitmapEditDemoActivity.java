@@ -26,7 +26,7 @@ import com.lansosdk.box.ViewLayer;
 import com.lansosdk.box.ViewLayerRelativeLayout;
 import com.lansosdk.box.onDrawPadOutFrameListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.FilterLibrary;
 import com.lansosdk.videoeditor.FilterLibrary.FilterAdjuster;

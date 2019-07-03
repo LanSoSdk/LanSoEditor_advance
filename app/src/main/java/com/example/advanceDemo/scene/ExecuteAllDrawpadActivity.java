@@ -21,18 +21,16 @@ import com.lansosdk.box.Animation;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.CanvasRunnable;
-import com.lansosdk.box.DrawPad;
-import com.lansosdk.box.DrawPadAllExecute;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MoveAnimation;
+import com.lansosdk.box.OnLanSongSDKCompletedListener;
+import com.lansosdk.box.OnLanSongSDKErrorListener;
+import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.box.ScaleAnimation;
 import com.lansosdk.box.VideoLayer;
-import com.lansosdk.box.onDrawPadCompletedListener;
-import com.lansosdk.box.onDrawPadErrorListener;
-import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.videoeditor.AudioEditor;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
-import com.lansosdk.videoeditor.MediaInfo;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
+import com.lansosdk.videoeditor.DrawPadAllExecute;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
 import com.lansosdk.LanSongFilter.LanSongSwirlFilter;
@@ -48,7 +46,6 @@ public class ExecuteAllDrawpadActivity extends Activity {
     private TextView tvHint;
     private String dstPath = null;
     private String secondVideoPath = null;
-    private long  secondVideoAddTimeUs;
 
     private DrawPadAllExecute drawPadExecute = null;
     private VideoLayer videoLayer1 = null;
@@ -58,7 +55,6 @@ public class ExecuteAllDrawpadActivity extends Activity {
 
     private boolean isExecuting = false;
     private Context mContext = null;
-    private MediaInfo mInfo = null;
     private int rectFactor = 0;  //可见区域系数;
     private LanSongSwirlFilter swirlFilter = null;
 
@@ -70,7 +66,6 @@ public class ExecuteAllDrawpadActivity extends Activity {
         mContext = getApplicationContext();
         firstVideoPath = getIntent().getStringExtra("videopath");
 
-        mInfo = new MediaInfo(firstVideoPath);
 
         initView();
 
@@ -86,52 +81,40 @@ public class ExecuteAllDrawpadActivity extends Activity {
             return;
 
         isExecuting = true;
-        drawPadExecute = new DrawPadAllExecute(mContext, 640, 640, 25, 1024 * 1024, dstPath);
-
-
-        drawPadExecute.setDrawPadErrorListener(new onDrawPadErrorListener() {
+        drawPadExecute = new DrawPadAllExecute(mContext, 640, 640,18*1000*1000, 25);
+        drawPadExecute.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
             @Override
-            public void onError(DrawPad d, int what) {
-                drawPadExecute.stopDrawPad();
+            public void onLanSongSDKError(int errorCode) {
+                drawPadExecute.cancel();
                 Log.e(TAG, "后台容器线程 运行失败,您请检查下是否码率分辨率设置过大,或者联系我们!...");
             }
         });
-        /**
-         * 处理进度;
-         */
-        drawPadExecute.setDrawPadProgressListener(new onDrawPadProgressListener() {
-
+        drawPadExecute.setOnLanSongSDKProgressListener(new OnLanSongSDKProgressListener() {
             @Override
-            public void onProgress(DrawPad v, long currentTimeUs) {
-                tvProgressHint.setText(String.valueOf(currentTimeUs));
-                if (currentTimeUs > 18 * 1000 * 1000) { // 18秒的时候停止.
-                    drawPadExecute.stopDrawPad();
-                } else if (currentTimeUs > 15 * 1000 * 1000) { // 显示第4个图层.
+            public void onLanSongSDKProgress(long ptsUs, int percent) {
+                tvProgressHint.setText(String.valueOf(ptsUs));
+                if (ptsUs > 15 * 1000 * 1000) { // 显示第4个图层.
                     showFourLayer();
-                } else if (currentTimeUs > 8 * 1000 * 1000
-                        && videoLayer2 == null) { // 8秒的时候增加一个视频图层
-                    showThreeLayer(currentTimeUs);
-                } else if (currentTimeUs > 3 * 1000 * 1000 && bmpLayer == null) { // 3秒的时候,
-                    showSecondLayer(currentTimeUs);
+                } else if (ptsUs > 8 * 1000 * 1000&& videoLayer2 == null) { // 8秒的时候增加一个视频图层
+                    showThreeLayer(ptsUs);
+                } else if (ptsUs > 3 * 1000 * 1000 && bmpLayer == null) { // 3秒的时候,
+                    showSecondLayer(ptsUs);
                 }
             }
         });
-
-        drawPadExecute.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
-
+        drawPadExecute.setOnLanSongSDKCompletedListener(new OnLanSongSDKCompletedListener() {
             @Override
-            public void onCompleted(DrawPad v) {
+            public void onLanSongSDKCompleted(String dstVideo) {
+                dstPath=dstVideo;
                 tvProgressHint.setText("DrawPadExecute Completed!!!");
                 isExecuting = false;
                 findViewById(R.id.id_video_edit_btn2).setEnabled(true);
             }
         });
-        drawPadExecute.pauseRecordDrawPad();
-        if (drawPadExecute.startDrawPad()) {
-            drawPadExecute.addBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.pad_bg), null);
-            videoLayer1 = drawPadExecute.addVideoLayer(firstVideoPath, null);
-            drawPadExecute.resumeRecordDrawPad();
-        } else {
+
+        drawPadExecute.addBitmapLayer(BitmapFactory.decodeResource(getResources(), R.drawable.pad_bg), null);
+        videoLayer1 = drawPadExecute.addVideoLayer(firstVideoPath, null);
+        if (!drawPadExecute.start()) {
             Log.e(TAG, "后台容器失败,请用MediaInfo.checkFile执行查看下....");
         }
     }
@@ -226,7 +209,6 @@ public class ExecuteAllDrawpadActivity extends Activity {
         if (secondVideoPath == null) {
             secondVideoPath = CopyFileFromAssets.copyAssets(getApplicationContext(), "ping5s.mp4");
         }
-        secondVideoAddTimeUs=currentTimeUs;
         videoLayer2 = drawPadExecute.addVideoLayer(secondVideoPath, null);
         videoLayer2.setVisibility(Layer.INVISIBLE);
         Animation move = new MoveAnimation(currentTimeUs + 1000 * 1000, 1 * 1000 * 1000, 0, 0, videoLayer2.getPadWidth() / 2,
@@ -252,8 +234,7 @@ public class ExecuteAllDrawpadActivity extends Activity {
                     paint.setAntiAlias(true);
                     paint.setTextSize(30);
                     canvas.drawColor(Color.YELLOW); // 背景设置为黄色.
-                    canvas.drawText("蓝松短视频演示之【转场】", 20,
-                            canvasLayer.getPadHeight() / 2, paint);
+                    canvas.drawText("蓝松短视频演示之【转场】", 20,canvasLayer.getPadHeight() / 2.0f, paint);
                 }
             });
         }
@@ -264,7 +245,7 @@ public class ExecuteAllDrawpadActivity extends Activity {
         super.onDestroy();
 
         if (drawPadExecute != null) {
-            drawPadExecute.releaseDrawPad();
+            drawPadExecute.release();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

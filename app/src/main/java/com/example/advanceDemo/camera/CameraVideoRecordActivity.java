@@ -26,7 +26,7 @@ import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.videoeditor.BeautyManager;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadCameraView;
 import com.lansosdk.videoeditor.DrawPadCameraView.onViewAvailable;
 import com.lansosdk.videoeditor.FilterLibrary;

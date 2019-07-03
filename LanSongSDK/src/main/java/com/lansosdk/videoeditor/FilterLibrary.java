@@ -143,7 +143,7 @@ public class FilterLibrary {
         filterList.addFilter("13HEFE", FilterType.HEFE);
         filterList.addFilter("14VALENCIA", FilterType.VALENCIA);
         filterList.addFilter("15NASHVILLE", FilterType.NASHVILLE);
-        filterList.addFilter("16if1977", FilterType.IF1977);
+        filterList.addFilter("16If1977", FilterType.IF1977);
         filterList.addFilter("17LORDKELVIN", FilterType.LORDKELVIN);
 
         filterList.addFilter("黑色抠图", FilterType.LanSongBLACKMASK);

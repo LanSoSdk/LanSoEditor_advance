@@ -345,14 +345,17 @@ public class LanSongFileUtil {
     public static void  deleteNameFiles(String dir,String prefix,String subfix)
     {
         File file=new File(dir);
+        if(!file.exists()){
+            file.mkdirs();
+        }
         for (File item : file.listFiles()){
-            if(item.isDirectory()==false){
+            if(!item.isDirectory()){
                 String path=item.getAbsolutePath();
                 String name=LanSongFileUtil.getFileNameFromPath(path);
                 String subfix2=LanSongFileUtil.getFileSuffix(path);
 
                 if(prefix!=null && subfix!=null){
-                    if(name!=null && name.contains(prefix) && subfix2!=null && subfix2.equals(subfix)){
+                    if(name != null && name.contains(prefix) && subfix2.equals(subfix)){
                         LanSongFileUtil.deleteFile(path);
                     }
                 }else if(prefix!=null){

@@ -30,7 +30,7 @@ import com.lansosdk.box.onDrawPadCompletedListener;
 import com.lansosdk.box.onDrawPadErrorListener;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadThreadProgressListener;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadVideoExecute;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;

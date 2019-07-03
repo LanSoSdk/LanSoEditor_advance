@@ -39,18 +39,6 @@
 				android:layout_centerInParent="true"
 				android:layout_gravity="center"
 				android:scaleType="matrix" />
-			<TextView
-				android:id="@+id/id_vview_tvtest"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerVertical="true"
-				android:layout_alignParentLeft="true"
-				android:background="@color/red"
-				android:text="上面是UI图层,您可以把整个UI叠加上面."
-				android:textColor="@color/white"
-				android:visibility="gone"
-				android:textSize="28sp"
-				/>
 			<com.example.advanceDemo.view.StickerView
 				android:id="@+id/id_vview_drawimage_stickview"
 				android:layout_width="match_parent"
@@ -110,10 +98,13 @@
 			android:layout_height="wrap_content"
 			android:text="@string/drawimage_hint1"
 			android:textColor="@color/white"/>
-
 	</LinearLayout>
-      
-
-      	   
+	<Button
+		android:id="@+id/id_vview_drawimage_export"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="25dp"
+		android:background="@drawable/button_btn_bg"
+		android:text="导出当前叠加"/>
 
 </LinearLayout>

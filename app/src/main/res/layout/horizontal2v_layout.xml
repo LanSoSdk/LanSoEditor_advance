@@ -17,7 +17,6 @@
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textColor="@color/red"
 			android:text="说明:横屏显示的视频,转为竖屏显示:对应代码在:VideoH2VActivity.java中."/>
 
 

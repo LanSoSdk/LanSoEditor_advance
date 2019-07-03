@@ -17,9 +17,9 @@
 		        android:layout_marginLeft="10dip"
 		        android:textSize="20sp"
 		        android:textColor="@color/red"
-		        android:text="背景音乐"/>
+		        android:text="1.背景音乐"/>
 	
-	        <Button
+	        <com.example.advanceDemo.utils.ButtonEnable
 	            android:id="@+id/id_onedo_addmusic_switch"
 	            android:layout_width="84dip"
 	            android:layout_height="40dip"

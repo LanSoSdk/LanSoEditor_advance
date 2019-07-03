@@ -16,7 +16,7 @@ import com.lansosdk.box.MoveAnimation;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadAutoExecute;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 

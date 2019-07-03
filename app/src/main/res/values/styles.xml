@@ -93,6 +93,39 @@
         <item name="progress_reached_bar_height">6dp</item>
         <item name="progress_unreached_bar_height">3dp</item>
     </style>
-			
-    
+
+
+    <style name="videoonedo_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">10dip</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+
+    <style name="videoonedo_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dip</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_margin">5dip</item>
+    </style>
+
+
+
+
+
+    <style name="videoonedo_button">
+        <item name="android:layout_width">84dip</item>
+        <item name="android:layout_height">40dip</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:background">@drawable/switch_off</item>
+    </style>
+
+
+
 </resources>

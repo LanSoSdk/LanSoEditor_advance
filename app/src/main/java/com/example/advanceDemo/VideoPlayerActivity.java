@@ -103,7 +103,8 @@ public class VideoPlayerActivity extends Activity {
             public void onSurfaceTextureAvailable(SurfaceTexture surface,
                                                   int width, int height) {
                 if (isSupport) {
-                    play(new Surface(surface)); // 采用系统本身的MediaPlayer播放
+//                    play(new Surface(surface)); // 采用系统本身的MediaPlayer播放
+					 startVPlayer(new Surface(surface)); //我们SDK提供的播放器.
                 }
             }
         });
@@ -146,8 +147,11 @@ public class VideoPlayerActivity extends Activity {
             mediaPlayer.setSurface(surface);
             mediaPlayer.prepare();
             mediaPlayer.setLooping(true);
-            textureView.setDispalyRatio(IRenderView.AR_ASPECT_FIT_PARENT);
-
+            if(screenWidth>= mediaInfo.getWidth() && screenHeight>= mediaInfo.getHeight()){
+                textureView.setDispalyRatio(IRenderView.AR_ASPECT_FIT_PARENT);
+            }else{
+                textureView.setDispalyRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
+            }
             textureView.setVideoSize(mediaPlayer.getVideoWidth(),
                     mediaPlayer.getVideoHeight());
             textureView.requestLayout();
@@ -161,16 +165,18 @@ public class VideoPlayerActivity extends Activity {
     private void startVPlayer(final Surface surface) {
         vplayer = new VPlayer(this);
         vplayer.setVideoPath(videoPath);
-        tvScreen.setText(tvScreen.getText().toString()+ ";播放:VPlayer ");
+        String str=tvScreen.getText().toString();
+        tvScreen.setText(String.format("%s;播放:VPlayer ", str));
         vplayer.setOnPreparedListener(new OnPlayerPreparedListener() {
 
             @Override
             public void onPrepared(VideoPlayer mp) {
                 vplayer.setSurface(surface);
-
-                textureView.setDispalyRatio(IRenderView.AR_ASPECT_FIT_PARENT);
-
                 textureView.setVideoSize(mediaInfo.getWidth(), mediaInfo.getHeight());
+
+                    textureView.setDispalyRatio(IRenderView.AR_ASPECT_FIT_PARENT);
+
+
                 textureView.requestLayout();
                 vplayer.start();
                 vplayer.setLooping(true);

@@ -19,7 +19,7 @@ public class LSOProgressDialog {
 
     public void setProgress(int percent){
             if(percent>=0 &&percent<=100){
-                progressDialog.setMessage("正在处理中..."+ String.valueOf(percent) + "%");
+                progressDialog.setMessage("正在处理中:"+ String.valueOf(percent) + "%");
             }
     }
 
@@ -27,7 +27,7 @@ public class LSOProgressDialog {
             if(progressDialog ==null){
                 show(acty);
             }
-            progressDialog.setMessage("正在处理中..."+ String.valueOf(percent) + "%");
+            progressDialog.setMessage("正在处理中:"+ String.valueOf(percent) + "%");
     }
     public void release() {
         if (progressDialog != null) {

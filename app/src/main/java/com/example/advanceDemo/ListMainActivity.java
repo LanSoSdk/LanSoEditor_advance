@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.lansosdk.videoeditor.EditModeVideo;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.MediaInfo;
+
 import java.io.File;
 
 public class ListMainActivity extends Activity implements OnClickListener {
@@ -37,7 +40,7 @@ public class ListMainActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//		Thread.setDefaultUncaughtExceptionHandler(new LanSoSdkCrashHandler());
+//		Thread.setDefaultUncaughtExceptionHandler(new DemoCrashHandler());
         setContentView(R.layout.activity_main);
 
         /**
@@ -55,8 +58,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
 
         //显示版本提示
         DemoUtil.showVersionDialog(ListMainActivity.this);
-
-        testFile();
     }
 
     @Override
@@ -90,14 +91,14 @@ public class ListMainActivity extends Activity implements OnClickListener {
                 case R.id.id_mainlist_douyin:
                     startDemoActivity(DouYinDemoActivity.class);
                     break;
-                case R.id.id_mainlist_ae:
-                    startDemoActivity(AERecordFileHintActivity.class);
-                    break;
                 case R.id.id_mainlist_gamevideo:
                     startDemoActivity(GameVideoDemoActivity.class);
                     break;
+                case R.id.id_mainlist_weishang:
+                    startDemoActivity(AERecordFileHintActivity.class);
+                    break;
                 case R.id.id_mainlist_videoonedo:
-                    startDemoActivity(VideoOneDODemoActivity.class);
+                    startDemoActivity(VideoOneDO2Activity.class);
                     break;
                 case R.id.id_mainlist_bitmaps:
                     startDemoActivity(ListBitmapAudioActivity.class);
@@ -118,13 +119,11 @@ public class ListMainActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_mainlist_somelayer).setOnClickListener(this);
         findViewById(R.id.id_mainlist_changjing).setOnClickListener(this);
         findViewById(R.id.id_mainlist_douyin).setOnClickListener(this);
-        findViewById(R.id.id_mainlist_ae).setOnClickListener(this);
+        findViewById(R.id.id_mainlist_weishang).setOnClickListener(this);
         findViewById(R.id.id_mainlist_videoonedo).setOnClickListener(this);
         findViewById(R.id.id_mainlist_bitmaps).setOnClickListener(this);
         findViewById(R.id.id_mainlist_videoplay).setOnClickListener(this);
         findViewById(R.id.id_mainlist_gamevideo).setOnClickListener(this);
-
-
         //---------------------
         findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
             @Override
@@ -142,8 +141,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
         });
     }
 
-
-
     private boolean checkPath() {
         if (tvVideoPath.getText() != null && tvVideoPath.getText().toString().isEmpty()) {
             Toast.makeText(ListMainActivity.this, "请输入视频地址", Toast.LENGTH_SHORT).show();
@@ -159,6 +156,7 @@ public class ListMainActivity extends Activity implements OnClickListener {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -234,8 +232,5 @@ public class ListMainActivity extends Activity implements OnClickListener {
                         isPermissionOk = false;
                     }
                 });
-    }
-    private void testFile() {
-
     }
 }

@@ -1,7 +1,6 @@
 package com.example.advanceDemo.scene;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +8,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,10 +24,9 @@ import com.lansosdk.box.DrawPadUpdateMode;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.ScaleAnimation;
 import com.lansosdk.box.VideoLayer;
-import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadRunTimeListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;

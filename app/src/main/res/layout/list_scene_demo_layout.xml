@@ -39,11 +39,11 @@
 
 
 	<RelativeLayout  android:id="@+id/id_screne_h2v" style="@style/main_item_reletivelayout">
-		<TextView   android:text="横屏转竖屏" style="@style/main_item_textview"/>
+		<TextView   android:text="画中画(竖屏)" style="@style/main_item_textview"/>
 		<TextView  style="@style/main_item_arrow"/>
 	</RelativeLayout>
 	<RelativeLayout  android:id="@+id/id_screne_v2h" style="@style/main_item_reletivelayout">
-		<TextView   android:text="竖屏转横屏" style="@style/main_item_textview"/>
+		<TextView   android:text="画中画(横屏)" style="@style/main_item_textview"/>
 		<TextView  style="@style/main_item_arrow"/>
 	</RelativeLayout>
 

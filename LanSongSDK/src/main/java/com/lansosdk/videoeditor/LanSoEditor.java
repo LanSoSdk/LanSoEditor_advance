@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
+
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LanSoEditorBox;
 
@@ -22,9 +24,8 @@ public class LanSoEditor {
         loadLibraries(); // 拿出来单独加载库文件.
 
 
-
+        setLanSongSDK1();
         initSo(context, str);
-//        String  cacheDir=getDiskCa˙cheDir(context)+"/lansongBox/";
         LanSoEditor.setTempFileDir(Environment.getExternalStorageDirectory().getPath() + "/lansongBox/");
 
 
@@ -97,7 +98,7 @@ public class LanSoEditor {
         String nativeVersion="* \tnative version:"+VideoEditor.getSDKVersion()+ " ;  ABI: "+VideoEditor.getCurrentNativeABI()+ " ; type:"+VideoEditor.getLanSongSDKType()
                 + "; Limited time: year:"+VideoEditor.getLimitYear()+ " month:" +VideoEditor.getLimitMonth();
 
-        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+checkCPUName();
+        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+LanSoEditorBox.getCpuName();
 
 
         LSOLog.i("********************LanSongSDK**********************");
@@ -154,6 +155,7 @@ public class LanSoEditor {
         if (isLoaded)
             return;
 
+
         System.loadLibrary("LanSongffmpeg");
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
@@ -175,27 +177,6 @@ public class LanSoEditor {
 
     private static native void nativeInit(Context ctx, AssetManager ass,String filename);
     private static native void nativeUninit();
-    private static String checkCPUName() {
-        String str1 = "/proc/cpuinfo";
-        String str2 = "";
-        try {
-            FileReader fr = new FileReader(str1);
-            BufferedReader localBufferedReader = new BufferedReader(fr, 8192);
-            str2 = localBufferedReader.readLine();
-            while (str2 != null) {
-                if(str2.contains("Hardware")){
-                    return str2;
-                }
-                str2 = localBufferedReader.readLine();
-            }
-            localBufferedReader.close();
-            return "unknown";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return " [get /proc/cpuinfo error]";
-        }
-    }
-
     ////LSTODO 特定用户使用, 发布删除;
     private static native void setLanSongSDK1();
 }

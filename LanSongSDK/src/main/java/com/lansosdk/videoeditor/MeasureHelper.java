@@ -17,8 +17,8 @@ public final class MeasureHelper {
     private int mVideoSarNum;
     private int mVideoSarDen;
     private int mVideoRotationDegree;
-    private int mMeasuredWidth;
-    private int mMeasuredHeight;
+    private int measuredWidth;
+    private int measuredHeight;
     private int mCurrentAspectRatio = AR_ASPECT_FIT_PARENT;
 
     public MeasureHelper(View view) {
@@ -147,99 +147,54 @@ public final class MeasureHelper {
                 width = widthSpecSize;
                 height = heightSpecSize;
 
-                // for compatibility, we adjust size based on aspect ratio
                 if (mVideoWidth * height < width * mVideoHeight) {
-                    // Log.i("@@@", "image too wide, correcting");
                     width = height * mVideoWidth / mVideoHeight;
                 } else if (mVideoWidth * height > width * mVideoHeight) {
-                    // Log.i("@@@", "image too tall, correcting");
                     height = width * mVideoHeight / mVideoWidth;
                 }
             } else if (widthSpecMode == View.MeasureSpec.EXACTLY) {
-                // only the width is fixed, adjust the height to match aspect
-                // ratio if possible
                 width = widthSpecSize;
                 height = width * mVideoHeight / mVideoWidth;
                 if (heightSpecMode == View.MeasureSpec.AT_MOST
                         && height > heightSpecSize) {
-                    // couldn't match aspect ratio within the constraints
                     height = heightSpecSize;
                 }
             } else if (heightSpecMode == View.MeasureSpec.EXACTLY) {
-                // only the height is fixed, adjust the width to match aspect
-                // ratio if possible
                 height = heightSpecSize;
                 width = height * mVideoWidth / mVideoHeight;
                 if (widthSpecMode == View.MeasureSpec.AT_MOST
                         && width > widthSpecSize) {
-                    // couldn't match aspect ratio within the constraints
                     width = widthSpecSize;
                 }
             } else {
-                // neither the width nor the height are fixed, try to use actual
-                // video size
                 width = mVideoWidth;
                 height = mVideoHeight;
                 if (heightSpecMode == View.MeasureSpec.AT_MOST
                         && height > heightSpecSize) {
-                    // too tall, decrease both width and height
                     height = heightSpecSize;
                     width = height * mVideoWidth / mVideoHeight;
                 }
                 if (widthSpecMode == View.MeasureSpec.AT_MOST
                         && width > widthSpecSize) {
-                    // too wide, decrease both width and height
                     width = widthSpecSize;
                     height = width * mVideoHeight / mVideoWidth;
                 }
             }
         } else {
-            // no size yet, just adopt the given spec sizes
         }
-
-        mMeasuredWidth = width;
-        mMeasuredHeight = height;
+        measuredWidth = width;
+        measuredHeight = height;
     }
 
     public int getMeasuredWidth() {
-        return mMeasuredWidth;
+        return measuredWidth;
     }
 
     public int getMeasuredHeight() {
-        return mMeasuredHeight;
+        return measuredHeight;
     }
 
     public void setAspectRatio(int aspectRatio) {
         mCurrentAspectRatio = aspectRatio;
     }
-    //
-    // @NonNull
-    // public static String getAspectRatioText(Context context, int aspectRatio)
-    // {
-    // String text;
-    // switch (aspectRatio) {
-    // case IRenderView.AR_ASPECT_FIT_PARENT:
-    // text = context.getString(R.string.VideoView_ar_aspect_fit_parent);
-    // break;
-    // case IRenderView.AR_ASPECT_FILL_PARENT:
-    // text = context.getString(R.string.VideoView_ar_aspect_fill_parent);
-    // break;
-    // case IRenderView.AR_ASPECT_WRAP_CONTENT:
-    // text = context.getString(R.string.VideoView_ar_aspect_wrap_content);
-    // break;
-    // case IRenderView.AR_MATCH_PARENT:
-    // text = context.getString(R.string.VideoView_ar_match_parent);
-    // break;
-    // case IRenderView.AR_16_9_FIT_PARENT:
-    // text = context.getString(R.string.VideoView_ar_16_9_fit_parent);
-    // break;
-    // case IRenderView.AR_4_3_FIT_PARENT:
-    // text = context.getString(R.string.VideoView_ar_4_3_fit_parent);
-    // break;
-    // default:
-    // text = context.getString(R.string.N_A);
-    // break;
-    // }
-    // return text;
-    // }
 }

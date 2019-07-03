@@ -14,11 +14,9 @@ import java.util.ArrayList;
 
 /**
  * 我们定义了一种视频格式,命名为"EditModeVideo", 这种转换的视频格式,会很快的找到视频中的每一帧, 像翻书一样,方便定位, 提取帧,倒序播放等;
- * <p>
  * 功能:
  * 2, 导出
  * 3, 可以检测当前视频 是否是 "EditModeVideo"的视频格式;
- * <p>
  *
  * 区别:
  * "EditModeVideo"格式的视频, 和正常的mp4唯一区别是: 比他大一些;, 也是正常的mp4视频,可以直接分享到微信, 上传到服务器等等;
@@ -29,7 +27,7 @@ public class EditModeVideo {
 
     protected String inputPath;
     protected MediaInfo inputInfo;
-    protected VideoOneDo oneDo;
+    protected VideoOneDo2 oneDo;
     protected Context ctx;
     protected boolean isConvertRunning;
     protected boolean isInputEditMode; // 输入的是否已经是
@@ -112,7 +110,7 @@ public class EditModeVideo {
             decoderHandler = 0;
         }
         if (oneDo != null) {
-            oneDo.stop();
+            oneDo.release();
             oneDo = null;
         }
     }
@@ -122,24 +120,25 @@ public class EditModeVideo {
         if (inputInfo.isHaveVideo() && isInputEditMode&& !isConvertRunning) {
             synchronized (this) {
                 isConvertRunning = true;
-                oneDo = new VideoOneDo(ctx, editVideoPath);
-                oneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
+                try {
+                    oneDo = new VideoOneDo2(ctx, editVideoPath);
+                    oneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
 
-                    @Override
-                    public void onLanSongSDKCompleted(String dstVideo) {
-                        if (onLanSongSDKCompletedListener != null) {
-                            onLanSongSDKCompletedListener.onLanSongSDKCompleted(dstVideo);
+                        @Override
+                        public void onLanSongSDKCompleted(String dstVideo) {
+                            if (onLanSongSDKCompletedListener != null) {
+                                onLanSongSDKCompletedListener.onLanSongSDKCompleted(dstVideo);
+                            }
+                            isConvertRunning = false;
+                            oneDo.release();
+                            oneDo = null;
                         }
-                        isConvertRunning = false;
-                        oneDo.release();
-                        oneDo = null;
-                    }
-                });
-                oneDo.setOnVideoOneDoProgressListener(onLanSongSDKProgressListener);
-                oneDo.setOnVideoOneDoErrorListener(onLanSongSDKErrorListener);
-                if (!oneDo.start()) {
-                    editVideoPath = null;
-                    isConvertRunning = false;
+                    });
+                    oneDo.setOnVideoOneDoProgressListener(onLanSongSDKProgressListener);
+                    oneDo.setOnVideoOneDoErrorListener(onLanSongSDKErrorListener);
+                    oneDo.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         } else {

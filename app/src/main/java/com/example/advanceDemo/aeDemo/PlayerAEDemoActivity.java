@@ -10,10 +10,9 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
-import com.example.advanceDemo.VideoPlayerActivity;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.IRenderView;
 import com.lansosdk.videoeditor.TextureRenderView;
 

@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -134,10 +135,10 @@ public class TextStickerView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (isInitLayout) {
-            isInitLayout = false;
+        //if (isInitLayout) {
+          //  isInitLayout = false;
             resetView();
-        }
+        //}//
     }
 
     @Override
@@ -210,8 +211,8 @@ public class TextStickerView extends View {
         mTextRect.set(0, 0, 0, 0);// clear
         Rect tempRect = new Rect();
         Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
-        int charMinHeight = Math.abs(fontMetrics.top)
-                + Math.abs(fontMetrics.bottom);// 字体高度
+        int charMinHeight = Math.abs(fontMetrics.top)+ Math.abs(fontMetrics.bottom);// 字体高度
+
         text_height = charMinHeight;
         // System.out.println("top = "+fontMetrics.top
         // +"   bottom = "+fontMetrics.bottom);
@@ -387,6 +388,8 @@ public class TextStickerView extends View {
     public void resetView() {
         layout_x = getMeasuredWidth() / 2;
         layout_y = getMeasuredHeight() / 2;
+
+
         mRotateAngle = 0;
         mScale = 1;
         mTextContents.clear();

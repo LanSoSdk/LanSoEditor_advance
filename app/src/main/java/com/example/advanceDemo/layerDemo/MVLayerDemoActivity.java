@@ -24,7 +24,7 @@ import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.box.onLayerAvailableListener;
 import com.lansosdk.videoeditor.AudioEditor;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.DrawPadView.onViewAvailable;
 import com.lansosdk.videoeditor.MediaInfo;
@@ -183,14 +183,11 @@ public class MVLayerDemoActivity extends Activity {
      */
     private void startDrawPad() {
         if (mDrawPadView.startDrawPad()) {
-            // 增加一个主视频的 VideoLayer
-            mLayerMain = mDrawPadView.addMainVideoLayer(
-                    mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
+            mLayerMain = mDrawPadView.addMainVideoLayer(mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
             if (mLayerMain != null) {
                 mplayer.setSurface(new Surface(mLayerMain.getVideoTexture()));
             }
             mplayer.start();
-
             addMVLayer();
         }
     }
@@ -201,26 +198,7 @@ public class MVLayerDemoActivity extends Activity {
     private void addMVLayer() {
         String colorMVPath = CopyFileFromAssets.copyAssets(MVLayerDemoActivity.this, "mei.mp4");
         String maskMVPath = CopyFileFromAssets.copyAssets(MVLayerDemoActivity.this, "mei_b.mp4");
-
-        mvLayer = mDrawPadView.addMVLayer(colorMVPath, maskMVPath, false); // <-----增加MVLayer
-        if (mvLayer != null) {
-            mvLayer.setOnLayerAvailableListener(new onLayerAvailableListener() {
-
-                @Override
-                public void onAvailable(Layer layer) {
-                    mvLayer.setPlayEnable();
-                }
-            });
-//            mvLayer.setScaledValue(mvLayer.getPadWidth(),mvLayer.getPadHeight());
-//            // 设置它为满屏.
-//            float scaleW = (float) mvLayer.getPadWidth() / (float) mvLayer.getLayerWidth();
-//            float scaleH = mvLayer.getPadHeight() / (float) mvLayer.getLayerHeight();
-//            mvLayer.setScale(scaleW, scaleH);
-            // 可以设置当前的MV是否要录制到
-            // mvLayer.setVisibility(AeLayer.VISIBLE_ONLY_PREVIEW);
-            // 可以增加mv在播放结束后的三种模式, 停留在最后一帧/循环/消失/
-            mvLayer.setEndMode(MVLayerENDMode.LOOP);
-        }
+        mvLayer = mDrawPadView.addMVLayer(colorMVPath, maskMVPath); // <-----增加MVLayer
     }
 
     /**

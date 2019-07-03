@@ -9,7 +9,6 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Toast;
 
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.view.FilterDemoAdapter;
@@ -39,7 +37,6 @@ import com.lansosdk.videoeditor.FilterLibrary.FilterAdjuster;
 import com.lansosdk.videoeditor.FilterLibrary.OnLanSongFilterChosenListener;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.LanSongFileUtil;
-import com.lansosdk.videoeditor.VideoOneDo;
 
 import java.io.IOException;
 import java.nio.IntBuffer;
@@ -63,6 +60,7 @@ import com.lansosdk.LanSongFilter.LanSongIFValenciaFilter;
 import com.lansosdk.LanSongFilter.LanSongIFWaldenFilter;
 import com.lansosdk.LanSongFilter.LanSongIFXproIIFilter;
 import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
+import com.lansosdk.videoeditor.VideoOneDo2;
 
 /**
  * 滤镜的操作
@@ -70,7 +68,7 @@ import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
 public class Demo3LayerFilterActivity extends Activity {
     private static final String TAG = "Demo3LayerFilterActivity";
     boolean isDestorying = false; // 是否正在销毁, 因为销毁会停止DrawPad
-    private String mVideoPath;
+    private String srcVideoPath;
     private DrawPadView drawPadView;
     private MediaPlayer mediaPlayer = null;
     private VideoLayer videoLayer = null;
@@ -86,7 +84,7 @@ public class Demo3LayerFilterActivity extends Activity {
 
     // -------------------------------------------------后台执行.
     private ProgressDialog progressDialog;
-    private VideoOneDo videoOneDo;
+    private VideoOneDo2 videoOneDo;
 
     private void createFilters() {
         filters.add(new LanSongFilter("无"));
@@ -122,12 +120,12 @@ public class Demo3LayerFilterActivity extends Activity {
 
         createFilters();
 
-        mVideoPath = getIntent().getStringExtra("videopath");
+        srcVideoPath = getIntent().getStringExtra("videopath");
         dstPath = LanSongFileUtil.newMp4PathInBox();
-        mediaInfo = new MediaInfo(mVideoPath);
+        mediaInfo = new MediaInfo(srcVideoPath);
 
         if (mediaInfo.prepare()) {
-            new GetBitmapFiltersTask(mVideoPath).execute();  //开启给图片增加滤镜;
+            new GetBitmapFiltersTask(srcVideoPath).execute();  //开启给图片增加滤镜;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -135,7 +133,6 @@ public class Demo3LayerFilterActivity extends Activity {
                 }
             }, 100);
         }
-
     }
 
     @Override
@@ -157,7 +154,7 @@ public class Demo3LayerFilterActivity extends Activity {
     private void startPlayVideo() {
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(mVideoPath);
+            mediaPlayer.setDataSource(srcVideoPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,30 +206,27 @@ public class Demo3LayerFilterActivity extends Activity {
     }
 
     private void initView() {
-        findViewById(R.id.id_filterLayer_demo_next).setOnClickListener(
-                new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        if (mediaPlayer != null) {
-                            mediaPlayer.stop();
-                            mediaPlayer.release();
-                            mediaPlayer = null;
-                        }
-                        drawPadView.stopDrawPad();
-                        filterExecute();
-                    }
-                });
+        findViewById(R.id.id_filterLayer_demo_next).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                }
+                drawPadView.stopDrawPad();
+                filterExecute();
+            }
+        });
         listFilterView = (HorizontalListView) findViewById(R.id.id_filterlayer_filterlist);
         listFilterView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 if (videoLayer != null) { //切换滤镜
-                    LanSongFilter filter=filters.get(arg2);
+                    LanSongFilter filter = filters.get(arg2);
                     videoLayer.switchFilterTo(filter);
                     filterIndex = arg2;
-                    Log.e("LSDelete", "----切换的是: "+ filter.getFilterName());
                 }
             }
         });
@@ -259,7 +253,6 @@ public class Demo3LayerFilterActivity extends Activity {
         });
         skbarFilterAdjuster.setMax(100);
         findViewById(R.id.id_filter_select).setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 selectFilter();
@@ -366,46 +359,50 @@ public class Demo3LayerFilterActivity extends Activity {
         progressDialog.setMessage("正在后台处理:");
         progressDialog.setCancelable(false);
 
-        videoOneDo = new VideoOneDo(getApplicationContext(), mVideoPath);
-
-        videoOneDo.setFilter(filters.get(filterIndex));
-        videoOneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
-            @Override
-            public void onLanSongSDKProgress(long ptsUs, int percent) {
-                progressDialog.setMessage("正在后台处理:" + percent + " %");
-            }
-        });
-        videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
-
-            @Override
-            public void onLanSongSDKCompleted(String dstVideo) {
-                if (progressDialog != null) {
-                    progressDialog.cancel();
-                    progressDialog = null;
+        try {
+            videoOneDo = new VideoOneDo2(getApplicationContext(), srcVideoPath);
+            videoOneDo.addFilter(filters.get(filterIndex));
+            videoOneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
+                @Override
+                public void onLanSongSDKProgress(long ptsUs, int percent) {
+                    progressDialog.setMessage("正在后台处理:" + percent + " %");
                 }
-                dstPath = dstVideo;
-                videoOneDo.release();
-                videoOneDo = null;
+            });
+            videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
 
-                if (LanSongFileUtil.fileExist(dstVideo)) {
-                    DemoUtil.startPlayDstVideo(Demo3LayerFilterActivity.this, dstVideo);
-                } else {
-                    DemoUtil.showDialog(Demo3LayerFilterActivity.this, "生成的文件错误,请联系我们");
+                @Override
+                public void onLanSongSDKCompleted(String dstVideo) {
+                    if (progressDialog != null) {
+                        progressDialog.cancel();
+                        progressDialog = null;
+                    }
+                    dstPath = dstVideo;
+                    videoOneDo.release();
+                    videoOneDo = null;
+
+                    if (LanSongFileUtil.fileExist(dstVideo)) {
+                        DemoUtil.startPlayDstVideo(Demo3LayerFilterActivity.this, dstVideo);
+                    } else {
+                        DemoUtil.showDialog(Demo3LayerFilterActivity.this, "生成的文件错误,请联系我们");
+                    }
                 }
-            }
-        });
-        if (videoOneDo.start()) {
+            });
+            videoOneDo.start();
             progressDialog.show();
-        } else {
-            Toast.makeText(getApplicationContext(), "后台运行失败,请查看打印信息", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+
     }
 
     public class GetBitmapFiltersTask extends AsyncTask<Object, Object, Boolean> {
         private String video;
+
         public GetBitmapFiltersTask(String videoPath) {
             video = videoPath;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

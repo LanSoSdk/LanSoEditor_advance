@@ -5,7 +5,7 @@ android {
 //    buildToolsVersion "27.0.3"
 
     defaultConfig {
-        applicationId "com.lansoeditor.advanceDemo"
+        applicationId "com.lansoeditor.github"
         minSdkVersion 18
         targetSdkVersion 27
         compileOptions {
@@ -28,7 +28,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
 
 
-    //发布或导出到test/publish的时候,   下面两行屏蔽,然后点击右上角的Sync Now
     implementation project(':LanSongSDK')
 
 

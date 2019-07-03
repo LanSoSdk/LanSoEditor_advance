@@ -125,6 +125,9 @@ public class DrawPadVideoExecute {
         return false;
     }
 
+    /**
+     * 停止执行.
+     */
     public void stopDrawPad() {
         if (render != null && render.isRunning()) {
             render.stopDrawPad();
@@ -620,19 +623,6 @@ public class DrawPadVideoExecute {
         }
     }
 
-    @Deprecated
-    public void switchFilterTo(Layer layer, LanSongFilter filter) {
-        if (render != null && render.isRunning()) {
-            render.switchFilterTo(layer, filter);
-        }
-    }
-
-    @Deprecated
-    public void switchFilterList(Layer layer, ArrayList<LanSongFilter> filters) {
-        if (render != null && render.isRunning()) {
-            render.switchFilterList(layer, filters);
-        }
-    }
 
     /**
      * 释放DrawPad,方法等同于 {@link #stopDrawPad()} 只是为了代码标准化而做.

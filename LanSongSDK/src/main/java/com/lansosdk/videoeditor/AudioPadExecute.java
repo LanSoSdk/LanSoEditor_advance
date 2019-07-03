@@ -191,8 +191,8 @@ public class AudioPadExecute {
 
     /**
      * 把音频的 指定时间段, 增加到audiopad音频容器里.
-     * <p>
-     * <p>
+     *
+     *
      * 如果有循环或其他操作, 可以在获取的AudioLayer对象中设置.
      *
      * @param srcPath      音频文件路径, 可以是有音频的视频路径;
@@ -398,7 +398,7 @@ public class AudioPadExecute {
      audioLayer.setVolume(0.01f);
      }
      //主音频静音;
-     AudioLayer audioSource = execute.getMainSource();
+     AudioLayer audioSource = execute.getMainAudioLayer();
      if (audioSource != null) {
      audioSource.setMute(true);
      }

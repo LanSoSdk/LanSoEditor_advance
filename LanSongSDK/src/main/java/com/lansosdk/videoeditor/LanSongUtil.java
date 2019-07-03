@@ -50,7 +50,6 @@ public class LanSongUtil {
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
-
     public static boolean isFullScreenRatio(int padWidth, int padHeight) {
         if (padWidth > padHeight) { // 其他则是屏幕比大于16:9的屏幕
             float ratio = (float) padWidth / (float) padHeight;

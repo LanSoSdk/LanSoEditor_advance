@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.lansosdk.videoeditor.LanSongFileUtil;
 
-import static com.lansosdk.videoeditor.CopyFileFromAssets.copyAssets;
+import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAssets;
 
 public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean> {
     private ProgressDialog mProgressDialog;

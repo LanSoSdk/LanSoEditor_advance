@@ -2822,10 +2822,10 @@ public class VideoEditor {
     /**
      *
      * @param videoInput 输入视频
-     * @param inteval  对输入的视频取帧间隔.
+     * @param inteval  一秒钟取多少帧; 建议取8,10,15;
      * @param scaleW  取帧的同时是否要缩放, =0为不缩放
      * @param scaleH
-     * @param frameRate 在编码成gif文件的时候的帧率;
+     * @param frameRate 在编码成gif文件的时候的帧率; 建议和inteval一致
      * @return
      */
     public String executeConvertToGif(String videoInput, float inteval,int scaleW,int scaleH,float frameRate)
@@ -3254,13 +3254,13 @@ public class VideoEditor {
     public boolean checkSoftEncoder()
     {
         for(String item: qilinCpulist){
-            if(item.contains(Build.MODEL) && isSupportNV21ColorFormat()==false){
+            if(item.contains(Build.MODEL) && !isSupportNV21ColorFormat()){
                 isForceSoftWareEncoder=true;
                 return true;
             }
         }
 
-        if(Build.MODEL!=null && isSupportNV21ColorFormat()==false) {
+        if(Build.MODEL!=null && !isSupportNV21ColorFormat()) {
             if (Build.MODEL.contains("-AL00") || Build.MODEL.contains("-CL00")) {
                 isForceSoftWareEncoder = true;
                 return true;

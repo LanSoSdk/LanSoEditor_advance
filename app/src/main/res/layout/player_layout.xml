@@ -14,7 +14,7 @@
             android:id="@+id/surface1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dip" />
+            android:layout_margin="50dip" />
     </FrameLayout>
 
     <LinearLayout

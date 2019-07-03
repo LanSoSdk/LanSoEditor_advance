@@ -23,7 +23,7 @@ import com.lansosdk.box.MicLine;
 import com.lansosdk.box.onDrawPadErrorListener;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.videoeditor.BeautyManager;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadCameraView;
 import com.lansosdk.videoeditor.DrawPadCameraView.doFousEventListener;
 import com.lansosdk.videoeditor.DrawPadCameraView.onViewAvailable;

@@ -11,11 +11,12 @@ import com.example.advanceDemo.layerDemo.CanvasLayerDemoActivity;
 import com.example.advanceDemo.layerDemo.Demo1LayerMothedActivity;
 import com.example.advanceDemo.layerDemo.Demo2LayerMothedActivity;
 import com.example.advanceDemo.layerDemo.Demo3LayerFilterActivity;
-import com.example.advanceDemo.layerDemo.ExecuteCanvasLayerActivity;
+import com.example.advanceDemo.layerDemo.CanvasLayerExecuteActivity;
 import com.example.advanceDemo.layerDemo.ExecuteVideoLayerActivity;
 import com.example.advanceDemo.layerDemo.MVLayerDemoActivity;
 import com.example.advanceDemo.layerDemo.TwoVideoLayerActivity;
 import com.example.advanceDemo.layerDemo.ViewLayerDemoActivity;
+import com.example.advanceDemo.layerDemo.ViewLayerListActivity;
 import com.example.advanceDemo.layerDemo.ViewLayerOnlyActivity;
 import com.lansoeditor.advanceDemo.R;
 
@@ -58,7 +59,7 @@ public class ListLayerDemoActivity extends Activity implements OnClickListener {
                 startDemoActivity(Demo3LayerFilterActivity.class);
                 break;
             case R.id.id_layer_viewlayerdemo1:
-                startDemoActivity(ViewLayerDemoActivity.class);
+                startDemoActivity(ViewLayerListActivity.class);
                 break;
             case R.id.id_layer_viewlayerdemo2:
                 startDemoActivity(ViewLayerOnlyActivity.class);
@@ -67,7 +68,7 @@ public class ListLayerDemoActivity extends Activity implements OnClickListener {
                 startDemoActivity(CanvasLayerDemoActivity.class);
                 break;
             case R.id.id_layer_canvaslayer_bg:
-                startDemoActivity(ExecuteCanvasLayerActivity.class);
+                startDemoActivity(CanvasLayerExecuteActivity.class);
                 break;
 
             case R.id.id_layer_mvlayerdemo:

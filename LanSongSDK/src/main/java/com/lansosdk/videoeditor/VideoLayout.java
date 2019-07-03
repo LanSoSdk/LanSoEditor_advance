@@ -741,8 +741,9 @@ public class VideoLayout extends VideoEditor {
     //-------------------------
     public static void test() {
         VideoLayout layout=new VideoLayout();
+
         VideoLayoutParam p1= new VideoLayoutParam();
-        p1.video="/sdcard/d3.mp4";
+        p1.video="/sdcard/p1920x1080.jpg";
         p1.x=0;
         p1.y=0;
         p1.scaleW=720;
@@ -750,13 +751,15 @@ public class VideoLayout extends VideoEditor {
 
         VideoLayoutParam p2= new VideoLayoutParam();
         p2.video="/sdcard/d2.mp4";
-        p2.x=0;
-        p2.y=0;
-        p2.scaleW=544/2;
+        p2.x=300;
+        p2.y=300;
+        p2.scaleW=523;
         p2.scaleH=960/2;
 
 
-        String dstPath=layout.executeLayout2Video(720,720,"/sdcard/d1.mp4",0,0,"/sdcard/d2.mp4",0,0);
+        String dstPath=layout.executeLayoutScale2Video(1280,720,p1,p2);
+
+        MediaInfo.checkFile(dstPath);
 
     }
 }
