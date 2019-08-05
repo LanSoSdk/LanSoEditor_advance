@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-//LSDELETE 移动到demo的util中. SDK不再提供这个类;
 public class CopyFileFromAssets {
     /**
      * 拷贝资源文件夹中的文件到默认地址. 如果文件已经存在,则直接返回文件路径

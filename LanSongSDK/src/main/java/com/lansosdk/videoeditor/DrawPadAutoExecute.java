@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.lansosdk.box.AudioLayer;
+import com.lansosdk.box.AudioPadRunnable;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.DataLayer;
@@ -74,7 +75,7 @@ public class DrawPadAutoExecute {
                         if(audioPad!=null && audioPad.getAudioCount()>0){
                             String audioPath=audioPad.waitComplete();
 
-                            dstPath2=AudioPadExecute.mergeAudioVideo(dstPath,audioPath,true);
+                            dstPath2= AudioPadRunnable.mergeAudioVideo(dstPath,audioPath,true);
                             LanSongFileUtil.deleteFile(dstPath);
 
                         }
@@ -92,7 +93,6 @@ public class DrawPadAutoExecute {
                     if(onLanSongSDKErrorListener!=null){
                         onLanSongSDKErrorListener.onLanSongSDKError(what);
                     }
-
                 }
             });
             renderer.setDrawPadProgressListener(new onDrawPadProgressListener() {
@@ -456,7 +456,7 @@ Log.e("TAG", "DrawPadAutoRunnable  ----curent: "+ptsUs+ " percent:"+percent);
  autoExecute.setOnLanSongSDKCompletedListener(new OnLanSongSDKCompletedListener() {
 @Override
 public void onLanSongSDKCompleted(String dstVideo) {
-MediaInfo.checkFile(dstVideo);
+MediaInfo.checkFileReturnString(dstVideo);
 DemoUtil.startPlayDstVideo(ListMainActivity.this,dstVideo);
 }
 });

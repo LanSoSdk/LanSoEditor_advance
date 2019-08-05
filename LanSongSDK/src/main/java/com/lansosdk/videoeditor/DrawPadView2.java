@@ -598,7 +598,7 @@ public class DrawPadView2 extends FrameLayout {
                     Log.e(TAG,"开启 drawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
                             + "请检测您 的代码或参考本文件中的SurfaceCallback 这个类中的注释;\n");
                 }else {
-                    Log.i(TAG,"Drawpad is running...");
+                    Log.i(TAG,"DrawPadView2 is running...");
                 }
             }
         } else {

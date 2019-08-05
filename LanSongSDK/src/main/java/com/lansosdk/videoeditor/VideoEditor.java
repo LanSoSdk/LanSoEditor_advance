@@ -326,16 +326,8 @@ public class VideoEditor {
      */
     public native void cancel();
 
-    /**
-     * @param filelength 采样点的总长度
-     * @param channel 通道号
-     * @param sampleRate 采样率;
-     * @param bitperSample 每个采样点有几个位, 默认单通道8位,双通道16位;
-     * @param outData 输出这个头文件
-     */
-    public static native void createWavHeader(int filelength, int channel, int sampleRate, int bitperSample, byte[] outData);
-
     //-----------------
+
     public static String mergeAVDirectly(String audio, String video,boolean deleteVideo) {
         MediaInfo info=new MediaInfo(audio);
         if(info.prepare() && info.isHaveAudio()){
@@ -381,6 +373,14 @@ public class VideoEditor {
         }
         return video;
     }
+    /**
+     * @param filelength 采样点的总长度, 字节数;
+     * @param channel 通道数量,1/2;
+     * @param sampleRate 采样率;
+     * @param bitperSample 每个采样点有几个位, 默认单通道8位,双通道16位;
+     * @param outData 输出这个头文件
+     */
+    public static native void createWavHeader(int filelength, int channel, int sampleRate, int bitperSample, byte[] outData);
     /**
      * 把一张图片变成视频
      *
@@ -664,7 +664,6 @@ public class VideoEditor {
         cmdList.add("-ac");
         cmdList.add("2");
 
-        //LSNEW 增加这行和上面的 码率, 通道数
         cmdList.add("-vn");
 
         cmdList.add("-y");
@@ -2819,15 +2818,11 @@ public class VideoEditor {
         }
     }
 
+
     /**
-     *
-     * @param videoInput 输入视频
-     * @param inteval  一秒钟取多少帧; 建议取8,10,15;
-     * @param scaleW  取帧的同时是否要缩放, =0为不缩放
-     * @param scaleH
-     * @param frameRate 在编码成gif文件的时候的帧率; 建议和inteval一致
-     * @return
+     * 请使用  executeConvertVideoToGif
      */
+    @Deprecated
     public String executeConvertToGif(String videoInput, float inteval,int scaleW,int scaleH,float frameRate)
     {
 //        ffmpeg -i d1.mp4 -r 1 -f image2 foo-%03d.jpeg
@@ -2848,6 +2843,56 @@ public class VideoEditor {
         }
         return null;
     }
+    /**
+     * 把视频转换为gif
+     * @param videoPath 视频的完整路径
+     * @param inteval   提取视频间隔, 从视频中一秒钟提取多少帧; 建议为5,10, 15;
+     * @param scaleWidth 把视频画面缩放到的宽度
+     * @param scaleHeight 缩放到的高度
+     * @param speed 速度. 转换为gif后的,gif播放速度,建议为0.3,0.5,1.0(不变),1.2,1.5;
+     * @return
+     */
+    public String executeConvertVideoToGif(String videoPath,int inteval,int scaleWidth,int scaleHeight,float speed) {
+        List<String> cmdList = new ArrayList<String>();
+
+        //ffmpeg -i iphone8Record_HEVC.mp4 -r 5 -vf "setpts=0.5*PTS,scale=720x1280" xi.gif
+
+        String dstPath=LanSongFileUtil.createGIFFileInBox();
+
+        int width=scaleWidth/2;
+        width*=2;
+
+        int height=scaleHeight/2;
+        height*=2;
+
+        String filter = String.format(Locale.getDefault(), "setpts=%f*PTS,scale=%dx%d", speed,width, height);
+
+        cmdList.add("-i");
+        cmdList.add(videoPath);
+        cmdList.add("-an");
+
+
+        cmdList.add("-r");
+        cmdList.add(String.valueOf(inteval));
+
+        cmdList.add("-vf");
+        cmdList.add(filter);
+
+        cmdList.add("-y");
+        cmdList.add(dstPath);
+
+        String[] command = new String[cmdList.size()];
+        for (int i = 0; i < cmdList.size(); i++) {
+            command[i] = (String) cmdList.get(i);
+        }
+        int ret= executeVideoEditor(command);
+        if(ret==0){
+            return dstPath;
+        }else{
+            LanSongFileUtil.deleteFile(dstPath);
+            return null;
+        }
+    }
 
 
     /**
@@ -2856,7 +2901,6 @@ public class VideoEditor {
      * 比如给视频的第一帧增加一张图片,时间范围是:0.0 --0.03;
      * 注意:如果你用这个给视频增加一张封面的话, 增加好后, 分享到QQ或微信或放到mac系统上, 显示的缩略图不一定是第一帧的画面.
      *
-     * LSNEW: 增加在指定时间叠加图片
      * @param srcPath 视频的完整路径
      * @param picPath 图片的完整的路径, 增加后,会从上左上角覆盖视频的第一帧
      * @param startTimeS 开始时间,单位秒.float类型,可以有小数
@@ -2987,7 +3031,6 @@ public class VideoEditor {
      * 注意:这个文字信息是携带到mp4文件中, 不会增加到每帧上.
      *
      *  这里是写入. 我们有另外的读取
-     * LSNEW :
      * @param srcPath 原视频的完整路径
      * @param text 要携带的描述文字
      * @return 增加后的目标文件.
@@ -3441,7 +3484,7 @@ public class VideoEditor {
         if (fileExist(videoFile)) {
             List<String> cmdList = new ArrayList<String>();
 
-            String scalecmd = String.format(Locale.getDefault(), "scale=%d:%d", width, height);
+            String filter = String.format(Locale.getDefault(), "scale=%d:%d", width, height);
 
             cmdList.add("-vcodec");
             cmdList.add("lansoh264_dec");
@@ -3462,7 +3505,7 @@ public class VideoEditor {
             //---测试调整码率、帧率+裁剪
 
             cmdList.add("-vf");
-            cmdList.add(scalecmd);
+            cmdList.add(filter);
 
             cmdList.add("-acodec");
             cmdList.add("copy");
@@ -3484,7 +3527,7 @@ public class VideoEditor {
      *         String  maskPic=SDCARD.file("a12801.png");
      *         String  videoPath=SDCARD.file("TEST_720P_15s.mp4");
      *         String  str=editor.executeAlphaMaskVideo(bgPic,videoPath,maskPic);
-     *         MediaInfo.checkFile(str);
+     *         MediaInfo.checkFileReturnString(str);
      */
     public String executeAlphaMaskVideo(String bgImgPath,
                                             String videoPath,
@@ -3522,4 +3565,6 @@ public class VideoEditor {
             return null;
         }
     }
+
+
 }

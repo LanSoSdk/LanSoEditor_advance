@@ -1330,7 +1330,7 @@ public class DrawPadCameraView extends FrameLayout {
 
                         if(isSlideToRight && slideFilterPercent>0.7f){
                             getCameraLayer().didSlideFilter();
-                        }else if(isSlideToRight==false && slideFilterPercent<0.3f) {
+                        }else if(!isSlideToRight && slideFilterPercent<0.3f) {
                             getCameraLayer().didSlideFilter();
                         }else {
                             getCameraLayer().cancelSlideFilter();

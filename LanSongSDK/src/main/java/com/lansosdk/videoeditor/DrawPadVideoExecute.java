@@ -43,8 +43,18 @@ public class DrawPadVideoExecute {
     public DrawPadVideoExecute(Context ctx, String srcPath, String dstPath) {
         mediaInfo=new MediaInfo(srcPath);
         if (render == null && mediaInfo.prepare()) {
+
+
+
             int padW=mediaInfo.getWidth();
             int padH=mediaInfo.getHeight();
+
+
+            if(padW*padH>1088*1920){
+                padW/=2;
+                padH/=2;
+                LSOLog.w(" setScaleValue  size biggeer than 1080P. divide to : "+ padW+ " x "+padH);
+            }
 
             durationUs=(long)(mediaInfo.vDuration*1000*1000);
             int bitrate=VideoEditor.getSuggestBitRate(padH *padW);
@@ -370,7 +380,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeStretch(rate, startTimeUs, endTimeUs);
         } else {
-            LSOLog.e("addTimeStretch error,drawPad is :"+toString());
+            LSOLog.e("addSpeedTimeRange error,drawPad is :"+toString());
         }
     }
 
@@ -389,7 +399,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeRepeat(startUs, endUs, loopcnt);
         } else {
-            LSOLog.e("addTimeRepeat error, drawPad is :"+toString());
+            LSOLog.e("addRepeatRange error, drawPad is :"+toString());
         }
     }
 
@@ -401,7 +411,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeStretch(list);
         } else {
-            LSOLog.e("addTimeStretch error,drawPad is :"+toString());
+            LSOLog.e("addSpeedTimeRange error,drawPad is :"+toString());
         }
     }
 
@@ -425,7 +435,7 @@ public class DrawPadVideoExecute {
         if (render != null && !render.isRunning()) {
             render.addTimeRepeat(list);
         } else {
-            LSOLog.e("addTimeRepeat error, drawPad is :"+toString());
+            LSOLog.e("addRepeatRange error, drawPad is :"+toString());
         }
     }
 

@@ -88,14 +88,6 @@ public class AudioEditor {
         return video;
     }
 
-    /**
-     */
-    public static byte[] getWavheader(int filelength, int channel, int sampleRate) {
-        byte header[] = new byte[44];
-        VideoEditor.createWavHeader(filelength, channel, sampleRate, 16, header);
-        return header;
-    }
-
     private onAudioEditorProgressListener monAudioEditorProgressListener=null;
     public interface  onAudioEditorProgressListener{
         void onProgress(AudioEditor v, int percent);

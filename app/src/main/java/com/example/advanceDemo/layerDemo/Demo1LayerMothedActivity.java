@@ -28,9 +28,11 @@ import com.lansosdk.box.YUVLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.box.onDrawPadThreadProgressListener;
 import com.lansosdk.videoeditor.DrawPadView;
+import com.lansosdk.videoplayer.OnLSOPlayerPreparedListener;
 import com.lansosdk.videoplayer.VPlayer;
 import com.lansosdk.videoplayer.VideoPlayer;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -70,16 +72,22 @@ public class Demo1LayerMothedActivity extends Activity implements
 
     private void startPlayVideo() {
         vPlayer = new VPlayer(this);
-        vPlayer.setVideoPath(videoPath);
+        try {
+            vPlayer.setVideoPath(videoPath);
+            vPlayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
+                @Override
+                public void onPrepared(VideoPlayer mp) {
+                    vPlayer.setLooping(true);
+                    initDrawPad();
+                }
+            });
+            vPlayer.prepareAsync();
 
-        vPlayer.setOnPreparedListener(new VideoPlayer.OnPlayerPreparedListener() {
-            @Override
-            public void onPrepared(VideoPlayer mp) {
-                vPlayer.setLooping(true);
-                initDrawPad();
-            }
-        });
-        vPlayer.prepareAsync();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
     boolean isInitDrawpad = false;
 

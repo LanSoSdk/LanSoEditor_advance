@@ -19,11 +19,13 @@ import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.MediaInfo;
+import com.lansosdk.videoplayer.OnLSOPlayerCompletionListener;
+import com.lansosdk.videoplayer.OnLSOPlayerPreparedListener;
+import com.lansosdk.videoplayer.OnLSOPlayerSeekCompleteListener;
 import com.lansosdk.videoplayer.VPlayer;
 import com.lansosdk.videoplayer.VideoPlayer;
-import com.lansosdk.videoplayer.VideoPlayer.OnPlayerCompletionListener;
-import com.lansosdk.videoplayer.VideoPlayer.OnPlayerPreparedListener;
-import com.lansosdk.videoplayer.VideoPlayer.OnPlayerSeekCompleteListener;
+
+import java.io.FileNotFoundException;
 
 public class VideoSpeedDemoActivity extends Activity implements
         OnClickListener, OnSeekBarChangeListener {
@@ -71,33 +73,40 @@ public class VideoSpeedDemoActivity extends Activity implements
 
     private void startPlayVideo() {
         mplayer = new VPlayer(getApplicationContext());
-        mplayer.setVideoPath(mVideoPath);
-        mplayer.setOnPreparedListener(new OnPlayerPreparedListener() {
+        try {
+            mplayer.setVideoPath(mVideoPath);
+            mplayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
 
-            @Override
-            public void onPrepared(VideoPlayer mp) {
-                initDrawPad();
-            }
-        });
-        mplayer.setOnSeekCompleteListener(new OnPlayerSeekCompleteListener() {
-
-            @Override
-            public void onSeekComplete(VideoPlayer mp) {
-                Log.i(TAG, "onseekcompleted---------------");
-
-            }
-        });
-
-        mplayer.setOnCompletionListener(new OnPlayerCompletionListener() {
-
-            @Override
-            public void onCompletion(VideoPlayer mp) {
-                if (drawPadView != null && drawPadView.isRunning()) {
-                    drawPadView.stopDrawPad();
+                @Override
+                public void onPrepared(VideoPlayer mp) {
+                    initDrawPad();
                 }
-            }
-        });
-        mplayer.prepareAsync();
+            });
+            mplayer.setOnSeekCompleteListener(new OnLSOPlayerSeekCompleteListener() {
+
+                @Override
+                public void onSeekComplete(VideoPlayer mp) {
+                    Log.i(TAG, "onseekcompleted---------------");
+
+                }
+            });
+
+            mplayer.setOnCompletionListener(new OnLSOPlayerCompletionListener() {
+
+                @Override
+                public void onCompletion(VideoPlayer mp) {
+                    if (drawPadView != null && drawPadView.isRunning()) {
+                        drawPadView.stopDrawPad();
+                    }
+                }
+            });
+            mplayer.prepareAsync();
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

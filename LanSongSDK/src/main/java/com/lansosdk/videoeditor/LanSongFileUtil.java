@@ -547,9 +547,40 @@ public class LanSongFileUtil {
         bmp.copyPixelsFromBuffer(buffer);
         return saveBitmap(bmp);
     }
+
     /**
-     * LSNEW
-     *
+     * 保存数据
+     * @param data 数据
+     * @param subfix 后缀名字;
+     * @return
+     */
+    public static String saveData(byte[] data,String subfix)
+    {
+        if(subfix!=null && data!=null && data.length>0){
+                String path = createFileInBox(subfix);
+
+                FileOutputStream fos = null;
+                BufferedOutputStream bos = null;
+
+                try {
+                    fos = new FileOutputStream(new File(path));
+                    bos = new BufferedOutputStream(fos);
+
+                    bos.write(data);
+
+                        bos.close();
+                        fos.close();
+
+                } catch (IOException ioe) {
+                    // throw new RuntimeException(ioe);
+                    LSOLog.e("video yuvEncoder cannot open write file: "+ ioe.toString());
+                }
+                return path;
+        }else{
+            return null;
+        }
+    }
+    /**
      * @param bmp
      */
     public static String saveBitmap(Bitmap bmp) {
@@ -684,19 +715,16 @@ public class LanSongFileUtil {
         return stitchBmp;
     }
 
-    /**
-     * LSNEW
-     *
-     * @return
-     */
     public static boolean deleteDefaultDir() {
         File file=new File(FileCacheDir);
         if (file.isDirectory()) {
             String[] children = file.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(file, children[i]));
-                if (!success) {
-                    return false;
+            if(children!=null){
+                for (int i = 0; i < children.length; i++) {
+                    boolean success = deleteDir(new File(file, children[i]));
+                    if (!success) {
+                        return false;
+                    }
                 }
             }
         }

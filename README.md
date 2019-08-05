@@ -5,12 +5,13 @@
 *  每个图层都支持移动 缩放 旋转 滤镜,亮暗,隐藏,等属性; 您可以任意个性化. 比如常见的美颜, 滤镜,文字,涂鸦,MV,增加各种动画, 抖音效果等
 *  支持AE模板,你可以直接把设计师做好的视频动画工程,输入到我们SDK中,从而直接实现各种个性化的视频效果.使用Ae模板的客户有:微商水印相机,熊猫动态壁纸,小柿饼等
 
-## 版本是3.5.7
-- 重写了VideoOneDo,命名为VideoOneDo2, 建议使用这个.
-- 图层增加遮罩功能.
-- 优化DrawPadAllExecute
-- 优化MVLayer/ 优化 VideoLayout.java
-- 其他代码优化
+## 版本是3.6.0
+- 重写Ae预览合成类, 命名为AECompositionView, 预览后的合成速度提升300%.
+- 重新DrawPadAllExecute, 命名为DrawPadAllExecute2,支持视频预裁剪和缩放;
+- 视频播放增加变声功能, 音频图层增加变声功能.
+- 移动VideoPlayer 到内部jar中,并修改各种回调为OnLSOPlayer [API有变动]
+- 优化其他代码.
+
 
 [更多版本日志](https://github.com/LanSoSdk/LanSoEditor_advance/blob/master/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E.md)
 

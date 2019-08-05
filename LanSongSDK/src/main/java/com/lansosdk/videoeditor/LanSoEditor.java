@@ -20,15 +20,16 @@ public class LanSoEditor {
 
     private static boolean isLoaded = false;
 
-    public static void initSDK(Context context, String str) {
-        loadLibraries(); // 拿出来单独加载库文件.
+    public static void initSDK(Context context, String str){
+        try {
+            loadLibraries(); // 拿出来单独加载库文件.
+        }catch (UnsatisfiedLinkError error){
+            LSOLog.e("load libraries  error. Maybe it is where your app crashes, causing the entire Activity to restart.(你的APP崩溃了,查看所有的logcat信息)");
+            error.printStackTrace();
+        }
 
-
-        setLanSongSDK1();
         initSo(context, str);
         LanSoEditor.setTempFileDir(Environment.getExternalStorageDirectory().getPath() + "/lansongBox/");
-
-
         printSDKVersion();
     }
 
@@ -45,6 +46,16 @@ public class LanSoEditor {
         LanSongFileUtil.FileCacheDir = tmpDir;
     }
 
+
+    /**
+     * 是否不限制Ae模板的尺寸;
+     * 默认是限制, 最大是1200x1920;
+     * @param is  如果您不想被限制,则设置为true;
+     */
+    public static void setNoLimiteAESize(boolean is){
+        LanSoEditorBox.setNoLimiteAESize(is);
+
+    }
     /**
      * 设置临时文件夹的路径
      * 并设置文件名的前缀和后缀 我们默认是以当前时间年月日时分秒毫秒:yymmddhhmmss_ms为当前文件名字.
@@ -151,7 +162,7 @@ public class LanSoEditor {
         }
         return cachePath;
     }
-    private static synchronized void loadLibraries() {
+    private static synchronized void loadLibraries() throws  UnsatisfiedLinkError{
         if (isLoaded)
             return;
 
@@ -177,6 +188,5 @@ public class LanSoEditor {
 
     private static native void nativeInit(Context ctx, AssetManager ass,String filename);
     private static native void nativeUninit();
-    ////LSTODO 特定用户使用, 发布删除;
     private static native void setLanSongSDK1();
 }

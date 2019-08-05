@@ -485,10 +485,8 @@ public class DrawPadView extends FrameLayout {
             renderer.stopDrawPad();
             renderer=null;
         }
-        if (mSurfaceTexture != null && renderer == null && drawPadWidth > 0
-                && drawPadHeight > 0) {
+        if (mSurfaceTexture != null && drawPadWidth > 0 && drawPadHeight > 0) {
             renderer = new DrawPadViewRender(getContext(), drawPadWidth,drawPadHeight);
-            if (renderer != null) {
                 renderer.setUseMainVideoPts(isUseMainPts);
                 // 因为要预览,这里设置显示的Surface,当然如果您有特殊情况需求,也可以不用设置,但displayersurface和EncoderEnable要设置一个,DrawPadRender才可以工作.
                 renderer.setDisplaySurface(new Surface(mSurfaceTexture));
@@ -542,13 +540,11 @@ public class DrawPadView extends FrameLayout {
 
                 ret = renderer.startDrawPad();
                 if (!ret) {
-                    LSOLog.e(
-                            "开启 drawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
+                    LSOLog.e("开启 drawPad 失败, 或许是您之前的DrawPad没有Stop, 或者传递进去的surface对象已经被系统Destory!!,"
                                     + "请检测您 的代码或参考本文件中的SurfaceCallback 这个类中的注释;\n");
                 }else {
-                    LSOLog.i("Drawpad is running..."+ret);
+                    LSOLog.i("DrawPadView is running..."+ret);
                 }
-            }
         } else {
             if (mSurfaceTexture == null) {
                 LSOLog.e(
@@ -656,7 +652,7 @@ public class DrawPadView extends FrameLayout {
      */
     public void setRecordMic(boolean record) {
         if (renderer != null && renderer.isRecording()) {
-            LSOLog.e("drawPad is running. set Mic Error!");
+            LSOLog.e("DrawPadView is running. set Mic Error!");
         } else {
             isRecordMic = record;
         }
@@ -974,6 +970,12 @@ public class DrawPadView extends FrameLayout {
         }
     }
 
+    /**
+     * 增加一个图片
+     * @param bmp 图片
+     * @param filter 给图片设置一个滤镜;
+     * @return
+     */
     public BitmapLayer addBitmapLayer(Bitmap bmp, LanSongFilter filter) {
         if (bmp != null) {
             if (renderer != null)

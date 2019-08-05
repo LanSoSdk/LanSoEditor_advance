@@ -3,6 +3,7 @@ package com.lansosdk.videoeditor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.Log;
 
 import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.AudioLayer;
@@ -84,8 +85,8 @@ public class VideoOneDo2 {
         if(mediaInfo!=null && startX>=0 && startY>=0 && startX<mediaInfo.getWidth() && startY<mediaInfo.getHeight())
         {
 
-            if(cropW%16!=0 || cropH%16!=0){
-                LSOLog.w("您要裁剪的宽高不是16的倍数,我们内部可能会调整 crop size:"+ cropW+ " x "+ cropH);
+            if(cropW%4!=0 || cropH%4!=0){
+                LSOLog.w("setCropRect not a multiple of 4, adjustment:"+ cropW+ " x "+ cropH);
             }
             int cropW2=(startX + cropW) < mediaInfo.getWidth()? cropW:(mediaInfo.getWidth() - startX);
             int cropH2=(startY + cropH)< mediaInfo.getHeight()? cropH :(mediaInfo.getHeight() -startY);
@@ -108,7 +109,7 @@ public class VideoOneDo2 {
             padWidth=w;
             padHeight=h;
             if(w%16!=0 || h%16!=0){
-                LSOLog.w("您缩放的不是16的倍数,我们内部可能会调整 set scale size:"+ w+ " x "+ h);
+                LSOLog.w("not a multiple of 16 set scale size:"+ w+ " x "+ h);
             }
             runnable.setScaleSize(w,h);
         }
@@ -222,7 +223,6 @@ public class VideoOneDo2 {
             runnable.setVideoVolume(volume);
         }
     }
-
     /**
      * 设置视频静音;
      */
@@ -231,7 +231,6 @@ public class VideoOneDo2 {
             runnable.setVideoMute();
         }
     }
-
     /**
      * 增加音频
      * @param srcPath 音频的完整路径(或还有音频的视频路径)
@@ -277,11 +276,12 @@ public class VideoOneDo2 {
 
 
     /**
-     *
+     * 增加音频.
+     * 从容器的指定位置开始增加, 增加一段声音;
      * @param srcPath 音频的完整路径(或还有音频的视频路径)
-     * @param offsetPadUs
-     * @param startAudioUs
-     * @param endAudioUs
+     * @param offsetPadUs 从容器的哪个时间点增加声音
+     * @param startAudioUs  增加一段声音的开始位置
+     * @param endAudioUs  增加一段声音的结束位置;
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath, long offsetPadUs,
@@ -292,8 +292,7 @@ public class VideoOneDo2 {
             return null;
         }
     }
-    //---------------gpu render start
-
+    //---------------------------------gpu render start---------------------------------------------
     //----------增加滤镜和别的图层信息;
     public void getVideoDataLayerAsync(OnLayerAlreadyListener listener){
         if(runnable!=null){
@@ -520,19 +519,19 @@ public class VideoOneDo2 {
 }
 /**************************测试代码**************************************************************************
 //demo1:
- private void testVideoOneDo()
- {
- try {
- VideoOneDo2 videoOneDo2= new VideoOneDo2(getApplicationContext(), SDCARD.file("d1.mp4"));
+ VideoOneDo2 videoOneDo2 = null;
+ private void testVideoOneDo() throws Exception {
+
+ videoOneDo2 = new VideoOneDo2(getApplicationContext(), SDCARD.file("d1.mp4"));
 
  //裁剪时长
- videoOneDo2.setCutDurationUs(2*1000*1000,10*1000*1000);
+ videoOneDo2.setCutDuration(2 * 1000 * 1000, 10 * 1000 * 1000);
 
  //裁剪画面
- videoOneDo2.setCropRect(100,100,400,800);
+ videoOneDo2.setCropRect(100, 100, 400, 800);
 
  //缩放
- videoOneDo2.setScaleSize(500,1200);
+ videoOneDo2.setScaleSize(500, 1200);
 
  //设置码率
  videoOneDo2.setCompressPercent(0.6f);
@@ -540,22 +539,19 @@ public class VideoOneDo2 {
  //设置监听
  videoOneDo2.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
 @Override
-public void onLanSongSDKProgress(long ptsUs, float percent) {
-Log.e("TAG", "percent: "+percent);
+public void onLanSongSDKProgress(long ptsUs, int percent) {
+    Log.e("TAG", "percent: " + percent);
 }
 });
- videoOneDo2.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
+        videoOneDo2.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
 @Override
 public void onLanSongSDKCompleted(String dstVideo) {
-MediaInfo.checkFile(dstVideo);
-}
-});
- videoOneDo2.start();
+        MediaInfo.checkFileReturnString(dstVideo);
+        }
+        });
+        videoOneDo2.start();
 
- } catch (IOException e) {
- e.printStackTrace();
- }
- }
+        }
 
 
  //demo2: 转换为编码模式
@@ -589,7 +585,7 @@ break;
 }
 }
 
-MediaInfo.checkFile(dstVideo);
+MediaInfo.checkFileReturnString(dstVideo);
 }
 });
  videoOneDo2.start();

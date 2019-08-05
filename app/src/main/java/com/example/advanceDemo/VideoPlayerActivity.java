@@ -20,11 +20,12 @@ import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.videoeditor.IRenderView;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.TextureRenderView;
+import com.lansosdk.videoplayer.OnLSOPlayerCompletionListener;
+import com.lansosdk.videoplayer.OnLSOPlayerPreparedListener;
 import com.lansosdk.videoplayer.VPlayer;
 import com.lansosdk.videoplayer.VideoPlayer;
-import com.lansosdk.videoplayer.VideoPlayer.OnPlayerCompletionListener;
-import com.lansosdk.videoplayer.VideoPlayer.OnPlayerPreparedListener;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -164,10 +165,14 @@ public class VideoPlayerActivity extends Activity {
 
     private void startVPlayer(final Surface surface) {
         vplayer = new VPlayer(this);
-        vplayer.setVideoPath(videoPath);
+        try {
+            vplayer.setVideoPath(videoPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         String str=tvScreen.getText().toString();
         tvScreen.setText(String.format("%s;播放:VPlayer ", str));
-        vplayer.setOnPreparedListener(new OnPlayerPreparedListener() {
+        vplayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
 
             @Override
             public void onPrepared(VideoPlayer mp) {
@@ -182,7 +187,7 @@ public class VideoPlayerActivity extends Activity {
                 vplayer.setLooping(true);
             }
         });
-        vplayer.setOnCompletionListener(new OnPlayerCompletionListener() {
+        vplayer.setOnCompletionListener(new OnLSOPlayerCompletionListener() {
 
             @Override
             public void onCompletion(VideoPlayer mp) {

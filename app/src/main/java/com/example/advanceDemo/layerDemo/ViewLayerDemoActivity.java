@@ -305,24 +305,24 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
                 @Override
                 public void onLanSongSDKProgress(long ptsUs, int percent) {
                     Log.e("LSDelete", "pts Us:: " + ptsUs + "  percnet " + percent);
-                    progressDialog.setProgress(percent);
-                }
-            });
+            progressDialog.setProgress(percent);
+        }
+    });
             videoOneDo2.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
-                @Override
-                public void onLanSongSDKCompleted(String dstVideo) {
-                    if(progressDialog!=null){
-                        progressDialog.release();
-                        progressDialog=null;
-                    }
-                    dstPath=dstVideo;
-                    DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstVideo);
-                }
-            });
+        @Override
+        public void onLanSongSDKCompleted(String dstVideo) {
+            if(progressDialog!=null){
+                progressDialog.release();
+                progressDialog=null;
+            }
+            dstPath=dstVideo;
+            DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstVideo);
+        }
+    });
             progressDialog.show(this);
             videoOneDo2.start();
 
-        } catch (Exception e) {
+} catch (Exception e) {
             e.printStackTrace();
         }
     }

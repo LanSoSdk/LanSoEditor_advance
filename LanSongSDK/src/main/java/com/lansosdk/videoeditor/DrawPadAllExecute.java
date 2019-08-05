@@ -72,13 +72,6 @@ public class DrawPadAllExecute  {
             @Override
             public void onCompleted(DrawPad v) {
                 if(!isCancelSatus() && onLanSongSDKCompletedListener!=null){
-
-//                    String dstPath2=dstPath;
-//                    if(audioPad!=null && audioPad.getAudioCount()>0){
-//                        String audioPath=audioPad.waitComplete();
-//                        dstPath2=AudioPadExecute.mergeAudioVideo(dstPath,audioPath,true);
-//                        LanSongFileUtil.deleteFile(dstPath);
-//                    }
                     onLanSongSDKCompletedListener.onLanSongSDKCompleted(padDstPath);
                 }
             }
@@ -199,8 +192,8 @@ public class DrawPadAllExecute  {
 
     /**
      * 增加数据图层
-     * @param dataWidth
-     * @param dataHeight
+     * @param dataWidth 数据的宽度
+     * @param dataHeight 数据的高度
      * @return
      */
     public DataLayer addDataLayer(int dataWidth, int dataHeight) {
@@ -213,7 +206,7 @@ public class DrawPadAllExecute  {
 
     /**
      * 增加视频图层
-     * @param videoPath
+     * @param videoPath 视频图层
      * @param filter
      * @return
      */
@@ -392,6 +385,13 @@ public class DrawPadAllExecute  {
             return runnable.isRunning();
         }else{
             return false;
+        }
+    }
+    public int getLayerSize(){
+        if(runnable!=null){
+            return runnable.getLayerSize();
+        }else{
+            return 0;
         }
     }
 

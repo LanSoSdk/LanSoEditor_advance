@@ -14,7 +14,7 @@ import com.lansosdk.box.onDrawPadProgressListener;
 import java.util.List;
 
 /**
- * 多个视频拼接
+ * 多个视频拼接[后台执行]
  *
  * 1. 内部会对每个视频进行编码,尽管是硬件编码,但速度还是没有不解码快.
  * 2. 使用场景是: 多个不同来源,不同分辨率的视频拼接.
@@ -186,49 +186,34 @@ public class DrawPadConcatVideo {
             renderer=null;
         }
     }
-    /**
-     *
-     测试代码;
 
-     String dst="/sdcard/shanchu2.mp4";
-
-     public void testFile2() {
-     try {
-     LSOVideoBody body=new LSOVideoBody("/sdcard/d1.mp4");
-     LSOVideoBody body2=new LSOVideoBody("/sdcard/TEST_720P_15s.mp4");
-     LSOVideoBody body3=new LSOVideoBody("/sdcard/he.mp4");
-
-     XDrawPadConcatVideo concatVideo=new XDrawPadConcatVideo(getApplicationContext(),
-     Arrays.asList(body,body3,body2),dst);
-
-
-     concatVideo.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
-    @Override
-    public void onLanSongSDKCompleted(drawPad v) {
-
-    MediaInfo.checkFile(dst);
-
-    }
-    });
-     concatVideo.setDrawPadProgressListener(new onDrawPadProgressListener() {
-    @Override
-    public void onLanSongSDKProgress(drawPad v, long currentTimeUs) {
-    Log.e("TAG", "------------currentTimeUs: "+currentTimeUs);
-    }
-    });
-     concatVideo.setDrawPadErrorListener(new onDrawPadErrorListener() {
-    @Override
-    public void onError(drawPad d, int what) {
-    Log.e("TAG", "------运行错误: ");
-    }
-    });
-     concatVideo.start();
-
-     } catch (IOException e) {
-     e.printStackTrace();
-     }
-     }
-
-
-     */
+//---------------测试代码.
+//    String dst="/sdcard/shanchu2.mp4";
+//
+//    public void testFile2() {
+//        try {
+//            LSOVideoBody body=new LSOVideoBody(SDCARD.file("huaweiP10_4k.mp4"));
+//            DrawPadConcatVideo concatVideo=new DrawPadConcatVideo(getApplicationContext(),
+//                    Arrays.asList(body),dst);
+//
+//            concatVideo.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
+//                @Override
+//                public void onCompleted(DrawPad v) {
+//
+//                    MediaInfo.checkFileReturnString(dst);
+//                }
+//            });
+//            concatVideo.setDrawPadProgressListener(new onDrawPadProgressListener() {
+//                @Override
+//                public void onProgress(DrawPad v, long currentTimeUs) {
+//                    Log.e("tag", "---currentTimeUs---: "+ currentTimeUs);
+//                }
+//            });
+//            concatVideo.start();
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

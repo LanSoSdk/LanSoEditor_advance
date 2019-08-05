@@ -85,7 +85,7 @@ public class MediaInfo {
      */
     public String vCodecName;
     /**
-     * 视频的 像素格式.(不能使用, 可能得到的格式和实际不同.)
+     * 视频的 像素格式.
      */
     public String vPixelFmt;
     /**
@@ -180,6 +180,12 @@ public class MediaInfo {
         }
     }
 
+    /**
+     * 是否不需要打印.
+     * @param videoPath
+     * @param noPrint
+     * @return
+     */
     public static String checkFile(String videoPath,boolean noPrint) {
         String ret = " ";
         if (videoPath == null) {
@@ -201,7 +207,7 @@ public class MediaInfo {
                     str += "文件名:" + info.fileName + "\n";
                     str += "文件后缀:" + info.fileSuffix + "\n";
                     str += "文件大小(字节):" + file.length() + "\n";
-                    ret = "文件存在,但文件的后缀可能表示是裸数据,我们的SDK需要多媒体格式的后缀是mp4/mp3/aac/m4a/mov/gif等常见格式";
+                    ret = "文件存在,但文件的后缀可能表示是裸数据,我们的SDK需要多媒体格式的后缀是mp4/mp3/wav/aac/m4a/mov/gif常见格式";
                     ret += str;
                 } else if (info.prepare()) {
                     ret = "文件内的信息是:\n";
@@ -244,7 +250,7 @@ public class MediaInfo {
                 }
             }
         }
-        if(noPrint==false){
+        if(!noPrint){
             LSOLog.i( "当前文件的音视频信息是:" + ret);
         }
         return ret;
@@ -375,11 +381,11 @@ public class MediaInfo {
                 return false;
             }
 
-            // if(vFrameRate>60) //如果帧率大于60帧, 则不支持.
-            // return false;
+
 
             if (vCodecName == null || vCodecName.isEmpty())
                 return false;
+
 
             return true;
         }
@@ -392,7 +398,11 @@ public class MediaInfo {
      * @return
      */
     public boolean isSupport() {
-        return isHaveAudio() || isHaveVideo();
+        if(isHaveVideo() && vPixelFmt!=null){
+            return true;
+        }else{
+            return  isHaveAudio();
+        }
     }
 
     @Override
