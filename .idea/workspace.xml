@@ -9,55 +9,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ad095dc-86dd-4c57-89f0-8dbc5ff0f481" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/jarAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioEditor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAllExecute.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAllExecute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAutoExecute.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAutoExecute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadCameraView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadCameraView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadConcatVideo.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadConcatVideo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadVideoExecute.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadVideoExecute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView2.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSoEditor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongFileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongFileUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/MediaInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/MediaInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoEditor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoOneDo.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoOneDo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoOneDo2.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoOneDo2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/IMediaDataSource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VideoPlayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongdisplay.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongdisplay.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongffmpeg.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongffmpeg.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongplayer.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongplayer.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongdisplay.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongdisplay.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongffmpeg.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongffmpeg.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongplayer.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongplayer.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/Demo1LayerMothedActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/Demo1LayerMothedActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/ViewLayerDemoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/ViewLayerDemoActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoSpeedDemoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoSpeedDemoActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/CopyFileFromAssets.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/CopyFileFromAssets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DemoUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DemoUtil.java" afterDir="false" />
-    </list>
+    <list default="true" id="4ad095dc-86dd-4c57-89f0-8dbc5ff0f481" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +28,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
+            <state relative-caret-position="594">
               <caret line="53" selection-start-line="53" selection-end-line="53" />
             </state>
           </provider>
@@ -85,7 +37,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
+            <state relative-caret-position="4400">
               <caret line="212" selection-start-line="212" selection-end-line="212" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -115,7 +67,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoSpeedDemoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1298">
+            <state relative-caret-position="748">
               <caret line="59" selection-start-line="59" selection-end-line="59" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -136,11 +88,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="20" column="42" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+            <state relative-caret-position="22">
+              <caret line="15" column="67" lean-forward="true" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
             </state>
           </provider>
-          <provider editor-type-id="android-manifest" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -192,6 +143,18 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView">
+        <subPane>
+          <expand>
+            <path>
+              <item name="LanSoEditor_advance" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -380,18 +343,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
-            <path>
-              <item name="LanSoEditor_advance" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -516,7 +467,7 @@
       <window_info anchor="bottom" id="Event Log" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="6" />
       <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.3295362" />
-      <window_info anchor="bottom" id="Android Profiler" order="8" />
+      <window_info anchor="bottom" id="Android Profiler" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="9" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
@@ -659,6 +610,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="53" selection-start-line="53" selection-end-line="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4400">
+          <caret line="212" selection-start-line="212" selection-end-line="212" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3916">
@@ -666,9 +634,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="23" column="60" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoSpeedDemoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1298">
+        <state relative-caret-position="748">
           <caret line="59" selection-start-line="59" selection-end-line="59" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -690,34 +665,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="23" column="60" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="212" selection-start-line="212" selection-end-line="212" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="42" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+        <state relative-caret-position="22">
+          <caret line="15" column="67" lean-forward="true" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
         </state>
       </provider>
       <provider editor-type-id="android-manifest" />

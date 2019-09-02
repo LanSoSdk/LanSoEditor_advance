@@ -1,0 +1,1 @@
+[{"outputType":{"type":"INSTANT_APP_MANIFEST"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":3600,"versionName":"3.6.0","enabled":true,"outputFile":"app-debug.apk","fullName":"debug","baseName":"debug"},"path":"AndroidManifest.xml","properties":{"packageId":"com.lansoeditor.github","split":"","minSdkVersion":"18"}}]
