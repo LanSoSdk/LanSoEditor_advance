@@ -347,7 +347,7 @@ public class CameraLayerFullSegmentActivity extends Activity implements
             if (!isRecordMp3) {
                 drawPadCamera.setRecordMic(true); // 如果不是录制音乐,则认为是录制外音.
             } else if (mAudioLine == null) { // 只在第一次
-                String music = CopyFileFromAssets.copyAssets(getApplicationContext(), "c_li_c_li_2m8s.mp3");
+                String music = CopyFileFromAssets.copyAssets(getApplicationContext(), "hongdou10s.mp3");
                 mAudioLine = drawPadCamera.setRecordExtraMp3(music, true);
             }
             resumeMVLayer();

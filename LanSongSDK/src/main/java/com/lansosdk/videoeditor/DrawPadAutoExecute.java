@@ -25,12 +25,11 @@ import com.lansosdk.box.onDrawPadThreadProgressListener;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
 /**
- * 自动刷新容器
- * 后台执行.
- *
- * 使用:没有视频的场合, 把一些图片/canvas, gif等素材合成视频;
+ * 已经废弃, 请用DrawPadAllExecute2
  */
+@Deprecated
 public class DrawPadAutoExecute {
 
     private DrawPadAutoRunnable renderer;
@@ -64,7 +63,7 @@ public class DrawPadAutoExecute {
 
             this.durationUS =durationUs;
             dstPath=LanSongFileUtil.createMp4FileInBox();
-            audioPad=new AudioPadExecute(ctx,(float)(durationUs/1000000));
+            audioPad=new AudioPadExecute(ctx,durationUs);
             renderer = new DrawPadAutoRunnable(ctx, padWidth, padHeight,durationUs, framerate, dstPath);
             renderer.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
                 @Override
@@ -466,7 +465,7 @@ public void onLanSongSDKError(int errorCode) {
 Log.e("TAG", ": ");
 }
 });
- autoExecute.start();
+ autoExecute.startPreview();
  }
  private ShowHeart showHeart;
  private CanvasLayer canvasLayer;

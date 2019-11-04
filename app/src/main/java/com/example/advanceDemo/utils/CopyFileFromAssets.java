@@ -102,7 +102,7 @@ public class CopyFileFromAssets {
     }
     /**
      * 调试代码用的一些需要是删除的文件;
-     *
+     * 蓝松开发测试用的拷贝文件
      * @param context
      * @param assetsName
      * @return
@@ -112,11 +112,11 @@ public class CopyFileFromAssets {
         String filePath;
 
 
-            if(LanSongFileUtil.getPath().endsWith("/")==false){
-                filePath = LanSongFileUtil.getPath() + "/" + assetsName;
-            }else{
-                filePath = LanSongFileUtil.getPath() +  assetsName;
-            }
+        if(!LanSongFileUtil.getPath().endsWith("/")){
+            filePath = LanSongFileUtil.getPath() + "/" + assetsName;
+        }else{
+            filePath = LanSongFileUtil.getPath() +  assetsName;
+        }
 
         File dir = new File(LanSongFileUtil.getPath());
         // 如果目录不中存在，创建这个目录
@@ -127,6 +127,53 @@ public class CopyFileFromAssets {
             if (!(new File(filePath)).exists()) { // 如果不存在.
 
                 String str="000shanchu/"+assetsName;
+
+                InputStream is = context.getAssets().open(str);
+                FileOutputStream fos = new FileOutputStream(filePath);
+                byte[] buffer = new byte[7168];
+                int count = 0;
+                while ((count = is.read(buffer)) > 0) {
+                    fos.write(buffer, 0, count);
+                }
+                fos.close();
+                is.close();
+                Log.i("copyFile","CopyFileFromAssets.copyAssets() is  success. file save to:"+filePath);
+            } else {
+                Log.w("copyFile","CopyFileFromAssets.copyAssets() is  not work. file existe:"+filePath);
+            }
+            return filePath;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 拷贝AE的一些资源;
+     * @param context
+     * @param assetsName
+     * @return
+     */
+    public static String copyAeAssets(Context context, String assetsName) {
+
+        String filePath;
+
+
+        if(!LanSongFileUtil.getPath().endsWith("/")){
+            filePath = LanSongFileUtil.getPath() + "/" + assetsName;
+        }else{
+            filePath = LanSongFileUtil.getPath() +  assetsName;
+        }
+
+        File dir = new File(LanSongFileUtil.getPath());
+        // 如果目录不中存在，创建这个目录
+        if (!dir.exists())
+            dir.mkdirs();
+
+        try {
+            if (!(new File(filePath)).exists()) { // 如果不存在.
+
+                String str="AeAssets/"+assetsName;
 
                 InputStream is = context.getAssets().open(str);
                 FileOutputStream fos = new FileOutputStream(filePath);

@@ -2,17 +2,20 @@ package com.lansosdk.videoeditor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 
 import com.lansosdk.box.AudioLayer;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPadAllRunnable2;
+import com.lansosdk.box.DrawPadBGRunnable;
 import com.lansosdk.box.GifLayer;
+import com.lansosdk.box.LSOBitmapAsset;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LSOVideoOption;
 import com.lansosdk.box.Layer;
-import com.lansosdk.box.MVLayer;
+import com.lansosdk.box.MVCacheLayer;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
@@ -21,37 +24,57 @@ import com.lansosdk.box.VideoFrameLayer;
 import com.lansosdk.box.YUVLayer;
 
 /**
- * 自动执行容器.
- * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
- * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
- * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
- * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
+ * 所有的图层,转换为视频
+ * 属于后台执行类;
  */
 public class DrawPadAllExecute2 {
 
     private boolean startSuccess;
     private DrawPadAllRunnable2 runnable;
+    private DrawPadBGRunnable pixelRunnable;
     private String padDstPath;
     private int padWidth;
     private int padHeight;
+
+    /**
+     * 强制使用老版本.
+     */
+    public static  boolean forceUseOLD =true;
+
     /**
      *  构造方法
      *
-     * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
+     * 如果您仅仅对一个视频做处理, 则可以设置为这个视频的宽高和时长;
      * @param ctx
      * @param padWidth 容器的宽度, 即最后生成视频的宽度 强烈建议最大值是720P
      * @param padHeight 容器的高度,即最后生成视频的高度 强烈建议最大值是720P
      * @param durationUS 容器的长度,  最后生成视频的长度;单位微秒;
      */
     public DrawPadAllExecute2(Context ctx, int padWidth, int padHeight, long  durationUS) {
-
-
         LanSongFileUtil.deleteFile(padDstPath);
         padDstPath=LanSongFileUtil.createMp4FileInBox();
-        runnable=new DrawPadAllRunnable2(ctx,padWidth,padHeight,durationUS);
+        int w,h;
+        w=padWidth;
+        h=padHeight;
 
-        this.padWidth=padWidth;
-        this.padHeight=padHeight;
+        if(padWidth%2 !=0 || padHeight%2 !=0){
+            LSOLog.e("drawPad size must be a multiple of 2 ");
+            w= w >> 1;
+            w *=2;
+            h= h >> 1;
+            h *=2;
+        }
+
+        //小于等于8.0 支持nv21, 麒麟处理器.
+        if(!forceUseOLD && Build.VERSION.SDK_INT<=Build.VERSION_CODES.O && LanSoEditor.isQiLinSoc() && VideoEditor.isSupportNV21ColorFormat() ){
+            pixelRunnable =new DrawPadBGRunnable(ctx,w,h,durationUS);
+            LSOLog.d("DrawPadAllExecute2 run  new free_pixel_mode Runnable...");
+        }else{
+            runnable=new DrawPadAllRunnable2(ctx,w,h,durationUS);
+            LSOLog.d("DrawPadAllExecute2 run  COMMON  Runnable(DrawPadAllRunnable2)...");
+        }
+        this.padWidth= w;
+        this.padHeight=h;
     }
 
     /**
@@ -61,7 +84,9 @@ public class DrawPadAllExecute2 {
      */
     public void setFrameRate(int rate) {
         if(runnable!=null){
-            runnable.setDrawPadFrameRate(rate);
+            runnable.setFrameRate(rate);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.setFrameRate(rate);
         }
     }
     /**
@@ -87,32 +112,123 @@ public class DrawPadAllExecute2 {
     public void setEncodeBitrate(int bitrate) {
         if(runnable!=null){
             runnable.setEncodeBitrate(bitrate);
+        }else  if(pixelRunnable !=null){
+            pixelRunnable.setEncodeBitrate(bitrate);
+        }
+    }
+    //---------------------------容器背景颜色;
+    protected float padBGRed =0.0f;
+    protected float padBGGreen =0.0f;
+    protected float padBGBlur =0.0f;
+    protected float padBGAlpha =1.0f;
+
+    /**
+     * 设置容器的 背景颜色RGBA分量
+     * 在增加各种图层前调用;
+     * @param r 红色分量, 范围0.0  ---1.0;
+     * @param g 绿色分量, 范围0.0  ---1.0;
+     * @param b 蓝色分量, 范围0.0  ---1.0;
+     * @param a 透明分量, 范围0.0  ---1.0; 建议为1.0; 因为TextureView在android9.0一下, 是不透明的,设置为0.0可能不起作用;
+     */
+    public  void setDrawPadBackGroundColor(float r,float g,float b,float a){
+        padBGRed=r;
+        padBGGreen=g;
+        padBGBlur=b;
+        padBGAlpha=a;
+        if(runnable!=null){
+            runnable.setDrawPadBackGroundColor(r,g,b,a);
+        }else  if(pixelRunnable !=null){
+            pixelRunnable.setDrawPadBackGroundColor(r,g,b,a);
         }
     }
     /**
-     * 增加图片图层
-     * @param bmp  图片
-     * @param startTimeUs 从容器的什么时间开始增加
-     * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
-     * @return
+     * 已废弃,请用LSOBitmapAsset类型的addBitmapLayer
      */
+    @Deprecated
     public BitmapLayer addBitmapLayer(Bitmap bmp,long startTimeUs,long endTimeUs) {
         if (runnable != null && setup()) {
-            return runnable.addBitmapLayer(bmp,startTimeUs,endTimeUs);
+            return runnable.addBitmapLayer(bmp, startTimeUs, endTimeUs);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addBitmapLayer(bmp,startTimeUs,endTimeUs);
         }else{
             return null;
         }
     }
 
     /**
-     * 增加图片图层
-     * @param bmp 图片.注意图片在内部不会被释放;
-     * @return 返回图片图层对象
+     * 已废弃,请用 String类型的addBitmapLayer
      */
+    @Deprecated
     public BitmapLayer addBitmapLayer(Bitmap bmp) {
         if (runnable != null && setup()) {
             return runnable.addBitmapLayer(bmp,0,Long.MAX_VALUE);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addBitmapLayer(bmp,0,Long.MAX_VALUE);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 增加图片图层
+     * @param asset  图片路径,
+     * @param startTimeUs 从容器的什么时间开始增加
+     * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
+     * @return
+     */
+    public BitmapLayer addBitmapLayer(LSOBitmapAsset asset, long startTimeUs, long endTimeUs) {
+        if (runnable != null && setup()) {
+            return runnable.addBitmapLayer(asset,startTimeUs,endTimeUs);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addBitmapLayer(asset,startTimeUs,endTimeUs);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 增加图片图层
+     * @param asset 图片路径
+     * @return 返回图片图层对象
+     */
+    public BitmapLayer addBitmapLayer(LSOBitmapAsset asset) {
+        if (runnable != null && setup()) {
+            return runnable.addBitmapLayer(asset,0,Long.MAX_VALUE);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addBitmapLayer(asset,0,Long.MAX_VALUE);
+        }else {
+            return null;
+        }
+    }
+
+
+    /**
+     * 请用 addBitmapLayer(LSOBitmapAsset asset, long startTimeUs, long endTimeUs)
+     */
+    @Deprecated
+    public BitmapLayer addBitmapLayer(String path, long startTimeUs, long endTimeUs)  throws  Exception{
+
+        LSOBitmapAsset asset=new LSOBitmapAsset(path);
+        if (runnable != null && setup()) {
+            return runnable.addBitmapLayer(asset,startTimeUs,endTimeUs);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addBitmapLayer(asset,startTimeUs,endTimeUs);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 请用BitmapLayer addBitmapLayer(LSOBitmapAsset asset)
+     * */
+    @Deprecated
+    public BitmapLayer addBitmapLayer(String path) throws Exception{
+        LSOBitmapAsset asset=new LSOBitmapAsset(path);
+        if (runnable != null && setup()) {
+            return runnable.addBitmapLayer(asset,0,Long.MAX_VALUE);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addBitmapLayer(asset,0,Long.MAX_VALUE);
+        }else {
             return null;
         }
     }
@@ -123,31 +239,33 @@ public class DrawPadAllExecute2 {
      * @param maskPath
      * @return
      */
-    public MVLayer addMVLayer(String srcPath, String maskPath) {
+    public MVCacheLayer addMVLayer(String srcPath, String maskPath) {
         if (runnable != null && setup()) {
             return runnable.addMVLayer(srcPath,maskPath,0,Long.MAX_VALUE,false);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addMVLayer(srcPath,maskPath,0,Long.MAX_VALUE,false);
+        }else {
             return null;
         }
     }
 
     /**
      * 增加视频图层
-     * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
      * @param option 在增加前,设置裁剪时长, 裁剪画面, 缩放, 循环等;
      * @return 返回视频图层
      */
     public VideoFrameLayer addVideoLayer(LSOVideoOption option) {
         if (runnable != null && option!=null && setup()) {
             return runnable.addVideoLayer(option,0,Long.MAX_VALUE,false,false);
-        }else{
+        }else if (pixelRunnable != null && option!=null && setup()) {
+            return pixelRunnable.addVideoLayer(option,0,Long.MAX_VALUE,false,false);
+        }else {
             return null;
         }
     }
 
     /**
      * 增加视频图层
-     * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
      * @param option 在增加前,设置裁剪时长, 裁剪画面, 缩放, 循环等;
      * @param startTimeUs 从容器的什么时间开始增加
      * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
@@ -158,30 +276,32 @@ public class DrawPadAllExecute2 {
     public VideoFrameLayer addVideoLayer(LSOVideoOption option,long startTimeUs,long endTimeUs,boolean holdFirst,boolean holdLast) {
         if (runnable != null && option!=null && setup()) {
             return runnable.addVideoLayer(option,startTimeUs,endTimeUs,holdFirst,holdLast);
-        }else{
+        }else if (pixelRunnable != null && option!=null && setup()) {
+            return pixelRunnable.addVideoLayer(option,startTimeUs,endTimeUs,holdFirst,holdLast);
+        }else {
             return null;
         }
     }
     /**
      *  增加mv图层
-     * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
      * @param srcPath
      * @param maskPath
      * @param startTimeUs 从容器的什么时间开始增加
      * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
      * @return
      */
-    public MVLayer addMVLayer(String srcPath, String maskPath,long startTimeUs,long endTimeUs) {
+    public MVCacheLayer addMVLayer(String srcPath, String maskPath, long startTimeUs, long endTimeUs) {
         if (runnable != null && setup()) {
             return runnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,false);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,false);
+        }else {
             return null;
         }
     }
 
     /**
      * 增加mv图层
-     * 注意:此方法没有做视频帧重采样, 可能部分视频的声音和画面不一致.
      * @param srcPath
      * @param maskPath
      * @param startTimeUs 从容器的什么时间开始增加
@@ -189,10 +309,12 @@ public class DrawPadAllExecute2 {
      * @param mute  如果mv中有声音, 是否要静音;默认不静音;
      * @return
      */
-    public MVLayer addMVLayer(String srcPath, String maskPath,long startTimeUs,long endTimeUs, boolean mute) {
+    public MVCacheLayer addMVLayer(String srcPath, String maskPath, long startTimeUs, long endTimeUs, boolean mute) {
         if (runnable != null && setup()) {
             return runnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,mute);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,mute);
+        }else {
             return null;
         }
     }
@@ -207,7 +329,9 @@ public class DrawPadAllExecute2 {
     public DataLayer addDataLayer(int dataWidth, int dataHeight,long startTimeUs,long endTimeUs) {
         if (runnable != null && setup()) {
             return runnable.addDataLayer(dataWidth,dataHeight,startTimeUs,endTimeUs);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addDataLayer(dataWidth,dataHeight,startTimeUs,endTimeUs);
+        }else {
             return null;
         }
     }
@@ -221,7 +345,9 @@ public class DrawPadAllExecute2 {
     public GifLayer addGifLayer(String gifPath,long startTimeUs,long endTimeUs) {
         if (runnable != null && setup()) {
             return runnable.addGifLayer(gifPath,startTimeUs,endTimeUs);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addGifLayer(gifPath,startTimeUs,endTimeUs);
+        }else {
             return null;
         }
     }
@@ -234,7 +360,9 @@ public class DrawPadAllExecute2 {
     public GifLayer addGifLayer(String gifPath) {
         if (runnable != null && setup()) {
             return runnable.addGifLayer(gifPath,0,Long.MAX_VALUE);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addGifLayer(gifPath,0,Long.MAX_VALUE);
+        }else {
             return null;
         }
     }
@@ -247,7 +375,9 @@ public class DrawPadAllExecute2 {
     public GifLayer addGifLayer(int resId) {
         if (runnable != null && setup()) {
             return runnable.addGifLayer(resId,0,Long.MAX_VALUE);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addGifLayer(resId,0,Long.MAX_VALUE);
+        }else {
             return null;
         }
     }
@@ -259,7 +389,9 @@ public class DrawPadAllExecute2 {
     public CanvasLayer addCanvasLayer() {
         if (runnable != null && setup()) {
             return runnable.addCanvasLayer();
-        }else{
+        }else  if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addCanvasLayer();
+        }else {
             return null;
         }
     }
@@ -276,16 +408,18 @@ public class DrawPadAllExecute2 {
     public YUVLayer addYUVLayer(int width, int height,long startTimeUs,long endTimeUs) {
         if (runnable != null && setup()) {
             return runnable.addYUVLayer(width,height,startTimeUs,endTimeUs);
-        }else{
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addYUVLayer(width,height,startTimeUs,endTimeUs);
+        }else {
             return null;
         }
     }
     public AudioLayer addAudioLayer(String srcPath) {
         if(runnable!=null){
-
-            AudioLayer layer= runnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
-            return layer;
-        }else{
+            return runnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
+        }else  if(pixelRunnable !=null){
+            return pixelRunnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
+        }else {
             return null;
         }
     }
@@ -299,13 +433,18 @@ public class DrawPadAllExecute2 {
      */
     public AudioLayer addAudioLayer(String srcPath, boolean isLoop) {
         if(runnable!=null){
-
             AudioLayer layer= runnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
             if(layer!=null){
                 layer.setLooping(isLoop);
             }
             return layer;
-        }else{
+        }else if(pixelRunnable !=null){
+            AudioLayer layer= pixelRunnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
+            if(layer!=null){
+                layer.setLooping(isLoop);
+            }
+            return layer;
+        }else {
             return null;
         }
     }
@@ -325,7 +464,14 @@ public class DrawPadAllExecute2 {
                 layer.setVolume(volume);
             }
             return layer;
-        }else{
+        }else if(pixelRunnable !=null){
+            AudioLayer layer= pixelRunnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
+            if(layer!=null){
+                layer.setLooping(isLoop);
+                layer.setVolume(volume);
+            }
+            return layer;
+        }else {
             return null;
         }
     }
@@ -344,7 +490,13 @@ public class DrawPadAllExecute2 {
                 LSOLog.e("DrawPadAllExecute2 addAudioLayer error. mediaInfo is:"+ MediaInfo.checkFile(srcPath,true));
             }
             return layer;
-        }else{
+        }else if(pixelRunnable !=null && srcPath!=null){
+            AudioLayer layer= pixelRunnable.addAudioLayer(srcPath,startPadUs,0, Long.MAX_VALUE);
+            if(layer==null){
+                LSOLog.e("DrawPadAllExecute2 addAudioLayer error. mediaInfo is:"+ MediaInfo.checkFile(srcPath,true));
+            }
+            return layer;
+        }else {
             return null;
         }
     }
@@ -364,7 +516,10 @@ public class DrawPadAllExecute2 {
         if(runnable!=null){
             AudioLayer layer= runnable.addAudioLayer(srcPath,offsetPadUs,startAudioUs, endAudioUs);
             return layer;
-        }else{
+        }else if(pixelRunnable !=null){
+            AudioLayer layer= pixelRunnable.addAudioLayer(srcPath,offsetPadUs,startAudioUs, endAudioUs);
+            return layer;
+        }else {
             return null;
         }
     }
@@ -377,7 +532,9 @@ public class DrawPadAllExecute2 {
     public int getLayerSize(){
         if(runnable!=null){
             return runnable.getLayerSize();
-        }else{
+        }else if(pixelRunnable !=null){
+            return pixelRunnable.getLayerSize();
+        }else {
             return 0;
         }
     }
@@ -388,6 +545,8 @@ public class DrawPadAllExecute2 {
     public void bringToBack(Layer layer) {
         if(runnable!=null){
             runnable.bringToBack(layer);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.bringToBack(layer);
         }
     }
 
@@ -398,6 +557,8 @@ public class DrawPadAllExecute2 {
     public void bringToFront(Layer layer) {
         if(runnable!=null){
             runnable.bringToFront(layer);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.bringToFront(layer);
         }
     }
 
@@ -409,6 +570,8 @@ public class DrawPadAllExecute2 {
     public void changeLayerPosition(Layer layer, int position) {
         if(runnable!=null){
             runnable.changeLayerPosition(layer,position);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.changeLayerPosition(layer,position);
         }
     }
 
@@ -420,6 +583,8 @@ public class DrawPadAllExecute2 {
     public void swapTwoLayerPosition(Layer first, Layer second) {
         if(runnable!=null){
             runnable.swapTwoLayerPosition(first,second);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.swapTwoLayerPosition(first,second);
         }
     }
     /**
@@ -430,6 +595,8 @@ public class DrawPadAllExecute2 {
     public void setOnLanSongSDKProgressListener(OnLanSongSDKProgressListener listener) {
         if(runnable!=null){
             runnable.setOnLanSongSDKProgressListener(listener);
+        }else  if(pixelRunnable !=null){
+            pixelRunnable.setOnLanSongSDKProgressListener(listener);
         }
     }
 
@@ -441,6 +608,8 @@ public class DrawPadAllExecute2 {
     public void setOnLanSongSDKThreadProgressListener(OnLanSongSDKThreadProgressListener listener) {
         if(runnable!=null){
             runnable.setOnLanSongSDKThreadProgressListener(listener);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.setOnLanSongSDKThreadProgressListener(listener);
         }
     }
 
@@ -451,6 +620,8 @@ public class DrawPadAllExecute2 {
     public void setOnLanSongSDKCompletedListener(OnLanSongSDKCompletedListener listener) {
         if(runnable!=null){
             runnable.setOnLanSongSDKCompletedListener(listener);
+        }else  if(pixelRunnable !=null){
+            pixelRunnable.setOnLanSongSDKCompletedListener(listener);
         }
     }
 
@@ -461,12 +632,16 @@ public class DrawPadAllExecute2 {
     public void setOnLanSongSDKErrorListener(OnLanSongSDKErrorListener listener) {
         if(runnable!=null){
             runnable.setOnLanSongSDKErrorListener(listener);
+        }else if(pixelRunnable !=null){
+            pixelRunnable.setOnLanSongSDKErrorListener(listener);
         }
     }
 
     public void removeLayer(Layer layer) {
         if(runnable!=null){
             runnable.removeLayer(layer);
+        }else  if(pixelRunnable !=null){
+            pixelRunnable.removeLayer(layer);
         }
     }
 
@@ -476,12 +651,16 @@ public class DrawPadAllExecute2 {
     public void removeAllLayer() {
         if (runnable != null) {
             runnable.removeAllLayer();
+        }else  if (pixelRunnable != null) {
+            pixelRunnable.removeAllLayer();
         }
     }
     public boolean isRunning() {
         if(runnable!=null){
             return runnable.isRunning();
-        }else{
+        }else  if(pixelRunnable !=null){
+            return pixelRunnable.isRunning();
+        }else {
             return false;
         }
     }
@@ -490,7 +669,13 @@ public class DrawPadAllExecute2 {
      * @return
      */
     public boolean start() {
-        return  runnable!=null && runnable.start();
+        if(runnable!=null){
+            return runnable.start();
+        }else if(pixelRunnable !=null){
+            return pixelRunnable.start();
+        }else{
+            return false;
+        }
     }
     /**
      * 取消执行
@@ -501,7 +686,13 @@ public class DrawPadAllExecute2 {
             runnable.release();
             runnable=null;
             startSuccess=false;
+        }else if(pixelRunnable !=null){
+            pixelRunnable.cancel();
+            pixelRunnable.release();
+            pixelRunnable =null;
+            startSuccess=false;
         }
+
     }
     /**
      * 释放;
@@ -510,6 +701,10 @@ public class DrawPadAllExecute2 {
         if(runnable!=null){
             runnable.release();
             runnable=null;
+            startSuccess=false;
+        }else if(pixelRunnable !=null){
+            pixelRunnable.release();
+            pixelRunnable =null;
             startSuccess=false;
         }
     }
@@ -520,23 +715,20 @@ public class DrawPadAllExecute2 {
      * [不建议使用]
      */
     public void setNotCheckDrawPadSize() {
-       if(runnable!=null){
-           runnable.setNotCheckDrawPadSize();
-       }
-    }
-
-    /**
-     * 设置编码;
-     */
-    public void setNotCheckBitRate() {
         if(runnable!=null){
-            runnable.setNotCheckBitRate();
+            runnable.setNotCheckDrawPadSize();
+        }else if(pixelRunnable !=null){
+            pixelRunnable.setNotCheckDrawPadSize();
         }
     }
+
     //---------------------------------------------------------------------------
     private synchronized boolean setup(){
         if(runnable!=null && !runnable.isRunning() && !startSuccess){
             runnable.setup();
+            startSuccess=true;
+        }else if(pixelRunnable !=null && !pixelRunnable.isRunning() && !startSuccess){
+            pixelRunnable.setup();
             startSuccess=true;
         }
         return startSuccess;
@@ -548,8 +740,6 @@ public class DrawPadAllExecute2 {
      DrawPadAllExecute2 allExecute;
      private void testAllexecute() throws Exception {
      //在其他手机上测试下.
-     final String dsPath = LanSongFileUtil.createMp4FileInBox();
-
      allExecute = new DrawPadAllExecute2(getApplicationContext(), 720, 1280, 25 * 1000 * 1000);
      allExecute.setOnLanSongSDKProgressListener(new OnLanSongSDKProgressListener() {
     @Override
@@ -561,7 +751,7 @@ public class DrawPadAllExecute2 {
      allExecute.setOnLanSongSDKCompletedListener(new OnLanSongSDKCompletedListener() {
     @Override
     public void onLanSongSDKCompleted(String dstVideo) {
-    MediaInfo.checkFileReturnString(dstVideo);
+    MediaInfo.checkFile(dstVideo);
     }
     });
 
@@ -573,14 +763,6 @@ public class DrawPadAllExecute2 {
      option.setLooping(true);
      option.setCropRect(308,308,411,411);
      VideoFrameLayer layer1 = allExecute.addVideoLayer(option);
-
-
-
-     LSOVideoOption option2 = new LSOVideoOption(SDCARD.file("kuaishou_H31.mp4"));
-     option2.setScaleSize(360,640);
-     VideoFrameLayer layer2 = allExecute.addVideoLayer(option2);
-     layer2.setPosition(LSOLayerPosition.LeftBottom);
-
 
 
 
@@ -617,7 +799,7 @@ public class DrawPadAllExecute2 {
     canvas.drawText("蓝松短视频演示之<任意绘制>", 20, canvasLayer.getPadHeight() - 200, paint);
     }
     });
-     showHeart = new ShowHeart(this, canvasLayer.getPadWidth(), canvasLayer.getPadHeight());
+     showHeart = new ShowHeart(this, canvasLayer.getDrawPadWidth(), canvasLayer.getPadHeight());
      canvasLayer.addCanvasRunnable(new CanvasRunnable() {
 
     @Override

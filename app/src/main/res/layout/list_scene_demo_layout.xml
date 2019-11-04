@@ -73,11 +73,6 @@
 			<TextView  style="@style/main_item_arrow"/> 
 	</RelativeLayout>
 
-	<RelativeLayout  android:id="@+id/id_screne_videoseek" style="@style/main_item_reletivelayout">
-		<TextView   android:text="视频精确定位" style="@style/main_item_textview"/>
-		<TextView  style="@style/main_item_arrow"/>
-	</RelativeLayout>
-
 
 
 

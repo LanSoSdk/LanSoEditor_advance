@@ -110,8 +110,10 @@ public class ExtractVideoFrameDemoActivity extends Activity {
          * 不调用则内部认为, 如果视频大于等于1280x720则自动缩小一倍.不然使用原来大小. 大部分的使用场景是:作为预览横条用, 建议缩放,
          * 这样可减少app内存
          *
-         * @param width 缩放宽度
-         * @param height 缩放高度
+         * @param width
+         *            缩放宽度
+         * @param height
+         *            缩放高度
          */
         if (mInfo.vWidth * mInfo.vHeight > 960 * 540) {
             mExtractFrame.setBitmapWH(mInfo.vWidth / 2, mInfo.vHeight / 2);
@@ -155,11 +157,13 @@ public class ExtractVideoFrameDemoActivity extends Activity {
                                     + mInfo.vHeight + "\n" + "解码后图片缩放宽高:"
                                     + mExtractFrame.getBitmapWidth() + " x "
                                     + mExtractFrame.getBitmapHeight() + "\n";
+
                             Log.i("TIME", "解码结束::" + str);
                             tvProgressHint.setText("Completed" + str);
                             isExecuting = false;
                             frameCount = 0;
                         }
+
                     }
                 });
         /**
@@ -168,7 +172,7 @@ public class ExtractVideoFrameDemoActivity extends Activity {
         mExtractFrame.setOnExtractProgressListener(new onExtractVideoFrameProgressListener() {
 
                     /**
-                     * 当前帧的画面回调,, displayPtsUs:当前帧的时间戳,单位微秒. 拿到图片后,建议放到ArrayList中,
+                     * 当前帧的画面回调,, ptsUS:当前帧的时间戳,单位微秒. 拿到图片后,建议放到ArrayList中,
                      * 不要直接在这里处理.
                      */
                     @Override
@@ -184,7 +188,7 @@ public class ExtractVideoFrameDemoActivity extends Activity {
                         // bmp.recycle();
                         // bmp=null;
                         // }
-                        // if(displayPtsUs>15*1000*1000){ // 你可以在指定的时间段停止.
+                        // if(ptsUS>15*1000*1000){ // 你可以在指定的时间段停止.
                         // mExtractFrame.cancel(); //这里演示在15秒的时候停止.
                         // }
                     }

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PointF;
 
+import com.lansosdk.LanSongFilter.LanSongGaussianBlurFilter;
 import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
 import com.lansosdk.box.BitmapLoader;
 import com.lansosdk.box.LSOLog;
@@ -105,7 +106,6 @@ import com.lansosdk.LanSongFilter.LanSongIFXproIIFilter;
 
 import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
 import com.lansosdk.LanSongFilter.LanSongBlackMaskBlendFilter;
-import com.lansosdk.LanSongFilter.LanSongBlurFilter;
 import com.lansosdk.LanSongFilter.LanSongBulgeDistortionFilter;
 import com.lansosdk.LanSongFilter.LanSongDistortionPinchFilter;
 import com.lansosdk.LanSongFilter.LanSongDistortionStretchFilter;
@@ -155,15 +155,12 @@ public class FilterLibrary {
         filterList.addFilter("Vignette加轮廓", FilterType.VIGNETTE);
         filterList.addFilter("加减雾", FilterType.HAZE);
         filterList.addFilter("玻璃球效果", FilterType.GLASS_SPHERE);
-        filterList.addFilter("球面折射",
-                FilterType.SPHERE_REFRACTION);
+        filterList.addFilter("球面折射",FilterType.SPHERE_REFRACTION);
 
         // 新增
         filterList.addFilter("扩散扭曲", FilterType.PINCH_DISTORTION);
-        filterList.addFilter("中心扭曲",
-                FilterType.STRETCH_DISTORTION);
-        filterList.addFilter("Bulge Distortion凸凹调节",
-                FilterType.BULGE_DISTORTION);
+        filterList.addFilter("中心扭曲", FilterType.STRETCH_DISTORTION);
+        filterList.addFilter("Bulge Distortion凸凹调节",FilterType.BULGE_DISTORTION);
 
         filterList.addFilter("亮度", FilterType.BRIGHTNESS);
 
@@ -173,8 +170,7 @@ public class FilterLibrary {
         filterList.addFilter("色调分离", FilterType.POSTERIZE);
         filterList.addFilter("复古", FilterType.SEPIA);
 
-        filterList.addFilter("阴影高亮",
-                FilterType.HIGHLIGHT_SHADOW);
+        filterList.addFilter("阴影高亮",FilterType.HIGHLIGHT_SHADOW);
         filterList.addFilter("单色", FilterType.MONOCHROME);
         filterList.addFilter("白平衡", FilterType.WHITE_BALANCE);
         filterList.addFilter("曝光度", FilterType.EXPOSURE);
@@ -234,8 +230,7 @@ public class FilterLibrary {
         filterList.addFilter("Toon", FilterType.TOON);
     }
 
-    public static void showDialog(final Context context,
-                                  final OnLanSongFilterChosenListener listener) {
+    public static void showDialog(final Context context, final OnLanSongFilterChosenListener listener) {
         if (filterList == null) {
             showAllFilter();
         }
@@ -243,15 +238,12 @@ public class FilterLibrary {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Choose a filter(total:" + filterList.names.size()
                 + " )");
-        builder.setItems(
-                filterList.names.toArray(new String[filterList.names.size()]),
+        builder.setItems(filterList.names.toArray(new String[filterList.names.size()]),
                 new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int item) {
+                    public void onClick(final DialogInterface dialog,final int item) {
                         listener.onLanSongFilterChosenListener(
-                                getFilterObject(context,
-                                        filterList.filters.get(item)),
+                                getFilterObject(context,filterList.filters.get(item)),
                                 filterList.names.get(item));
                     }
                 });
@@ -259,7 +251,7 @@ public class FilterLibrary {
     }
 
     public static LanSongFilter getFilterObject(final Context context,
-                                                 final FilterType type) {
+                                                final FilterType type) {
         switch (type) {
             case NONE:
                 return null;
@@ -305,7 +297,7 @@ public class FilterLibrary {
             case WHITE_BALANCE:
                 return new LanSongWhiteBalanceFilter(5000.0f, 0.0f);
             case LanSongBLUR:
-                return new LanSongBlurFilter();
+                return new LanSongGaussianBlurFilter();
             case VIGNETTE:
                 PointF centerPoint = new PointF();
                 centerPoint.x = 0.5f;
@@ -381,8 +373,7 @@ public class FilterLibrary {
                 return createBlendFilter(context,
                         LanSongLinearBurnBlendFilter.class);
             case BLEND_SOFT_LIGHT:
-                return createBlendFilter(context,
-                        LanSongSoftLightBlendFilter.class);
+                return createBlendFilter(context,LanSongSoftLightBlendFilter.class);
             case BLEND_SUBTRACT:
                 return createBlendFilter(context, LanSongSubtractBlendFilter.class);
             case BLEND_CHROMA_KEY:
@@ -488,7 +479,7 @@ public class FilterLibrary {
     }
 
     private static LanSongFilter createBlendFilter(Context context,
-                                                    Class<? extends LanSongTwoInputFilter> filterClass) {
+                                                   Class<? extends LanSongTwoInputFilter> filterClass) {
         try {
             LanSongTwoInputFilter filter = filterClass.newInstance();
             String var3 = "assets://LSResource/blend_demo.png"; //这里只是为了方便,用默认图片;
@@ -558,7 +549,7 @@ public class FilterLibrary {
             } else if (filter instanceof LanSongWhiteBalanceFilter) {
                 adjuster = new WhiteBalanceAdjuster().filter(filter);
 
-            } else if (filter instanceof LanSongBlurFilter) {
+            } else if (filter instanceof LanSongGaussianBlurFilter) {
                 adjuster = new LanSongBlurFilterAdjuster().filter(filter);
 
             } else if (filter instanceof LanSongVignetteFilter) {
@@ -749,7 +740,7 @@ public class FilterLibrary {
         }
 
         private class LanSongBlurFilterAdjuster extends
-                Adjuster<LanSongBlurFilter> {
+                Adjuster<LanSongGaussianBlurFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBlurFactor(range(percentage, 0.0f, 8.0f));
@@ -786,7 +777,7 @@ public class FilterLibrary {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
-                getFilter().setScale(range(percentage, -1.0f, 1.0f));
+                getFilter().setDistortionFactor(range(percentage, -1.0f, 1.0f));
             }
         }
 
@@ -821,20 +812,16 @@ public class FilterLibrary {
             }
         }
 
-        private class ColorBalanceAdjuster extends
-                Adjuster<LanSongColorBalanceFilter> {
-
+        private class ColorBalanceAdjuster extends Adjuster<LanSongColorBalanceFilter> {
             @Override
             public void adjust(int percentage) {
-                getFilter().setMidtones(
-                        new float[]{range(percentage, 0.0f, 1.0f),
+                getFilter().setMidtones(new float[]{range(percentage, 0.0f, 1.0f),
                                 range(percentage / 2, 0.0f, 1.0f),
                                 range(percentage / 3, 0.0f, 1.0f)});
             }
         }
 
-        private class LevelsMinMidAdjuster extends
-                Adjuster<LanSongLevelsFilter> {
+        private class LevelsMinMidAdjuster extends Adjuster<LanSongLevelsFilter> {
             @Override
             public void adjust(int percentage) {
                 getFilter().setMin(0.0f, range(percentage, 0.0f, 1.0f), 1.0f);

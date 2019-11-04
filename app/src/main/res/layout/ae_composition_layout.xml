@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black">
+
+    <com.lansosdk.videoeditor.AECompositionView
+        android:id="@+id/id_ae_preview2"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+        android:layout_height="0dip"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/id_ae_preview_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/id_ae_preview_replace_picture"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="替换图片"/>
+
+            <Button
+                android:id="@+id/id_ae_preview_pause"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="暂停预览"/>
+
+            <Button
+                android:id="@+id/id_ae_preview_resume"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="恢复预览"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/id_ae_preview_export_ae"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_height="wrap_content"
+        android:background="@drawable/corners_button_orange_bg"
+        android:text="后台处理(导出)"/>
+
+</LinearLayout>

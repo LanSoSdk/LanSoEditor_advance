@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lansoeditor.advanceDemo"
-    android:versionCode="3600"
-    android:versionName="3.6.0">
+    android:versionCode="3540"
+    android:versionName="3.5.4">
 
 
     <uses-feature android:glEsVersion="0x00020000"></uses-feature>
@@ -64,18 +64,10 @@
         </activity>
 
         <activity
-            android:name="com.example.advanceDemo.aeDemo.AEInputActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="com.example.advanceDemo.aeDemo.AEPreviewActivity"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity
-            android:name="com.example.advanceDemo.aeDemo.AeTextPreviewActivity"
-            android:screenOrientation="portrait">
-        </activity>
 
         <activity
             android:name="com.example.advanceDemo.aeDemo.AEPositionDemoActivity"
@@ -90,9 +82,6 @@
         </activity>
 
 
-        <activity android:name="com.example.advanceDemo.aeDemo.AERecordFileHintActivity"
-            android:screenOrientation="portrait">
-        </activity>
 
         <activity
             android:name="com.example.advanceDemo.aeDemo.PlayerAEDemoActivity"
@@ -177,7 +166,6 @@
 
         <activity android:name="com.example.advanceDemo.scene.VideoSpeedDemoActivity"/>
 
-        <activity android:name="com.example.advanceDemo.VideoOneDODemoActivity"/>
 
 
         <activity android:name="com.example.advanceDemo.layerDemo.BitmapLayerMarkActivity"/>
@@ -188,7 +176,6 @@
         <activity android:name="com.example.advanceDemo.layerDemo.ExecuteTwoVideoLayerDemoActivity"/>
 
 
-        <activity android:name="com.example.advanceDemo.layerDemo.TextureLayerDemoActivity"/>
 
         <activity android:name="com.example.advanceDemo.bitmapAudio.BitmapLayerFilterDemoActivity"/>
         <activity android:name="com.example.advanceDemo.layerDemo.CanvasLayerExecuteActivity"/>
@@ -261,15 +248,16 @@
             android:screenOrientation="portrait" />
 
 
-        <activity android:name="com.example.advanceDemo.TestMediaPlayerActivity" />
         <activity android:name="com.example.advanceDemo.aeDemo.AEExecuteAutoSearchActivity" />
         <activity android:name="com.example.advanceDemo.aeDemo.AEFrameShowActivity" />
         <activity android:name="com.example.advanceDemo.aeDemo.AERenderExecuteActivity" />
         <activity android:name="com.example.advanceDemo.ReversePlayerActivity" />
         <activity android:name="com.example.advanceDemo.VideoOneDO2Activity" />
         <activity android:name="com.example.advanceDemo.layerDemo.ViewLayerListActivity" />
-
-
+        <activity android:name="com.example.advanceDemo.aeDemo.AECompositionActivity" />
+        <activity android:name="com.example.advanceDemo.aeDemo.AECompositionExecuteActivity" />
+        <activity android:name="com.example.advanceDemo.aeDemo.BitmapAnimationActivity" />
+        <activity android:name="com.example.advanceDemo.VideoConcatAnimationActivity" />
     </application>
 
 </manifest>

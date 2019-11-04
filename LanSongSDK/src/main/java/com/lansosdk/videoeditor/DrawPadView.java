@@ -44,6 +44,12 @@ public class DrawPadView extends FrameLayout {
     private static final boolean VERBOSE = false;
     private TextureRenderView mTextureRenderView;
     private DrawPadViewRender renderer;
+    protected float padBGRed =0.0f;
+    protected float padBGGreen =0.0f;
+    protected float padBGBlur =0.0f;
+    protected float padBGAlpha =1.0f;
+
+
     private SurfaceTexture mSurfaceTexture = null;
     private boolean isUseMainPts = false;
     private int encWidth, encHeight, encFrameRate;
@@ -123,9 +129,9 @@ public class DrawPadView extends FrameLayout {
         mTextureRenderView.setDispalyRatio(AR_ASPECT_FIT_PARENT);
 
         View renderUIView = mTextureRenderView.getView();
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+        LayoutParams lp = new LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT, Gravity.CENTER);
         renderUIView.setLayoutParams(lp);
         addView(renderUIView);
         mTextureRenderView.setVideoRotation(0);
@@ -463,6 +469,24 @@ public class DrawPadView extends FrameLayout {
         }
     }
 
+
+    /**
+     * 设置容器的 背景颜色RGBA分量
+     * 在startDrawPad前调用
+     * @param r 红色分量, 范围0.0  ---1.0;
+     * @param g 绿色分量, 范围0.0  ---1.0;
+     * @param b 蓝色分量, 范围0.0  ---1.0;
+     * @param a 透明分量, 范围0.0  ---1.0; 建议为1.0; 因为TextureView在android9.0一下, 是不透明的,设置为0.0可能不起作用;
+     */
+    public  void setDrawPadBackGroundColor(float r,float g,float b,float a){
+        padBGRed=r;
+        padBGGreen=g;
+        padBGBlur=b;
+        padBGAlpha=a;
+        if(renderer!=null){
+            renderer.setDrawPadBackGroundColor(r,g,b,a);
+        }
+    }
     /**
      * 开始DrawPad的渲染线程, 阻塞执行, 直到DrawPad真正开始执行后才退出当前方法.
      * <p>
@@ -507,6 +531,9 @@ public class DrawPadView extends FrameLayout {
                     renderer.setEditModeVideo(isEditModeVideo);
                 }
                 renderer.setUpdateMode(mUpdateMode, mAutoFlushFps);
+
+
+                renderer.setDrawPadBackGroundColor(padBGRed,padBGGreen,padBGBlur,padBGAlpha);
 
                 // 设置DrawPad处理的进度监听, 回传的currentTimeUs单位是微秒.
                 renderer.setDrawpadSnapShotListener(drawpadSnapShotListener);
@@ -813,8 +840,7 @@ public class DrawPadView extends FrameLayout {
         drawPadWidth = width;
         drawPadHeight = height;
         if (renderer != null) {
-            LSOLog.w(
-                    "aeRenderer maybe is running. your setting is not available!!");
+            LSOLog.w("aeRenderer maybe is running. your setting is not available!!");
         }
     }
 

@@ -6,14 +6,12 @@
 *  支持AE模板,你可以直接把设计师做好的视频动画工程,输入到我们SDK中,从而直接实现各种个性化的视频效果.使用Ae模板的客户有:微商水印相机,熊猫动态壁纸, 趣制作,卡点视频,美册等
 
 
-## 版本3.6.8(合作客户更新)
-- 父类图层Layer: setRotate方法,修改为顺时针旋转角度.
-- AE模板合成类AeCompositionView: 优化极速导出, 预览后最快可0.01秒导出.
-- AE模板合成类AeCompositionView: 增加暂停/恢复播放/增加渲染进度回调.
-- LSOAeDrawable: 增加图片输入路径功能, 以节省图片对象占用的内存;
-- 图片图层BitmapLayer 增加输入路径功能.
-- 图片图层BitmapLayer 增加图片序列动画输入;
-- 已适配Android 10.0系统(谷歌 Pixel手机)
+## 版本3.7.0
+- AE模板: 图片替换视频时的 视频处理优化
+- 增加DrawPadConcatView和DrawPadConcatExecute, 用作视频转场动画.
+- 增加LanSongAnimation 类似LanSongFilter 是动画的父类, 所有的动画均继承他.
+- 增加LanSongMaskAnimation , 遮罩父类
+- 优化LSOVideoAsset, 可以直接读取视频帧,读取视频缩略图.
 - 优化其他代码.
 
 

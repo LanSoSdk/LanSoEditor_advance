@@ -71,13 +71,15 @@ public class ConvertToEditModeDialog {
             videoOneDo2.setOnVideoOneDoErrorListener(new OnLanSongSDKErrorListener() {
                 @Override
                 public void onLanSongSDKError(int errorCode) {
-                    Log.e("LSDelete", ": ");
+                    Log.e("DEMO", "videoOneDo2.setOnVideoOneDoErrorListener: ");
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
     public void start() {
         if (!isRunning) {
             if(videoOneDo2!=null){

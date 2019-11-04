@@ -273,7 +273,7 @@ public class ExecuteAllDrawpadActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (LanSongFileUtil.fileExist(dstPath)) {
-                      Intent intent = new Intent(mContext, VideoPlayerActivity.class);
+                    Intent intent = new Intent(mContext, VideoPlayerActivity.class);
                     String audioPath = CopyFileFromAssets.copyAssets(mContext, "bgMusic20s.m4a");
                     String ret = AudioEditor.mergeAudioNoCheck(audioPath, dstPath, true);
                     intent.putExtra("videopath", ret);

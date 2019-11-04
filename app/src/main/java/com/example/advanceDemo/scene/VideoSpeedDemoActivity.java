@@ -75,38 +75,35 @@ public class VideoSpeedDemoActivity extends Activity implements
         mplayer = new VPlayer(getApplicationContext());
         try {
             mplayer.setVideoPath(mVideoPath);
-            mplayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
-
-                @Override
-                public void onPrepared(VideoPlayer mp) {
-                    initDrawPad();
-                }
-            });
-            mplayer.setOnSeekCompleteListener(new OnLSOPlayerSeekCompleteListener() {
-
-                @Override
-                public void onSeekComplete(VideoPlayer mp) {
-                    Log.i(TAG, "onseekcompleted---------------");
-
-                }
-            });
-
-            mplayer.setOnCompletionListener(new OnLSOPlayerCompletionListener() {
-
-                @Override
-                public void onCompletion(VideoPlayer mp) {
-                    if (drawPadView != null && drawPadView.isRunning()) {
-                        drawPadView.stopDrawPad();
-                    }
-                }
-            });
-            mplayer.prepareAsync();
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        mplayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
 
+            @Override
+            public void onPrepared(VideoPlayer mp) {
+                initDrawPad();
+            }
+        });
+        mplayer.setOnSeekCompleteListener(new OnLSOPlayerSeekCompleteListener() {
+
+            @Override
+            public void onSeekComplete(VideoPlayer mp) {
+                Log.i(TAG, "onseekcompleted---------------");
+
+            }
+        });
+
+        mplayer.setOnCompletionListener(new OnLSOPlayerCompletionListener() {
+
+            @Override
+            public void onCompletion(VideoPlayer mp) {
+                if (drawPadView != null && drawPadView.isRunning()) {
+                    drawPadView.stopDrawPad();
+                }
+            }
+        });
+        mplayer.prepareAsync();
 
     }
 

@@ -19,7 +19,6 @@ import com.example.advanceDemo.VideoPlayerActivity;
 import com.example.advanceDemo.view.ShowHeart;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.BitmapLayer;
-import com.lansosdk.box.BoxDecoder;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.CanvasRunnable;
 import com.lansosdk.box.DataLayer;
@@ -49,7 +48,7 @@ import java.nio.IntBuffer;
  */
 public class ExecuteVideoLayerActivity extends Activity {
 
-    private static final String TAG = "ExecuteVideoLayerActivity";
+    private static final String TAG = "ExecuteVideoLayer";
     GifLayer gifLayer;
     private String videoPath = null;
     private ProgressDialog mProgressDialog;
@@ -159,8 +158,7 @@ public class ExecuteVideoLayerActivity extends Activity {
             // 增加一些图层.
             addLayers();
         } else {
-            Log.e(TAG,
-                    "后台容器线程  运行失败,您请检查下是否是路径设置有无, 请用MediaInfo.checkFile执行查看下....");
+            Log.e(TAG,"后台容器线程  运行失败,您请检查下是否是路径设置有无, 请用MediaInfo.checkFile执行查看下....");
         }
     }
 
@@ -206,7 +204,6 @@ public class ExecuteVideoLayerActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        removeGif();
         if (execute2 != null) {
             execute2.releaseDrawPad();
             try {
@@ -314,60 +311,4 @@ public class ExecuteVideoLayerActivity extends Activity {
             return false;
         }
     }
-
-    /**
-     * 增加一个DataLayer, 数据图层. 数据图层是可以把外界的数据图片RGBA, 作为一个图层, 传到到DrawPad中.
-     * <p>
-     * 流程是: 把gif作为一个视频文件, 一帧一帧的解码,把解码得到的数据通过DataLayer传递到容器中.
-     */
-
-    private void addDataLayer() {
-        String gifPath = CopyFileFromAssets.copyAssets(
-                getApplicationContext(), "a.gif");
-        gifInfo = new MediaInfo(gifPath);
-        if (gifInfo.prepare()) {
-            decoderHandler = BoxDecoder.decoderInit(gifPath);
-            mGLRgbBuffer = IntBuffer.allocate(gifInfo.vWidth * gifInfo.vHeight);
-
-            gifInterval = (int) (mInfo.vFrameRate / gifInfo.vFrameRate);
-            dataLayer = execute2.addDataLayer(gifInfo.vWidth, gifInfo.vHeight);
-
-            /**
-             * 容器中的onDrawPadThreadProgressListener监听,与
-             * onDrawPadProgressListener不同的地方在于:
-             * 此回调是在DrawPad渲染完一帧后,立即执行这个回调中的代码,不通过Handler传递出去.
-             */
-            execute2.setDrawPadThreadProgressListener(new onDrawPadThreadProgressListener() {
-
-                @Override
-                public void onThreadProgress(DrawPad v, long currentTimeUs) {
-                    // TODO Auto-generated method stub
-                    if (dataLayer != null) {
-                        if (canDrawNext()) {
-                            int seekZero = -1;
-                            if (decoderHandler != 0
-                                    && BoxDecoder.decoderIsEnd(decoderHandler)) {
-                                seekZero = 0;
-                            }
-                            BoxDecoder.decoderFrame(decoderHandler, seekZero,
-                                    mGLRgbBuffer.array());
-
-                            dataLayer.pushFrameToTexture(mGLRgbBuffer);
-                            mGLRgbBuffer.position(0);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void removeGif() {
-        if (execute2 != null && dataLayer != null) {
-            execute2.removeLayer(dataLayer);
-            dataLayer = null;
-            BoxDecoder.decoderRelease(decoderHandler);
-            decoderHandler = 0;
-        }
-    }
-
 }

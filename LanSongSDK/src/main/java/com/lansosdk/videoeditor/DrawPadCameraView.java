@@ -164,9 +164,9 @@ public class DrawPadCameraView extends FrameLayout {
         mTextureRenderView.setDispalyRatio(0);
 
         View renderUIView = mTextureRenderView.getView();
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+        LayoutParams lp = new LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT, Gravity.CENTER);
         renderUIView.setLayoutParams(lp);
         addView(renderUIView);
         mTextureRenderView.setVideoRotation(mVideoRotationDegree);
@@ -396,6 +396,7 @@ public class DrawPadCameraView extends FrameLayout {
     }
 
     /**
+     *
      * 设置 获取当前DrawPad这一帧的画面的监听, 注意,因为Camera是全速运行, 会根据手机cpu的速度来执行, 可能一秒钟执行50帧,
      * 或60帧, 也可能一秒钟执行30帧. 设置截图监听,当截图完成后, 返回当前图片的btimap格式的图片. 此方法工作在主线程.
      * 请不要在此方法里做图片的处理,以免造成拥堵; 建议获取到bitmap后,放入到一个链表中,在外面或另开一个线程处理.

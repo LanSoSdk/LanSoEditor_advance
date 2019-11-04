@@ -18,8 +18,9 @@ import java.util.Locale;
  *
  * 每个输入视频的路径,都可以是一张图片.图片支持png, jpg, tif格式.
  *
- * 杭州蓝松科技有限公司
- * www.lansongtech.com
+ *
+ *
+ * 建议用DrawPadAllExecute2,
  */
 public class VideoLayout extends VideoEditor {
 

@@ -145,11 +145,11 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
 
 
 
+        drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, frameRate);
+
         if(!isExportMode()){  //录制模式,则设置录制的路径;
             drawPadRecordPath=LanSongFileUtil.createMp4FileInBox();
             drawPadView.setRealEncodeEnable(padWidth, padHeight, (int) frameRate, drawPadRecordPath);
-        }else{
-            drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, frameRate);
         }
 
         drawPadView.setDrawPadSize(padWidth, padHeight, new onDrawPadSizeChangedListener() {
@@ -164,7 +164,6 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
      *容器线程, 并增加一个视频图层和 view图层.
      */
     private void startDrawPad() {
-        drawPadView.pauseDrawPad();
         if (drawPadView.startDrawPad()) {
             mainVideoLayer = drawPadView.addMainVideoLayer(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight(), null);
             if (mainVideoLayer != null) {
@@ -173,8 +172,6 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
             }
 
             mediaPlayer.start();
-            drawPadView.resumeDrawPad();
-
             addViewLayer();
         }
     }
@@ -304,25 +301,24 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
             videoOneDo2.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
                 @Override
                 public void onLanSongSDKProgress(long ptsUs, int percent) {
-                    Log.e("LSDelete", "pts Us:: " + ptsUs + "  percnet " + percent);
-            progressDialog.setProgress(percent);
-        }
-    });
+                    progressDialog.setProgress(percent);
+                }
+            });
             videoOneDo2.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
-        @Override
-        public void onLanSongSDKCompleted(String dstVideo) {
-            if(progressDialog!=null){
-                progressDialog.release();
-                progressDialog=null;
-            }
-            dstPath=dstVideo;
-            DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstVideo);
-        }
-    });
+                @Override
+                public void onLanSongSDKCompleted(String dstVideo) {
+                    if(progressDialog!=null){
+                        progressDialog.release();
+                        progressDialog=null;
+                    }
+                    dstPath=dstVideo;
+                    DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstVideo);
+                }
+            });
             progressDialog.show(this);
             videoOneDo2.start();
 
-} catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

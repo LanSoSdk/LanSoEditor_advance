@@ -183,11 +183,14 @@ public class MVLayerDemoActivity extends Activity {
      */
     private void startDrawPad() {
         if (mDrawPadView.startDrawPad()) {
-            mLayerMain = mDrawPadView.addMainVideoLayer(mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
+            // 增加一个主视频的 VideoLayer
+            mLayerMain = mDrawPadView.addMainVideoLayer(
+                    mplayer.getVideoWidth(), mplayer.getVideoHeight(), null);
             if (mLayerMain != null) {
                 mplayer.setSurface(new Surface(mLayerMain.getVideoTexture()));
             }
             mplayer.start();
+
             addMVLayer();
         }
     }

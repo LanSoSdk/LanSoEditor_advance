@@ -27,8 +27,7 @@ import java.util.List;
 /**
  * 当前可以完成常见18个功能:
  * 增加音乐, 裁剪时长, 裁剪画面, 缩放, 压缩,增加logo,文字, 设置编辑模式,
- * 设置遮罩, 增加滤镜, 增加美颜,增加mv, 增加Gif,提取图片.增加Canvas等.
- *
+ * 设置遮罩, 增加滤镜, 增加美颜,增加mv动画, 增加Gif,提取图片.增加Canvas等.
  */
 public class VideoOneDo2 {
 
@@ -77,14 +76,19 @@ public class VideoOneDo2 {
      *
      * @param startX 画面的开始横向坐标,
      * @param startY 画面的开始纵向坐标
-     * @param cropW  裁剪多少宽度
-     * @param cropH  裁剪多少高度
+     * @param cropW  裁剪多少宽度 最小是32个像素,最大视频宽高
+     * @param cropH  裁剪多少高度 最小是32个像素,最大视频宽高
      */
     public void  setCropRect(int startX, int startY, int cropW, int cropH) {
 
+
+        if(cropH<32 || cropW<32){
+            LSOLog.e("setCropRect error  min Size is 32x 32");
+            return;
+        }
+
         if(mediaInfo!=null && startX>=0 && startY>=0 && startX<mediaInfo.getWidth() && startY<mediaInfo.getHeight())
         {
-
             if(cropW%4!=0 || cropH%4!=0){
                 LSOLog.w("setCropRect not a multiple of 4, adjustment:"+ cropW+ " x "+ cropH);
             }
@@ -292,8 +296,15 @@ public class VideoOneDo2 {
             return null;
         }
     }
-    //---------------------------------gpu render start---------------------------------------------
+    //---------------------------------gpu render startPreview---------------------------------------------
     //----------增加滤镜和别的图层信息;
+
+    /**
+     * 异步获取当前的视频图层,
+     *
+     *
+     * OnLayerAlreadyListener监听的3个方法分别是: VideoDataLayer图层对象, 容器的宽度, 容器的高度;
+     */
     public void getVideoDataLayerAsync(OnLayerAlreadyListener listener){
         if(runnable!=null){
             runnable.getVideoDataLayerAsync(listener);
@@ -304,6 +315,25 @@ public class VideoOneDo2 {
             runnable.setMaskBitmap(bmp);
         }
     }
+
+    public void  setFilter(LanSongFilter filter){
+        if(runnable!=null){
+            runnable.addFilter(filter);
+        }
+    }
+
+    /**
+     * 设置滤镜列表;
+     * 增加后, 执行顺序是: 视频源--->滤镜1-->滤镜2-->....-->最终输出到编码器;
+     *
+     */
+    public void setFilterList(List<LanSongFilter> filterList){
+        if(runnable!=null){
+            runnable.addFilterList(filterList);
+        }
+    }
+
+
     /**
      * 增加滤镜
      */
@@ -314,7 +344,10 @@ public class VideoOneDo2 {
     }
 
     /**
-     * 设置滤镜列表;
+     * 滤镜列表;
+     * 增加滤镜列表.
+     *
+     * 增加后, 执行顺序是: 视频源--->滤镜1-->滤镜2-->....-->最终输出到编码器;
      */
     public void addFilterList(List<LanSongFilter> filterList){
         if(runnable!=null){
@@ -360,7 +393,7 @@ public class VideoOneDo2 {
      * 设置封面, 和addBitmap唯一的区别是:缩放到整个容器大小;
      * @param bmp
      * @param startUs
-     * @param endUs  推荐一秒;
+     * @param endUs  推荐一秒, 即1*1000*1000
      * @return
      */
     public BitmapLayer setCoverLayer(Bitmap bmp,long startUs,long endUs) {
@@ -483,7 +516,7 @@ public class VideoOneDo2 {
         if(runnable!=null && !runnable.isRunning()){
             runnable.start();
         }else{
-            LSOLog.e("VideoOneDo2 start error. runnable is null or is running");
+            LSOLog.e("VideoOneDo2 startPreview error. runnable is null or is running");
         }
     }
 
@@ -549,7 +582,7 @@ public void onLanSongSDKCompleted(String dstVideo) {
         MediaInfo.checkFileReturnString(dstVideo);
         }
         });
-        videoOneDo2.start();
+        videoOneDo2.startPreview();
 
         }
 
@@ -588,7 +621,7 @@ break;
 MediaInfo.checkFileReturnString(dstVideo);
 }
 });
- videoOneDo2.start();
+ videoOneDo2.startPreview();
 
  } catch (Exception e) {
  e.printStackTrace();

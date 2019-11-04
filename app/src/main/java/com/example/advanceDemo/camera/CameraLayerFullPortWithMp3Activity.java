@@ -109,8 +109,7 @@ public class CameraLayerFullPortWithMp3Activity extends Activity implements
                         /**
                          * 把用户选择好的歌曲,设置到drawpad容器中, 开始录制.
                          */
-                        String music = CopyFileFromAssets.copyAssets(
-                                getApplicationContext(), "c_li_c_li_2m8s.mp3");
+                        String music = CopyFileFromAssets.copyAssets(getApplicationContext(), "hongdou10s.mp3");
                         audioLine = drawPadCamera.setRecordExtraMp3(music, true);
                         drawPadCamera.startRecord();
                     }

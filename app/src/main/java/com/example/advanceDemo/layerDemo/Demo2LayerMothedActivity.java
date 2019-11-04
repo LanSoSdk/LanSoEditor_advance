@@ -32,25 +32,20 @@ import java.io.IOException;
 
 /**
  * 演示: 使用DrawPad来实现 视频和视频的实时叠加.
- * <p>
  * 流程是: 先创建一个DrawPad,增加主VideoLayer,在播放过程中,再次增加一个VideoLayer然后可以调节SeekBar来对
  * Layer的每个参数进行调节.
- * <p>
  * 可以调节的有:平移,旋转,缩放,RGBA值,显示/不显示(闪烁)效果. 实际使用中, 可用这些属性来扩展一些功能.
- * <p>
  * 比如 调节另一个视频的RGBA中的A值来实现透明叠加效果,类似MV的效果.
- * <p>
  * 比如 调节另一个视频的平移,缩放,旋转来实现贴纸的效果.
  */
-public class Demo2LayerMothedActivity extends Activity implements
-        OnSeekBarChangeListener {
+public class Demo2LayerMothedActivity extends Activity implements OnSeekBarChangeListener {
     private static final String TAG = "Demo2LayerMothedActivity";
     boolean isFirstRemove = false;
     boolean isDestorying = false; // 是否正在销毁, 因为销毁会停止DrawPad
     int RotateCnt = 0;
-    private String mVideoPath;
+    private String srcPath;
     private DrawPadView drawPadView;
-    private MediaPlayer mediaPlayer = null;
+    private MediaPlayer mplayer = null;
     private VideoLayer videoLayer = null;
     private String editTmpPath = null;
     private String dstPath = null;
@@ -63,7 +58,7 @@ public class Demo2LayerMothedActivity extends Activity implements
         setContentView(R.layout.demo2_layer_layout);
         initView();
 
-         mVideoPath = getIntent().getStringExtra("videopath");
+         srcPath = getIntent().getStringExtra("videopath");
 
         drawPadView = (DrawPadView) findViewById(R.id.id_mothed2_drawpadview);
 
@@ -83,29 +78,29 @@ public class Demo2LayerMothedActivity extends Activity implements
     }
 
     private void startPlayVideo() {
-        if (mVideoPath != null) {
-            mediaPlayer = new MediaPlayer();
+        if (srcPath != null) {
+            mplayer = new MediaPlayer();
             try {
-                mediaPlayer.setDataSource(mVideoPath);
+                mplayer.setDataSource(srcPath);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            mediaPlayer.setOnPreparedListener(new OnPreparedListener() {
+            mplayer.setOnPreparedListener(new OnPreparedListener() {
 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     initDrawPad(mp);
                 }
             });
-            mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+            mplayer.setOnCompletionListener(new OnCompletionListener() {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     stopDrawPad();
                 }
             });
-            mediaPlayer.prepareAsync();
+            mplayer.prepareAsync();
         } else {
             finish();
             return;
@@ -116,7 +111,7 @@ public class Demo2LayerMothedActivity extends Activity implements
      * Step1: init Drawpad 初始化DrawPad
      */
     private void initDrawPad(MediaPlayer mp) {
-        mInfo = new MediaInfo(mVideoPath);
+        mInfo = new MediaInfo(srcPath);
         if (mInfo.prepare()) {
             int width=mInfo.getWidth();
             int height=mInfo.getHeight();
@@ -149,10 +144,10 @@ public class Demo2LayerMothedActivity extends Activity implements
             /**
              *  增加视频图层;
              */
-            videoLayer = drawPadView.addVideoLayer(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight(), null);
+            videoLayer = drawPadView.addVideoLayer(mplayer.getVideoWidth(),mplayer.getVideoHeight(), null);
             if (videoLayer != null) {
-                mediaPlayer.setSurface(new Surface(videoLayer.getVideoTexture()));
-                mediaPlayer.start();
+                mplayer.setSurface(new Surface(videoLayer.getVideoTexture()));
+                mplayer.start();
             }
 
         }
@@ -165,10 +160,16 @@ public class Demo2LayerMothedActivity extends Activity implements
         if (drawPadView != null && drawPadView.isRunning()) {
             drawPadView.stopDrawPad();
             Toast.makeText(getApplicationContext(), "录制已停止!!",Toast.LENGTH_SHORT).show();
-
             if (LanSongFileUtil.fileExist(editTmpPath)) {
-                dstPath= AudioEditor.mergeAudioNoCheck(mVideoPath, editTmpPath, true);
+
+                MediaInfo.checkFile(srcPath);
+
+                MediaInfo.checkFile(editTmpPath);
+
+
+                dstPath= AudioEditor.mergeAudioNoCheck(srcPath, editTmpPath, true);
                 playVideo.setVisibility(View.VISIBLE);
+
             }
         }
     }
@@ -178,10 +179,10 @@ public class Demo2LayerMothedActivity extends Activity implements
         super.onDestroy();
 
         isDestorying = true;
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if (mplayer != null) {
+            mplayer.stop();
+            mplayer.release();
+            mplayer = null;
         }
 
         if (drawPadView != null) {

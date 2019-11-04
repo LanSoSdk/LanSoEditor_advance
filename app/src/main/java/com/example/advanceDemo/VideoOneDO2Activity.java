@@ -9,13 +9,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.example.advanceDemo.utils.ButtonEnable;
 import com.example.advanceDemo.utils.DemoLog;
+import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
-import com.example.advanceDemo.utils.LSOProgressDialog;
 import com.example.advanceDemo.view.ShowHeart;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
@@ -29,6 +30,7 @@ import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.videoeditor.BeautyManager;
 import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.LanSongFileUtil;
+import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoOneDo2;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class VideoOneDO2Activity extends Activity {
     private List<Integer> buttonIds = new ArrayList<>();
     private VideoOneDo2 videoOneDo;
     private String srcVideoPath;
-    private LSOProgressDialog progressDialog;
+    private DemoProgressDialog progressDialog;
     private boolean isExtractEnable; //是否设置的读取帧;
     private boolean isAddBgPicture; //是否增加了背景图片
     private String dstVideoPath;
@@ -59,7 +61,7 @@ public class VideoOneDO2Activity extends Activity {
         srcVideoPath= getIntent().getStringExtra("videopath");
         initView();
 
-        progressDialog=new LSOProgressDialog();
+        progressDialog=new DemoProgressDialog();
         findViewById(R.id.id_onedoe_export_btn).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,16 +154,16 @@ public class VideoOneDO2Activity extends Activity {
                     videoOneDo.addFilterList(BeautyManager.getBeaufulFilters(getApplicationContext()));
                     break;
                 case R.id.id_onedo_mask_btn:  //设置遮罩,
-                    {
-                        Bitmap  bmp3=BitmapFactory.decodeFile(CopyFileFromAssets.copyAssets(getApplicationContext(),"alpha_corners.png"));
-                        videoOneDo.setMaskBitmap(bmp3);
+                {
+                    Bitmap  bmp3=BitmapFactory.decodeFile(CopyFileFromAssets.copyAssets(getApplicationContext(),"alpha_corners.png"));
+                    videoOneDo.setMaskBitmap(bmp3);
 
-                        if(!isAddBgPicture){
-                            Bitmap bmp4= CopyFileFromAssets.copyAsset2Bmp(getApplicationContext(),"bgPicture.jpg");
-                            videoOneDo.setBackGroundBitmapLayer(bmp4);
-                        }
+                    if(!isAddBgPicture){
+                        Bitmap bmp4= CopyFileFromAssets.copyAsset2Bmp(getApplicationContext(),"bgPicture.jpg");
+                        videoOneDo.setBackGroundBitmapLayer(bmp4);
                     }
-                    break;
+                }
+                break;
                 case R.id.id_onedo_background_bitmap_btn:  //增加背景图片
 
                     Bitmap bmp= BitmapFactory.decodeResource(getResources(),R.drawable.a2);
@@ -184,7 +186,7 @@ public class VideoOneDO2Activity extends Activity {
                     MVLayer mvLayer=videoOneDo.addMVLayer(mvColor,mvMask);
                     if(mvLayer!=null)mvLayer.setScaledToPadSize(); //缩放到整个容器;
                 }
-                    break;
+                break;
                 case R.id.id_onedo_gif_btn:
                     videoOneDo.addGifLayer(R.drawable.g06,LSOLayerPosition.LeftBottom);
                     break;
@@ -199,14 +201,14 @@ public class VideoOneDO2Activity extends Activity {
         // 文字可以用Canvas直接绘制, 也可以先绘制成Bitmap,然后用addBitmap的形式来调用;
         if(isEnable(R.id.id_onedo_text_btn)){
             String str1 = "蓝松视频SDK,文字演示";
-            int fontSize = 60;
-            Bitmap bitmap = Bitmap.createBitmap(videoOneDo.getPadWidth()*2,videoOneDo.getPadHeight()*2, Bitmap.Config.ARGB_8888);
+            int fontSize = 30;
+            Bitmap bitmap = Bitmap.createBitmap(videoOneDo.getPadWidth(),videoOneDo.getPadHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             Paint paint = new Paint();
             paint.setTextSize(fontSize);
             paint.setColor(Color.RED);
 
-            int y = 100;
+            int y = 40;
             canvas.drawText(str1, 0, y, paint);
             canvas.save(Canvas.ALL_SAVE_FLAG);
             canvas.restore();
@@ -238,6 +240,7 @@ public class VideoOneDO2Activity extends Activity {
         videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
             @Override
             public void onLanSongSDKCompleted(String dstVideo) {
+
                 if(progressDialog!=null){
                     progressDialog.release();
                 }
@@ -249,7 +252,17 @@ public class VideoOneDO2Activity extends Activity {
                 }
             }
         });
-        progressDialog.show(VideoOneDO2Activity.this);
+        progressDialog.showWithNoCancel(VideoOneDO2Activity.this);
+        progressDialog.getProgressDialog().setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if(videoOneDo!=null){
+                    videoOneDo.cancel();
+                    DemoLog.w("您已经取消了执行...");
+                }
+            }
+        });
+
         videoOneDo.start();
     }
     private boolean isEnable(int id){
@@ -267,28 +280,24 @@ public class VideoOneDO2Activity extends Activity {
     }
 
     private void showExtractFrames(){
-        if(isExtractEnable&& videoOneDo!=null){
-            int cnt=0;
-            Bitmap bmp=videoOneDo.getExtractFrame();
-            if(bmp!=null) cnt++;
-            while(bmp!=null){
-                bmp=videoOneDo.getExtractFrame();
+            if(isExtractEnable&& videoOneDo!=null){
+                int cnt=0;
+                Bitmap bmp=videoOneDo.getExtractFrame();
                 if(bmp!=null) cnt++;
-            }
-            new AlertDialog.Builder(VideoOneDO2Activity.this).setTitle("提示").setMessage("您设置了读取帧,总共读取了 "+cnt+ " 帧图片")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                while(bmp!=null){
+                    bmp=videoOneDo.getExtractFrame();
+                    if(bmp!=null) cnt++;
+                }
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startPlayDstVideo();
-                        }
-                    }).show();
-        }
+                String str="已经读取了:"+ cnt + " 帧, 代码在VideoOneDo2Activity中";
+                DemoUtil.showToast(getApplicationContext(),str);
+                startPlayDstVideo();
+            }
     }
     private void startPlayDstVideo(){
         videoOneDo=null;
         if(LanSongFileUtil.fileExist(dstVideoPath)){
-            DemoUtil.startPlayDstVideo(VideoOneDO2Activity.this,dstVideoPath);
+            DemoUtil.playDstVideo(VideoOneDO2Activity.this,dstVideoPath);
         }else{
             DemoUtil.showDialog(VideoOneDO2Activity.this,"VideoOneDo处理错误");
         }

@@ -12,6 +12,7 @@ import com.lansosdk.box.LanSoEditorBox;
 import com.lansosdk.box.OnLanSongLogOutListener;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
@@ -24,18 +25,49 @@ public class LanSoEditor {
         try {
             loadLibraries(); // 拿出来单独加载库文件.
         }catch (UnsatisfiedLinkError error){
-            LSOLog.e("load libraries  error. Maybe it is where your app crashes, causing the entire Activity to restart.(你的APP崩溃了,查看所有的logcat信息)");
+            LSOLog.e("load libraries  error. Maybe it is where your app crashes, causing the entire Activity to restart.(你的APP崩溃后被系统再次启动,查看所有的logcat信息)");
             error.printStackTrace();
         }
 
         initSo(context, str);
         LanSoEditor.setTempFileDir(Environment.getExternalStorageDirectory().getPath() + "/lansongBox/");
+        LSOLog.init(context);
         printSDKVersion();
     }
 
     public static void unInitSDK(){
         unInitSo();
     }
+
+    /**
+     * 删除默认文件夹;
+     * 如果您在调用此方法前, 设置了文件夹路径,则会删除您指定的文件夹;
+     * 如果没有调用,则删除我们默认文件夹;
+     */
+    public static void deleteDefaultDir() {
+        LanSoEditorBox.deleteDefaultDirFiles();
+        LanSongFileUtil.deleteDefaultDir();
+    }
+
+    /**
+     * 设置log的默认保存文件.
+     * 在每次运行时,会把上一次的sdk运行文件删除, 重新创建文件;
+     * 如果你不设置, 默认可通过getLogSavePath回去当前保存的位置;
+     * @param path 文件完整路径. 比如: /sdcard/lansongBox/lansongLog.txt
+     */
+    public static void setLogSavePath(String path){
+        LSOLog.setLogSavePath(path);
+        printSDKVersion();
+    }
+    /**
+     * 获取SDK的log保存位置;
+     * @return
+     */
+    public static String getLogSavePath(){
+        return LSOLog.getLogPath();
+    }
+
+
     /**
      * 设置默认产生文件的文件夹,
      * 默认是:/sdcard/lansongBox/
@@ -119,6 +151,7 @@ public class LanSoEditor {
         LSOLog.i("* \t"+ LanSoEditorBox.getBoxInfo());
         LSOLog.i("* ");
         LSOLog.i("*************************************************************");
+        LSOLog.d("getColorFormat:"+ LanSoEditorBox.getColorFormat());
     }
     private static String getAndroidVersion(){
         switch (Build.VERSION.SDK_INT){
@@ -171,7 +204,7 @@ public class LanSoEditor {
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
 
-        LSOLog.d("loaded native libraries.isQiLinSoC:"+VideoEditor.isQiLinSoc());
+        LSOLog.d("loaded native libraries.isQiLinSoC:"+isQiLinSoc());
         isLoaded = true;
     }
 
@@ -181,8 +214,28 @@ public class LanSoEditor {
     }
     private static void unInitSo() {
         nativeUninit();
+        LanSoEditorBox.unInit();
     }
-
+    public static boolean isQiLinSoc()
+    {
+        if(LanSoEditorBox.isQiLinSoC()){
+            return true;
+        }
+        if(Build.MODEL!=null) {
+            if (Build.MODEL.contains("-AL")
+                    || Build.MODEL.contains("-CL")
+                    || Build.MODEL.contains("-TL")
+                    || Build.MODEL.contains("-UL")
+                    || Build.MODEL.contains("-DL")
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean isSupportNV21(){
+        return LanSoEditorBox.isSupportNV21();
+    }
 
 
 

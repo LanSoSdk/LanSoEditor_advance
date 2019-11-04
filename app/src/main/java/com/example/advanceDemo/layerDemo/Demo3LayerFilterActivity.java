@@ -9,6 +9,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +18,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
 
+import com.example.advanceDemo.utils.DemoLog;
+import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.view.FilterDemoAdapter;
 import com.example.advanceDemo.view.HorizontalListView;
@@ -68,7 +72,7 @@ import com.lansosdk.videoeditor.VideoOneDo2;
 public class Demo3LayerFilterActivity extends Activity {
     private static final String TAG = "Demo3LayerFilterActivity";
     boolean isDestorying = false; // 是否正在销毁, 因为销毁会停止DrawPad
-    private String srcVideoPath;
+    private String mVideoPath;
     private DrawPadView drawPadView;
     private MediaPlayer mediaPlayer = null;
     private VideoLayer videoLayer = null;
@@ -83,7 +87,6 @@ public class Demo3LayerFilterActivity extends Activity {
     private FilterAdjuster mFilterAdjuster;
 
     // -------------------------------------------------后台执行.
-    private ProgressDialog progressDialog;
     private VideoOneDo2 videoOneDo;
 
     private void createFilters() {
@@ -120,12 +123,12 @@ public class Demo3LayerFilterActivity extends Activity {
 
         createFilters();
 
-        srcVideoPath = getIntent().getStringExtra("videopath");
+        mVideoPath = getIntent().getStringExtra("videopath");
         dstPath = LanSongFileUtil.newMp4PathInBox();
-        mediaInfo = new MediaInfo(srcVideoPath);
+        mediaInfo = new MediaInfo(mVideoPath);
 
         if (mediaInfo.prepare()) {
-            new GetBitmapFiltersTask(srcVideoPath).execute();  //开启给图片增加滤镜;
+            new GetBitmapFiltersTask(mVideoPath).execute();  //开启给图片增加滤镜;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -154,7 +157,7 @@ public class Demo3LayerFilterActivity extends Activity {
     private void startPlayVideo() {
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(srcVideoPath);
+            mediaPlayer.setDataSource(mVideoPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -354,28 +357,23 @@ public class Demo3LayerFilterActivity extends Activity {
      * 后台处理
      */
     private void filterExecute() {
-        progressDialog = new ProgressDialog(Demo3LayerFilterActivity.this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("正在后台处理:");
-        progressDialog.setCancelable(false);
 
         try {
-            videoOneDo = new VideoOneDo2(getApplicationContext(), srcVideoPath);
+            videoOneDo = new VideoOneDo2(getApplicationContext(), mVideoPath);
             videoOneDo.addFilter(filters.get(filterIndex));
             videoOneDo.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
                 @Override
                 public void onLanSongSDKProgress(long ptsUs, int percent) {
-                    progressDialog.setMessage("正在后台处理:" + percent + " %");
+                    DemoProgressDialog.showPercent(Demo3LayerFilterActivity.this,percent);
                 }
+
             });
             videoOneDo.setOnVideoOneDoCompletedListener(new OnLanSongSDKCompletedListener() {
 
                 @Override
                 public void onLanSongSDKCompleted(String dstVideo) {
-                    if (progressDialog != null) {
-                        progressDialog.cancel();
-                        progressDialog = null;
-                    }
+                    DemoProgressDialog.releaseDialog();
+
                     dstPath = dstVideo;
                     videoOneDo.release();
                     videoOneDo = null;
@@ -388,7 +386,6 @@ public class Demo3LayerFilterActivity extends Activity {
                 }
             });
             videoOneDo.start();
-            progressDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

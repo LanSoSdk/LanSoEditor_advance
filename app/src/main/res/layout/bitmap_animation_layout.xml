@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/red">
+
+    <com.lansosdk.videoeditor.DrawPadConcatView
+        android:id="@+id/id_ae_preview2"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+        android:layout_height="0dip"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="0dip"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/id_ae_preview_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:text="进度:"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/id_video_concats_cancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="取消"/>
+
+            <Button
+                android:id="@+id/id_video_concats_restart"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="重新开始"/>
+
+
+            <Button
+                android:id="@+id/id_video_concats_switch_animation"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corners_button_orange_bg"
+                android:text="切换动画"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/id_video_concats_export"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="40dp"
+            android:background="@drawable/corners_button_orange_bg"
+            android:text="后台导出"/>
+    </LinearLayout>
+</LinearLayout>

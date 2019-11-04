@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,19 +15,38 @@ import android.widget.Toast;
 
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
-import com.example.advanceDemo.aeDemo.AERecordFileHintActivity;
 import com.example.advanceDemo.scene.GameVideoDemoActivity;
 import com.example.advanceDemo.utils.ConvertToEditModeDialog;
 import com.example.advanceDemo.utils.CopyDefaultVideoAsyncTask;
+import com.example.advanceDemo.utils.CopyFileFromAssets;
+import com.example.advanceDemo.utils.DemoLog;
+import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.utils.FileExplorerActivity;
 import com.lansoeditor.advanceDemo.R;
+import com.lansosdk.LanSongAe.LSOAeDrawable;
+import com.lansosdk.box.AudioLayer;
+import com.lansosdk.box.AudioPad;
+import com.lansosdk.box.BitmapLayer;
+import com.lansosdk.box.LSOBitmapAsset;
+import com.lansosdk.box.LSOLayerPosition;
+import com.lansosdk.box.LSOVideoOption;
+import com.lansosdk.box.OnAudioPadExecuteCompletedListener;
+import com.lansosdk.box.OnLanSongSDKCompletedListener;
+import com.lansosdk.box.OnLanSongSDKProgressListener;
+import com.lansosdk.box.VideoFrameLayer;
+import com.lansosdk.box.onAudioPadProgressListener;
+import com.lansosdk.box.onAudioPadThreadProgressListener;
+import com.lansosdk.videoeditor.AudioPadExecute;
+import com.lansosdk.videoeditor.DrawPadAllExecute2;
 import com.lansosdk.videoeditor.EditModeVideo;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.MediaInfo;
 
 import java.io.File;
+import java.util.List;
+
 
 public class ListMainActivity extends Activity implements OnClickListener {
 
@@ -40,13 +60,13 @@ public class ListMainActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//		Thread.setDefaultUncaughtExceptionHandler(new DemoCrashHandler());
         setContentView(R.layout.activity_main);
 
         /**
          * 初始化SDK˙
          */
-        LanSoEditor.initSDK(getApplicationContext(), null);
+        LanSoEditor.initSDK(getApplicationContext(),null);
+        LanSongFileUtil.deleteDefaultDir();
         /**
          * 检查权限
          */
@@ -54,10 +74,11 @@ public class ListMainActivity extends Activity implements OnClickListener {
 
         initView();
 
-        LanSongFileUtil.deleteDefaultDir();
-
         //显示版本提示
         DemoUtil.showVersionDialog(ListMainActivity.this);
+
+        testFile();
+
     }
 
     @Override
@@ -91,11 +112,11 @@ public class ListMainActivity extends Activity implements OnClickListener {
                 case R.id.id_mainlist_douyin:
                     startDemoActivity(DouYinDemoActivity.class);
                     break;
+                case R.id.id_mainlist_weishang:
+                    startDemoActivity(ListAEActivity.class);
+                    break;
                 case R.id.id_mainlist_gamevideo:
                     startDemoActivity(GameVideoDemoActivity.class);
-                    break;
-                case R.id.id_mainlist_weishang:
-                    startDemoActivity(AERecordFileHintActivity.class);
                     break;
                 case R.id.id_mainlist_videoonedo:
                     startDemoActivity(VideoOneDO2Activity.class);
@@ -124,6 +145,8 @@ public class ListMainActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_mainlist_bitmaps).setOnClickListener(this);
         findViewById(R.id.id_mainlist_videoplay).setOnClickListener(this);
         findViewById(R.id.id_mainlist_gamevideo).setOnClickListener(this);
+
+
         //---------------------
         findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
             @Override
@@ -218,7 +241,7 @@ public class ListMainActivity extends Activity implements OnClickListener {
             return;
         }
         permissionCnt++;
-        // PermissionsManager采用github上开源库,不属于我们sdk的一部分.
+        // PermissionsManager采用github上开源库,不属于sdk的一部分.
         // 下载地址是:https://github.com/anthonycr/Grant,您也可以使用别的方式来检查app所需权限.
         PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this,
                 new PermissionsResultAction() {
@@ -226,11 +249,17 @@ public class ListMainActivity extends Activity implements OnClickListener {
                     public void onGranted() {
                         isPermissionOk = true;
                     }
-
                     @Override
                     public void onDenied(String permission) {
                         isPermissionOk = false;
                     }
                 });
     }
+
+    private void testFile() {
+
+
+
+    }
+
 }

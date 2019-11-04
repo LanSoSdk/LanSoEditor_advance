@@ -21,7 +21,6 @@ import com.example.advanceDemo.scene.PicturesSlideDemoActivity;
 import com.example.advanceDemo.scene.VViewImage3DDemoActivity;
 import com.example.advanceDemo.scene.TwoVideoLayoutActivity;
 import com.example.advanceDemo.scene.VideoLayerTransformActivity;
-import com.example.advanceDemo.scene.VideoSeekActivity;
 import com.lansoeditor.advanceDemo.R;
 
 public class ListSceneDemoActivity extends Activity implements OnClickListener {
@@ -47,7 +46,6 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
 
         findViewById(R.id.id_screne_cuoluo_layout).setOnClickListener(this);
 
-        findViewById(R.id.id_screne_videoseek).setOnClickListener(this);
         findViewById(R.id.id_screne_video2_layout).setOnClickListener(this);
         //新增;
         findViewById(R.id.id_mainlist_lizi).setOnClickListener(this);
@@ -83,9 +81,6 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
                 break;
             case R.id.id_screne_videobiansu:
                 startDemoActivity(VideoSpeedDemoActivity.class);
-                break;
-            case R.id.id_screne_videoseek:
-                startDemoActivity(VideoSeekActivity.class);
                 break;
             case  R.id.id_mainlist_lizi:
                 startDemoActivity(ParticleDemoActivity.class);

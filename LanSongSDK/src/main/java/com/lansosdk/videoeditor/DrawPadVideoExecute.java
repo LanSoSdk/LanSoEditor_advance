@@ -44,18 +44,14 @@ public class DrawPadVideoExecute {
         mediaInfo=new MediaInfo(srcPath);
         if (render == null && mediaInfo.prepare()) {
 
-
-
             int padW=mediaInfo.getWidth();
             int padH=mediaInfo.getHeight();
-
 
             if(padW*padH>1088*1920){
                 padW/=2;
                 padH/=2;
                 LSOLog.w(" setScaleValue  size biggeer than 1080P. divide to : "+ padW+ " x "+padH);
             }
-
             durationUs=(long)(mediaInfo.vDuration*1000*1000);
             int bitrate=VideoEditor.getSuggestBitRate(padH *padW);
             render = new DrawPadVideoRunnable(ctx, srcPath, 0, padW,padH,bitrate, null, dstPath);

@@ -3,6 +3,8 @@ package com.lansosdk.videoeditor;
 import android.content.Context;
 import android.util.Log;
 
+import com.lansosdk.box.LSOLog;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -50,6 +52,7 @@ public class LanSongLogCollector implements Runnable {
             runEntry();
         } catch (Exception e) {
             e.printStackTrace();
+            LSOLog.e("LanSongLogCollector  error . " + e);
             notifyReady();
         }
     }

@@ -39,7 +39,8 @@ public class AVDecoder {
     public static native int audioRelease(long handle);
 
     /**
-     * 一下是代码测试. XSaveDataToFile write=new XSaveDataToFile("/sdcard/hddd3.pcm");
+     * 一下是代码测试.
+     * XSaveDataToFile write=new XSaveDataToFile("/sdcard/hddd3.pcm");
      * AVDecoder.audioInit("/sdcard/hongdou.mp3"); byte[] pcmOut=new
      * byte[1152*4]; //这个是44100, 双通道的
      *

@@ -24,14 +24,11 @@ import com.lansosdk.box.onDrawPadThreadProgressListener;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
 /**
- * 自动执行容器.
- * 可以增加视频, 图片等.
- * 与DrawPadAutoExecute相对比,有增加视频的功能.
- *
- * 注意1: 此类暂时不做音频处理, 如果您有声音处理,则需要另外用AudioPadExecute处理后,再合并;
- * 注意2: 此类暂时没有做视频的帧率自适应算法,当视频帧率和容器帧率不同时,会导致视频画面少许的放慢或加快.
+ * 已经废弃, 请用DrawPadAllExecute2
  */
+@Deprecated
 public class DrawPadAllExecute  {
 
     private AtomicBoolean isPausing;

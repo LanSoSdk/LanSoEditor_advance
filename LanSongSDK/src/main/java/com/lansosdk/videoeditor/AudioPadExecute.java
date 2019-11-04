@@ -11,6 +11,7 @@ import com.lansosdk.box.onAudioPadCompletedListener;
 import com.lansosdk.box.onAudioPadProgressListener;
 import com.lansosdk.box.onAudioPadThreadProgressListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class AudioPadExecute {
      * @param ctx
      * @param input 输入如是音频则返回的是m4a的音频文件; 如是视频 则返回的是mp4的视频文件
      */
-    public AudioPadExecute(Context ctx, String input) {
+    public AudioPadExecute(Context ctx, String input) throws Exception {
         if(render==null){
             render=new AudioPadRunnable(ctx,input);
         }
@@ -56,7 +57,6 @@ public class AudioPadExecute {
 
     /**
      * 因为其他add都是long类型, 废弃这个长度是秒的构造方法;
-     * 请用 AudioPadRunnable(Context ctx, long durationUS);
      * @param ctx
      * @param durationS
      */
@@ -214,6 +214,10 @@ public class AudioPadExecute {
     /**
      * 设置监听当前audioPad的处理进度. 一个音频帧处理完毕后, 直接执行您listener中的代码.
      * 在audioPad线程中执行,不能在里面增加UI代码.
+     * <p>
+     * 建议使用这个.
+     * <p>
+     * 如果您声音在40s一下,建议使用这个, 因为音频本身很短,处理时间很快.
      *
      * @param listener
      */
@@ -287,18 +291,17 @@ public class AudioPadExecute {
     // ----------------------------一下为测试代码-------------------------------------------
 
     /**
+
      float source1Volume=1.0f;
      AudioLayer audioLayer;
 
      private void testFile3(){
-     AudioPadRunnable execute = new AudioPadRunnable(getApplicationContext(), "/sdcard/d1.mp4");
+     AudioPadExecute execute = new AudioPadExecute(getApplicationContext(), "/sdcard/d1.mp4");
      //增加一个音频
      audioLayer = execute.addAudioLayer("/sdcard/hongdou10s.mp3", 0, 0, -1);
      if (audioLayer != null) {
      audioLayer.setVolume(0.01f);
      }
-
-
      audioLayer.setSoundPitchLittleGirl();
 
      //主音频静音;
@@ -320,13 +323,13 @@ public class AudioPadExecute {
     }
     }
     });
-     execute.setOnAudioPadCompletedListener(new AudioPadRunnable.onAudioPadExecuteCompletedListener() {
+     execute.setOnAudioPadCompletedListener(new OnAudioPadExecuteCompletedListener() {
     @Override
     public void onCompleted(String path) {
-    MediaInfo.checkFileReturnString(path);
+    MediaInfo.checkFile(path);
     }
     });
-     execute.start();
+     execute.startPreview();
      }
 
      */

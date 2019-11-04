@@ -5,24 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.utils.YUVLayerDemoData;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.LanSongFilter.LanSongMaskBlendFilter;
 import com.lansosdk.box.BitmapLayer;
-import com.lansosdk.box.CameraLayer;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.DrawPadUpdateMode;
-import com.lansosdk.box.Layer;
 import com.lansosdk.box.VideoLayer;
 import com.lansosdk.box.YUVLayer;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
@@ -74,21 +67,20 @@ public class Demo1LayerMothedActivity extends Activity implements
         vPlayer = new VPlayer(this);
         try {
             vPlayer.setVideoPath(videoPath);
-            vPlayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
-                @Override
-                public void onPrepared(VideoPlayer mp) {
-                    vPlayer.setLooping(true);
-                    initDrawPad();
-                }
-            });
-            vPlayer.prepareAsync();
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-
+        vPlayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
+            @Override
+            public void onPrepared(VideoPlayer mp) {
+                vPlayer.setLooping(true);
+                initDrawPad();
+            }
+        });
+        vPlayer.prepareAsync();
     }
+
     boolean isInitDrawpad = false;
 
     private void initDrawPad() {
@@ -96,6 +88,9 @@ public class Demo1LayerMothedActivity extends Activity implements
             return;
         }
         isInitDrawpad = true;
+        drawPadView.setDrawPadBackGroundColor(1.0f,0.5f,0.0f,0.5f);
+
+
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH,25);
         drawPadView.setDrawPadSize(vPlayer.getVideoWidth(), vPlayer.getVideoHeight(), new onDrawPadSizeChangedListener() {
             @Override
@@ -108,13 +103,11 @@ public class Demo1LayerMothedActivity extends Activity implements
     private void startDrawPad() {
         drawPadView.pauseDrawPad();
         if (!drawPadView.isRunning() && drawPadView.startDrawPad()) {
-
             videoLayer = drawPadView.addVideoLayer(vPlayer.getVideoWidth(), vPlayer.getVideoHeight(), null);
             if (videoLayer != null) {
                 vPlayer.setSurface(new Surface(videoLayer.getVideoTexture()));
                 vPlayer.start();
             }
-            addBitmapLayer();
             drawPadView.resumeDrawPad();
         }
     }
@@ -201,9 +194,7 @@ public class Demo1LayerMothedActivity extends Activity implements
                 break;
             case R.id.id_DrawPad_skbar_moveY:
                 if (videoLayer != null) {
-
                     float percent = progress * 1.0f / 100f;  //百分比;
-
                     float posY = (videoLayer.getPadHeight() + videoLayer.getLayerHeight()) * percent - videoLayer.getLayerHeight() / 2.0f;
                     videoLayer.setPosition(videoLayer.getPositionX(), posY);
                 }

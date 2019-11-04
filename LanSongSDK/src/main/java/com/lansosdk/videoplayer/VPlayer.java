@@ -187,7 +187,12 @@ public class VPlayer {
             videoPlayer.setScreenOnWhilePlaying(true);
             videoPlayer.prepareAsync();
             mCurrentState = STATE_PREPARING;
-        } catch (Exception ex) {
+        } catch (IOException ex) {
+            LSOLog.e("Unable to open content: " + mUri, ex);
+            mCurrentState = STATE_ERROR;
+            mErrorListener.onError(videoPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            return;
+        } catch (IllegalArgumentException ex) {
             LSOLog.e("Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mErrorListener.onError(videoPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
@@ -366,6 +371,11 @@ public class VPlayer {
         return -1;
     }
 
+    /**
+     * 获取当前播放位置,
+     * 单位ms;
+     * @return
+     */
     public int getCurrentPosition() {
         if (isInPlaybackState()) {
             return (int) videoPlayer.getCurrentPosition();
@@ -373,12 +383,6 @@ public class VPlayer {
         return 0;
     }
 
-    public int setLanSongPosition() {
-        if (isInPlaybackState()) {
-            return (int) videoPlayer.setLanSongPosition();
-        }
-        return 0;
-    }
 
     public int getCurrentFramePosition() {
         if (isInPlaybackState()) {
@@ -387,6 +391,11 @@ public class VPlayer {
         return 0;
     }
 
+    /**
+     * 定位,  单位毫秒;
+     * 属于不精确定位, 定位到当前指定的时间的前一个关键帧;
+     * @param msec
+     */
     public void seekTo(int msec) {
         if (isInPlaybackState()) {
             videoPlayer.seekTo(msec);
@@ -397,6 +406,7 @@ public class VPlayer {
     }
 
     /**
+     * 获取视频宽度
      */
     public int getVideoWidth() {
         if (mediaInfo != null) {
@@ -407,7 +417,7 @@ public class VPlayer {
     }
 
     /**
-     * @return
+     * 获取视频高度
      */
     public int getVideoHeight() {
         if (mediaInfo != null) {
@@ -479,7 +489,7 @@ public class VPlayer {
             player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
             player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
             player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-            player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+            player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "startPreview-on-prepared", 0);
             player.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
             player.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
 

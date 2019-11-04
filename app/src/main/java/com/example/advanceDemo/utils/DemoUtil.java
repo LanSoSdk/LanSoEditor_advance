@@ -47,8 +47,10 @@ public class DemoUtil {
         int limitMonth = VideoEditor.getLimitMonth();
 
 
-        if(year>limitYear || month>=limitMonth){
-            DemoUtil.showDialog(activity, "SDK 已经过期,请联系我们更新.(time out.) ");
+        if(limitYear==-1 && limitMonth==-1){
+            DemoUtil.showDialog(activity, "SDK已经授权. ");
+        }else if(year>limitYear || month>=limitMonth){
+            DemoUtil.showDialog(activity, "SDK 已经过期,请联系我们更新.(time out.)");
         }else{
             String timeHint = activity.getResources().getString(R.string.sdk_limit);
             String version = VideoEditor.getSDKVersion() + ";\n BOX:" + LanSoEditorBox.VERSION_BOX;
@@ -161,6 +163,17 @@ public class DemoUtil {
         intent.putExtra("videopath", videoPath);
         act.startActivity(intent);
     }
+
+    /**
+     * 开始播放目标文件
+     */
+    public static void playDstVideo(Activity act, String videoPath){
+        Intent intent = new Intent(act, VideoPlayerActivity.class);
+        intent.putExtra("videopath", videoPath);
+        act.startActivity(intent);
+    }
+
+
     // mhandler.sendMessageDelayed(mhandler.obtainMessage(23),10); //别地方调用
     // private HandlerLoop mhandler=new HandlerLoop();
     // private int maskCnt=1;

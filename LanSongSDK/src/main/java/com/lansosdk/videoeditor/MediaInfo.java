@@ -34,7 +34,7 @@ public class MediaInfo {
     public final String filePath;
     public final String fileName; // 视频的文件名, 路径的最后一个/后的字符串.
     public final String fileSuffix; // 文件的后缀名.
-    public final long fileLength; // 文件的后缀名.
+    public final long fileLength; // 文件的总大小, 单位字节;
     /**
      * 视频的显示高度,即正常视频高度. 如果视频旋转了90度或270度,则这里等于实际视频的宽度!!
      */
@@ -117,6 +117,7 @@ public class MediaInfo {
      */
     public String aCodecName;
     private boolean getSuccess = false;
+    private boolean isPngFile;
 
     /**
      * 构造方法, 输入文件路径; 注意: 创建对象后, 需要执行 {@link #prepare()}后才可以使用.
@@ -134,6 +135,8 @@ public class MediaInfo {
             }else{
                 fileLength=0;
             }
+            isPngFile="png".equalsIgnoreCase(fileSuffix);
+
         }else{
             fileLength=0;
         }
@@ -192,7 +195,6 @@ public class MediaInfo {
             ret = "文件名为空指针, null";
         } else {
             File file = new File(videoPath);
-
             if (!file.exists()) {
                 ret = "文件不存在," + videoPath;
             } else if (file.isDirectory()) {
@@ -283,6 +285,21 @@ public class MediaInfo {
         int ret = 0;
         if (fileExist(filePath)) { // 这里检测下mfilePath是否是多媒体后缀.
             ret = nativePrepare(filePath, false);
+
+            if(!isPngFile && vPixelFmt==null && vWidth>0 && vHeight>0 && vDuration>0 && vFrameRate>0){
+                VideoEditor editor=new VideoEditor();
+                String path2=editor.executeCutVideo(filePath,0,1.0f);
+                float duration=-vDuration;
+                if(path2!=null){
+                    nativePrepare(path2,false);
+                }
+
+                vDuration=duration;
+
+                LanSongFileUtil.deleteFile(path2);
+                LSOLog.d("video pixel format is null, decode  to get frame size");
+            }
+
             if (ret >= 0) {
                 getSuccess = true;
                 return isSupport();
@@ -331,6 +348,22 @@ public class MediaInfo {
         }
         return 0;
     }
+    public long getVideoTrackDurationUs(){
+
+        if(vDuration>0){
+            return (long)(vDuration *1000*1000);
+        }else{
+            return 1;
+        }
+    }
+    public long getAudioTrackDurationUs(){
+
+        if(aDuration>0){
+            return (long)(aDuration *1000*1000);
+        }else{
+            return 1;
+        }
+    }
 
     public void release() {
         getSuccess = false;
@@ -372,7 +405,9 @@ public class MediaInfo {
     }
 
     public boolean isHaveVideo() {
-        if (vBitRate > 0 || vWidth > 0 || vHeight > 0) {
+        if(isPngFile && vWidth>0 && vHeight>0){
+            return true;
+        }else if (vBitRate > 0 || vWidth > 0 || vHeight > 0) {
             if (vHeight == 0 || vWidth == 0) {
                 return false;
             }
@@ -380,13 +415,8 @@ public class MediaInfo {
             if (vCodecHeight == 0 || vCodecWidth == 0) {
                 return false;
             }
-
-
-
             if (vCodecName == null || vCodecName.isEmpty())
                 return false;
-
-
             return true;
         }
         return false;
@@ -508,11 +538,11 @@ public class MediaInfo {
      * ****************************************************************************
      * 测试 // new Thread(new Runnable() { // // @Override // public void run() {
      * MediaInfo("/sdcard/2x.mp4"); //这里是我们的测试视频地址, 如您测试, 则需要修改视频地址. //
-     * mif.prepare(); // Log.i(TAG,"mif is:"+ mif.toString()); // mif.release();
-     * // } // },"testMediaInfo#1").start(); // new Thread(new Runnable() { //
+     * mif.prepare(); // Log.i(TAG,"mif is:"+ mif.toString()); // mif.releaseOnTask();
+     * // } // },"testMediaInfo#1").startPreview(); // new Thread(new Runnable() { //
      * // @Override // public void run() { // // TODO Auto-generated method stub
      * // MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");//这里是我们的测试视频地址, 如您测试,
      * 则需要修改视频地址. // mif.prepare(); // Log.i(TAG,"mif is:"+ mif.toString()); //
-     * mif.release(); // } // },"testMediaInfo#2").start();
+     * mif.releaseOnTask(); // } // },"testMediaInfo#2").startPreview();
      */
 }

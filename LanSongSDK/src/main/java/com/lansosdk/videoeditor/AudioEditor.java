@@ -32,6 +32,15 @@ public class AudioEditor {
     }
 
     /**
+     * 取消当前操作;
+     */
+    public void cancel(){
+        if(editor!=null){
+            editor.cancel();
+        }
+    }
+
+    /**
      * 注意,这个类是直接把音频和视频合并在一起;
      *
      * 不检查音频和视频的长度,

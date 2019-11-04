@@ -30,7 +30,7 @@ public class DrawPadConcatVideo {
      *  视频会默认以最大的宽或高和padWidth/padHeight对齐,然后调整另一边;
      *
      * @param ctx
-     * @param padWidth 拼接后的视频宽高.
+     * @param padWidth 拼接后的视频宽高. 注意请一定保证此宽高是16的倍数; 如果不是16的倍数,在低端手机上可能会返回错误回调;
      * @param padHeight
      * @param dstPath 拼接后保存到的目标视频路径
      */
@@ -209,7 +209,7 @@ public class DrawPadConcatVideo {
 //                    Log.e("tag", "---currentTimeUs---: "+ currentTimeUs);
 //                }
 //            });
-//            concatVideo.start();
+//            concatVideo.startPreview();
 //
 //
 //        } catch (IOException e) {
