@@ -7,12 +7,11 @@
 
 
 ## 版本3.7.0
-- AE模板: 图片替换视频时的 视频处理优化
-- 增加DrawPadConcatView和DrawPadConcatExecute, 用作视频转场动画.
-- 增加LanSongAnimation 类似LanSongFilter 是动画的父类, 所有的动画均继承他.
-- 增加LanSongMaskAnimation , 遮罩父类
-- 优化LSOVideoAsset, 可以直接读取视频帧,读取视频缩略图.
-- 优化其他代码.
+- 优化DrawPadAllExecute2类.
+- 优化转场DrawPadConcatView,mask转场支持json文件
+- 视频子图层可以单独设置到指定图层位置.
+- 优化视频资源类, LSOVideoAsset类.
+- AE模板的替换视频优化.
 
 
 
