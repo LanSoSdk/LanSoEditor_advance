@@ -871,27 +871,6 @@ public class DrawPadView2 extends FrameLayout {
             return null;
         }
     }
-
-    /**
-     * 增加一个mv图层,
-     *
-     * 是否在mv好了之后, 直接去显示, 如果不想直接显示, 可以先设置isShow=false,然后在需要显示的使用, 调用
-     * {@link MVLayer #setPlayEnable(boolean)}, 此方法暂时只能被调用一次.
-     *
-     * @param srcPath
-     * @param maskPath
-     * @param isplay   是否直接显示.
-     * @return
-     */
-    public MVLayer addMVLayer(String srcPath, String maskPath, boolean isplay) {
-        if (renderer != null)
-            return renderer.addMVLayer(srcPath, maskPath, isplay);
-        else {
-            Log.e(TAG, "addMVLayer error render is not avalid");
-            return null;
-        }
-    }
-
     /**
      * 获得一个 ViewLayer,
      * 您可以在获取后,仿照我们的例子,来为视频增加各种UI控件.

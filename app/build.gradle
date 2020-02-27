@@ -2,10 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-//    buildToolsVersion "27.0.3"
-
     defaultConfig {
-        applicationId "com.lansoeditor.github"
+        applicationId "com.lansoeditor.advanceDemo"
         minSdkVersion 18
         targetSdkVersion 27
         compileOptions {
@@ -39,6 +37,10 @@ dependencies {
     implementation files('libs/textsurface.jar')
     implementation files('libs/particlelibrary.jar')
 
+
+
+    //演示界面使用了第三方控件;需要在allproject中增加 maven { url 'https://jitpack.io' }
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.github.warkiz.widget:indicatorseekbar:1.2.9'
 
 

@@ -170,7 +170,7 @@ public class MoreLayHeadSeekActivity extends Activity {
         bmpLayer.setVisibility(Layer.INVISIBLE);
 
         scaleAnim = new ScaleAnimation(bmpLayerStartTime, 2 * 1000 * 1000, 1.0f, 2.0f);
-        bmpLayer.addAnimation(scaleAnim);
+        bmpLayer.addAnimationOLD(scaleAnim);
 
         //第三层是另一个视频
         mplayer2 = new MediaPlayer();

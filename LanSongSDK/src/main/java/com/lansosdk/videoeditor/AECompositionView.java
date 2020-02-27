@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Surface;
 import android.view.TextureView;
@@ -17,7 +16,6 @@ import com.lansosdk.LanSongAe.LSOAeDrawable;
 import com.lansosdk.LanSongAe.LSOAeImage;
 import com.lansosdk.LanSongAe.LSOAeImageLayer;
 import com.lansosdk.LanSongAe.LSOAeText;
-import com.lansosdk.LanSongAe.LSOLoadAeJsons;
 import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.AECompositionRunnable;
 import com.lansosdk.box.AEJsonLayer;
@@ -27,30 +25,32 @@ import com.lansosdk.box.AEVideoLayer;
 import com.lansosdk.box.AudioLayer;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.LSOAudioAsset;
+import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPreviewBufferingListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
+import com.lansosdk.box.OnLanSongSDKRenderProgressListener;
+import com.lansosdk.box.OnLanSongSDKThumbnailListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 /**
- * Ae的预览合成类.
+ * Ae的预览和导出合成类.
  *
+ *
+ * 如果你不需要预览,则可以用AECompositionExecute直接导出;
  */
 public class AECompositionView extends FrameLayout {
 
     private AECompositionRunnable renderer;
-
-
 
     private TextureRenderView textureRenderView;
     private SurfaceTexture mSurfaceTexture = null;
@@ -142,6 +142,7 @@ public class AECompositionView extends FrameLayout {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface,
                                               int width, int height) {
+
             mSurfaceTexture = surface;
             drawPadHeight = height;
             drawPadWidth = width;
@@ -151,6 +152,7 @@ public class AECompositionView extends FrameLayout {
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface,
                                                 int width, int height) {
+
             mSurfaceTexture = surface;
             drawPadHeight = height;
             drawPadWidth = width;
@@ -173,49 +175,6 @@ public class AECompositionView extends FrameLayout {
     private int desireWidth;
     private int desireHeight;
     private onDrawPadSizeChangedListener sizeChangedListener;
-
-    /**
-     * 设置容器的大小, 在设置后, 我们会根据这个大小来调整DrawPadAEPriview这个类的大小.
-     * 从而让画面不变形;
-     * @param width
-     * @param height
-     * @param cb
-     */
-    public void setDrawPadSize(int width, int height, onDrawPadSizeChangedListener cb) {
-
-        requestLayoutCount=0;
-        desireWidth=width;
-        desireHeight=height;
-
-        if (width != 0 && height != 0) {
-            if(drawPadWidth==0 || drawPadHeight==0){  //直接重新布局UI
-                textureRenderView.setVideoSize(width, height);
-                textureRenderView.setVideoSampleAspectRatio(1, 1);
-                sizeChangedListener = cb;
-                requestLayoutPreview();
-            }else{
-                float setAcpect = (float) width / (float) height;
-                float setViewacpect = (float) drawPadWidth / (float) drawPadHeight;
-
-                if (setAcpect == setViewacpect) { // 如果比例已经相等,不需要再调整,则直接显示.
-                    if (cb != null) {
-                        isLayoutOk=true;
-                        cb.onSizeChanged(width, height);
-                    }
-                } else if (Math.abs(setAcpect - setViewacpect) * 1000 < 16.0f) {
-                    if (cb != null) {
-                        cb.onSizeChanged(width, height);
-                    }
-                } else if (textureRenderView != null) {
-                    textureRenderView.setVideoSize(width, height);
-                    textureRenderView.setVideoSampleAspectRatio(1, 1);
-                    sizeChangedListener = cb;
-                }
-                requestLayoutPreview();
-            }
-        }
-    }
-
     private int requestLayoutCount=0;
     /**
      * 检查得到的大小, 如果和view成比例,则直接回调; 如果不成比例,则重新布局;
@@ -253,6 +212,7 @@ public class AECompositionView extends FrameLayout {
         if(requestLayoutCount>3){
             LSOLog.e("DrawPadAEPreview layout view error.  return  callback");
             if(sizeChangedListener!=null){
+                isLayoutOk=true;
                 sizeChangedListener.onSizeChanged(drawPadWidth,drawPadHeight);
             }else if(mViewAvailable!=null){
                 mViewAvailable.viewAvailable(this);
@@ -261,6 +221,50 @@ public class AECompositionView extends FrameLayout {
             requestLayout();
         }
     }
+    /**
+     * 设置容器的大小, 在设置后, 我们会根据这个大小来调整DrawPadAEPriview这个类的大小.
+     * 从而让画面不变形;
+     * @param width
+     * @param height
+     * @param cb
+     */
+    public void setDrawPadSize(int width, int height, onDrawPadSizeChangedListener cb) {
+
+        requestLayoutCount=0;
+        desireWidth=width;
+        desireHeight=height;
+
+        if (width != 0 && height != 0) {
+            if(drawPadWidth==0 || drawPadHeight==0){  //直接重新布局UI
+                textureRenderView.setVideoSize(width, height);
+                textureRenderView.setVideoSampleAspectRatio(1, 1);
+                sizeChangedListener = cb;
+                requestLayoutPreview();
+            }else{
+                float setAcpect = (float) width / (float) height;
+                float setViewacpect = (float) drawPadWidth / (float) drawPadHeight;
+
+                if (setAcpect == setViewacpect) { // 如果比例已经相等,不需要再调整,则直接显示.
+                    if (cb != null) {
+                        cb.onSizeChanged(width, height);
+                    }
+                    isLayoutOk=true;
+                } else if (Math.abs(setAcpect - setViewacpect) * 1000 < 16.0f) {
+                    if (cb != null) {
+                        cb.onSizeChanged(width, height);
+                    }
+                    isLayoutOk=true;
+                } else if (textureRenderView != null) {
+                    textureRenderView.setVideoSize(width, height);
+                    textureRenderView.setVideoSampleAspectRatio(1, 1);
+                    sizeChangedListener = cb;
+                }
+                requestLayoutPreview();
+            }
+        }
+    }
+
+
     /**
      * 获取当前View的 宽度
      */
@@ -286,12 +290,7 @@ public class AECompositionView extends FrameLayout {
     public int getDrawPadHeight() {
         return drawPadHeight;
     }
-   //-------------------------------增加Ae的代码....
-
-
-
-
-
+   //------------------------------------------Ae的代码-----------------------------------------------------------
     /**
      * 增加第1层
      * 视频图层; 没有则设置为nil
@@ -374,7 +373,19 @@ public class AECompositionView extends FrameLayout {
             return null;
         }
     }
-
+    public void addBitmap3DLayer(LSOAeDrawable drawables){
+        createRender();
+//        if(renderer !=null && !renderer.isRunning() && drawables!=null && drawables.size()>0) {
+//            AESegmentLayer layer= renderer.addAeLayer(drawables);
+//            if(layer==null){
+//                LSOLog.e("AECompositionView addSecondLayer error.");
+//            }
+//            secondLayerAdd= layer!=null;
+//            return layer;
+//        }else{
+//            return null;
+//        }
+    }
 
     /**
      * 增加第3层
@@ -448,15 +459,6 @@ public class AECompositionView extends FrameLayout {
             return null;
         }
     }
-
-
-    private void createRender(){
-        if(renderer==null){
-            renderer =new AECompositionRunnable(getContext());
-        }
-        isStarted=false;
-    }
-
     /**
      * 在预览的时候, 是否设置循环.
      * [导出时无效]
@@ -470,14 +472,24 @@ public class AECompositionView extends FrameLayout {
     }
 
     /**
-     * 在预览的时候,设置播放器的音量.
-     * [导出时无效]
+     * 设置声音的音量.
      * @param volume 音量. 1.0原声;0.0静音;2.0是放大两倍;
      */
     public void setPreviewVolume(float volume){
         if(renderer!=null){
             renderer.setPlayerVolume(volume);
         }
+    }
+
+    /**
+     * 设置所有图层的声音音量;
+     *
+     * 同setPreviewVolume 设置声音音量,
+     * 在预览和最后生成的声音都变化;
+     * @param volume
+     */
+    public void setAudioVolume(float volume){
+        setPreviewVolume(volume);
     }
 
     /**
@@ -531,6 +543,15 @@ public class AECompositionView extends FrameLayout {
         }
     }
 
+    public BitmapLayer addLogoLayer(Bitmap bmp, LSOLayerPosition position){
+        createRender();
+        if(renderer !=null && bmp!=null){
+            return  renderer.addLogoLayer(bmp,position);
+        }else {
+            LSOLog.e("AECompositionView 增加图片图层失败...");
+            return  null;
+        }
+    }
     /**
      * 增加图片序列,
      * 一般用在动态的透明logo
@@ -548,10 +569,8 @@ public class AECompositionView extends FrameLayout {
             return  null;
         }
     }
-    /**
-     * 有些Ae模板是视频的, 则声音会单独导出为mp3格式, 从这里增加;
-     * @param audioPath
-     */
+
+    @Deprecated
     public void addAeModuleAudio(String audioPath){
         if (renderer != null && !renderer.isRunning()) {
             renderer.addAeModuleAudio(audioPath);
@@ -697,15 +716,14 @@ public class AECompositionView extends FrameLayout {
      *
      * @param srcPath
      * @param startFromPadUs   从容器的什么位置开始增加
-     * @param startAudioTimeUs 把当前声音的开始时间增加进去.
-     * @param durationUs       增加多少, 时长.
+     * @param startAudioTimeUs 裁剪声音的开始时间
+     * @param endAudioTimeUs   裁剪声音的结束时间;
      * @return
      */
-    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
-                                    long startAudioTimeUs, long durationUs) {
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,long startAudioTimeUs, long endAudioTimeUs) {
         if (renderer != null && !renderer.isRunning()) {
             AudioLayer layer=renderer.addAudioLayer(srcPath, startFromPadUs,
-                    startAudioTimeUs, durationUs);
+                    startAudioTimeUs, endAudioTimeUs);
             if(layer==null){
                 LSOLog.e("AECompositionView addAudioLayer error. path:"+srcPath);
             }
@@ -722,11 +740,18 @@ public class AECompositionView extends FrameLayout {
     public boolean isExportRunning(){
         return  renderer!=null && renderer.isExportMode();
     }
+
+    /**
+     * 我们的容器本质是是一个线程,这个是获取当前容器线程是否在运行;
+     * 线程运行不一定正在播放;
+     * @return
+     */
     public boolean isRunning(){
         return renderer!=null && renderer.isRunning();
     }
     /**
-     * 预览 进度监听
+     * 预览播放进度监听
+     * @param listener 此监听有两个参数,分别是long ptsUs(当前渲染的时间戳) + int percent, 当前的百分比;
      */
     public void setOnLanSongSDKProgressListener(OnLanSongSDKProgressListener listener) {
         createRender();
@@ -734,7 +759,6 @@ public class AECompositionView extends FrameLayout {
             renderer.setOnLanSongSDKProgressListener(listener);
         }
     }
-
     /**
      * 后台导出进度;
      * @param listener
@@ -745,7 +769,6 @@ public class AECompositionView extends FrameLayout {
             renderer.setOnLanSongSDKExportProgressListener(listener);
         }
     }
-
     /**
      * 完成回调.
      * 两种情况:
@@ -780,6 +803,47 @@ public class AECompositionView extends FrameLayout {
             renderer.setOnLanSongSDKPreviewBufferingListener(listener);
         }
     }
+
+    /**
+     * 我们的渲染是另外一个线程执行的,你可以用此监听得到当前渲染的进度;
+     * 渲染进度和播放进度的区别是: 先渲染好一帧,然后才可以播放;类似网络播放器有两个进度条一样;
+     *
+     * @param listener 当前渲染进度; 此监听有两个参数,分别是long ptsUs(当前渲染的时间戳) + int percent, 当前的百分比;
+     */
+    public void setOnLanSongSDKRenderProgressListener(OnLanSongSDKRenderProgressListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.setOnLanSongSDKRenderProgressListener(listener);
+        }
+    }
+
+    /**
+     * 异步获取Ae模板合成后的视频 的缩略图.
+     * 注意:请不要在这里做过多的图片处理操作, 以免造成线程卡顿, 应该放到一个list中;
+     * @param frameCnt 要获取的张数 建议不要超过30张;
+     * @param listener 缩略图监听 返回的是bitmap类型的数据;
+     */
+    public void getThumbnailBitmapsAsynchronously(int frameCnt, OnLanSongSDKThumbnailListener listener){
+        createRender();
+        //判断最大是50张;
+        if(renderer!=null && frameCnt>0 && frameCnt<=50 && listener!=null){
+            renderer.getThumbnailBitmapsAsynchronously(frameCnt,listener);
+        }
+    }
+
+    /**
+     * 异步获取Ae模板合成后的视频 的缩略图.
+     * @param listener
+     */
+    public void getThumbnailBitmapsAsynchronously(OnLanSongSDKThumbnailListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.getThumbnailBitmapsAsynchronously(10,listener);
+        }
+    }
+
+
+    //---------------------------------------------------------------------------------------------
     /**
      * 布局是否好.
      * @return
@@ -789,7 +853,7 @@ public class AECompositionView extends FrameLayout {
     }
 
     /**
-     * 当前界整个
+     * 当前是否在播放;
      * @return
      */
     public boolean isPlaying(){
@@ -797,6 +861,8 @@ public class AECompositionView extends FrameLayout {
     }
     private int lastPercent=0; //上一个百分比;
     private boolean isStarted;
+
+
 
     /**
      * 设置在导出时 码率
@@ -822,7 +888,7 @@ public class AECompositionView extends FrameLayout {
     /**
      *  是否禁止在预览过程中,  禁止缓冲.
      * 如果模板很复杂, 渲染很耗时, 默认是返回缓冲监听;
-     * 默认是 不禁止.
+     * 默认是 禁止.
      * 如果禁止,当模板复杂,耗时严重时,会导致音视频不同步;
      * @param disable
      */
@@ -844,22 +910,21 @@ public class AECompositionView extends FrameLayout {
             renderer.updateDrawPadSize(drawPadWidth,drawPadHeight);
             renderer.setSurface(new Surface(mSurfaceTexture));
             isStarted= renderer.startPreview();
-
-
             LSOLog.i("AEComposition startPreview.ret:"+isStarted);
             secondLayerAdd=!isStarted;
             return isStarted;
         }else{
-            if(renderer!=null && !renderer.isRunning()){
-                LSOLog.e("开启AePreview 失败.mSurfaceTexture 无效 :");
+            boolean ret=renderer!=null && renderer.isRunning();
+            if(ret){
+                LSOLog.w("AeCompositionView  is running...");
             }
-            return  false;
+            return ret;
         }
     }
     /**
      * 开始导出Ae模板.
-     * 导出后, 会以视频的形式返回给你
-     * 你可以不预览,add好各种图层后, 直接调用此方法.
+     * 导出后, 会把生成的视频完整路径返回给你
+     * @return 已经开始,返回true, 无法导出返回false
      */
     public boolean startExport(){
         if(renderer !=null) {
@@ -868,6 +933,7 @@ public class AECompositionView extends FrameLayout {
             return false;
         }
     }
+
     /**
      * 暂停预览画面.
      * 注意: 不能用在Activity的 onPause中,因为onPause会销毁 TextureView,从而整个OpenGL语境就没有了.
@@ -891,6 +957,41 @@ public class AECompositionView extends FrameLayout {
         }
     }
 
+    /**
+     * 设置为seek模式, 用在SeekBar的场合
+     * 在开始seek的时候,设置为true,当seekbar结束的时候, 设置为false;
+     * @param is
+     */
+    public void setSeekMode(boolean is){
+        if(renderer!=null){
+            renderer.setSeekMode(is);
+        }
+    }
+
+    /**
+     * 定位到某一点, 在定位的时候, 默认是不播放声音, 暂停状态;
+     * @param us
+     */
+    public void seekToTimeUs(long us){
+        if(renderer!=null){
+            renderer.seekToTimeUs(us);
+        }
+    }
+
+    /**
+     * 获取Ae模板的总时长,
+     * @return
+     */
+    public long getAeDurationUs(){
+        long  ret=0;
+        if(renderer!=null && renderer.isRunning()){
+            ret=renderer.getAeDurationUs();
+        }
+        if(ret==0){
+            ret=100*1000;
+        }
+        return ret;
+    }
 
     /**
      *
@@ -917,8 +1018,12 @@ public class AECompositionView extends FrameLayout {
         }
         isStarted=false;
     }
-
-
+    private void createRender(){
+        if(renderer==null){
+            renderer =new AECompositionRunnable(getContext());
+        }
+        isStarted=false;
+    }
     /**
      * 打印json中的所有的图片和文字信息;
      * @param drawable

@@ -301,6 +301,7 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
             videoOneDo2.setOnVideoOneDoProgressListener(new OnLanSongSDKProgressListener() {
                 @Override
                 public void onLanSongSDKProgress(long ptsUs, int percent) {
+                    Log.e("demo", "pts Us:: " + ptsUs + "  percnet " + percent);
                     progressDialog.setProgress(percent);
                 }
             });

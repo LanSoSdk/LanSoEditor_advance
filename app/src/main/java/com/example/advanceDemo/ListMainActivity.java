@@ -18,34 +18,16 @@ import com.anthonycr.grant.PermissionsResultAction;
 import com.example.advanceDemo.scene.GameVideoDemoActivity;
 import com.example.advanceDemo.utils.ConvertToEditModeDialog;
 import com.example.advanceDemo.utils.CopyDefaultVideoAsyncTask;
-import com.example.advanceDemo.utils.CopyFileFromAssets;
-import com.example.advanceDemo.utils.DemoLog;
-import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.utils.FileExplorerActivity;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.LanSongAe.LSOAeDrawable;
-import com.lansosdk.box.AudioLayer;
-import com.lansosdk.box.AudioPad;
-import com.lansosdk.box.BitmapLayer;
-import com.lansosdk.box.LSOBitmapAsset;
-import com.lansosdk.box.LSOLayerPosition;
-import com.lansosdk.box.LSOVideoOption;
-import com.lansosdk.box.OnAudioPadExecuteCompletedListener;
-import com.lansosdk.box.OnLanSongSDKCompletedListener;
-import com.lansosdk.box.OnLanSongSDKProgressListener;
-import com.lansosdk.box.VideoFrameLayer;
-import com.lansosdk.box.onAudioPadProgressListener;
-import com.lansosdk.box.onAudioPadThreadProgressListener;
-import com.lansosdk.videoeditor.AudioPadExecute;
-import com.lansosdk.videoeditor.DrawPadAllExecute2;
+import com.lansosdk.box.LSOVideoAsset;
 import com.lansosdk.videoeditor.EditModeVideo;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.MediaInfo;
 
 import java.io.File;
-import java.util.List;
 
 
 public class ListMainActivity extends Activity implements OnClickListener {
@@ -73,12 +55,9 @@ public class ListMainActivity extends Activity implements OnClickListener {
         testPermission();
 
         initView();
-
         //显示版本提示
         DemoUtil.showVersionDialog(ListMainActivity.this);
-
         testFile();
-
     }
 
     @Override
@@ -132,7 +111,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
             }
         }
     }
-
     // -----------------------------
     private void initView() {
         tvVideoPath = (TextView) findViewById(R.id.id_main_tvvideo);
@@ -145,7 +123,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_mainlist_bitmaps).setOnClickListener(this);
         findViewById(R.id.id_mainlist_videoplay).setOnClickListener(this);
         findViewById(R.id.id_mainlist_gamevideo).setOnClickListener(this);
-
 
         //---------------------
         findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
@@ -179,7 +156,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
             }
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -187,8 +163,8 @@ public class ListMainActivity extends Activity implements OnClickListener {
             case RESULT_OK:
                 if (requestCode == SELECT_FILE_REQUEST_CODE) {
                     Bundle b = data.getExtras();
-                    String seleced = b.getString("SELECT_VIDEO");
-                    checkConvertDialog(seleced);
+                    String selected = b.getString("SELECT_VIDEO");
+                    checkConvertDialog(selected);
                 }
                 break;
             default:
@@ -228,10 +204,13 @@ public class ListMainActivity extends Activity implements OnClickListener {
         }
     }
 
+
     private void startDemoActivity(Class<?> cls) {
         String path = tvVideoPath.getText().toString();
         Intent intent = new Intent(ListMainActivity.this, cls);
         intent.putExtra("videopath", path);
+        DemoApplication.getInstance().currentEditVideo = path;
+
         startActivity(intent);
     }
 
@@ -249,6 +228,7 @@ public class ListMainActivity extends Activity implements OnClickListener {
                     public void onGranted() {
                         isPermissionOk = true;
                     }
+
                     @Override
                     public void onDenied(String permission) {
                         isPermissionOk = false;
@@ -257,9 +237,5 @@ public class ListMainActivity extends Activity implements OnClickListener {
     }
 
     private void testFile() {
-
-
-
     }
-
 }

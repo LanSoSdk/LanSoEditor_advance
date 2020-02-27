@@ -1,41 +1,29 @@
 package com.lansosdk.videoeditor;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.SurfaceTexture;
-import android.os.Build;
-import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.Surface;
-import android.view.TextureView;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import com.lansosdk.LanSongAe.LSOAeDrawable;
-import com.lansosdk.LanSongAe.LSOAeImage;
-import com.lansosdk.LanSongAe.LSOAeImageLayer;
-import com.lansosdk.LanSongAe.LSOAeText;
-import com.lansosdk.LanSongFilter.LanSongFilter;
-import com.lansosdk.box.AECompositionRunnable;
 import com.lansosdk.box.AEJsonLayer;
 import com.lansosdk.box.AEMVLayer;
-import com.lansosdk.box.AESegmentLayer;
+import com.lansosdk.box.AERenderRunnable;
 import com.lansosdk.box.AEVideoLayer;
 import com.lansosdk.box.AudioLayer;
 import com.lansosdk.box.BitmapLayer;
+import com.lansosdk.box.DrawPad;
+import com.lansosdk.box.DrawPadAERunnable;
 import com.lansosdk.box.LSOAudioAsset;
+import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.OnLanSongSDKCompletedListener;
-import com.lansosdk.box.OnLanSongSDKErrorListener;
-import com.lansosdk.box.OnLanSongSDKExportProgressListener;
-import com.lansosdk.box.OnLanSongSDKProgressListener;
-import com.lansosdk.box.onDrawPadSizeChangedListener;
+import com.lansosdk.box.OnAERenderCompletedListener;
+import com.lansosdk.box.OnAERenderErrorListener;
+import com.lansosdk.box.OnAERenderProgressListener;
+import com.lansosdk.box.OnDrawPadCancelAsyncListener;
+import com.lansosdk.box.onDrawPadCompletedListener;
+import com.lansosdk.box.onDrawPadErrorListener;
+import com.lansosdk.box.onDrawPadProgressListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -43,17 +31,28 @@ import java.util.Map;
  */
 public class AECompositionExecute {
 
-
     private boolean secondLayerAdd=false;
 
-    private AECompositionRunnable renderer;
+    public AERenderRunnable aeRenderer;
 
+    public DrawPadAERunnable drawPadRenderer;
+
+    public static  boolean forceUseDrawPad=false;
+
+    private String drawPadOutPath;
+
+    private BitmapLayer drawPadLogoLayer =null;
+    private LSOLayerPosition drawPadLogoPosition;
 
     public AECompositionExecute(Context context){
-        if(renderer==null){
-            renderer =new AECompositionRunnable(context);
+        if(VideoEditor.isSupportNV21ColorFormat() &&!forceUseDrawPad){
+            aeRenderer =new AERenderRunnable(context);
+            LSOLog.d("AERenderExecute use AERenderRunnable...");
+        }else{
+            drawPadOutPath=LanSongFileUtil.createMp4FileInBox();
+            drawPadRenderer=new DrawPadAERunnable(context,drawPadOutPath);
+            LSOLog.d("AERenderExecute use DrawPadAERunnable...");
         }
-        isStarted=false;
     }
     /**
      * 设置在导出时 码率
@@ -61,20 +60,27 @@ public class AECompositionExecute {
      * @param bitrate 码率,最低1*1024*1024;
      */
     public void setExportBitrate(int bitrate){
-        if(renderer!=null){
-            renderer.setExportBitrate(bitrate);
+        if(aeRenderer!=null){
+            aeRenderer.setEncodeBitrate(bitrate);
+        }else if(drawPadRenderer!=null){
+            drawPadRenderer.setEncodeBitrate(bitrate);
         }
     }
     /**
      * 增加第1层
      * 视频图层; 没有则设置为nil
      */
-    public AEVideoLayer addFirstLayer(String videoPath) throws IOException {
-        if(renderer !=null && !renderer.isRunning() && LanSongFileUtil.fileExist(videoPath)){
-            return renderer.addVideoLayer(videoPath);
-        }else{
-            return null;
+    public AEVideoLayer addFirstLayer(String videoPath){
+        AEVideoLayer layer=null;
+        if(aeRenderer !=null) {
+            layer= aeRenderer.addBgVideoLayer(videoPath);
+        }else if(drawPadRenderer!=null){
+            layer= drawPadRenderer.addVideoLayer(videoPath);
         }
+        if(layer==null){
+            LSOLog.e("AERenderExecute addVideoLayer error. input is "+ MediaInfo.checkFile(videoPath,true));
+        }
+        return layer;
     }
 
     /**
@@ -86,25 +92,22 @@ public class AECompositionExecute {
             LSOLog.e("已经增加第二层(AE图层). 请确认你的增加顺序.");
             return null;
         }
-        if(renderer !=null && !renderer.isRunning()) {
-            AEJsonLayer layer= renderer.addAeLayer(drawable);
-            if(layer==null){
-                LSOLog.e("AECompositionView addSecondLayer error.");
-            }
-            secondLayerAdd= layer!=null;
-            return layer;
-        }else{
-            return null;
+        AEJsonLayer layer=null;
+        if(aeRenderer !=null) {
+            layer= aeRenderer.addAeLayer(drawable);
+        }else if(drawPadRenderer!=null) {
+            layer = drawPadRenderer.addAeLayer(drawable);
         }
+        if(layer==null){
+            LSOLog.e("AERenderExecute addAeLayer error input is:"+ drawable);
+        }
+        return layer;
     }
-
-
     /**
      *
      * 增加第2层
      * Ae json图层;
      *  [重载方法.]
-     * LSNEW
      * @param drawable
      * @param startIndex
      * @param endIndex
@@ -117,37 +120,17 @@ public class AECompositionExecute {
             return null;
         }
         drawable.setCutFrame(startIndex,endIndex);
-        AEJsonLayer layer= renderer.addAeLayer(drawable);
-        if(layer==null){
-            LSOLog.e("AECompositionView addSecondLayer error.");
+        AEJsonLayer layer=null;
+        if(aeRenderer !=null) {
+            layer= aeRenderer.addAeLayer(drawable);
+        }else if(drawPadRenderer!=null) {
+            layer = drawPadRenderer.addAeLayer(drawable);
         }
-        secondLayerAdd= layer!=null;
+        if(layer==null){
+            LSOLog.e("AERenderExecute addAeLayer error input is:"+ drawable);
+        }
         return layer;
     }
-
-    /**
-     * 增加第2层
-     * Ae json图层;
-     * [重载方法.]
-     * LSNEW
-     */
-    public AESegmentLayer addSecondLayer(List<LSOAeDrawable> drawables){
-        if(secondLayerAdd){
-            LSOLog.e("已经增加第二层(AE图层). 请确认你的增加顺序.");
-            return null;
-        }
-        if(renderer !=null && !renderer.isRunning() && drawables!=null && drawables.size()>0) {
-            AESegmentLayer layer= renderer.addAeLayer(drawables);
-            if(layer==null){
-                LSOLog.e("AECompositionView addSecondLayer error.");
-            }
-            secondLayerAdd= layer!=null;
-            return layer;
-        }else{
-            return null;
-        }
-    }
-
 
     /**
      * 增加第3层
@@ -155,15 +138,16 @@ public class AECompositionExecute {
      * [没有则不调用]
      */
     public AEMVLayer addThirdLayer(String colorPath, String maskPath){
-        if(renderer !=null && !renderer.isRunning()&& colorPath!=null && maskPath!=null) {
-            AEMVLayer layer= renderer.addMVLayer(colorPath,maskPath);
-            if(layer==null){
-                LSOLog.e("AECompositionView addThirdLayer MV Video error.");
-            }
-            return layer;
-        }else{
-            return null;
+        AEMVLayer aemvLayer=null;
+        if(aeRenderer !=null){
+            aemvLayer= aeRenderer.addMVLayer(colorPath,maskPath);
+        }else if(drawPadRenderer!=null) {
+            aemvLayer = drawPadRenderer.addMVLayer(colorPath, maskPath);
         }
+        if(aemvLayer==null){
+            LSOLog.e("AERenderExecute addMVLayer error color path:"+colorPath+ " mask path:"+maskPath);
+        }
+        return aemvLayer;
     }
 
     /**
@@ -173,19 +157,17 @@ public class AECompositionExecute {
      * @return
      */
     public AEJsonLayer addForthLayer(LSOAeDrawable drawable){
-        if(renderer !=null && !renderer.isRunning()) {
-            AEJsonLayer layer= renderer.addAeLayer(drawable);
-            if(layer==null){
-                LSOLog.e("AECompositionView addForthLayer  Ae Json error.");
-            }
-            return layer;
-        }else{
-            return null;
+        AEJsonLayer layer=null;
+        if(aeRenderer !=null) {
+            layer= aeRenderer.addAeLayer(drawable);
+        }else if(drawPadRenderer!=null) {
+            layer = drawPadRenderer.addAeLayer(drawable);
         }
+        if(layer==null){
+            LSOLog.e("AERenderExecute addAeLayer error input is:"+ drawable);
+        }
+        return layer;
     }
-
-
-
     /**
      * 增加第5层
      * 增加mv图层
@@ -193,15 +175,16 @@ public class AECompositionExecute {
      * @return
      */
     public AEMVLayer addFifthLayer(String colorPath, String maskPath){
-        if(renderer !=null && !renderer.isRunning() && colorPath!=null && maskPath!=null) {
-            AEMVLayer layer= renderer.addMVLayer(colorPath,maskPath);
-            if(layer==null){
-                LSOLog.e("AECompositionView addFifthLayer MV Video error.");
-            }
-            return layer;
-        }else{
-            return null;
+        AEMVLayer aemvLayer=null;
+        if(aeRenderer !=null){
+            aemvLayer= aeRenderer.addMVLayer(colorPath,maskPath);
+        }else if(drawPadRenderer!=null) {
+            aemvLayer = drawPadRenderer.addMVLayer(colorPath, maskPath);
         }
+        if(aemvLayer==null){
+            LSOLog.e("AERenderExecute addMVLayer error color path:"+colorPath+ " mask path:"+maskPath);
+        }
+        return aemvLayer;
     }
 
     /**
@@ -213,30 +196,16 @@ public class AECompositionExecute {
      * @return 返回图片图层对象
      */
     public BitmapLayer addBitmapLayer(ArrayList<Bitmap> bmpList, long intervalUs,boolean loop) {
-        if(renderer !=null && bmpList!=null){
-            return  renderer.addBitmapLayer(bmpList,intervalUs,loop);
-        }else {
-            LSOLog.e("AECompositionView 增加图片图层失败...");
-            return  null;
+        BitmapLayer layer=null;
+        if(aeRenderer !=null && bmpList!=null) {
+            layer= aeRenderer.addBitmapLayer(bmpList,intervalUs,loop);
+        }else if(drawPadRenderer!=null) {
+            layer = drawPadRenderer.addBitmapLayer(bmpList,intervalUs,loop);
         }
-    }
-    /**
-     * 有些Ae模板是视频的, 则声音会单独导出为mp3格式, 从这里增加;
-     * @param audioPath
-     */
-    public void addAeModuleAudio(String audioPath){
-        if (renderer != null && !renderer.isRunning()) {
-            renderer.addAeModuleAudio(audioPath);
+        if(layer==null){
+            LSOLog.e("AERenderExecute addBitmapLayer error bitmap is:"+bmpList);
         }
-    }
-    /**
-     * 有些Ae模板是视频的, 则声音会单独导出为mp3格式, 从这里增加;
-     * @param audioPath
-     */
-    public void addAeModuleAudio(LSOAudioAsset audioPath){
-        if (renderer != null && !renderer.isRunning()) {
-            renderer.addAeModuleAudio(audioPath);
-        }
+        return  layer;
     }
 
     /**
@@ -245,22 +214,13 @@ public class AECompositionExecute {
      * @return
      */
     public AudioLayer getAEAudioLayer(){
-        if(renderer!=null){
-            return renderer.getAEAudioLayer();
-        }else {
+        if (aeRenderer != null) {
+            return aeRenderer.getMainAudioLayer();
+        }else if(drawPadRenderer!=null){
+            return drawPadRenderer.getMainAudioLayer();
+        }else{
+            LSOLog.e("AERenderExecute getAEAudioLayer error.");
             return null;
-        }
-    }
-    /**
-     * 裁剪时长;
-     * 裁剪模板的时长.
-     * LSNEW :
-     * 在视频增加后, 音频图层增加前调用;
-     * @param durationUS
-     */
-    public void setCutDurationUS(long durationUS){
-        if(renderer!=null){
-            renderer.setCutDurationUS(durationUS);
         }
     }
     /**
@@ -268,12 +228,33 @@ public class AECompositionExecute {
      * 在start前调用
      */
     public BitmapLayer addBitmapLayer(Bitmap bmp){
-        if(renderer !=null && bmp!=null){
-            return  renderer.addBitmapLayer(bmp);
-        }else {
-            LSOLog.e("AECompositionView 增加图片图层失败...");
-            return  null;
+        BitmapLayer layer=null;
+        if(aeRenderer !=null && bmp!=null) {
+            layer= aeRenderer.addBitmapLayer(bmp);
+        }else if(drawPadRenderer!=null) {
+            layer = drawPadRenderer.addBitmapLayer(bmp);
         }
+        if(layer==null){
+            LSOLog.e("AERenderExecute addBitmapLayer error bitmap is:"+bmp);
+        }
+        return  layer;
+    }
+
+
+    public BitmapLayer addLogoLayer(Bitmap bmp, LSOLayerPosition position){
+        BitmapLayer layer=null;
+        if(aeRenderer !=null && bmp!=null){
+            layer=  aeRenderer.addLogo(bmp,position);
+        }else if(drawPadRenderer!=null){
+            drawPadLogoLayer = drawPadRenderer.addBitmapLayer(bmp);
+            drawPadLogoPosition =position;
+            layer= drawPadLogoLayer;
+        }
+
+        if(layer==null){
+            LSOLog.e("AERenderExecute addLogoLayer error bitmap is:"+bmp);
+        }
+        return  layer;
     }
     /**
      * 增加声音图层;
@@ -281,13 +262,12 @@ public class AECompositionExecute {
      * @return
      */
     public AudioLayer addAudioLayer(LSOAudioAsset audioAsset) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer= renderer.addAudioLayer(audioAsset);
-            if(layer==null){
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+audioAsset);
-            }
-            return layer;
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            return aeRenderer.addAudioLayer(audioAsset.getAudioPath());
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            return drawPadRenderer.addAudioLayer(audioAsset.getAudioPath());
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
@@ -299,15 +279,16 @@ public class AECompositionExecute {
      * @return
      */
     public AudioLayer addAudioLayer(LSOAudioAsset audioAsset,boolean loop) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer= renderer.addAudioLayer(audioAsset);
-            if(layer==null){
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+audioAsset);
-            }else{
-                layer.setLooping(loop);
-            }
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            AudioLayer layer= aeRenderer.addAudioLayer(audioAsset.getAudioPath());
+            layer.setLooping(loop);
+            return layer;
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            AudioLayer layer= drawPadRenderer.addAudioLayer(audioAsset.getAudioPath());
+            layer.setLooping(loop);
             return layer;
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
@@ -321,13 +302,12 @@ public class AECompositionExecute {
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer= renderer.addAudioLayer(srcPath);
-            if(layer==null){
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+srcPath);
-            }
-            return layer;
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            return aeRenderer.addAudioLayer(srcPath);
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            return drawPadRenderer.addAudioLayer(srcPath);
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
@@ -338,15 +318,16 @@ public class AECompositionExecute {
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath, boolean loop) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer= renderer.addAudioLayer(srcPath);
-            if(layer!=null){
-                layer.setLooping(loop);
-            }else{
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+srcPath);
-            }
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            AudioLayer layer= aeRenderer.addAudioLayer(srcPath);
+            layer.setLooping(loop);
+            return layer;
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath);
+            layer.setLooping(loop);
             return layer;
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
@@ -358,17 +339,18 @@ public class AECompositionExecute {
      *
      * 音频采样率必须和视频的声音采样率一致
      * @param srcPath
-     * @param startFromPadTime 从Ae模板的什么时间开始增加
+     * @param startFromPadUs 从Ae模板的什么时间开始增加,
      * @return  返回增加后音频层, 可以用来设置音量,快慢,变声等.
      */
-    public AudioLayer addAudioLayer(String srcPath, long startFromPadTime) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer=  renderer.addAudioLayer(srcPath, 0,startFromPadTime, -1);
-            if(layer==null){
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+srcPath);
-            }
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs) {
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            AudioLayer layer= aeRenderer.addAudioLayer(srcPath,startFromPadUs,-1);
+            return layer;
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,-1);
             return layer;
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
@@ -386,15 +368,15 @@ public class AECompositionExecute {
      * @param durationUs     把这段声音多长插入进去.
      * @return 返回一个AudioLayer对象;
      */
-    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
-                                    long durationUs) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer=  renderer.addAudioLayer(srcPath,0, startFromPadUs, durationUs);
-            if(layer==null){
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+srcPath);
-            }
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,long durationUs) {
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            AudioLayer layer= aeRenderer.addAudioLayer(srcPath,startFromPadUs,durationUs);
+            return layer;
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,durationUs);
             return layer;
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
@@ -406,102 +388,159 @@ public class AECompositionExecute {
      *
      * @param srcPath
      * @param startFromPadUs   从容器的什么位置开始增加
-     * @param startAudioTimeUs 把当前声音的开始时间增加进去.
-     * @param durationUs       增加多少, 时长.
+     * @param startAudioTimeUs 裁剪声音的开始时间
+     * @param endAudioTimeUs   裁剪声音的结束时间;
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
-                                    long startAudioTimeUs, long durationUs) {
-        if (renderer != null && !renderer.isRunning()) {
-            AudioLayer layer=renderer.addAudioLayer(srcPath, startFromPadUs,
-                    startAudioTimeUs, durationUs);
-            if(layer==null){
-                LSOLog.e("AECompositionView addAudioLayer error. path:"+srcPath);
-            }
+                                    long startAudioTimeUs, long endAudioTimeUs) {
+        if (aeRenderer != null && !aeRenderer.isRunning()) {
+            AudioLayer layer= aeRenderer.addAudioLayer(srcPath,startFromPadUs,startAudioTimeUs,endAudioTimeUs);
+            return layer;
+        }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,startAudioTimeUs,endAudioTimeUs);
             return layer;
         } else {
+            LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
         }
     }
 
+//----------------监听 回调;
+    private OnAERenderProgressListener onAERenderProgressListener;
+    private OnAERenderCompletedListener onAERenderCompletedListener;
+    private OnAERenderErrorListener onAERenderErrorListener;
+
     /**
-     * 是否运行在导出阶段;
+     * 进度监听, 回调的两个参数分别是, 时间戳, 百分比;
+     */
+    public void setOnAERenderProgressListener(OnAERenderProgressListener listener) {
+        if (aeRenderer != null) {
+            aeRenderer.setOnAERenderProgressListener(listener);
+        }else if(drawPadRenderer!=null){
+            onAERenderProgressListener=listener;
+        }
+    }
+
+    /**
+     * 完成监听
+     */
+    public void setOnAERenderCompletedListener(OnAERenderCompletedListener listener) {
+        if (aeRenderer != null) {
+            aeRenderer.setOnAERenderCompletedListener(listener);
+        }else if(drawPadRenderer!=null){
+            onAERenderCompletedListener=listener;
+        }
+    }
+    public void setOnAERenderErrorListener(OnAERenderErrorListener listener) {
+        if (aeRenderer != null) {
+            aeRenderer.setOnAERenderErrorListener(listener);
+        }else{
+            onAERenderErrorListener=listener;
+        }
+    }
+
+
+
+    /**
+     * 返回处理的时长
+     * 单位us
      * @return
      */
-    public boolean isExportRunning(){
-        return  renderer!=null && renderer.isExportMode();
-    }
-    public boolean isRunning(){
-        return renderer!=null && renderer.isRunning();
-    }
-    /**
-     * 导出进度;
-     * @param listener
-     */
-    public void setOnLanSongSDKExportProgressListener(OnLanSongSDKExportProgressListener listener) {
-        if(renderer!=null){
-            renderer.setOnLanSongSDKExportProgressListener(listener);
+    public long getDuration(){
+        if(aeRenderer !=null){
+            return aeRenderer.getDurationUS();
+        }else if(drawPadRenderer!=null){
+            return drawPadRenderer.getDuration();
+        }else {
+            LSOLog.e("get duration error, aeRenderer==null.here return 1000");
+            return  1000;
         }
     }
 
-    /**
-     * 完成回调.
-     * 两种情况:
-     * 1. 预览没有循环,退出了
-     * 2. 预览后, 导出完成.
-     */
-    public void setOnLanSongSDKCompletedListener(OnLanSongSDKCompletedListener listener){
-        if(renderer!=null){
-            renderer.setOnLanSongSDKCompletedListener(listener);
-        }
-    }
-    /**
-     * 错误监听
-     */
-    public void setOnLanSongSDKErrorListener(OnLanSongSDKErrorListener listener){
-        if(renderer!=null){
-            renderer.setOnLanSongSDKErrorListener(listener);
-        }
-    }
-
-    public boolean isPlaying(){
-        return renderer!=null && renderer.isRunning();
-    }
-
-    private int lastPercent=0; //上一个百分比;
-    private boolean isStarted;
     /**
      * 开始导出Ae模板.
      * 导出后, 会以视频的形式返回给你
      * 你可以不预览,add好各种图层后, 直接调用此方法.
      */
     public boolean startExport(){
-        if(renderer !=null) {
-            return renderer.startExport();
-        }else{
-            return false;
-        }
+            if(aeRenderer!=null&& !aeRenderer.isRunning()) {
+                return aeRenderer.start();
+            }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
+
+
+                drawPadRenderer.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
+                    @Override
+                    public void onCompleted(DrawPad v) {
+                        if(onAERenderCompletedListener!=null){
+                            LSOLog.d("AERenderExecute use drawPad completed.");
+                            onAERenderCompletedListener.onCompleted(drawPadOutPath);
+                        }
+                    }
+                });
+                drawPadRenderer.setDrawPadProgressListener(new onDrawPadProgressListener() {
+                    @Override
+                    public void onProgress(DrawPad v, long currentTimeUs) {
+                        if(onAERenderProgressListener!=null){
+                            int percent=(int)(currentTimeUs*100/getDuration());
+                            onAERenderProgressListener.onProgress(currentTimeUs,percent);
+                        }
+                    }
+                });
+                drawPadRenderer.setDrawPadErrorListener(new onDrawPadErrorListener() {
+                    @Override
+                    public void onError(DrawPad d, int what) {
+                        if(onAERenderErrorListener!=null){
+                            onAERenderErrorListener.onError("code is:"+what);
+                        }
+                    }
+                });
+                boolean ret= drawPadRenderer.startDrawPad();
+                if(ret && drawPadLogoLayer !=null){
+                    drawPadLogoLayer.setPosition(drawPadLogoPosition);
+                }
+                return ret;
+            }else{
+                return  false;
+            }
     }
     /**
-     * 取消预览
-     * [阻塞进行,一直等待到整个线程退出才返回.]
+     * 取消
+     * 如果已经收到完成监听, 则不需要调用;
      */
     public void cancel(){
-        if(renderer!=null){
-            renderer.cancel();
-            renderer=null;
+        if(aeRenderer!=null && aeRenderer.isRunning()){
+            aeRenderer.cancel();
+        }else if(drawPadRenderer!=null && drawPadRenderer.isRunning()){
+            drawPadRenderer.cancelDrawPad();
         }
-        isStarted=false;
+    }
+
+    public void cancelWithAsync(OnDrawPadCancelAsyncListener listener){
+        if(aeRenderer!=null && aeRenderer.isRunning()){
+            aeRenderer.cancelWithAsync(listener);
+        }else if(drawPadRenderer!=null && drawPadRenderer.isRunning()){
+            drawPadRenderer.cancelWithAsync(listener);
+        }
     }
     /**
      * 释放
      * 如果已经收到完成监听, 则不需要调用;
      */
     public void release(){
-        if(renderer!=null){
-            renderer.release();
-            renderer=null;
+        if(aeRenderer!=null) {
+            if (aeRenderer.isRunning()) {
+                aeRenderer.cancel();
+            } else {
+                aeRenderer.release();
+            }
+        }else if(drawPadRenderer!=null){
+            if (drawPadRenderer.isRunning()) {
+                drawPadRenderer.cancelDrawPad();
+            } else {
+                drawPadRenderer.release();
+            }
         }
-        isStarted=false;
+        LSOLog.d("AeRenderExecute released....");
     }
 }

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.advanceDemo.utils.DemoLog;
 import com.lansosdk.LanSongAe.LSOAeDrawable;
@@ -18,6 +20,7 @@ import com.lansosdk.videoeditor.LanSongFileUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAeAssets;
 import static com.example.advanceDemo.utils.CopyFileFromAssets.copyShanChu;
@@ -50,10 +53,14 @@ public class AEDemoAsset {
     public String mvColorPath2;
     public String mvMaskPath2;
 
+
+
+
     public String jsonUsedFontPath;
 
     public int startFrameIndex =0;
     public int endFrameIndex =Integer.MAX_VALUE;
+
 
     LSOAudioAsset audioAsset = null;
     String audioPath;
@@ -80,8 +87,6 @@ public class AEDemoAsset {
     public static final int AE_DEMO_NONE = 109;
 
 
-    public static final int AE_DEMO_JSON_CUT = 110;
-    public static final int AE_DEMO_JSON_CONCAT = 111;
     //两个json叠加
     public static final int AE_DEMO_TWO_JSON_OVERLAY = 112;
 
@@ -90,8 +95,8 @@ public class AEDemoAsset {
 
 
     public static final int AE_DEMO_JSON_GAUSSIAN_BLUR2 = 114;
-    public static final int AE_DEMO_JSON_KA_DIAIN = 115;
-
+    public static final int AE_DEMO_JSON_KA_DIAN = 115;
+    public static final int AE_DEMO_JSON_SAMPLE_3D = 116;
 
 
     public AEDemoAsset(Context context, int inputType) {
@@ -113,14 +118,98 @@ public class AEDemoAsset {
         json1Path = null;
         json2Path = null;
 
+        if (inputType == AE_DEMO_AOBAMA) {
+            json1Path = copyAeAssets(context, "aobama.json");
+        } else if (inputType == AE_DEMO_HAOKAN) {
+            json1Path = copyAeAssets(context, "haokan.json");
+        } else if (inputType == AE_DEMO_XIAOHUANGYA) {
+            json1Path = copyAeAssets(context, "xiaoYa.json");
+        } else if (inputType == AE_DEMO_XIANZI) {
+            json1Path = copyAeAssets(context, "zixiaxianzi.json");
+        } else if (inputType == AE_DEMO_KUAISHAN) {
+            //文字快闪;
+            json1Path = copyAeAssets(context, "kuaishan1.json");
+        } else if (inputType == AE_DEMO_VIDEOBITMAP) {
+            //早安替换视频;
+            json1Path = copyAeAssets(context, "zaoan.json");
+        } else if (inputType == AE_DEMO_MORE_PICTURE) {
+            json1Path = copyAeAssets(context, "morePicture.json");
+        }else if(inputType==AE_DEMO_TWO_JSON_OVERLAY) {
+            json1Path = copyAeAssets(context, "tianQi_c2.json");
+        }else if(inputType==AE_DEMO_JSON_GAUSSIAN_BLUR1) {  //高斯模糊1
+            json1Path = copyAeAssets(context, "gaussianBlur.json");
+        }else if(inputType== AE_DEMO_JSON_GAUSSIAN_BLUR2){  //高斯模糊2
+            json1Path = copyAeAssets(context, "gaussianBlur2.json");
+        }else if(inputType== AE_DEMO_JSON_KA_DIAN) {
+            json1Path = copyAeAssets(context, "kadian.json");
+        }else if(inputType== AE_DEMO_JSON_SAMPLE_3D) {
+            json1Path = copyAeAssets(context, "sample3D.json");
+        }else{
+            LSOLog.e("AEDemoAsset   input type  unknown(类型未知).");
+            testJson();
+        }
+        CopyAEDemoAssetAsyncTask task=new CopyAEDemoAssetAsyncTask();
+        task.execute();
+    }
 
+    /**
+     * 开始拷贝Ae的各种资源.
+     * 因为我们的资源在demo工程里,要拷贝到手机内存中.
+     * 您可能来自服务器.则不需要拷贝,只需要下载下来即可;
+     * @param listener
+     */
+    public void waitForCopyCompleted(OnAeAssetCopyedListener listener){
+
+        onAeAssetCopyedListener=listener;
+        if(copyCompleted.get()){
+            onAeAssetCopyedListener.onCopyed();
+        }
+    }
+
+
+
+
+
+
+    private AtomicBoolean copyCompleted=new AtomicBoolean(false);
+    private OnAeAssetCopyedListener onAeAssetCopyedListener=null;
+
+    private class CopyAEDemoAssetAsyncTask extends AsyncTask<Object, Object, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            copyCompleted.set(false);
+        }
+
+        @Override
+        protected synchronized Boolean doInBackground(Object... params) {
+
+            copyAssetBody();
+            copyCompleted.set(true);
+            return true;
+        }
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if(onAeAssetCopyedListener!=null){
+                onAeAssetCopyedListener.onCopyed();
+            }
+        }
+    }
+
+
+    interface  OnAeAssetCopyedListener{
+        void onCopyed();
+    }
+    /**
+     * 拷贝各种资源;
+     */
+    private void copyAssetBody(){
         if (inputType == AE_DEMO_AOBAMA) {
             bgVideo = copyAeAssets(context, "aobamaEx.mp4");
-            json1Path = copyAeAssets(context, "aobama.json");
             mvColorPath1 = copyAeAssets(context, "ao_color.mp4");
             mvMaskPath1 = copyAeAssets(context, "ao_mask.mp4");
         } else if (inputType == AE_DEMO_HAOKAN) {
-            json1Path = copyAeAssets(context, "haokan.json");
             mvColorPath1 = copyAeAssets(context, "haokan_mvColor.mp4");
             mvMaskPath1 = copyAeAssets(context, "haokan_mvMask.mp4");
             putBitmapToMap("image_0", "haokan_img_0.jpeg");
@@ -128,21 +217,22 @@ public class AEDemoAsset {
             putBitmapToMap("image_2", "haokan_img_2.jpeg");
             putBitmapToMap("image_3", "haokan_img_3.jpeg");
             putBitmapToMap("image_4", "haokan_img_4.jpeg");
+
+
+
+
         } else if (inputType == AE_DEMO_XIAOHUANGYA) {
-            json1Path = copyAeAssets(context, "xiaoYa.json");
             mvColorPath1 = copyAeAssets(context, "xiaoYa_mvColor.mp4");
             mvMaskPath1 = copyAeAssets(context, "xiaoYa_mvMask.mp4");
             putBitmapToMap("image_0", "xiaoYa_img_0.jpeg");
             putBitmapToMap("image_1", "xiaoYa_img_1.jpeg");
             putBitmapToMap("image_2", "xiaoYa_img_2.jpeg");
         } else if (inputType == AE_DEMO_XIANZI) {
-            json1Path = copyAeAssets(context, "zixiaxianzi.json");
             mvColorPath1 = copyAeAssets(context, "zixiaxianzi_mvColor.mp4");
             mvMaskPath1 = copyAeAssets(context, "zixiaxianzi_mvMask.mp4");
             putBitmapToMap("image_0", "zixiaxianzi_img0.jpeg");
             putBitmapToMap("image_1", "zixiaxianzi_img1.jpeg");
         } else if (inputType == AE_DEMO_KUAISHAN) {  //文字快闪;
-            json1Path = copyAeAssets(context, "kuaishan1.json");
             jsonUsedFontPath = copyAeAssets(context, "STHeiti.ttf");
 
             bgVideo = null;
@@ -155,13 +245,11 @@ public class AEDemoAsset {
             json1ReplaceTexts.put("视", "文");
             json1ReplaceTexts.put("频", "字");
         } else if (inputType == AE_DEMO_VIDEOBITMAP) {  //早安替换视频;
-            json1Path = copyAeAssets(context, "zaoan.json");
             mvColorPath1 = copyAeAssets(context, "zaoan_mvColor.mp4");
             mvMaskPath1 = copyAeAssets(context, "zaoan_mvMask.mp4");
             json1ReplaceVideos.put("image_0", copyAeAssets(context, "zaoan_replace.mp4"));
         } else if (inputType == AE_DEMO_MORE_PICTURE) {
 
-            json1Path = copyAeAssets(context, "morePicture.json");
             for (int i = 0; i < 10; i++) {
                 String key = "image_" + i;
                 String name = "morePicture_img_" + i + ".jpeg";
@@ -177,45 +265,18 @@ public class AEDemoAsset {
                 e.printStackTrace();
                 audioAsset = null;
             }
-        }else if(inputType==AE_DEMO_JSON_CUT){  //json裁剪
-
-            json1Path = copyAeAssets(context, "json_cut.json");
-            bgVideo=copyAeAssets(context,"json_cut_bg_10s.mp4");
-
-
-        }else if(inputType==AE_DEMO_JSON_CONCAT){  //json拼接
-            json1Path = copyAeAssets(context, "json_concat1.json");
-            json2Path = copyAeAssets(context, "json_concat2.json");
-            bgVideo=copyAeAssets(context,"json_cut_bg_10s.mp4");
-
-
-            json1ReplaceBitmapPaths.put("image_0",copyAeAssets(context,"json_concat1_img_0.jpeg"));
-            json1ReplaceBitmapPaths.put("image_1",copyAeAssets(context,"json_concat1_img_1.jpeg"));
-            json1ReplaceBitmapPaths.put("image_2",copyAeAssets(context,"json_concat1_img_2.jpeg"));
-            json1ReplaceBitmapPaths.put("image_3",copyAeAssets(context,"json_concat1_img_3.jpeg"));
-
-
-            json2ReplaceBitmapPaths.put("image_0",copyAeAssets(context,"json_concat2_img_0.jpeg"));
-            json2ReplaceBitmapPaths.put("image_1",copyAeAssets(context,"json_concat2_img_1.jpeg"));
-            json2ReplaceBitmapPaths.put("image_2",copyAeAssets(context,"json_concat2_img_2.jpeg"));
-            json2ReplaceBitmapPaths.put("image_3",copyAeAssets(context,"json_concat2_img_3.jpeg"));
-
         }else if(inputType==AE_DEMO_TWO_JSON_OVERLAY) {
-            json1Path = copyAeAssets(context, "tianQi_c2.json");
             json1ReplaceBitmapPaths.put("image_0", copyAeAssets(context, "tianQi_c2_img_0.jpeg"));
 
             mvColorPath1 = copyAeAssets(context, "tianQi_c3_mvColor.mp4");
             mvMaskPath1 = copyAeAssets(context, "tianQi_c3_mvMask.mp4");
 
-
             json2Path = copyAeAssets(context, "tianQi_c4.json");
-
             mvColorPath2 = copyAeAssets(context, "tianQi_c5_mvColor.mp4");
             mvMaskPath2 = copyAeAssets(context, "tianQi_c5_mvMask.mp4");
 
         }else if(inputType==AE_DEMO_JSON_GAUSSIAN_BLUR1) {  //高斯模糊1
 
-            json1Path = copyAeAssets(context, "gaussianBlur.json");
             json1ReplaceBitmapPaths.put("image_0", copyAeAssets(context, "gaussianBlur_img_0.jpeg"));
             json1ReplaceBitmapPaths.put("image_1", copyAeAssets(context, "gaussianBlur_img_1.jpeg"));
             json1ReplaceBitmapPaths.put("image_2", copyAeAssets(context, "gaussianBlur_img_2.jpeg"));
@@ -223,16 +284,13 @@ public class AEDemoAsset {
             json1ReplaceBitmapPaths.put("image_4", copyAeAssets(context, "gaussianBlur_img_4.jpeg"));
             json1ReplaceBitmapPaths.put("image_5", copyAeAssets(context, "gaussianBlur_img_5.jpeg"));
 
-
             mvColorPath1=copyAeAssets(context,"gaussianBlur_mvColor.mp4");
             mvMaskPath1=copyAeAssets(context,"gaussianBlur_mvMask.mp4");
-
 
         }else if(inputType== AE_DEMO_JSON_GAUSSIAN_BLUR2){  //高斯模糊2
 
             mvColorPath1=copyAeAssets(context,"gaussianBlur2_mvColor.mp4");
             mvMaskPath1=copyAeAssets(context,"gaussianBlur2_mvMask.mp4");
-            json1Path = copyAeAssets(context, "gaussianBlur2.json");
             json1ReplaceBitmapPaths.put("image_0",copyAeAssets(context,"gaussianBlur2_img_0.jpeg"));
             json1ReplaceBitmapPaths.put("image_1",copyAeAssets(context,"gaussianBlur2_img_1.jpeg"));
             json1ReplaceBitmapPaths.put("image_2",copyAeAssets(context,"gaussianBlur2_img_2.jpeg"));
@@ -240,86 +298,61 @@ public class AEDemoAsset {
             json1ReplaceBitmapPaths.put("image_4",copyAeAssets(context,"gaussianBlur2_img_4.jpeg"));
             json1ReplaceBitmapPaths.put("image_5",copyAeAssets(context,"gaussianBlur2_img_5.jpeg"));
             json1ReplaceBitmapPaths.put("image_6",copyAeAssets(context,"gaussianBlur2_img_6.jpeg"));
-        }else if(inputType==AE_DEMO_JSON_KA_DIAIN) {
-            json1Path = copyAeAssets(context, "kadian.json");
-            json1ReplaceBitmapPaths.put("image_0",copyAeAssets(context,"kadian_img_0.jpeg"));
-            json1ReplaceBitmapPaths.put("image_1",copyAeAssets(context,"kadian_img_1.jpeg"));
-            json1ReplaceBitmapPaths.put("image_2",copyAeAssets(context,"kadian_img_2.jpeg"));
-            json1ReplaceBitmapPaths.put("image_3",copyAeAssets(context,"kadian_img_3.jpeg"));
-            json1ReplaceBitmapPaths.put("image_4",copyAeAssets(context,"kadian_img_4.jpeg"));
-            json1ReplaceBitmapPaths.put("image_5",copyAeAssets(context,"kadian_img_5.jpeg"));
-            json1ReplaceBitmapPaths.put("image_6",copyAeAssets(context,"kadian_img_6.jpeg"));
-            json1ReplaceBitmapPaths.put("image_7",copyAeAssets(context,"kadian_img_7.jpeg"));
-            json1ReplaceBitmapPaths.put("image_8",copyAeAssets(context,"kadian_img_8.jpeg"));
-            json1ReplaceBitmapPaths.put("image_9",copyAeAssets(context,"kadian_img_9.jpeg"));
-            json1ReplaceBitmapPaths.put("image_10",copyAeAssets(context,"kadian_img_10.jpeg"));
+        }else if(inputType== AE_DEMO_JSON_KA_DIAN) {
+            json1ReplaceBitmapPaths.put("image_0", copyAeAssets(context, "kadian_img_0.jpeg"));
+            json1ReplaceBitmapPaths.put("image_1", copyAeAssets(context, "kadian_img_1.jpeg"));
+            json1ReplaceBitmapPaths.put("image_2", copyAeAssets(context, "kadian_img_2.jpeg"));
+            json1ReplaceBitmapPaths.put("image_3", copyAeAssets(context, "kadian_img_3.jpeg"));
+            json1ReplaceBitmapPaths.put("image_4", copyAeAssets(context, "kadian_img_4.jpeg"));
+            json1ReplaceBitmapPaths.put("image_5", copyAeAssets(context, "kadian_img_5.jpeg"));
+            json1ReplaceBitmapPaths.put("image_6", copyAeAssets(context, "kadian_img_6.jpeg"));
+            json1ReplaceBitmapPaths.put("image_7", copyAeAssets(context, "kadian_img_7.jpeg"));
+            json1ReplaceBitmapPaths.put("image_8", copyAeAssets(context, "kadian_img_8.jpeg"));
+            json1ReplaceBitmapPaths.put("image_9", copyAeAssets(context, "kadian_img_9.jpeg"));
             String audioPath = copyAeAssets(context, "kadian.mp3");
             try {
                 audioAsset = new LSOAudioAsset(audioPath);//多个图片没有视频,只有mp3,则增加mp3;
-                this.audioPath=audioPath;
+                this.audioPath = audioPath;
             } catch (Exception e) {
                 e.printStackTrace();
                 audioAsset = null;
             }
+        }else if(inputType==AE_DEMO_JSON_SAMPLE_3D){
+            //LSNEW  增加3D模板演示; 只是简单的3D演示;
+            bgVideo=copyAeAssets(context,"s3d_bgVideo.mp4");
+            mvColorPath1=copyAeAssets(context,"s3d_mvColor.mp4");
+            mvMaskPath1=copyAeAssets(context,"s3d_mvMask.mp4");
+
+            for(int i=0;i<4;i++){
+                String key="image_"+i;
+                String name="kadian_img_"+(i+4)+".jpeg";
+                putBitmapToMap(key, name);
+            }
         }else{
             LSOLog.e("AEDemoAsset   input type  unknown(类型未知).");
-            testJson();
         }
     }
-
     /**
      * 替换各种资源.
      */
     public void replaceJsonAsset() {
 
         if (drawable1 != null) {
-            if (inputType == AE_DEMO_JSON_CUT) {
-                //因为这里演示,从第5张图,截取到12张图片, 故先找到image_4这个id的开始时间, 然后找到image_12这个id的结束时间;
-                ArrayList<LSOAeImageLayer> imageLayers= drawable1.getAllAeImageLayer();
-                for (LSOAeImageLayer layer: imageLayers){
-
-                    if("image_4".equals(layer.imgId)){
-                        startFrameIndex=(int)layer.startFrame;
-                    }
-
-                    if("image_12".equals(layer.imgId)){
-                        endFrameIndex=(int)layer.endFrame;
-                    }
-                }
-
-                if(startFrameIndex>endFrameIndex){  //如果模板id小的在下面,则顺序调换下.
-                    int tmp=endFrameIndex;
-                    endFrameIndex=startFrameIndex;
-                    startFrameIndex=tmp;
-                }
-
-
-                DemoLog.i("演示json裁剪: 裁剪范围是:"+startFrameIndex+ " -- "+ endFrameIndex);
-
-                json1ReplaceBitmapPaths.put("image_4", copyAeAssets(context, "json_cut_img_4.jpeg"));
-                json1ReplaceBitmapPaths.put("image_5", copyAeAssets(context, "json_cut_img_5.jpeg"));
-                json1ReplaceBitmapPaths.put("image_6", copyAeAssets(context, "json_cut_img_6.jpeg"));
-                json1ReplaceBitmapPaths.put("image_7", copyAeAssets(context, "json_cut_img_7.jpeg"));
-                json1ReplaceBitmapPaths.put("image_8", copyAeAssets(context, "json_cut_img_8.jpeg"));
-                json1ReplaceBitmapPaths.put("image_9", copyAeAssets(context, "json_cut_img_9.jpeg"));
-                json1ReplaceBitmapPaths.put("image_10", copyAeAssets(context, "json_cut_img_10.jpeg"));
-                json1ReplaceBitmapPaths.put("image_11", copyAeAssets(context, "json_cut_img_11.jpeg"));
-                json1ReplaceBitmapPaths.put("image_12", copyAeAssets(context, "json_cut_img_12.jpeg"));
-
-
-            }
-        }
-
-
-
-        if (drawable1 != null) {
             replaceJsonAsset(drawable1, json1ReplaceBitmapPaths, json1ReplaceVideos, json1ReplaceTexts);
         }
+
         if (drawable2 != null) {
             replaceJsonAsset(drawable2, json2ReplaceBitmapPaths, json2ReplaceVideos, json2ReplaceTexts);
         }
     }
 
+    /**
+     * 替换json文件里的图片/视频/文字
+     * @param drawable
+     * @param bitmapMaps
+     * @param videoMaps
+     * @param textpMaps
+     */
     private void replaceJsonAsset(LSOAeDrawable drawable, HashMap<String, String> bitmapMaps,
                                   HashMap<String, String> videoMaps,
                                   HashMap<String, String> textpMaps) {
@@ -361,6 +394,7 @@ public class AEDemoAsset {
 
         //替换字体;
         setJsonFontPath(drawable);
+
         //在处理过程中, 对图片或视频做调整;
 //        drawable.setOnLSOAeImageLayerListenerById("image_0", new OnLSOAeImageLayerListener() {
 //            @Override
@@ -380,6 +414,7 @@ public class AEDemoAsset {
         drawable.setFontAssetListener(new OnLSOFontAssetListener() {
             public String getFontPath(String fontFamily) {
                 if (fontFamily.equals("STHeiti.ttf")) {
+                    Log.e("TAG", "------设置文字字体....: ");
                     return "/sdcard/lansongBox/STHeiti.ttf";  //返回这个字体名字对应的字体文件绝对路径
                 } else {
                     return null;
@@ -430,8 +465,12 @@ public class AEDemoAsset {
     }
 
     private void testJson(){
-        json1Path = copyShanChu(context, "testBW_blur.json");
-        json1ReplaceBitmapPaths.put("image_0",copyShanChu(context,"cn_img_0.jpeg"));
-        json1ReplaceBitmapPaths.put("image_1",copyShanChu(context,"cn_img_1.jpeg"));
+        bgVideo=copyShanChu(context,"bgVideo.mp4");
+        json1Path = copyShanChu(context, "data2.json");
+//        for(int i=0;i<4;i++){
+//            String key="image_"+i;
+//            String name="kadian_img_"+(i+4)+".jpeg";
+//            putBitmapToMap(key, name);
+//        }
     }
 }

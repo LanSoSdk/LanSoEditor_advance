@@ -2,17 +2,24 @@ package com.lansosdk.videoeditor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 
+import com.lansosdk.LanSongAe.LSOAeDrawable;
+import com.lansosdk.box.AEJsonLayer;
 import com.lansosdk.box.AudioLayer;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPadAllRunnable2;
-import com.lansosdk.box.DrawPadBGRunnable;
+import com.lansosdk.box.DrawPadPixelRunnable;
 import com.lansosdk.box.GifLayer;
+import com.lansosdk.box.LSOAECompositionLayer;
+import com.lansosdk.box.LSOAeCompositionAsset;
 import com.lansosdk.box.LSOBitmapAsset;
+import com.lansosdk.box.LSOGifAsset;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.LSOMVAsset;
 import com.lansosdk.box.LSOVideoOption;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVCacheLayer;
@@ -20,31 +27,32 @@ import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.box.OnLanSongSDKThreadProgressListener;
+import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.VideoFrameLayer;
 import com.lansosdk.box.YUVLayer;
 
 /**
- * 所有的图层,转换为视频
- * 属于后台执行类;
+ * 自动执行容器.
  */
 public class DrawPadAllExecute2 {
 
-    private boolean startSuccess;
+    private boolean success;
     private DrawPadAllRunnable2 runnable;
-    private DrawPadBGRunnable pixelRunnable;
+    private DrawPadPixelRunnable pixelRunnable;
     private String padDstPath;
     private int padWidth;
     private int padHeight;
 
+
     /**
      * 强制使用老版本.
      */
-    public static  boolean forceUseOLD =true;
+    public static  boolean forceUseOLD =false;
 
     /**
      *  构造方法
-     *
      * 如果您仅仅对一个视频做处理, 则可以设置为这个视频的宽高和时长;
+     * 默认帧率是
      * @param ctx
      * @param padWidth 容器的宽度, 即最后生成视频的宽度 强烈建议最大值是720P
      * @param padHeight 容器的高度,即最后生成视频的高度 强烈建议最大值是720P
@@ -65,14 +73,16 @@ public class DrawPadAllExecute2 {
             h *=2;
         }
 
+
         //小于等于8.0 支持nv21, 麒麟处理器.
         if(!forceUseOLD && Build.VERSION.SDK_INT<=Build.VERSION_CODES.O && LanSoEditor.isQiLinSoc() && VideoEditor.isSupportNV21ColorFormat() ){
-            pixelRunnable =new DrawPadBGRunnable(ctx,w,h,durationUS);
-            LSOLog.d("DrawPadAllExecute2 run  new free_pixel_mode Runnable...");
+            pixelRunnable =new DrawPadPixelRunnable(ctx,w,h,durationUS);
+            LSOLog.d("DrawPadAllExecute2 run  new pixel_mode Runnable...");
         }else{
             runnable=new DrawPadAllRunnable2(ctx,w,h,durationUS);
             LSOLog.d("DrawPadAllExecute2 run  COMMON  Runnable(DrawPadAllRunnable2)...");
         }
+
         this.padWidth= w;
         this.padHeight=h;
     }
@@ -123,6 +133,25 @@ public class DrawPadAllExecute2 {
     protected float padBGAlpha =1.0f;
 
     /**
+     * 设置容器的背景颜色;
+     * @param color
+     */
+    public void setBackgroundColor(int color) {
+        int red = Color.red(color);  //<---拷贝这里的代码;3行
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        padBGRed=(float)red/255f;
+        padBGGreen=(float)green/255f;
+        padBGBlur=(float)blue/255f;
+        if(runnable!=null){
+            runnable.setDrawPadBackGroundColor(padBGRed,padBGGreen,padBGBlur,1.0f);
+        }else  if(pixelRunnable !=null){
+            pixelRunnable.setDrawPadBackGroundColor(padBGRed,padBGGreen,padBGBlur,1.0f);
+        }
+    }
+
+    /**
      * 设置容器的 背景颜色RGBA分量
      * 在增加各种图层前调用;
      * @param r 红色分量, 范围0.0  ---1.0;
@@ -151,6 +180,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addBitmapLayer(bmp,startTimeUs,endTimeUs);
         }else{
+            LSOLog.e("DrawPadAllExecute2  addBitmapLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -165,6 +195,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addBitmapLayer(bmp,0,Long.MAX_VALUE);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addBitmapLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -182,6 +213,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addBitmapLayer(asset,startTimeUs,endTimeUs);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addBitmapLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -197,6 +229,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addBitmapLayer(asset,0,Long.MAX_VALUE);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addBitmapLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -214,6 +247,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addBitmapLayer(asset,startTimeUs,endTimeUs);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addBitmapLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -229,6 +263,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addBitmapLayer(asset,0,Long.MAX_VALUE);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addBitmapLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -245,12 +280,16 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addMVLayer(srcPath,maskPath,0,Long.MAX_VALUE,false);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addMVLayer error. return null, success status is:"+ success);
             return null;
         }
     }
 
     /**
      * 增加视频图层
+     * option 中可以设置旋转, 裁剪时长, 裁剪画面, 缩放等. 顺序是,先裁剪时长-->旋转(90/180/270)--->裁剪画面-->缩放;
+     * 如果你要任意角度的旋转, 则用图层的旋转属性;
+     *
      * @param option 在增加前,设置裁剪时长, 裁剪画面, 缩放, 循环等;
      * @return 返回视频图层
      */
@@ -260,12 +299,15 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && option!=null && setup()) {
             return pixelRunnable.addVideoLayer(option,0,Long.MAX_VALUE,false,false);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addVideoLayer error. return null, success status is:"+ success);
             return null;
         }
     }
-
     /**
      * 增加视频图层
+     * option 中可以设置旋转, 裁剪时长, 裁剪画面, 缩放等. 顺序是,先裁剪时长-->旋转(90/180/270)--->裁剪画面-->缩放;
+     * 如果你要任意角度的旋转, 则用图层的旋转属性;
+     *
      * @param option 在增加前,设置裁剪时长, 裁剪画面, 缩放, 循环等;
      * @param startTimeUs 从容器的什么时间开始增加
      * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
@@ -279,9 +321,11 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && option!=null && setup()) {
             return pixelRunnable.addVideoLayer(option,startTimeUs,endTimeUs,holdFirst,holdLast);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addVideoLayer error. return null, success status is:"+ success);
             return null;
         }
     }
+
     /**
      *  增加mv图层
      * @param srcPath
@@ -296,6 +340,7 @@ public class DrawPadAllExecute2 {
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,false);
         }else {
+            LSOLog.e("DrawPadAllExecute2  addMVLayer error. return null, success status is:"+ success);
             return null;
         }
     }
@@ -309,11 +354,41 @@ public class DrawPadAllExecute2 {
      * @param mute  如果mv中有声音, 是否要静音;默认不静音;
      * @return
      */
+    @Deprecated
     public MVCacheLayer addMVLayer(String srcPath, String maskPath, long startTimeUs, long endTimeUs, boolean mute) {
         if (runnable != null && setup()) {
             return runnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,mute);
         }else if (pixelRunnable != null && setup()) {
             return pixelRunnable.addMVLayer(srcPath,maskPath,startTimeUs,endTimeUs,mute);
+        }else {
+            LSOLog.e("DrawPadAllExecute2  addMVLayer error. return null, success status is:"+ success);
+            return null;
+        }
+    }
+
+    public MVCacheLayer addMVLayer(LSOMVAsset asset) {
+        if (runnable != null && setup()) {
+            return runnable.addMVLayer(asset,0,Long.MAX_VALUE,false);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addMVLayer(asset,0,Long.MAX_VALUE,false);
+        }else {
+            LSOLog.e("DrawPadAllExecute2  addMVLayer error. return null, success status is:"+ success);
+            return null;
+        }
+    }
+    /**
+     * 增加mv图层
+     * @param asset 透明视频的资源;
+     * @param startTimeUs 从容器的什么时间开始增加
+     * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
+     * @param mute  如果mv中有声音, 是否要静音;默认不静音;
+     * @return
+     */
+    public MVCacheLayer addMVLayer(LSOMVAsset asset, long startTimeUs, long endTimeUs, boolean mute) {
+        if (runnable != null && setup()) {
+            return runnable.addMVLayer(asset,startTimeUs,endTimeUs,mute);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addMVLayer(asset,startTimeUs,endTimeUs,mute);
         }else {
             return null;
         }
@@ -342,6 +417,7 @@ public class DrawPadAllExecute2 {
      * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
      * @return
      */
+    @Deprecated
     public GifLayer addGifLayer(String gifPath,long startTimeUs,long endTimeUs) {
         if (runnable != null && setup()) {
             return runnable.addGifLayer(gifPath,startTimeUs,endTimeUs);
@@ -351,6 +427,24 @@ public class DrawPadAllExecute2 {
             return null;
         }
     }
+
+    /**
+     *增加gif图层
+     * @param gifAsset gif文件的资源;
+     * @param startTimeUs 从容器的什么时间开始增加
+     * @param endTimeUs 在容器的什么时间消失, 如果到文件尾,请输入Long.MAX_VALUE
+     * @return
+     */
+    public GifLayer addGifLayer(LSOGifAsset gifAsset, long startTimeUs, long endTimeUs) {
+        if (runnable != null && setup()) {
+            return runnable.addGifLayer(gifAsset,startTimeUs,endTimeUs);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addGifLayer(gifAsset,startTimeUs,endTimeUs);
+        }else {
+            return null;
+        }
+    }
+
 
     /**
      * 增加gif图层
@@ -414,6 +508,135 @@ public class DrawPadAllExecute2 {
             return null;
         }
     }
+
+
+    /**
+     * 增加子图层. 子图层是通过父类图层createSubLayer得到的.
+     * 默认不需要调用,我们会在视频图层绘制后, 直接绘制子图层;
+     * 如果你要在视频层上面增加其他层, 然后再增加子图层, 则用这个.
+     *
+     * 一般用在溶图的场合;
+     * 举例如下
+     *  try {
+     *             LSOVideoOption videoOption=new LSOVideoOption(SDCARD.d1());
+     *
+     *
+     *             VideoFrameLayer videoLayer=allExecute.addVideoLayer(videoOption);
+     *
+     *             Bitmap bmp= BitmapFactory.decodeResource(getResources(),R.drawable.tt3);
+     *             allExecute.addBitmapLayer(bmp);
+     *
+     *
+     *             //创建一个子图层
+     *             SubLayer layer=videoLayer.createSubLayer();
+     *             layer.setScale(0.5f);
+     *             LanSongBlurFilter maskFilter=new LanSongBlurFilter();
+     *             layer.switchFilterTo(maskFilter);
+     *             //增加到容器里, 因为先增加了图片,这个在图片的上层;
+     *             allExecute.addSubLayer(layer);
+     *
+     *
+     *         } catch (Exception e) {
+     *             e.printStackTrace();
+     *         }
+     * @param layer 子图层 通过父类图层createSubLayer得到的
+     * @return
+     */
+    public boolean addSubLayer(SubLayer layer){
+        if (runnable != null && setup()) {
+            return runnable.addSubLayer(layer);
+        }else if (pixelRunnable != null && setup()) {
+            return pixelRunnable.addSubLayer(layer);
+        }else {
+            return false;
+        }
+    }
+    /**
+     * 增加AE合成的资源;
+     * 你可以把各种Ae素材通过LSOAeCompositionAsset 创建一个合成, 把这个合成, 作为一个图层输入到容器中.
+     * 注意:当前暂时不支持Ae合成资源中的声音, 如果有声音,则声音则通过addAudioLayer另外增加;
+     *
+     * 举例代码如下:
+     * 把一个Ae模板作为一个资源,增加到容器中, 增加后, 返回一个"Ae合成图层"
+     *  String jsonPath= copyShanChu(getApplicationContext(),"cs.json");
+     *             String bgVideo=copyShanChu(getApplicationContext(),"cs_Bg.mp4");
+     *             String colorPath=copyShanChu(getApplicationContext(),"cs_mvColor.mp4");
+     *             String maskPath=copyShanChu(getApplicationContext(),"cs_mvMask.mp4");
+     *
+     *
+     *             LSOAeDrawable drawable= LSOLoadAeJsons.loadSync(jsonPath);
+     *             drawable.updateBitmap("image_0",copyShanChu2Bmp(getApplicationContext(),"img_0.png"));
+     *
+     *             LSOAeCompositionAsset compositionAsset=new LSOAeCompositionAsset();
+     *             compositionAsset.addFirstLayer(bgVideo);
+     *             compositionAsset.addSecondLayer(drawable);
+     *             compositionAsset.addThirdLayer(colorPath,maskPath);
+     *             compositionAsset.startAeRender();
+     *
+     * @param asset Ae合成资源;
+     * @return
+     */
+    public LSOAECompositionLayer addAECompositionLayer(LSOAeCompositionAsset asset){
+        return addAECompositionLayer(asset,0,Long.MAX_VALUE);
+    }
+
+
+
+    /**
+     * 增加Ae合成的图层;
+     * 你可以把各种Ae素材通过LSOAeCompositionAsset 创建一个合成, 把这个合成, 作为一个图层输入到容器中.
+     * 注意:当前暂时不支持Ae合成资源中的声音, 如果有声音,则声音则通过addAudioLayer另外增加;
+     * @param asset
+     * @param startTimeUs 从容器什么时间点开始增加
+     * @param endTimeUs 增加到容器的什么时间点;
+     * @return
+     */
+    public LSOAECompositionLayer addAECompositionLayer(LSOAeCompositionAsset asset,long startTimeUs, long endTimeUs){
+        if(asset!=null && asset.prepare() && setup()){
+            asset.startAeRender();
+            if (runnable != null) {
+                return runnable.addAECompositionLayer(asset,startTimeUs,endTimeUs);
+            }else if (pixelRunnable != null) {
+                asset.startAeRender();
+                return pixelRunnable.addAECompositionLayer(asset, startTimeUs, endTimeUs);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 增加Ae图层, 把Ae的json作为一个图层增加到容器中;
+     * @param dr
+     * @return
+     */
+    public AEJsonLayer addAeJsonLayer(LSOAeDrawable dr){
+        return addAeJsonLayer(dr,0,Long.MAX_VALUE);
+    }
+
+    /**
+     * 增加Ae图层, 把Ae的json作为一个图层增加到容器中;
+     * @param dr 解析并替换各种素材后的drawable对象
+     * @param startTimeUs 这个图层在容器中的开始时间
+     * @param endTimeUs  图层在容器中的结束时间;
+     * @return
+     */
+    public AEJsonLayer addAeJsonLayer(LSOAeDrawable dr, long startTimeUs, long endTimeUs){
+        if(dr!=null && setup()){
+            if (runnable != null) {
+                return runnable.addAeJsonLayer(dr,startTimeUs,endTimeUs);
+            }else if (pixelRunnable != null) {
+                return pixelRunnable.addAeJsonLayer(dr, startTimeUs, endTimeUs);
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 增加声音图层;
+     * @param srcPath 声音的完整路径
+     * @return
+     */
     public AudioLayer addAudioLayer(String srcPath) {
         if(runnable!=null){
             return runnable.addAudioLayer(srcPath,0,0, Long.MAX_VALUE);
@@ -423,6 +646,7 @@ public class DrawPadAllExecute2 {
             return null;
         }
     }
+
     /**
      * 增加其他音频;
      * 支持mp4,wav,mp3,m4a文件;
@@ -502,7 +726,7 @@ public class DrawPadAllExecute2 {
     }
 
     /**
-     * 把音频的 指定时间段, 增加到audiopad音频容器里.
+     * 把音频的 指定时间段, 增加到audio pad音频容器里.
      * 如果有循环或其他操作, 可以在获取的AudioLayer对象中设置.
      *
      * @param srcPath      音频文件路径, 可以是有音频的视频路径;
@@ -587,10 +811,12 @@ public class DrawPadAllExecute2 {
             pixelRunnable.swapTwoLayerPosition(first,second);
         }
     }
+
     /**
-     * 设置进度监听,  ---经过handle机制,
-     * 进度返回的两个参数 long类型是:当前时间戳,单位微秒; int类型是:当前处理的百分比;
-     * @param listener
+     * 进度监听  ---经过handle机制, 可以在主线程中调用UI界面;
+     * OnLanSongSDKProgressListener 的两个方法分别是:
+     * long ptsUs : 当前处理视频帧的时间戳. 单位微秒; 1秒=1000*1000微秒
+     * int percent : 当前处理的进度百分比. 范围:0--100;
      */
     public void setOnLanSongSDKProgressListener(OnLanSongSDKProgressListener listener) {
         if(runnable!=null){
@@ -601,7 +827,7 @@ public class DrawPadAllExecute2 {
     }
 
     /**
-     * 设置进度监听 ----不经过handle机制
+     * 设置进度监听 ----不经过handle机制,不可以在主线程中调用UI界面;
      * 进度返回的两个参数 long类型是:当前时间戳,单位微秒; int类型是:当前处理的百分比;
      * @param listener
      */
@@ -615,6 +841,7 @@ public class DrawPadAllExecute2 {
 
     /**
      * 完成回调
+     * 回调完成后, 返回给你处理后的视频完整路径.
      * @param listener
      */
     public void setOnLanSongSDKCompletedListener(OnLanSongSDKCompletedListener listener) {
@@ -624,7 +851,6 @@ public class DrawPadAllExecute2 {
             pixelRunnable.setOnLanSongSDKCompletedListener(listener);
         }
     }
-
     /**
      * 错误回调
      * @param listener
@@ -685,12 +911,12 @@ public class DrawPadAllExecute2 {
             runnable.cancel();
             runnable.release();
             runnable=null;
-            startSuccess=false;
+            success =false;
         }else if(pixelRunnable !=null){
             pixelRunnable.cancel();
             pixelRunnable.release();
             pixelRunnable =null;
-            startSuccess=false;
+            success =false;
         }
 
     }
@@ -701,11 +927,11 @@ public class DrawPadAllExecute2 {
         if(runnable!=null){
             runnable.release();
             runnable=null;
-            startSuccess=false;
+            success =false;
         }else if(pixelRunnable !=null){
             pixelRunnable.release();
             pixelRunnable =null;
-            startSuccess=false;
+            success =false;
         }
     }
 
@@ -715,23 +941,22 @@ public class DrawPadAllExecute2 {
      * [不建议使用]
      */
     public void setNotCheckDrawPadSize() {
-        if(runnable!=null){
-            runnable.setNotCheckDrawPadSize();
-        }else if(pixelRunnable !=null){
-            pixelRunnable.setNotCheckDrawPadSize();
-        }
+       if(runnable!=null){
+           runnable.setNotCheckDrawPadSize();
+       }else if(pixelRunnable !=null){
+           pixelRunnable.setNotCheckDrawPadSize();
+       }
     }
-
     //---------------------------------------------------------------------------
     private synchronized boolean setup(){
-        if(runnable!=null && !runnable.isRunning() && !startSuccess){
+        if(runnable!=null && !runnable.isRunning() && !success){
             runnable.setup();
-            startSuccess=true;
-        }else if(pixelRunnable !=null && !pixelRunnable.isRunning() && !startSuccess){
+            success =true;
+        }else if(pixelRunnable !=null && !pixelRunnable.isRunning() && !success){
             pixelRunnable.setup();
-            startSuccess=true;
+            success =true;
         }
-        return startSuccess;
+        return success;
     }
     //---------------------------test Demo测试例子------------------------------------------------
     /**
@@ -739,7 +964,6 @@ public class DrawPadAllExecute2 {
 
      DrawPadAllExecute2 allExecute;
      private void testAllexecute() throws Exception {
-     //在其他手机上测试下.
      allExecute = new DrawPadAllExecute2(getApplicationContext(), 720, 1280, 25 * 1000 * 1000);
      allExecute.setOnLanSongSDKProgressListener(new OnLanSongSDKProgressListener() {
     @Override
@@ -763,6 +987,9 @@ public class DrawPadAllExecute2 {
      option.setLooping(true);
      option.setCropRect(308,308,411,411);
      VideoFrameLayer layer1 = allExecute.addVideoLayer(option);
+
+
+
 
 
 

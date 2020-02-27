@@ -114,7 +114,14 @@
     </style>
 
 
-
+    <style name="CustomSeekBarStyle" >
+        <item name="android:maxHeight">100dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <!--        <item name="android:indeterminateDrawable">@color/colorAccent</item>-->
+        <item name="android:progressDrawable">@drawable/seek_bar_bg</item>
+        <item name="android:minHeight">100dp</item>
+        <item name="android:thumb">@mipmap/vertical_line_white</item>
+    </style>
 
 
     <style name="videoonedo_button">

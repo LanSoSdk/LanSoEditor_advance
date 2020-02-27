@@ -367,7 +367,7 @@ public class DrawPadCameraView extends FrameLayout {
     /**
      * 录制执行的回调.
      * DrawPad每录制完一帧画面,会通过Handler机制,回传调用这个Listener,返回的timeUs是当前录制画面的时间戳(微妙),
-     *
+     *LSTODO: 应该有 录制的时候的进度, 因为录制用户可能会暂停, 这个进度会把录制暂停的时间也计算进去;
      */
     public void setOnDrawPadProgressListener(onDrawPadProgressListener listener) {
         if (renderer != null) {

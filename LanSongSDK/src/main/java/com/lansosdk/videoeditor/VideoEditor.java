@@ -27,18 +27,21 @@ import static com.lansosdk.videoeditor.LanSongFileUtil.fileExist;
 
 
 /**
- * 最简单的调用方法:
+ *
+ * 所有的execute开头的方法都是阻塞执行, 即耗时严重, 即只有执行完当前executeXXX的功能,才执行下一行语句;
+ * 所有的execute开头的方法都是阻塞执行, 即耗时严重, 即只有执行完当前executeXXX的功能,才执行下一行语句;
+ * 所有的execute开头的方法都是阻塞执行, 即耗时严重, 即只有执行完当前executeXXX的功能,才执行下一行语句;
+ *
+ * 简单的调用方法:
  *  //step1. 放在主线程中执行;
- * VideoEditor veditor=new VideoEditor();
- * veditor.setOnProgessListener(xxx)进度;
+ * VideoEditor videoEditor=new VideoEditor();
+ * videoEditor.setOnProgressListener(xxx)进度;
  *
  * //step2.
  * 然后在AsyncTask或Thread中执行如下;
- * veditor.executeXXXXX();
+ * videoEditor.executeXXXXX();
  *
  *
- * 杭州蓝松科技有限公司
- * www.lansongtech.com
  */
 public class VideoEditor {
 
@@ -142,7 +145,6 @@ public class VideoEditor {
      *
      * 不要直接修改我们的这个文件, 以方便以后的sdk更新升级.
      */
-
     public VideoEditor() {
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
@@ -154,6 +156,7 @@ public class VideoEditor {
             LSOLog.w( "cannot get Looper handler. may be cannot receive video editor progress!!");
         }
     }
+
     public onVideoEditorEncodeChangedListener mEncoderChangeListener=null;
     public void setOnEncodeChangedListener(onVideoEditorEncodeChangedListener listener) {
         mEncoderChangeListener = listener;
@@ -168,13 +171,14 @@ public class VideoEditor {
 
     public onVideoEditorProgressListener mProgressListener = null;
 
-    public void setOnProgessListener(onVideoEditorProgressListener listener) {
+    public void setOnProgressListener(onVideoEditorProgressListener listener) {
         mProgressListener = listener;
     }
 
-    private void doOnProgressListener(int timeMS) {
-        if (mProgressListener != null)
-            mProgressListener.onProgress(this, timeMS);
+    private void doOnProgressListener(int percent) {
+        if (mProgressListener != null){
+            mProgressListener.onProgress(this, percent);
+        }
     }
 
     private EventHandler mEventHandler;
@@ -189,23 +193,25 @@ public class VideoEditor {
 
         @Override
         public void handleMessage(Message msg) {
-            VideoEditor videoextract = mWeakExtract.get();
-            if (videoextract == null) {
+            VideoEditor videoEditor = mWeakExtract.get();
+            if (videoEditor == null) {
                 LSOLog.e(  "VideoEditor went away with unhandled events");
                 return;
             }
             switch (msg.what) {
                 case VIDEOEDITOR_HANDLER_PROGRESS:
-                    videoextract.doOnProgressListener(msg.arg1);
+                    videoEditor.doOnProgressListener(msg.arg1);
                     break;
                 case VIDEOEDITOR_HANDLER_ENCODERCHANGE:
-                    videoextract.doEncoderChangedListener(true);  //暂停只要改变,就变成软编码;
+                    videoEditor.doEncoderChangedListener(true);  //暂停只要改变,就变成软编码;
                     break;
                 default:
                     break;
             }
         }
     }
+
+
 
     /**
      * 异步线程执行的代码.
@@ -272,6 +278,15 @@ public class VideoEditor {
      * @return 执行成功, 返回0, 失败返回错误码.
      */
     private native int execute(Object cmdArray);
+
+
+    protected int durationMs=0;
+    /**
+     * 设置视频总时长,单位毫秒;
+     * @param durationMS
+     * @return
+     */
+    protected native int setDurationMs(int durationMS);
     private native int setForceColorFormat(int format);
 
     /**
@@ -715,13 +730,31 @@ public class VideoEditor {
     }
     public String executeGIF2MP4(String srcPath) {
         if (fileExist(srcPath)) {
-
             MediaInfo info = new MediaInfo(srcPath);
-            if (info.prepare()) {
+            if (info.prepare() && "gif".equalsIgnoreCase(info.fileSuffix)) {
+
                 List<String> cmdList = new ArrayList<String>();
                 cmdList.add("-i");
                 cmdList.add(srcPath);
-                return executeAutoSwitch(cmdList);
+                if(info.vWidth%2!=0 || info.vHeight%2!=0){
+
+                    int width=info.vWidth/2;
+                    width*=2;
+
+                    int height=info.vHeight/2;
+                    height*=2;
+
+                    String filter = String.format(Locale.getDefault(), "crop=%d:%d:%d:%d",width, height, 0,0);
+                    cmdList.add("-vf");
+                    cmdList.add(filter);
+                }
+
+                isForceSoftWareEncoder=true;
+                isForceSoftWareDecoder=true;
+                String ret=executeAutoSwitch(cmdList);
+                isForceSoftWareEncoder=false;
+                isForceSoftWareDecoder=false;
+                return ret;
             }
         }
         return null;
@@ -1020,7 +1053,12 @@ public class VideoEditor {
      */
     @Deprecated
     public String executeCutAudio(String srcFile, float startS, float durationS) {
-        if (fileExist(srcFile)) {
+        MediaInfo info=new MediaInfo(srcFile);
+        if (info.prepare()) {
+
+
+
+            durationMs=((int)(durationS *1000));
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -1056,8 +1094,8 @@ public class VideoEditor {
 
     /**
      * 剪切mp4文件.
+     * 请用VideoOneDo2
      * (包括视频文件中的音频部分和视频部分),即把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个1分钟的视频,裁剪其中的10秒钟等.
-     * <p>
      * 注意: 此方法裁剪不是精确裁剪,而是从视频的IDR帧开始裁剪的, 没有精确到您指定的那一帧的时间, 如果您指定的时间不是IDR帧上的时间,则退后到上一个IDR帧开始.
      *
      * @param videoFile 原视频文件 文件格式是mp4
@@ -1066,8 +1104,8 @@ public class VideoEditor {
      * @return
      */
     public String executeCutVideo(String videoFile, float startS, float durationS) {
-        if (fileExist(videoFile)) {
-
+        if (LanSongFileUtil.fileExist(videoFile)) {
+            durationMs=((int)(durationS *1000));
             String dstFile=LanSongFileUtil.createMp4FileInBox();
 
             List<String> cmdList = new ArrayList<String>();
@@ -1102,8 +1140,8 @@ public class VideoEditor {
             return null;
         }
     }
-
     /**
+     * 请用VideoOneDo2
      * 精确裁剪
      * @param videoFile 输入源视频的完整路径
      * @param startS    开始裁剪时间点, 单位秒
@@ -1111,7 +1149,10 @@ public class VideoEditor {
      * @return 裁剪后返回的目标视频
      */
     public String executeCutVideoExact(String videoFile, float startS, float durationS) {
-        if (fileExist(videoFile)) {
+        MediaInfo info=new MediaInfo(videoFile);
+        if (info.prepare()) {
+
+            durationMs=( (int)(durationS *1000));
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -1129,7 +1170,6 @@ public class VideoEditor {
 
             cmdList.add("-acodec");
             cmdList.add("copy");
-
             return executeAutoSwitch(cmdList);
         } else {
             return null;
@@ -1139,10 +1179,9 @@ public class VideoEditor {
 
 
     /**
+     *
+     * 请用VideoOneDo2
      * 精确裁剪的同时,缩放到指定位置,不同于上面的命令,这个可以设置宽度和高度. 其中宽度和高度是采用缩放来完成.
-     * <p>
-     * <p>
-     * 采用的是软缩放的形式.
      *
      * @param videoFile
      * @param startS
@@ -1152,7 +1191,10 @@ public class VideoEditor {
      * @return
      */
     public String executeCutVideoExact(String videoFile, float startS, float durationS, int width, int height) {
-        if (fileExist(videoFile)) {
+        MediaInfo info=new MediaInfo(videoFile);
+        if (info.prepare()) {
+
+            durationMs=((int)(durationS *1000));
             List<String> cmdList = new ArrayList<String>();
 
             String scalecmd = String.format(Locale.getDefault(), "scale=%d:%d", width, height);
@@ -1229,8 +1271,6 @@ public class VideoEditor {
     /**
      * 根据设定的采样,获取视频的几行图片.
      * 假如视频时长是30秒,想平均取5张图片,则sampleRate=5/30;
-     * <p>
-     * <p>
      * 如果您使用的是专业版本,则建议用ExtractVideoFrameDemoActivity来获取视频图片,因为直接返回bitmap,不存到文件中,速度相对快很多
      *
      * @param videoFile
@@ -2246,7 +2286,7 @@ public class VideoEditor {
                 cmdList.add("-map");
                 cmdList.add("[a]");
             }
-
+            durationMs=( (int)(mediaInfo.vDuration*1000/speed));
             return executeAutoSwitch(cmdList);
         } else {
             return null;
@@ -2464,11 +2504,11 @@ public class VideoEditor {
     }
 
     /**
-     * 视频倒序；比如正常的视频画面是一个人从左边走到右边，倒序后，人从右边倒退到左边，即视频画面发生了倒序
-     * <p>
-     * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
-     * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
-     * <p>
+     * 视频倒序；
+     * 比如正常的视频画面是一个人从左边走到右边，倒序后，人从右边倒退到左边，即视频画面发生了倒序
+     *
+     *  只是倒序视频, 不倒序声音;
+     *
      * 如您的视频过大, 则可能导致:Failed to inject frame into filter network: Out of memory;这个是正常的.因为已超过APP可使用的内容范围, 内存不足.
      *
      * @param srcPath 　原视频
@@ -2497,6 +2537,8 @@ public class VideoEditor {
             return null;
         }
     }
+
+
 
     /**
      * 把一个mp4文件中的音频部分和视频都倒序播放。
@@ -3287,9 +3329,11 @@ public class VideoEditor {
             bitrate=encodeBitRate;
         }
 
+        if(durationMs>0){
+            setDurationMs(durationMs);
+        }
 
         String dstPath=LanSongFileUtil.createMp4FileInBox();
-
         if(isForceSoftWareDecoder || checkSoftDecoder()){
             for(int i=0;i<cmdList.size();i++){
                 String cmd=cmdList.get(i);
@@ -3326,7 +3370,6 @@ public class VideoEditor {
             LSOLog.d("开始处理:硬解码+ 硬编码....");
             ret=executeWithEncoder(cmdList, bitrate, dstPath, true);
         }else if(isForceSoftWareEncoder || useSoftWareEncoder || checkSoftEncoder()) {
-
             LSOLog.d("开始处理:硬解码+ 软编码....");
             ret = executeWithEncoder(cmdList, bitrate, dstPath, false);
         }else{
@@ -3339,6 +3382,7 @@ public class VideoEditor {
                 ret=executeWithEncoder(cmdList, bitrate, dstPath, false);
             }
         }
+
         if(ret!=0) {
             for(int i=0;i<cmdList.size();i++){
                 String cmd=cmdList.get(i);
@@ -3366,6 +3410,9 @@ public class VideoEditor {
                 lanSongLogCollector.stop();
             }
             LanSongFileUtil.deleteFile(dstPath);
+
+            durationMs=0;
+            setDurationMs(0);
             return null;
         }else{
             return dstPath;

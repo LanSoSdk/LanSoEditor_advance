@@ -196,8 +196,8 @@ public class PicturesSlideDemoActivity extends Activity {
 
 
         move2.setVisibleWhenValid(true);
-        item.addAnimation(move1);
-        item.addAnimation(move2);
+        item.addAnimationOLD(move1);
+        item.addAnimationOLD(move2);
     }
 
     private void initView() {

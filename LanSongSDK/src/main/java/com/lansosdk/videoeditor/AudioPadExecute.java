@@ -3,17 +3,10 @@ package com.lansosdk.videoeditor;
 import android.content.Context;
 
 import com.lansosdk.box.AudioLayer;
-import com.lansosdk.box.AudioPad;
 import com.lansosdk.box.AudioPadRunnable;
-import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.OnAudioPadExecuteCompletedListener;
-import com.lansosdk.box.onAudioPadCompletedListener;
 import com.lansosdk.box.onAudioPadProgressListener;
 import com.lansosdk.box.onAudioPadThreadProgressListener;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 音频容器;
@@ -295,32 +288,29 @@ public class AudioPadExecute {
      float source1Volume=1.0f;
      AudioLayer audioLayer;
 
-     private void testFile3(){
+     private void testFile3() throws  Exception{
      AudioPadExecute execute = new AudioPadExecute(getApplicationContext(), "/sdcard/d1.mp4");
      //增加一个音频
      audioLayer = execute.addAudioLayer("/sdcard/hongdou10s.mp3", 0, 0, -1);
      if (audioLayer != null) {
-     audioLayer.setVolume(0.01f);
-     }
      audioLayer.setSoundPitchLittleGirl();
+     }
+
 
      //主音频静音;
      AudioLayer audioSource = execute.getMainAudioLayer();
-     if (audioSource != null) {
-     audioSource.setMute(true);
-     }
      execute.setOnAudioPadThreadProgressListener(new onAudioPadThreadProgressListener() {
     @Override
     public void onProgress(AudioPad v, long currentTimeUs) {
-    if(currentTimeUs<2*1000*1000){
-    audioLayer.setVolume(source1Volume);
-    source1Volume-=0.015f;
-    if(source1Volume<0.0){
-    source1Volume=0.0f;
-    }
-    }else{
-    audioLayer.setVolume(1.0f);
-    }
+    //                if(currentTimeUs<2*1000*1000){
+    //                    audioLayer.setVolume(source1Volume);
+    //                    source1Volume-=0.015f;
+    //                    if(source1Volume<0.0){
+    //                        source1Volume=0.0f;
+    //                    }
+    //                }else{
+    //                    audioLayer.setVolume(1.0f);
+    //                }
     }
     });
      execute.setOnAudioPadCompletedListener(new OnAudioPadExecuteCompletedListener() {
@@ -329,8 +319,60 @@ public class AudioPadExecute {
     MediaInfo.checkFile(path);
     }
     });
-     execute.startPreview();
+     execute.start();
      }
+///举例2----------音频拼接举例------------------------
+
+     ArrayList<String> audios=new ArrayList<>();
+     audios.add("/sdcard/audio1/record1.mp3");
+     audios.add("/sdcard/audio1/record2.mp3");
+     audios.add("/sdcard/audio1/record3.mp3");
+     audios.add("/sdcard/audio1/record4.mp3");
+     audios.add("/sdcard/audio1/record5.mp3");
+     audios.add("/sdcard/audio1/record6.mp3");
+
+
+
+     //分析得到时长, 知道时长的可忽略;
+     ArrayList<MediaInfo> audioInfoArray=new ArrayList<>();
+
+     float durationS=0;
+     for (String str: audios){
+
+     MediaInfo info=new MediaInfo(str);
+     if(info.prepare() && info.isHaveAudio()){
+         audioInfoArray.add(info);
+         durationS+=info.aDuration;
+     }
+     }
+
+
+     //开始送到容器中
+     long startUs=0;
+     final long durationUs=(long)(durationS*1000*1000);
+
+     AudioPadExecute execute=new AudioPadExecute(getApplication(),durationUs);
+
+     for (MediaInfo info:audioInfoArray){
+     execute.addAudioLayer(info.filePath,startUs);
+     startUs+= (long)(info.aDuration*1000*1000);
+     }
+
+     execute.setOnAudioPadCompletedListener(new OnAudioPadExecuteCompletedListener() {
+    @Override
+    public void onCompleted(String path) {
+
+    MediaInfo.checkFile(path);
+    }
+    });
+
+     execute.setOnAudioPadProgressListener(new onAudioPadProgressListener() {
+    @Override
+    public void onProgress(AudioPad v, long currentTimeUs) {
+    Log.e("TAG", "----currentTimeUs: "+currentTimeUs + " percent is :"+(currentTimeUs *100/durationUs));
+    }
+    });
+     execute.start();
 
      */
 }

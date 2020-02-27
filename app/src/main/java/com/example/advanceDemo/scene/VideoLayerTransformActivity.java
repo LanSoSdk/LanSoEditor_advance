@@ -225,7 +225,7 @@ public class VideoLayerTransformActivity extends Activity {
         bmpLayer.setVisibility(Layer.INVISIBLE);
         ScaleAnimation scaleAnim = new ScaleAnimation(
                 currentTimeUs + 1000 * 1000, 2 * 1000 * 1000, 0.0f, 1.2f);
-        bmpLayer.addAnimation(scaleAnim);
+        bmpLayer.addAnimationOLD(scaleAnim);
     }
 
     /**
@@ -333,10 +333,8 @@ public class VideoLayerTransformActivity extends Activity {
         }
         mplayer2 = new MediaPlayer();
         try {
-
             mplayer2.setDataSource(videoPath2);
             mplayer2.setVolume(0.0f, 0.0f); // 不要声音.
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -354,8 +352,8 @@ public class VideoLayerTransformActivity extends Activity {
                         Animation move = new MoveAnimation( currentTimeUs + 1000 * 1000, 1 * 1000 * 1000,0, 0, videoLayer2.getPadWidth() / 2,
                                 videoLayer2.getPadHeight() / 2);
                         Animation scale = new ScaleAnimation(currentTimeUs + 1000 * 1000, 1 * 1000 * 1000,0.0f, 1.0f);
-                        videoLayer2.addAnimation(move);
-                        videoLayer2.addAnimation(scale);
+                        videoLayer2.addAnimationOLD(move);
+                        videoLayer2.addAnimationOLD(scale);
                         videoLayer2.setVisibility(Layer.INVISIBLE);
                     }
                     mplayer2.start();

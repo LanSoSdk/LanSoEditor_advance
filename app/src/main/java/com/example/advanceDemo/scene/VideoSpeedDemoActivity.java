@@ -139,7 +139,6 @@ public class VideoSpeedDemoActivity extends Activity implements
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mplayer.setSpeedEnable();
                     mplayer.setSpeed(2.0f);
                 }
             },1000);
@@ -183,21 +182,17 @@ public class VideoSpeedDemoActivity extends Activity implements
                     mplayer.pause();
                 } else {
                     mplayer.start();
-                    mplayer.setSpeedEnable();
                     mplayer.setSpeed(1.0f);
                 }
 
                 break;
             case R.id.id_speed_btn_speednormal:
-                mplayer.setSpeedEnable();
                 mplayer.setSpeed(1.0f);
                 break;
             case R.id.id_speed_btn_speedslow:
-                mplayer.setSpeedEnable();
                 mplayer.setSpeed(0.5f);
                 break;
             case R.id.id_speed_btn_speedfast:
-                mplayer.setSpeedEnable();
                 mplayer.setSpeed(2.0f);
                 break;
             default:
@@ -222,7 +217,6 @@ public class VideoSpeedDemoActivity extends Activity implements
         } else if (seekBar.getId() == R.id.id_speed_seekbar_speed) {
             if (fromUser && mplayer != null) {
                 float percent = (float) progress / 100f;
-                mplayer.setSpeedEnable();
                 mplayer.setSpeed(percent);
             }
         }

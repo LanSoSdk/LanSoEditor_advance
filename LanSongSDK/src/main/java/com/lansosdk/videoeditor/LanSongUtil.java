@@ -2,19 +2,12 @@ package com.lansosdk.videoeditor;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Build;
-import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.lansosdk.box.LanSoEditorBox;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class LanSongUtil {
 

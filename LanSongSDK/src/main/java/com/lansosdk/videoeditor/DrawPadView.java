@@ -3,6 +3,7 @@ package com.lansosdk.videoeditor;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -12,6 +13,7 @@ import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.AudioLine;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
@@ -20,11 +22,15 @@ import com.lansosdk.box.DrawPadUpdateMode;
 import com.lansosdk.box.DrawPadViewRender;
 import com.lansosdk.box.GifLayer;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.LSOMVAsset;
+import com.lansosdk.box.LSOVideoAsset;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
+import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.TextureLayer;
 import com.lansosdk.box.TwoVideoLayer;
 import com.lansosdk.box.VideoLayer;
+import com.lansosdk.box.VideoLayer2;
 import com.lansosdk.box.ViewLayer;
 import com.lansosdk.box.YUVLayer;
 import com.lansosdk.box.onDrawPadCompletedListener;
@@ -35,8 +41,6 @@ import com.lansosdk.box.onDrawPadRunTimeListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.box.onDrawPadSnapShotListener;
 import com.lansosdk.box.onDrawPadThreadProgressListener;
-
-import com.lansosdk.LanSongFilter.LanSongFilter;
 
 public class DrawPadView extends FrameLayout {
 
@@ -259,8 +263,7 @@ public class DrawPadView extends FrameLayout {
      * @param cb     设置好后的回调, 注意:如果预设值的宽度和高度经过调整后
      *               已经和父view的宽度和高度一致,则不会触发此回调(当然如果已经是希望的宽高,您也不需要调用此方法).
      */
-    public void setDrawPadSize(int width, int height,
-                               onDrawPadSizeChangedListener cb) {
+    public void setDrawPadSize(int width, int height,onDrawPadSizeChangedListener cb) {
 
         isDrawPadSizeChanged=true;
         if (width != 0 && height != 0 && cb != null) {
@@ -469,6 +472,22 @@ public class DrawPadView extends FrameLayout {
         }
     }
 
+    /**
+     * 设置容器的背景颜色;
+     * @param color
+     */
+    public void setBackgroundColor(int color) {
+        int red = Color.red(color);  //<---拷贝这里的代码;3行
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        padBGRed=(float)red/255f;
+        padBGGreen=(float)green/255f;
+        padBGBlur=(float)blue/255f;
+        if(renderer!=null){
+            renderer.setDrawPadBackGroundColor(padBGRed,padBGGreen,padBGBlur,1.0f);
+        }
+    }
 
     /**
      * 设置容器的 背景颜色RGBA分量
@@ -780,6 +799,7 @@ public class DrawPadView extends FrameLayout {
             return false;
     }
 
+
     /**
      * 停止DrawPad的渲染线程
      */
@@ -959,6 +979,21 @@ public class DrawPadView extends FrameLayout {
             return null;
         }
     }
+
+
+    /**
+     * 输入一个视频资源, 内部自动启动播放器;
+     * @param videoAsset
+     * @return
+     */
+    public VideoLayer2 addVideoLayer2(LSOVideoAsset videoAsset){
+        if(renderer!=null){
+            return renderer.addVideoLayer2(videoAsset);
+        }else{
+            LSOLog.e( "addVideoLayer error render is not avalid");
+            return null;
+        }
+    }
     /**
      * 因之前有客户自定义一个Camera图层, 我们的Drawpad可以接受外部客户自定义图层.这里填入.
      */
@@ -1095,6 +1130,17 @@ public class DrawPadView extends FrameLayout {
     }
 
     /**
+     * 增加子图层.
+     * 默认不需要调用,我们会在视频图层绘制后, 直接绘制子图层;
+     * 如果你要在视频层上面增加其他层, 然后再增加子图层, 则用这个.
+     * @param layer
+     * @return
+     */
+    public boolean addSubLayer(SubLayer layer){
+        return renderer!=null && renderer.addSubLayer(layer);
+    }
+
+    /**
      * 增加一个mv图层, mv图层分为两个视频文件, 一个是彩色的视频, 一个黑白视频
      *
      * @param srcPath
@@ -1109,6 +1155,15 @@ public class DrawPadView extends FrameLayout {
             return null;
         }
     }
+    public MVLayer addMVLayer(LSOMVAsset asset) {
+        if (renderer != null && asset!=null)
+            return renderer.addMVLayer(asset);
+        else {
+            LSOLog.e("addMVLayer error render is not avalid");
+            return null;
+        }
+    }
+
     /**
      * 获得一个 ViewLayer,您可以在获取后,仿照我们的例子,来为视频增加各种UI空间. 注意:此方法一定在
      * startDrawPad之后,在stopDrawPad之前调用.
@@ -1224,6 +1279,7 @@ public class DrawPadView extends FrameLayout {
             mSurfaceTexture = null;
             // drawPadHeight=0;
             // drawPadWidth=0;
+
 
             stopDrawPad(); //当Texture销毁的时候, 停止DrawPad
 

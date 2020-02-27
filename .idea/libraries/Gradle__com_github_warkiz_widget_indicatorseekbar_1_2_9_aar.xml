@@ -4,7 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a315925899f96a7c3400781330a0ea96/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a315925899f96a7c3400781330a0ea96/res" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.warkiz.widget/indicatorseekbar/1.2.9/7ae176aef7d04347953b428cd75c9e4f1cb69fdf/indicatorseekbar-1.2.9-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.warkiz.widget/indicatorseekbar/1.2.9/e498e41b1cec251bfdd70eda79d7c44b47138081/indicatorseekbar-1.2.9-sources.jar!/" />
     </SOURCES>

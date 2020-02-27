@@ -21,6 +21,7 @@ import com.example.advanceDemo.scene.PicturesSlideDemoActivity;
 import com.example.advanceDemo.scene.VViewImage3DDemoActivity;
 import com.example.advanceDemo.scene.TwoVideoLayoutActivity;
 import com.example.advanceDemo.scene.VideoLayerTransformActivity;
+import com.example.advanceDemo.scene.VideoSeekActivity;
 import com.lansoeditor.advanceDemo.R;
 
 public class ListSceneDemoActivity extends Activity implements OnClickListener {

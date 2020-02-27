@@ -10,6 +10,7 @@ import com.example.advanceDemo.aeDemo.AECompositionActivity;
 import com.example.advanceDemo.aeDemo.AECompositionExecuteActivity;
 import com.example.advanceDemo.aeDemo.AEDemoAsset;
 import com.example.advanceDemo.aeDemo.AEPositionDemoActivity;
+import com.example.advanceDemo.aeDemo.AEPreviewActivity;
 import com.example.advanceDemo.utils.ButtonEnable;
 import com.lansoeditor.advanceDemo.R;
 
@@ -51,12 +52,6 @@ public class ListAEActivity extends Activity implements OnClickListener {
             case R.id.id_aemain_more_picture:
                 showActivity(AEDemoAsset.AE_DEMO_MORE_PICTURE);
                 break;
-            case R.id.id_aemain_json_cut:
-                showActivity(AEDemoAsset.AE_DEMO_JSON_CUT);
-                break;
-            case R.id.id_aemain_json_concat:
-                showActivity(AEDemoAsset.AE_DEMO_JSON_CONCAT);
-                break;
             case R.id.id_aemain_json_overlay:
                 showActivity(AEDemoAsset.AE_DEMO_TWO_JSON_OVERLAY);
                 break;
@@ -70,9 +65,19 @@ public class ListAEActivity extends Activity implements OnClickListener {
                 break;
 
             case R.id.id_aemain_ka_dian:
-                showActivity(AEDemoAsset.AE_DEMO_JSON_KA_DIAIN);
+                showActivity(AEDemoAsset.AE_DEMO_JSON_KA_DIAN);
                 break;
+//            case R.id.id_aemain_3D_1:
+//                showActivity(AEDemoAsset.AE_DEMO_JSON_SAMPLE_3D);
+//                break;
             //-------其他版本;
+            case R.id.id_aemain_oldversion:
+            {
+                Intent intent = new Intent(ListAEActivity.this, AEPreviewActivity.class);
+                intent.putExtra("AEType", AEDemoAsset.AE_DEMO_AOBAMA);
+                startActivity(intent);
+            }
+            break;
             case R.id.id_aemain_bitmapxy:  //图片坐标;
             {
                 Intent intent = new Intent(ListAEActivity.this, AEPositionDemoActivity.class);
@@ -101,8 +106,6 @@ public class ListAEActivity extends Activity implements OnClickListener {
             startActivity(intent);
         }
     }
-
-
     private void initView() {
         findViewById(R.id.id_aemain_aobama).setOnClickListener(this);
         findViewById(R.id.id_aemain_xiaohuangya).setOnClickListener(this);
@@ -115,13 +118,14 @@ public class ListAEActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_aemain_more_picture).setOnClickListener(this);
 
 
-        findViewById(R.id.id_aemain_json_cut).setOnClickListener(this);
-        findViewById(R.id.id_aemain_json_concat).setOnClickListener(this);
-
         findViewById(R.id.id_aemain_json_overlay).setOnClickListener(this);
         findViewById(R.id.id_aemain_json_blur1).setOnClickListener(this);
         findViewById(R.id.id_aemain_json_blur2).setOnClickListener(this);
         findViewById(R.id.id_aemain_ka_dian).setOnClickListener(this);
+
+//        findViewById(R.id.id_aemain_3D_1).setOnClickListener(this);
+
+        findViewById(R.id.id_aemain_oldversion).setOnClickListener(this);
     }
 
 

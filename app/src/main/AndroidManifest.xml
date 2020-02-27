@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lansoeditor.advanceDemo"
-    android:versionCode="3540"
-    android:versionName="3.5.4">
+    android:versionCode="3760"
+    android:versionName="3.7.6">
 
 
     <uses-feature android:glEsVersion="0x00020000"></uses-feature>
@@ -147,7 +147,7 @@
 
         <!-- 基本图层类 -->
         <activity
-            android:name="com.example.advanceDemo.layerDemo.Demo1LayerMothedActivity"
+            android:name="com.example.advanceDemo.layerDemo.Demo1LayerMethodActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -258,6 +258,9 @@
         <activity android:name="com.example.advanceDemo.aeDemo.AECompositionExecuteActivity" />
         <activity android:name="com.example.advanceDemo.aeDemo.BitmapAnimationActivity" />
         <activity android:name="com.example.advanceDemo.VideoConcatAnimationActivity" />
+        <activity android:name="com.example.advanceDemo.TestAdjustAnimationActivity" />
+        <activity android:name="com.example.advanceDemo.aeDemo.VideoConcatAnimationActivity" />
+        <activity android:name="com.example.advanceDemo.TestSomeFunctionActivity" />
     </application>
 
 </manifest>

@@ -96,18 +96,6 @@ public class LanSongFileUtil {
         }
     }
 
-    public static long getFileSizeByte(String filePath) {
-        if (filePath == null) {
-            return 0;
-        } else {
-            File file = new File(filePath);
-            if (!file.exists()) {
-                return 0;
-            } else {
-               return  file.length();
-            }
-        }
-    }
 
 
     /**
@@ -170,7 +158,6 @@ public class LanSongFileUtil {
             return retPath;
         }
     }
-
     /**
      * 在box目录下生成一个mp4的文件,并返回名字的路径.
      *

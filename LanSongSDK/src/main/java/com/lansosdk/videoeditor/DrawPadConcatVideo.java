@@ -116,6 +116,11 @@ public class DrawPadConcatVideo {
             renderer.setEncoderBitrate(bitrate);
         }
     }
+    public  void setCheckDrawPadSize(){
+        if(renderer!=null){
+            renderer.setCheckDrawPadSize(true);
+        }
+    }
     /**
      * 是否忽略声音
      */

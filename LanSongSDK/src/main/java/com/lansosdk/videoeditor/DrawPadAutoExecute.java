@@ -487,7 +487,7 @@ canvas.drawText("蓝松短视频演示之<任意绘制>", 20,canvasLayer.getPadH
 }
 });
 
- showHeart = new ShowHeart(this, canvasLayer.getPadWidth(),canvasLayer.getPadHeight());
+ showHeart = new ShowHeart(this, canvasLayer.getDrawPadWidth(),canvasLayer.getPadHeight());
  canvasLayer.addCanvasRunnable(new CanvasRunnable() {
 
 @Override

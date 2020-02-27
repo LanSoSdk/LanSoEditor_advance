@@ -1,34 +1,33 @@
 package com.lansosdk.videoeditor;
 
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
+
 import com.lansosdk.box.LSOLog;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * 用来得到当前音视频中的各种信息,比如视频的宽高,码率, 帧率,
  * 旋转角度,解码器信息,总时长,总帧数;音频的码率,采样率,解码器信息,总帧数等,为其他各种编辑处理为参考使用.
- * <p>
- * <p>
  * 暂时只支持一个音频和一个视频组成的多媒体文件,如MP4等,如果有多个音频,则音频数据是最后一个音频的info.
- * <p>
- * 如您的视频格式比较特殊, 需要另外的方式, 请联系我们. 如您的视频格式比较特殊, 需要另外的方式, 请联系我们.
- * <p>
- * 使用方法是:创建对象, 执行prepare, 使用结果. 可以在任意线程中执行如下:
- * <p>
- * MediaInfo info=new MediaInfo(inputPath);
- * <p>
- * if(info.prepare()){ //<==============主要是这里, 需要执行以下,
- * <p>
- * //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
- * <p>
- * }else{
- * <p>
- * //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
- * <p>
- * }
+ *
+  使用方法是:创建对象, 执行prepare,
+
+ 使用结果. 可以在任意线程中执行如下:
+
+  MediaInfo info=new MediaInfo(inputPath);
+  if(info.prepare()){ //<==============主要是这里, 需要执行以下,
+        //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
+  }else{
+        //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
  */
 public class MediaInfo {
-    //
+
+
+    private  String[] supportAudioFix={"wav","mp3","m4a","aac"};
+    private  String[] supportVideoFix={"mp4","mov","flv"};
 
     private static final boolean VERBOSE = true;
     public final String filePath;
@@ -136,26 +135,47 @@ public class MediaInfo {
                 fileLength=0;
             }
             isPngFile="png".equalsIgnoreCase(fileSuffix);
-
         }else{
             fileLength=0;
         }
     }
+    /**
+     * 准备当前媒体的信息
+     * 去底层运行相关方法, 得到媒体信息.
+     *
+     * @return 如获得当前媒体信息并支持格式, 则返回true, 否则返回false;
+     */
+    public boolean prepare() {
+        int ret = 0;
+        if (fileExist(filePath)) { // 这里检测下mfilePath是否是多媒体后缀.
+            ret = nativePrepare(filePath, false);
+            if(!isPngFile && vPixelFmt==null && vWidth>0 && vHeight>0 && vDuration>0 && vFrameRate>0){
+                VideoEditor editor=new VideoEditor();
+                String path2=editor.executeCutVideo(filePath,0,1.0f);
+                float duration=vDuration;
+                if(path2!=null){
+                    nativePrepare(path2,false);
+                }
+                vDuration=duration;
 
-    @Deprecated
-    public MediaInfo(String path, boolean checkCodec) {
-        filePath = path;
-        fileName = getFileNameFromPath(path);
-        fileSuffix = getFileSuffix(path);
-        if (path != null){
-            File file = new File(path);
-            if (file.exists()){
-                fileLength=file.length();
-            }else{
-                fileLength=0;
+                LanSongFileUtil.deleteFile(path2);
+                LSOLog.d("video pixel format is null, decode  to get frame size");
             }
-        }else{
-            fileLength=0;
+
+            if (ret >= 0) {
+                getSuccess = true;
+                return isSupport();
+            } else {
+                if (ret == -13) {
+                    LSOLog.e( "MediaInfo执行失败，可能您没有打开读写文件授权导致的，我们提供了PermissionsManager类来检测,可参考使用");
+                } else {
+                    LSOLog.e( "MediaInfo执行失败，" + prepareErrorInfo(filePath));
+                }
+                return false;
+            }
+        } else {
+            LSOLog.e( "MediaInfo执行失败,你设置的文件不存在.您的设置是:"+filePath );
+            return false;
         }
     }
 
@@ -182,81 +202,6 @@ public class MediaInfo {
             return false;
         }
     }
-
-    /**
-     * 是否不需要打印.
-     * @param videoPath
-     * @param noPrint
-     * @return
-     */
-    public static String checkFile(String videoPath,boolean noPrint) {
-        String ret = " ";
-        if (videoPath == null) {
-            ret = "文件名为空指针, null";
-        } else {
-            File file = new File(videoPath);
-            if (!file.exists()) {
-                ret = "文件不存在," + videoPath;
-            } else if (file.isDirectory()) {
-                ret = "您设置的路径是一个文件夹," + videoPath;
-            } else if (file.length() == 0) {
-                ret = "文件存在,但文件的大小为0字节(可能您只创建文件,但没有进行各种调用设置导致的.)." + videoPath;
-            } else {
-                MediaInfo info = new MediaInfo(videoPath);
-                if (info.fileSuffix.equals("pcm")
-                        || info.fileSuffix.equals("yuv")) {
-                    String str = "文件路径:" + info.filePath + "\n";
-                    str += "文件名:" + info.fileName + "\n";
-                    str += "文件后缀:" + info.fileSuffix + "\n";
-                    str += "文件大小(字节):" + file.length() + "\n";
-                    ret = "文件存在,但文件的后缀可能表示是裸数据,我们的SDK需要多媒体格式的后缀是mp4/mp3/wav/aac/m4a/mov/gif常见格式";
-                    ret += str;
-                } else if (info.prepare()) {
-                    ret = "文件内的信息是:\n";
-                    String str = "文件路径:" + info.filePath + "\n";
-                    str += "文件名:" + info.fileName + "\n";
-                    str += "文件后缀:" + info.fileSuffix + "\n";
-                    str += "文件大小(字节):" + file.length() + "\n";
-                    if (info.isHaveVideo()) {
-                        str += "视频信息-----:\n";
-                        str += "宽度:" + info.vWidth + "\n";
-                        str += "高度:" + info.vHeight + "\n";
-                        str += "编码宽度:" + info.vCodecWidth + "\n";
-                        str += "编码高度:" + info.vCodecHeight + "\n";
-                        str += "时长:" + info.vDuration + "\n";
-                        str += "帧率:" + info.vFrameRate + "\n";
-                        str += "码率:" + info.vBitRate + "\n";
-                        str += "总帧数:" + info.vTotalFrames + "\n";
-                        str += "旋转角度:" + info.vRotateAngle + "\n";
-                        str += "编码器名字:" + info.vCodecName + "\n";
-                        str += "是否有B帧:" + info.vHasBFrame + "\n";
-                        str += "像素格式:" + info.vPixelFmt + "\n";
-                    } else {
-                        str += "<无视频信息>\n";
-                    }
-
-                    if (info.isHaveAudio()) {
-                        str += "音频信息-----:\n";
-                        str += "采样率:" + info.aSampleRate + "\n";
-                        str += "通道数:" + info.aChannels + "\n";
-                        str += "码率:" + info.aBitRate + "\n";
-                        str += "时长:" + info.aDuration + "\n";
-                        str += "编码器:" + info.aCodecName + "\n";
-                    } else {
-                        str += "<无音频信息>\n";
-                    }
-                    ret += str;
-                } else {
-                    ret = "文件存在, 但MediaInfo.prepare获取媒体信息失败,请查看下 文件是否是音频或视频, 或许演示工程APP名字不是我们demo中的名字:"
-                            + videoPath;
-                }
-            }
-        }
-        if(!noPrint){
-            LSOLog.i( "当前文件的音视频信息是:" + ret);
-        }
-        return ret;
-    }
     /**
      * 如果在调试中遇到问题了, 首先应该执行这里, 这样可以检查出60%以上的错误信息. 在出错代码的上一行增加： 2018年1月4日20:54:07:
      * 新增, 在内部直接打印, 外部无效增加Log
@@ -274,49 +219,6 @@ public class MediaInfo {
         else
             return (new File(absolutePath)).exists();
     }
-
-    /**
-     * 准备当前媒体的信息
-     * 去底层运行相关方法, 得到媒体信息.
-     *
-     * @return 如获得当前媒体信息并支持格式, 则返回true, 否则返回false;
-     */
-    public boolean prepare() {
-        int ret = 0;
-        if (fileExist(filePath)) { // 这里检测下mfilePath是否是多媒体后缀.
-            ret = nativePrepare(filePath, false);
-
-            if(!isPngFile && vPixelFmt==null && vWidth>0 && vHeight>0 && vDuration>0 && vFrameRate>0){
-                VideoEditor editor=new VideoEditor();
-                String path2=editor.executeCutVideo(filePath,0,1.0f);
-                float duration=-vDuration;
-                if(path2!=null){
-                    nativePrepare(path2,false);
-                }
-
-                vDuration=duration;
-
-                LanSongFileUtil.deleteFile(path2);
-                LSOLog.d("video pixel format is null, decode  to get frame size");
-            }
-
-            if (ret >= 0) {
-                getSuccess = true;
-                return isSupport();
-            } else {
-                if (ret == -13) {
-                    LSOLog.e( "MediaInfo执行失败，可能您没有打开读写文件授权导致的，我们提供了PermissionsManager类来检测,可参考使用");
-                } else {
-                    LSOLog.e( "MediaInfo执行失败，" + prepareErrorInfo(filePath));
-                }
-                return false;
-            }
-        } else {
-            LSOLog.e( "MediaInfo执行失败,你设置的文件不存在.您的设置是:"+filePath );
-            return false;
-        }
-    }
-
     /**
      * 获取当前视频在显示的时候, 图像的宽度;
      * 因为有些视频是90度或270度旋转显示的, 旋转的话, 就宽高对调了
@@ -347,6 +249,15 @@ public class MediaInfo {
             }
         }
         return 0;
+    }
+    public long getDurationUs(){
+        if(vDuration>0){
+            return (long)(vDuration *1000*1000);
+        }else{
+            LSOLog.e("MediaInfo getDurationUs error. vDuration =0;");
+            return 1000;
+        }
+
     }
     public long getVideoTrackDurationUs(){
 
@@ -394,9 +305,9 @@ public class MediaInfo {
         {
             if (aChannels == 0)
                 return false;
-
             if (aCodecName == null || aCodecName.isEmpty())
                 return false;
+
 
             return true;
         } else {
@@ -411,17 +322,29 @@ public class MediaInfo {
             if (vHeight == 0 || vWidth == 0) {
                 return false;
             }
-
             if (vCodecHeight == 0 || vCodecWidth == 0) {
                 return false;
             }
             if (vCodecName == null || vCodecName.isEmpty())
                 return false;
+
+            if(vDuration<0 && ("mp4".equalsIgnoreCase(fileSuffix)
+                    ||  "mov".equalsIgnoreCase(fileSuffix)
+                    ||  "flv".equalsIgnoreCase(fileSuffix))){
+                return false;
+            }
             return true;
         }
         return false;
     }
-
+    private boolean isInAudioSupportList(){
+        for (String fix: supportAudioFix){
+            if (fix.equalsIgnoreCase(fileSuffix)){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 传递过来的文件是否支持
      *
@@ -430,9 +353,35 @@ public class MediaInfo {
     public boolean isSupport() {
         if(isHaveVideo() && vPixelFmt!=null){
             return true;
-        }else{
+        }else if(isInAudioSupportList()){
             return  isHaveAudio();
+        }else{
+            return false;
         }
+    }
+
+    int flvWidth;
+    int flvHeight;
+    long flvDurationUs;
+    private void checkFLV(String path){
+        MediaExtractor extractor = new MediaExtractor();
+        try {
+            extractor.setDataSource(path);
+            for (int i = 0; i < extractor.getTrackCount(); i++) {
+                MediaFormat format = extractor.getTrackFormat(i);
+                String mime = format.getString(MediaFormat.KEY_MIME);
+                if (mime.startsWith("video/")) {
+                    flvWidth = format.getInteger(MediaFormat.KEY_WIDTH);
+                    flvHeight = format.getInteger(MediaFormat.KEY_HEIGHT);
+                    flvDurationUs= format.getLong(MediaFormat.KEY_DURATION);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        extractor.release();
     }
 
     @Override
@@ -534,15 +483,84 @@ public class MediaInfo {
         else
             return "";
     }
-    /*
-     * ****************************************************************************
-     * 测试 // new Thread(new Runnable() { // // @Override // public void run() {
-     * MediaInfo("/sdcard/2x.mp4"); //这里是我们的测试视频地址, 如您测试, 则需要修改视频地址. //
-     * mif.prepare(); // Log.i(TAG,"mif is:"+ mif.toString()); // mif.releaseOnTask();
-     * // } // },"testMediaInfo#1").startPreview(); // new Thread(new Runnable() { //
-     * // @Override // public void run() { // // TODO Auto-generated method stub
-     * // MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");//这里是我们的测试视频地址, 如您测试,
-     * 则需要修改视频地址. // mif.prepare(); // Log.i(TAG,"mif is:"+ mif.toString()); //
-     * mif.releaseOnTask(); // } // },"testMediaInfo#2").startPreview();
+    /**
+     * 是否不需要打印.
+     * @param videoPath
+     * @param noPrint
+     * @return
+     */
+    public static String checkFile(String videoPath,boolean noPrint) {
+        String ret = " ";
+        if (videoPath == null) {
+            ret = "文件名为空指针, null";
+        } else {
+            File file = new File(videoPath);
+            if (!file.exists()) {
+                ret = "文件不存在," + videoPath;
+            } else if (file.isDirectory()) {
+                ret = "您设置的路径是一个文件夹," + videoPath;
+            } else if (file.length() == 0) {
+                ret = "文件存在,但文件的大小为0字节(可能您只创建文件,但没有进行各种调用设置导致的.)." + videoPath;
+            } else {
+                MediaInfo info = new MediaInfo(videoPath);
+                if (info.fileSuffix.equals("pcm")|| info.fileSuffix.equals("yuv")) {
+                    String str = "文件路径:" + info.filePath + "\n";
+                    str += "文件名:" + info.fileName + "\n";
+                    str += "文件后缀:" + info.fileSuffix + "\n";
+                    str += "文件大小(字节):" + file.length() + "\n";
+                    ret = "文件存在,但文件的后缀可能表示是裸数据,我们的SDK需要多媒体格式的后缀是mp4/mp3/wav/aac/m4a/mov/gif常见格式";
+                    ret += str;
+                } else if (info.prepare()) {
+                    ret = "文件内的信息是:\n";
+                    String str = "文件路径:" + info.filePath + "\n";
+                    str += "文件名:" + info.fileName + "\n";
+                    str += "文件后缀:" + info.fileSuffix + "\n";
+                    str += "文件大小(字节):" + file.length() + "\n";
+                    if (info.isHaveVideo()) {
+                        str += "视频信息-----:\n";
+                        str += "宽度:" + info.vWidth + "\n";
+                        str += "高度:" + info.vHeight + "\n";
+                        str += "编码宽度:" + info.vCodecWidth + "\n";
+                        str += "编码高度:" + info.vCodecHeight + "\n";
+                        str += "时长:" + info.vDuration + "\n";
+                        str += "帧率:" + info.vFrameRate + "\n";
+                        str += "码率:" + info.vBitRate + "\n";
+                        str += "总帧数:" + info.vTotalFrames + "\n";
+                        str += "旋转角度:" + info.vRotateAngle + "\n";
+                        str += "编码器名字:" + info.vCodecName + "\n";
+                        str += "是否有B帧:" + info.vHasBFrame + "\n";
+                        str += "像素格式:" + info.vPixelFmt + "\n";
+                    } else {
+                        str += "<无视频信息>\n";
+                    }
+
+                    if (info.isHaveAudio()) {
+                        str += "音频信息-----:\n";
+                        str += "采样率:" + info.aSampleRate + "\n";
+                        str += "通道数:" + info.aChannels + "\n";
+                        str += "码率:" + info.aBitRate + "\n";
+                        str += "时长:" + info.aDuration + "\n";
+                        str += "编码器:" + info.aCodecName + "\n";
+                    } else {
+                        str += "<无音频信息>\n";
+                    }
+                    ret += str;
+                } else {
+                    ret = "文件存在, 但MediaInfo.prepare获取媒体信息失败,请查看下 文件是否是音频或视频, 或许演示工程APP名字不是我们demo中的名字:"
+                            + videoPath;
+                }
+            }
+        }
+        if(!noPrint){
+            LSOLog.i( "当前文件的音视频信息是:" + ret);
+        }
+        return ret;
+    }
+
+    /**
+
+
+        使用 : MediaInfo创建后, 执行prepare, 则得到各种文件信息;
+
      */
 }

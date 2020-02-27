@@ -71,7 +71,7 @@ public class ConvertToEditModeDialog {
             videoOneDo2.setOnVideoOneDoErrorListener(new OnLanSongSDKErrorListener() {
                 @Override
                 public void onLanSongSDKError(int errorCode) {
-                    Log.e("DEMO", "videoOneDo2.setOnVideoOneDoErrorListener: ");
+                    Log.e("DEMO", "videoOneDo2 onLanSongSDKError: " + errorCode);
                 }
             });
         } catch (Exception e) {

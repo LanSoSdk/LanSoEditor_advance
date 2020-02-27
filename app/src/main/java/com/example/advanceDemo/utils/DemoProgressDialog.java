@@ -2,14 +2,17 @@ package com.example.advanceDemo.utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.util.Log;
 
 public class DemoProgressDialog {
 
     ProgressDialog progressDialog;
     boolean isShowing=false;
+    private Activity activity;
 
     public void show(Activity acty) {
         release();
+        activity=acty;
         progressDialog = new ProgressDialog(acty);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("正在处理中...");
@@ -48,11 +51,17 @@ public class DemoProgressDialog {
         progressDialog.setMessage("正在处理中:"+ String.valueOf(percent) + "%");
     }
     public void release() {
-        if (progressDialog != null) {
-            progressDialog.cancel();
-            isShowing=false;
-            progressDialog = null;
+        try {
+            if (progressDialog != null) {
+                progressDialog.cancel();
+                isShowing=false;
+                progressDialog = null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            DemoLog.e("DemoProgress cancel error.");
         }
+
     }
 
 
@@ -76,20 +85,21 @@ public class DemoProgressDialog {
     /**
      * 显示是否在缓冲中.....
      * @param activity
+     * @param text
      * @param isShowing
      */
-    public static void showBufferingHint(Activity activity,boolean isShowing){
+    public static void showBufferingHint(Activity activity,String text, boolean isShowing){
         if(isShowing){
-            if(bufferingDialog==null){
-                bufferingDialog=new DemoProgressDialog();
-                bufferingDialog.show(activity);
-                bufferingDialog.setMessage("正在加速渲染...");
-            }
-        }else if(bufferingDialog!=null){
             if(bufferingDialog!=null){
                 bufferingDialog.release();
                 bufferingDialog=null;
             }
+            bufferingDialog=new DemoProgressDialog();
+            bufferingDialog.show(activity);
+            bufferingDialog.setMessage(text);
+        }else if(bufferingDialog!=null){
+            bufferingDialog.release();
+            bufferingDialog=null;
         }
     }
 }
@@ -102,6 +112,6 @@ public class DemoProgressDialog {
  progressDialog.setProgress
  ......
 
- progressDialog.release();
+ progressDialog.releaseOnTask();
 
  */

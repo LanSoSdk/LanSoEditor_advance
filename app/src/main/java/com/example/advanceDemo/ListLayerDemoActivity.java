@@ -8,14 +8,13 @@ import android.view.View.OnClickListener;
 
 import com.example.advanceDemo.layerDemo.BitmapLayerMarkActivity;
 import com.example.advanceDemo.layerDemo.CanvasLayerDemoActivity;
-import com.example.advanceDemo.layerDemo.Demo1LayerMothedActivity;
+import com.example.advanceDemo.layerDemo.Demo1LayerMethodActivity;
 import com.example.advanceDemo.layerDemo.Demo2LayerMothedActivity;
 import com.example.advanceDemo.layerDemo.Demo3LayerFilterActivity;
 import com.example.advanceDemo.layerDemo.CanvasLayerExecuteActivity;
 import com.example.advanceDemo.layerDemo.ExecuteVideoLayerActivity;
 import com.example.advanceDemo.layerDemo.MVLayerDemoActivity;
 import com.example.advanceDemo.layerDemo.TwoVideoLayerActivity;
-import com.example.advanceDemo.layerDemo.ViewLayerDemoActivity;
 import com.example.advanceDemo.layerDemo.ViewLayerListActivity;
 import com.example.advanceDemo.layerDemo.ViewLayerOnlyActivity;
 import com.lansoeditor.advanceDemo.R;
@@ -50,7 +49,7 @@ public class ListLayerDemoActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.id_layer_layermothed1:
-                startDemoActivity(Demo1LayerMothedActivity.class);
+                startDemoActivity(Demo1LayerMethodActivity.class);
                 break;
             case R.id.id_layer_layermothed2:
                 startDemoActivity(Demo2LayerMothedActivity.class);

@@ -16,14 +16,11 @@ import com.lansosdk.LanSongAe.LSOLoadAeJsons;
 import com.lansosdk.LanSongAe.OnLSOAeJsonLoadedListener;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.LSOLayerPosition;
-import com.lansosdk.box.OnLanSongSDKCompletedListener;
-import com.lansosdk.box.OnLanSongSDKErrorListener;
-import com.lansosdk.box.OnLanSongSDKExportProgressListener;
+import com.lansosdk.box.OnAERenderCompletedListener;
+import com.lansosdk.box.OnAERenderErrorListener;
+import com.lansosdk.box.OnAERenderProgressListener;
 import com.lansosdk.videoeditor.AECompositionExecute;
 import com.lansosdk.videoeditor.AECompositionView;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 
 public class AECompositionExecuteActivity extends Activity {
@@ -41,17 +38,16 @@ public class AECompositionExecuteActivity extends Activity {
 
         inputType = getIntent().getIntExtra("AEType", AEDemoAsset.AE_DEMO_NONE);
         //创建素材;
-        demoAsset =new AEDemoAsset(getApplicationContext(),inputType);
 
-
-        findViewById(R.id.id_only_ae_export_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                parseAeJson();
-            }
-        });
+            //开始执行
+            demoAsset =new AEDemoAsset(getApplicationContext(),inputType);
+            findViewById(R.id.id_only_ae_export_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    parseAeJson();
+                }
+            });
     }
-
     /**
      * 解析AE中的json
      */
@@ -82,7 +78,7 @@ public class AECompositionExecuteActivity extends Activity {
     boolean isRunning;
 
     /**
-     * 开始预览.
+     * 开始导出.
      */
     private void startAEExport() {
 
@@ -98,23 +94,12 @@ public class AECompositionExecuteActivity extends Activity {
 
         //第一层:视频层
         if (demoAsset.bgVideo != null) {
-            try {
-                aeExecute.addFirstLayer(demoAsset.bgVideo);
-            } catch (IOException e) {
-                DemoLog.e("ae preview add videolayer  error. ", e);
-                e.printStackTrace();
-            }
+            aeExecute.addFirstLayer(demoAsset.bgVideo);
         }
 
         //第二层:json层;
         if (demoAsset.drawable1 != null) {
-            if(inputType== AEDemoAsset.AE_DEMO_JSON_CUT) {  //json裁剪
-                aeExecute.addSecondLayer(demoAsset.drawable1, demoAsset.startFrameIndex, demoAsset.endFrameIndex);
-            }else  if(inputType == AEDemoAsset.AE_DEMO_JSON_CONCAT){  //json拼接;
-                aeExecute.addSecondLayer(Arrays.asList(demoAsset.drawable1,demoAsset.drawable2));  //两个json拼接.
-            }else {
                 aeExecute.addSecondLayer(demoAsset.drawable1);
-            }
         }
 
         //第三层:mv图层;
@@ -124,7 +109,7 @@ public class AECompositionExecuteActivity extends Activity {
 
 
         //第四层:json图层[通常用不到]
-        if (demoAsset.drawable2 != null && inputType!= AEDemoAsset.AE_DEMO_JSON_CONCAT) {
+        if (demoAsset.drawable2 != null) {
             aeExecute.addForthLayer(demoAsset.drawable2);
         }
 
@@ -133,36 +118,14 @@ public class AECompositionExecuteActivity extends Activity {
             aeExecute.addFifthLayer(demoAsset.mvColorPath2,demoAsset.mvMaskPath2);
         }
 
-
         //增加其他音频;
         if (demoAsset.audioAsset != null) {
             aeExecute.addAudioLayer(demoAsset.audioAsset);
         }
 
-
-        aeExecute.setOnLanSongSDKCompletedListener(new OnLanSongSDKCompletedListener() {
+        aeExecute.setOnAERenderErrorListener(new OnAERenderErrorListener() {
             @Override
-            public void onLanSongSDKCompleted(String dstVideo) {
-                DemoProgressDialog.releaseDialog();
-
-                isRunning=false;
-                if(aeExecute!=null){
-                    aeExecute.release();
-                    aeExecute=null;
-                }
-                DemoUtil.playDstVideo(AECompositionExecuteActivity.this, dstVideo);
-            }
-        });
-        aeExecute.setOnLanSongSDKExportProgressListener(new OnLanSongSDKExportProgressListener() {
-            @Override
-            public void onLanSongSDKExportProgress(long ptsUs, int percent) {
-               DemoProgressDialog.showPercent(AECompositionExecuteActivity.this,percent);
-            }
-        });
-
-        aeExecute.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
-            @Override
-            public void onLanSongSDKError(int errorCode) {
+            public void onError(String error) {
                 if(aeExecute!=null){
                     aeExecute.cancel();
                     aeExecute=null;
@@ -172,7 +135,25 @@ public class AECompositionExecuteActivity extends Activity {
                 DemoUtil.showDialog(AECompositionExecuteActivity.this, "AE执行错误,请查看错误信息.我们的TAG是LanSongSDK.");
             }
         });
+        aeExecute.setOnAERenderProgressListener(new OnAERenderProgressListener() {
+            @Override
+            public void onProgress(long ptsUs, int percent) {
+                DemoProgressDialog.showPercent(AECompositionExecuteActivity.this,percent);
+            }
+        });
+        aeExecute.setOnAERenderCompletedListener(new OnAERenderCompletedListener() {
+            @Override
+            public void onCompleted(String dstPath) {
+                DemoProgressDialog.releaseDialog();
 
+                isRunning=false;
+                if(aeExecute!=null){
+                    aeExecute.release();
+                    aeExecute=null;
+                }
+                DemoUtil.playDstVideo(AECompositionExecuteActivity.this, dstPath);
+            }
+        });
         //增加图标演示
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         BitmapLayer bmpLayer = aeExecute.addBitmapLayer(bmp);

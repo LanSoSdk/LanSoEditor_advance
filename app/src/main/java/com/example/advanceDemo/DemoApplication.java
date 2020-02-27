@@ -15,6 +15,7 @@ public class DemoApplication extends Application {
         return instance;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,7 +31,10 @@ public class DemoApplication extends Application {
     }
 
 
-
+    /**
+     * 当前正在处理的视频;
+     */
+    public String currentEditVideo;
 
 
 }

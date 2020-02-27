@@ -21,7 +21,7 @@ public class AudioEditor {
     public AudioEditor()
     {
         editor=new VideoEditor();
-        editor.setOnProgessListener(new onVideoEditorProgressListener() {
+        editor.setOnProgressListener(new onVideoEditorProgressListener() {
             @Override
             public void onProgress(VideoEditor v, int percent) {
                 if(monAudioEditorProgressListener!=null){
@@ -37,6 +37,51 @@ public class AudioEditor {
     public void cancel(){
         if(editor!=null){
             editor.cancel();
+        }
+    }
+
+    public String executeAudioReverse(String srcPath) {
+        if (fileExist(srcPath)) {
+
+            List<String> cmdList = new ArrayList<String>();
+
+            String  retPath=LanSongFileUtil.createMP3FileInBox();
+            cmdList.add("-vcodec");
+            cmdList.add("lansoh264_dec");
+
+            cmdList.add("-i");
+            cmdList.add(srcPath);
+
+            cmdList.add("-af");
+            cmdList.add("areverse");
+
+            cmdList.add("-vn");
+
+            cmdList.add("-acodec");
+            cmdList.add("libmp3lame");
+
+            cmdList.add("-b:a");
+            cmdList.add("128000");
+
+            cmdList.add("-ac");
+            cmdList.add("2");
+
+
+            cmdList.add("-y");
+            cmdList.add(retPath);
+            String[] command = new String[cmdList.size()];
+            for (int i = 0; i < cmdList.size(); i++) {
+                command[i] = (String) cmdList.get(i);
+            }
+            VideoEditor editor = new VideoEditor();
+            int ret = editor.executeVideoEditor(command);
+            if(ret==0){
+                return retPath;
+            }else{
+                return null;
+            }
+        } else {
+            return null;
         }
     }
 
@@ -624,8 +669,9 @@ public class AudioEditor {
      * @return
      */
     public String executeCutAudio(String srcFile, float startS, float durationS) {
-        if (fileExist(srcFile)) {
-
+        MediaInfo info=new MediaInfo(srcFile);
+        if (info.prepare()) {
+            editor.setDurationMs((int)(durationS *1000));
             List<String> cmdList = new ArrayList<String>();
 
             String dstFile=LanSongFileUtil.createM4AFileInBox();
@@ -665,6 +711,7 @@ public class AudioEditor {
                 command[i] = (String) cmdList.get(i);
             }
             int ret= editor.executeVideoEditor(command);
+            editor.setDurationMs(0);
             if(ret==0){
                 return dstFile;
             }else{
@@ -790,9 +837,6 @@ public class AudioEditor {
                 cmdList.add("-b:a");
                 cmdList.add("128000");
             }
-
-
-
             cmdList.add("-y");
             cmdList.add(retPath);
             String[] command = new String[cmdList.size()];

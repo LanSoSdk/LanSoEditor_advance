@@ -3,6 +3,7 @@ package com.lansosdk.videoeditor;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.AudioLayer;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CanvasLayer;
@@ -19,11 +20,13 @@ import com.lansosdk.box.onDrawPadErrorListener;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadThreadProgressListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.lansosdk.LanSongFilter.LanSongFilter;
-
+/**
+ * 对单个视频做VideoOneDo2无法完成的工作.
+ * 视频容器, 仅作为单个视频使用.
+ *
+ */
 public class DrawPadVideoExecute {
 
     protected boolean isCheckBitRate = true;
@@ -328,15 +331,15 @@ public class DrawPadVideoExecute {
      *
      * @param srcPath
      * @param startFromPadUs   从容器的什么位置开始增加
-     * @param startAudioTimeUs 把当前声音的开始时间增加进去.
-     * @param durationUs       增加多少, 时长.
+     * @param startAudioTimeUs 裁剪声音的开始时间
+     * @param endAudioTimeUs   裁剪声音的结束时间;
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
-                                  long startAudioTimeUs, long durationUs) {
+                                  long startAudioTimeUs, long endAudioTimeUs) {
         if (render != null && !render.isRunning()) {
             return render.addAudioLayer(srcPath, startFromPadUs,
-                    startAudioTimeUs, durationUs);
+                    startAudioTimeUs, endAudioTimeUs);
         } else {
             LSOLog.e("addAudioLayer error, drawPad is :"+toString());
             return null;

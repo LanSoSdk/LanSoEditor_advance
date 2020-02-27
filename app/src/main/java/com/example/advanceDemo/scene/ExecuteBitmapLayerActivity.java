@@ -22,6 +22,7 @@ import com.lansosdk.videoeditor.LanSongFileUtil;
 
 /**
  * 后台执行 照片影集的功能. 使用DrawPad的扩展类:DrawPadPictureExecute来操作.
+ * 不建议使用.
  */
 public class ExecuteBitmapLayerActivity extends Activity {
 
@@ -160,7 +161,7 @@ public class ExecuteBitmapLayerActivity extends Activity {
                 item.getPadWidth() + item.getPadWidth() / 2,
                 item.getPadHeight() / 2);
 
-        item.addAnimation(move1);
-        item.addAnimation(move2);
+        item.addAnimationOLD(move1);
+        item.addAnimationOLD(move2);
     }
 }

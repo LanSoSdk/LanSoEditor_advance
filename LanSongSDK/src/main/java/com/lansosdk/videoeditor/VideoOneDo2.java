@@ -2,8 +2,6 @@ package com.lansosdk.videoeditor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.util.Log;
 
 import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.AudioLayer;
@@ -13,18 +11,24 @@ import com.lansosdk.box.CanvasLayer;
 import com.lansosdk.box.GifLayer;
 import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.LanSoEditorBox;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
+import com.lansosdk.box.OnLanSongSDKThreadProgressListener;
 import com.lansosdk.box.OnLayerAlreadyListener;
+import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.VideoOneDoRunnable;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
+ * 此类是针对单个视频操作.
+ * 此类是针对单个视频操作.
+ * 此类是针对单个视频操作.
+ *
+ *
  * 当前可以完成常见18个功能:
  * 增加音乐, 裁剪时长, 裁剪画面, 缩放, 压缩,增加logo,文字, 设置编辑模式,
  * 设置遮罩, 增加滤镜, 增加美颜,增加mv动画, 增加Gif,提取图片.增加Canvas等.
@@ -47,6 +51,31 @@ public class VideoOneDo2 {
         padWidth=mediaInfo.getWidth();
         padHeight=mediaInfo.getHeight();
     }
+    /**
+     * [可选]
+     * VideoOnedo2是对单个视频做处理,它本身也是一个容器, 可以设置容器的宽高
+     * 一般不建议设置, 常见的视频处理,处理前的宽高是多少, 处理后是多少.
+     * 但如果您强制输出一个宽高,请从这里设置,常见非视频宽高的比例是正方形;
+     * @param width
+     * @param height
+     */
+    public void setDrawPadSize(int width,int height){
+        if(runnable!=null){
+            runnable.setDrawPadSize(width,height);
+        }
+
+    }
+
+    /**
+     * 设置背景颜色; 只有在
+     * @param color
+     */
+    public void setBackGroundColor(int color){
+        if(runnable!=null){
+            runnable.setBackGroundColor(color);
+        }
+    }
+
     public int getVideoWidth(){
         return mediaInfo.getWidth();
     }
@@ -68,7 +97,6 @@ public class VideoOneDo2 {
             runnable.setCutDuration(startUs,endUs);
         }
     }
-
     /**
      * 设置裁剪画面
      *
@@ -175,8 +203,9 @@ public class VideoOneDo2 {
      *
      * 您可以实时读取,也可以在执行到"完成监听"后一次性读取. 如果您最后一次性读取,建议不要缓冲太多图片,以免造成OOM
      *
+     *
      * 读取到最后一张图片,则返回null;
-     * 先得到的是开始的图片, 后得到的是后来的图片.
+     * 先得到的是开始的图片, 后得到的是后来的图片.提取图片的数量是通过 setExtractFrame设置的;
      * @return
      */
     public Bitmap getExtractFrame(){
@@ -200,6 +229,7 @@ public class VideoOneDo2 {
     /**
      * 设置压缩比;
      * 如果小于我们规定的最小值, 则等于最小值;
+     * [如果视频是1080P,码率在10M以上有作用, 如果码率太小,则没有作用]
      * @param percent 0---1.0f
      */
     public void setCompressPercent(float percent){
@@ -248,7 +278,6 @@ public class VideoOneDo2 {
             return null;
         }
     }
-
     /**
      * 增加音频
      * @param srcPath 音频的完整路径(或还有音频的视频路径)
@@ -267,7 +296,7 @@ public class VideoOneDo2 {
     /**
      * 增加音频
      * @param srcPath 音频的完整路径(或还有音频的视频路径)
-     * @param startPadUs
+     * @param startPadUs 从视频的什么时间点增加;
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath, long startPadUs) {
@@ -297,13 +326,12 @@ public class VideoOneDo2 {
         }
     }
     //---------------------------------gpu render startPreview---------------------------------------------
-    //----------增加滤镜和别的图层信息;
-
     /**
-     * 异步获取当前的视频图层,
+     * 异步获取当前视频的图层对象.
      *
-     *
-     * OnLayerAlreadyListener监听的3个方法分别是: VideoDataLayer图层对象, 容器的宽度, 容器的高度;
+     * OnLayerAlreadyListener监听的3个方法分别是: Layer图层对象, 容器的宽度, 容器的高度;
+     * 此方法的listener运行在内部的GPU线程中, 不可以在此监听中增加UI相关的代码;
+     * 请不要在此方法里做过多耗时的操作.
      */
     public void getVideoDataLayerAsync(OnLayerAlreadyListener listener){
         if(runnable!=null){
@@ -336,6 +364,7 @@ public class VideoOneDo2 {
 
     /**
      * 增加滤镜
+     * 可以增加多个
      */
     public void  addFilter(LanSongFilter filter){
         if(runnable!=null){
@@ -354,20 +383,21 @@ public class VideoOneDo2 {
             runnable.addFilterList(filterList);
         }
     }
-    /**
-     * 增加图片图层;
-     */
-    public BitmapLayer addBitmapLayer(Bitmap bmp ,LSOLayerPosition position) {
+    public BitmapLayer addBitmapLayer(Bitmap bmp) {
         if(runnable!=null){
-            return runnable.addBitmapLayer(bmp,position);
+            return runnable.addBitmapLayer(bmp);
         }else{
             return null;
         }
     }
 
-    public BitmapLayer addBitmapLayer(Bitmap bmp) {
+
+    /**
+     * 增加图片图层;
+     */
+    public BitmapLayer addBitmapLayer(Bitmap bmp , LSOLayerPosition position) {
         if(runnable!=null){
-            return runnable.addBitmapLayer(bmp);
+            return runnable.addBitmapLayer(bmp,position);
         }else{
             return null;
         }
@@ -422,15 +452,6 @@ public class VideoOneDo2 {
 
 
     //----------增加图片图层End;
-    //------------------------
-    public MVLayer addMVLayer(String srcPath, String maskPath, boolean isAsync) {
-        if(runnable!=null){
-            return runnable.addMVLayer(srcPath,maskPath,isAsync);
-        }else{
-            return null;
-        }
-    }
-
     /**
      * 增加mv图层, mv默认是循环模式.
      * @param colorPath   mv图层的color视频
@@ -445,7 +466,7 @@ public class VideoOneDo2 {
         }
     }
 
-    public GifLayer addGifLayer(String gifPath,LSOLayerPosition position) {
+    public GifLayer addGifLayer(String gifPath, LSOLayerPosition position) {
         if(runnable!=null){
             return runnable.addGifLayer(gifPath,position);
         }else{
@@ -464,7 +485,7 @@ public class VideoOneDo2 {
     /**
      * 增加gif图层
      */
-    public GifLayer addGifLayer(int resId,LSOLayerPosition position) {
+    public GifLayer addGifLayer(int resId, LSOLayerPosition position) {
         if(runnable!=null){
             GifLayer gifLayer= runnable.addGifLayer(resId);
             if(gifLayer!=null){
@@ -483,8 +504,56 @@ public class VideoOneDo2 {
             return null;
         }
     }
+
+    /**
+     * 增加子图层.
+     * 默认不需要调用,我们会在视频图层绘制后, 直接绘制子图层;
+     * 如果你要在视频层上面增加其他层, 然后再增加子图层, 则用这个.
+     *
+     * 在getVideoDataLayerAsync 回调中增加;
+     * 一般用在溶图的场合;
+     * 举例如下:
+     *    videoOneDo2.getVideoDataLayerAsync(new OnLayerAlreadyListener() {
+     *                 @Override
+     *                 public void onLayerAlready(VideoDataLayer layer, int padWidth, int padHeight) {
+     *
+     *                     //先增加一个图片图层
+     *                     Bitmap bmp1=BitmapFactory.decodeResource(getResources(),R.drawable.tt3);
+     *                     videoOneDo2.addBitmapLayer(bmp1);
+     *
+     *                    //再次增加子图层;
+     *                     SubLayer subLayer =layer.addSubLayer();
+     *                     subLayer.setScale(0.3f);
+     *                     videoOneDo2.addSubLayer(subLayer);
+     *                 }
+     *             });
+     *
+     * @param layer
+     * @return
+     */
+    public boolean addSubLayer(SubLayer layer){
+        return runnable!=null && runnable.addSubLayer(layer);
+    }
+
+
     /**
      * 进度监听
+     * 此进度不经过handler+message机制, 直接在处理完当前帧的时候, 调用此监听;
+     * OnLanSongSDKThreadProgressListener 的两个方法分别是:
+     * long ptsUs : 当前处理视频帧的时间戳. 单位微秒; 1秒=1000*1000微秒
+     * int percent : 当前处理的进度百分比. 范围:0--100;
+     */
+    public void setOnLanSongSDKThreadProgressListener(OnLanSongSDKThreadProgressListener listener) {
+        if(runnable!=null){
+            runnable.setOnLanSongSDKThreadProgressListener(listener);
+        }
+    }
+
+    /**
+     * 进度监听
+     * OnLanSongSDKProgressListener 的两个方法分别是:
+     * long ptsUs : 当前处理视频帧的时间戳. 单位微秒; 1秒=1000*1000微秒
+     * int percent : 当前处理的进度百分比. 范围:0--100;
      */
     public void setOnVideoOneDoProgressListener(OnLanSongSDKProgressListener listener) {
         if(runnable!=null){
@@ -509,18 +578,6 @@ public class VideoOneDo2 {
         }
     }
     /**
-     * 开始执行,
-     * 执行的同时有进度回调, 完成后有完成回调;
-     */
-    public void start(){
-        if(runnable!=null && !runnable.isRunning()){
-            runnable.start();
-        }else{
-            LSOLog.e("VideoOneDo2 startPreview error. runnable is null or is running");
-        }
-    }
-
-    /**
      * 处理是否在运行
      */
     public boolean isRunning(){
@@ -528,6 +585,18 @@ public class VideoOneDo2 {
             return runnable.isRunning();
         }else {
             return false;
+        }
+    }
+
+    /**
+     * 另外开启一个线程,开始执行,
+     * 执行的同时有进度回调, 完成后有完成回调;
+     */
+    public void start(){
+        if(runnable!=null && !runnable.isRunning()){
+            runnable.start();
+        }else{
+            LSOLog.e("VideoOneDo2 startPreview error. runnable is null or is running");
         }
     }
     /**

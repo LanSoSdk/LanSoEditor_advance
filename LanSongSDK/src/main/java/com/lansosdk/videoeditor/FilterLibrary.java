@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 CyberAgent
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, A0Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,16 +21,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PointF;
 
-import com.lansosdk.LanSongFilter.LanSongGaussianBlurFilter;
-import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
-import com.lansosdk.box.BitmapLoader;
-import com.lansosdk.box.LSOLog;
-
 import com.lansosdk.LanSongFilter.LanSong3x3ConvolutionFilter;
 import com.lansosdk.LanSongFilter.LanSong3x3TextureSamplingFilter;
 import com.lansosdk.LanSongFilter.LanSongAddBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongAlphaBlendFilter;
+import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
+import com.lansosdk.LanSongFilter.LanSongBlackMaskBlendFilter;
+import com.lansosdk.LanSongFilter.LanSongBlurFilter;
 import com.lansosdk.LanSongFilter.LanSongBrightnessFilter;
+import com.lansosdk.LanSongFilter.LanSongBulgeDistortionFilter;
 import com.lansosdk.LanSongFilter.LanSongCGAColorspaceFilter;
 import com.lansosdk.LanSongFilter.LanSongChromaKeyBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongColorBalanceFilter;
@@ -43,6 +42,8 @@ import com.lansosdk.LanSongFilter.LanSongCrosshatchFilter;
 import com.lansosdk.LanSongFilter.LanSongDarkenBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongDifferenceBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongDissolveBlendFilter;
+import com.lansosdk.LanSongFilter.LanSongDistortionPinchFilter;
+import com.lansosdk.LanSongFilter.LanSongDistortionStretchFilter;
 import com.lansosdk.LanSongFilter.LanSongDivideBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongEmbossFilter;
 import com.lansosdk.LanSongFilter.LanSongExclusionBlendFilter;
@@ -50,6 +51,7 @@ import com.lansosdk.LanSongFilter.LanSongExposureFilter;
 import com.lansosdk.LanSongFilter.LanSongFalseColorFilter;
 import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.LanSongFilter.LanSongGammaFilter;
+import com.lansosdk.LanSongFilter.LanSongGaussianBlurFilter;
 import com.lansosdk.LanSongFilter.LanSongGlassSphereFilter;
 import com.lansosdk.LanSongFilter.LanSongGrayscaleFilter;
 import com.lansosdk.LanSongFilter.LanSongHalftoneFilter;
@@ -58,6 +60,23 @@ import com.lansosdk.LanSongFilter.LanSongHazeFilter;
 import com.lansosdk.LanSongFilter.LanSongHighlightShadowFilter;
 import com.lansosdk.LanSongFilter.LanSongHueBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongHueFilter;
+import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
+import com.lansosdk.LanSongFilter.LanSongIFAmaroFilter;
+import com.lansosdk.LanSongFilter.LanSongIFBrannanFilter;
+import com.lansosdk.LanSongFilter.LanSongIFEarlybirdFilter;
+import com.lansosdk.LanSongFilter.LanSongIFHefeFilter;
+import com.lansosdk.LanSongFilter.LanSongIFHudsonFilter;
+import com.lansosdk.LanSongFilter.LanSongIFInkwellFilter;
+import com.lansosdk.LanSongFilter.LanSongIFLomofiFilter;
+import com.lansosdk.LanSongFilter.LanSongIFLordKelvinFilter;
+import com.lansosdk.LanSongFilter.LanSongIFNashvilleFilter;
+import com.lansosdk.LanSongFilter.LanSongIFRiseFilter;
+import com.lansosdk.LanSongFilter.LanSongIFSierraFilter;
+import com.lansosdk.LanSongFilter.LanSongIFSutroFilter;
+import com.lansosdk.LanSongFilter.LanSongIFToasterFilter;
+import com.lansosdk.LanSongFilter.LanSongIFValenciaFilter;
+import com.lansosdk.LanSongFilter.LanSongIFWaldenFilter;
+import com.lansosdk.LanSongFilter.LanSongIFXproIIFilter;
 import com.lansosdk.LanSongFilter.LanSongKuwaharaFilter;
 import com.lansosdk.LanSongFilter.LanSongLaplacianFilter;
 import com.lansosdk.LanSongFilter.LanSongLevelsFilter;
@@ -65,6 +84,7 @@ import com.lansosdk.LanSongFilter.LanSongLightenBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongLinearBurnBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongLookupFilter;
 import com.lansosdk.LanSongFilter.LanSongLuminosityBlendFilter;
+import com.lansosdk.LanSongFilter.LanSongMaskBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongMonochromeFilter;
 import com.lansosdk.LanSongFilter.LanSongMultiplyBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongNormalBlendFilter;
@@ -86,30 +106,8 @@ import com.lansosdk.LanSongFilter.LanSongToonFilter;
 import com.lansosdk.LanSongFilter.LanSongTwoInputFilter;
 import com.lansosdk.LanSongFilter.LanSongVignetteFilter;
 import com.lansosdk.LanSongFilter.LanSongWhiteBalanceFilter;
-import com.lansosdk.LanSongFilter.LanSongIFAmaroFilter;
-import com.lansosdk.LanSongFilter.LanSongIFBrannanFilter;
-import com.lansosdk.LanSongFilter.LanSongIFEarlybirdFilter;
-import com.lansosdk.LanSongFilter.LanSongIFHefeFilter;
-import com.lansosdk.LanSongFilter.LanSongIFHudsonFilter;
-import com.lansosdk.LanSongFilter.LanSongIFInkwellFilter;
-import com.lansosdk.LanSongFilter.LanSongIFLomofiFilter;
-import com.lansosdk.LanSongFilter.LanSongIFLordKelvinFilter;
-import com.lansosdk.LanSongFilter.LanSongIFNashvilleFilter;
-import com.lansosdk.LanSongFilter.LanSongIFRiseFilter;
-import com.lansosdk.LanSongFilter.LanSongIFSierraFilter;
-import com.lansosdk.LanSongFilter.LanSongIFSutroFilter;
-import com.lansosdk.LanSongFilter.LanSongIFToasterFilter;
-import com.lansosdk.LanSongFilter.LanSongIFValenciaFilter;
-import com.lansosdk.LanSongFilter.LanSongIFWaldenFilter;
-import com.lansosdk.LanSongFilter.LanSongIFXproIIFilter;
-
-
-import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
-import com.lansosdk.LanSongFilter.LanSongBlackMaskBlendFilter;
-import com.lansosdk.LanSongFilter.LanSongBulgeDistortionFilter;
-import com.lansosdk.LanSongFilter.LanSongDistortionPinchFilter;
-import com.lansosdk.LanSongFilter.LanSongDistortionStretchFilter;
-import com.lansosdk.LanSongFilter.LanSongMaskBlendFilter;
+import com.lansosdk.box.BitmapLoader;
+import com.lansosdk.box.LSOLog;
 
 public class FilterLibrary {
 
@@ -155,11 +153,12 @@ public class FilterLibrary {
         filterList.addFilter("Vignette加轮廓", FilterType.VIGNETTE);
         filterList.addFilter("加减雾", FilterType.HAZE);
         filterList.addFilter("玻璃球效果", FilterType.GLASS_SPHERE);
-        filterList.addFilter("球面折射",FilterType.SPHERE_REFRACTION);
+        filterList.addFilter("球面折射",
+                FilterType.SPHERE_REFRACTION);
 
         // 新增
         filterList.addFilter("扩散扭曲", FilterType.PINCH_DISTORTION);
-        filterList.addFilter("中心扭曲", FilterType.STRETCH_DISTORTION);
+        filterList.addFilter("中心扭曲",FilterType.STRETCH_DISTORTION);
         filterList.addFilter("Bulge Distortion凸凹调节",FilterType.BULGE_DISTORTION);
 
         filterList.addFilter("亮度", FilterType.BRIGHTNESS);
@@ -170,7 +169,7 @@ public class FilterLibrary {
         filterList.addFilter("色调分离", FilterType.POSTERIZE);
         filterList.addFilter("复古", FilterType.SEPIA);
 
-        filterList.addFilter("阴影高亮",FilterType.HIGHLIGHT_SHADOW);
+        filterList.addFilter("阴影高亮", FilterType.HIGHLIGHT_SHADOW);
         filterList.addFilter("单色", FilterType.MONOCHROME);
         filterList.addFilter("白平衡", FilterType.WHITE_BALANCE);
         filterList.addFilter("曝光度", FilterType.EXPOSURE);
@@ -179,8 +178,7 @@ public class FilterLibrary {
 
         filterList.addFilter("假彩色", FilterType.FALSE_COLOR);
         filterList.addFilter("颜色平衡", FilterType.COLOR_BALANCE);
-        filterList.addFilter("暗色调节",
-                FilterType.LEVELS_FILTER_MIN);
+        filterList.addFilter("暗色调节",FilterType.LEVELS_FILTER_MIN);
         filterList
                 .addFilter("Lookup (Amatorka)查找表", FilterType.LOOKUP_AMATORKA);
         filterList.addFilter("Crosshatch交叉阴影网格", FilterType.CROSSHATCH);
@@ -194,6 +192,7 @@ public class FilterLibrary {
 
         filterList.addFilter("Grayscale灰度", FilterType.GRAYSCALE);
         filterList.addFilter("Contrast对比度", FilterType.CONTRAST);
+
         filterList.addFilter("Saturation饱和度", FilterType.SATURATION);
 
         filterList.addFilter("Blend (Difference)", FilterType.BLEND_DIFFERENCE);
@@ -238,18 +237,22 @@ public class FilterLibrary {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Choose a filter(total:" + filterList.names.size()
                 + " )");
-        builder.setItems(filterList.names.toArray(new String[filterList.names.size()]),
-                new DialogInterface.OnClickListener() {
+        builder.setItems(filterList.names.toArray(new String[filterList.names.size()]),new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,final int item) {
-                        listener.onLanSongFilterChosenListener(
-                                getFilterObject(context,filterList.filters.get(item)),
+                        listener.onLanSongFilterChosenListener( getFilterObject(context,filterList.filters.get(item)),
                                 filterList.names.get(item));
                     }
                 });
         builder.create().show();
     }
 
+    /**
+     * 获取滤镜对象;
+     * @param context
+     * @param type
+     * @return
+     */
     public static LanSongFilter getFilterObject(final Context context,
                                                 final FilterType type) {
         switch (type) {
@@ -288,16 +291,17 @@ public class FilterLibrary {
             case HIGHLIGHT_SHADOW:
                 return new LanSongHighlightShadowFilter(0.0f, 1.0f);
             case MONOCHROME:
-                return new LanSongMonochromeFilter(1.0f, new float[]{0.6f,
-                        0.45f, 0.3f, 1.0f});
+                return new LanSongMonochromeFilter(1.0f, new float[]{0.6f,0.45f, 0.3f, 1.0f});
             case OPACITY:
                 return new LanSongOpacityFilter(1.0f);
             case RGB:
                 return new LanSongRGBFilter(1.0f, 1.0f, 1.0f);
             case WHITE_BALANCE:
                 return new LanSongWhiteBalanceFilter(5000.0f, 0.0f);
-            case LanSongBLUR:
+            case GaussionBLUR:
                 return new LanSongGaussianBlurFilter();
+            case LanSongBLUR:
+                return new LanSongBlurFilter();
             case VIGNETTE:
                 PointF centerPoint = new PointF();
                 centerPoint.x = 0.5f;
@@ -305,14 +309,6 @@ public class FilterLibrary {
                 return new LanSongVignetteFilter(centerPoint, new float[]{0.0f,
                         0.0f, 0.0f}, 0.3f, 0.75f);
             case LanSongBLACKMASK:
-                /**
-                 * 这个滤镜的效果是: 把输入源的某区域
-                 * 处理成透明(如果bitmap有灰色的毛刺,则可能扣除的不规则,一般使用在用代码生成的bitmap图片中,
-                 * 不适用用photoshop等做成的图片).
-                 *
-                 * 这个滤镜的效果是: 把传递进来的bitmap图片, 从中心叠加到输入源上, 并判断Bitmap中黑色像素RGB中R的值，
-                 * 如果等于0, 则设置输入源对应的像素为透明， 如果不等于0，则把R替换输入源像素中的RGBA中A，从而实现半透明等效果。
-                 */
                 return createBlendFilter(context, LanSongBlackMaskBlendFilter.class);
             case LanSongMASK:
                 /**
@@ -324,27 +320,21 @@ public class FilterLibrary {
                 return createBlendFilter(context, LanSongMaskBlendFilter.class);
 
             case BLEND_DIFFERENCE:
-                return createBlendFilter(context,
-                        LanSongDifferenceBlendFilter.class);
+                return createBlendFilter(context,LanSongDifferenceBlendFilter.class);
             case BLEND_SOURCE_OVER:
-                return createBlendFilter(context,
-                        LanSongSourceOverBlendFilter.class);
+                return createBlendFilter(context,LanSongSourceOverBlendFilter.class);
             case BLEND_COLOR_BURN:
-                return createBlendFilter(context,
-                        LanSongColorBurnBlendFilter.class);
+                return createBlendFilter(context,LanSongColorBurnBlendFilter.class);
             case BLEND_COLOR_DODGE:
-                return createBlendFilter(context,
-                        LanSongColorDodgeBlendFilter.class);
+                return createBlendFilter(context, LanSongColorDodgeBlendFilter.class);
             case BLEND_DARKEN:
                 return createBlendFilter(context, LanSongDarkenBlendFilter.class);
             case BLEND_DISSOLVE:
                 return createBlendFilter(context, LanSongDissolveBlendFilter.class);
             case BLEND_EXCLUSION:
-                return createBlendFilter(context,
-                        LanSongExclusionBlendFilter.class);
+                return createBlendFilter(context,LanSongExclusionBlendFilter.class);
             case BLEND_HARD_LIGHT:
-                return createBlendFilter(context,
-                        LanSongHardLightBlendFilter.class);
+                return createBlendFilter(context,LanSongHardLightBlendFilter.class);
             case BLEND_LIGHTEN:
                 return createBlendFilter(context, LanSongLightenBlendFilter.class);
             case BLEND_ADD:
@@ -364,21 +354,17 @@ public class FilterLibrary {
             case BLEND_HUE:
                 return createBlendFilter(context, LanSongHueBlendFilter.class);
             case BLEND_SATURATION:
-                return createBlendFilter(context,
-                        LanSongSaturationBlendFilter.class);
+                return createBlendFilter(context,LanSongSaturationBlendFilter.class);
             case BLEND_LUMINOSITY:
-                return createBlendFilter(context,
-                        LanSongLuminosityBlendFilter.class);
+                return createBlendFilter(context,LanSongLuminosityBlendFilter.class);
             case BLEND_LINEAR_BURN:
-                return createBlendFilter(context,
-                        LanSongLinearBurnBlendFilter.class);
+                return createBlendFilter(context,LanSongLinearBurnBlendFilter.class);
             case BLEND_SOFT_LIGHT:
                 return createBlendFilter(context,LanSongSoftLightBlendFilter.class);
             case BLEND_SUBTRACT:
                 return createBlendFilter(context, LanSongSubtractBlendFilter.class);
             case BLEND_CHROMA_KEY:
-                return createBlendFilter(context,
-                        LanSongChromaKeyBlendFilter.class);
+                return createBlendFilter(context, LanSongChromaKeyBlendFilter.class);
             case BLEND_NORMAL:
                 return createBlendFilter(context, LanSongNormalBlendFilter.class);
 
@@ -492,9 +478,10 @@ public class FilterLibrary {
     }
 
     public enum FilterType {
-        NONE, BEAUTIFUL, BEAUTIFUL2, LanSongBLACKMASK, LanSongMASK, LanSongBLUR, CONTRAST, GRAYSCALE, SEPIA,
+        NONE, BEAUTIFUL, BEAUTIFUL2, LanSongBLACKMASK, LanSongMASK, LanSongBLUR,GaussionBLUR, CONTRAST, GRAYSCALE, SEPIA,
         POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION, SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME,
-        OPACITY, RGB, WHITE_BALANCE, VIGNETTE, BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,
+        OPACITY, RGB, WHITE_BALANCE, VIGNETTE,
+        BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,
         BLEND_DISSOLVE, BLEND_EXCLUSION, BLEND_SOURCE_OVER, BLEND_HARD_LIGHT, BLEND_LIGHTEN, BLEND_ADD, BLEND_DIVIDE,
         BLEND_MULTIPLY, BLEND_OVERLAY, BLEND_SCREEN, BLEND_ALPHA, BLEND_COLOR, BLEND_HUE, BLEND_SATURATION,
         BLEND_LUMINOSITY, BLEND_LINEAR_BURN, BLEND_SOFT_LIGHT, BLEND_SUBTRACT, BLEND_CHROMA_KEY, BLEND_NORMAL,
@@ -705,8 +692,7 @@ public class FilterLibrary {
             }
         }
 
-        private class MonochromeAdjuster extends
-                Adjuster<LanSongMonochromeFilter> {
+        private class MonochromeAdjuster extends Adjuster<LanSongMonochromeFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setIntensity(range(percentage, 0.0f, 1.0f));
@@ -730,8 +716,7 @@ public class FilterLibrary {
             }
         }
 
-        private class WhiteBalanceAdjuster extends
-                Adjuster<LanSongWhiteBalanceFilter> {
+        private class WhiteBalanceAdjuster extends  Adjuster<LanSongWhiteBalanceFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setTemperature(range(percentage, 2000.0f, 8000.0f));
@@ -739,8 +724,7 @@ public class FilterLibrary {
             }
         }
 
-        private class LanSongBlurFilterAdjuster extends
-                Adjuster<LanSongGaussianBlurFilter> {
+        private class LanSongBlurFilterAdjuster extends  Adjuster<LanSongGaussianBlurFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBlurFactor(range(percentage, 0.0f, 8.0f));
@@ -812,16 +796,20 @@ public class FilterLibrary {
             }
         }
 
-        private class ColorBalanceAdjuster extends Adjuster<LanSongColorBalanceFilter> {
+        private class ColorBalanceAdjuster extends
+                Adjuster<LanSongColorBalanceFilter> {
+
             @Override
             public void adjust(int percentage) {
-                getFilter().setMidtones(new float[]{range(percentage, 0.0f, 1.0f),
+                getFilter().setMidtones(
+                        new float[]{range(percentage, 0.0f, 1.0f),
                                 range(percentage / 2, 0.0f, 1.0f),
                                 range(percentage / 3, 0.0f, 1.0f)});
             }
         }
 
-        private class LevelsMinMidAdjuster extends Adjuster<LanSongLevelsFilter> {
+        private class LevelsMinMidAdjuster extends
+                Adjuster<LanSongLevelsFilter> {
             @Override
             public void adjust(int percentage) {
                 getFilter().setMin(0.0f, range(percentage, 0.0f, 1.0f), 1.0f);

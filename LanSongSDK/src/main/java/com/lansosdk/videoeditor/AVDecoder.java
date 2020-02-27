@@ -39,16 +39,31 @@ public class AVDecoder {
     public static native int audioRelease(long handle);
 
     /**
-     * 一下是代码测试.
-     * XSaveDataToFile write=new XSaveDataToFile("/sdcard/hddd3.pcm");
-     * AVDecoder.audioInit("/sdcard/hongdou.mp3"); byte[] pcmOut=new
-     * byte[1152*4]; //这个是44100, 双通道的
-     *
-     * while(true){ int ret=AVDecoder.audioDecode((long)0, (long)0, pcmOut);
-     * if(AVDecoder.audioIsEnd((long)0)){ break; }else{ //
-     * Log.i(TAG,"audio decode ret is:"+ret); write.writeFile(pcmOut); }
-     * if(ret<=0){ break; } } write.closeWriteFile();
-     * AVDecoder.audioRelease((long)0);
+
+
+     音频解码有问题!!!
+     private void testAudioDecoder() {
+     XSaveDataToFile write = new XSaveDataToFile("/sdcard/hddd3.pcm");
+     long handle1= AVDecoder.audioInit(SDCARD.d1());
+     MediaInfo.checkFile(SDCARD.d1());
+
+     byte[] pcmOut = new byte[1152 * 4]; //这个是44100, 双通道的
+
+     while (true) {
+     int ret = AVDecoder.audioDecode(handle1, -1, pcmOut);
+     if (AVDecoder.audioIsEnd((long) 0)) {
+     break;
+     } else { //
+     Log.i(TAG, "audio decode ret is:" + ret);
+     write.writeFile(pcmOut);
+     }
+     if (ret <= 0) {
+     break;
+     }
+     }
+     write.closeWriteFile();
+     AVDecoder.audioRelease(handle1);
+     }
      */
 
     // ------------------------------------------------------------------------

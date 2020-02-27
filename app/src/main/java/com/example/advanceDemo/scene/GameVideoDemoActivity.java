@@ -220,9 +220,14 @@ public class GameVideoDemoActivity extends Activity implements OnClickListener {
                     if(drawPadView.isRecording()){
                         mplayer.setLooping(true);
                         String recordFile=drawPadView.stopRecord();
+
+
                          if(MediaInfo.isHaveVideo(recordFile)){
                              videoList.add(recordFile);
+                         }else{
+                             DemoUtil.showToast(getApplicationContext(),"录制失败, 无法获取到一个视频");
                          }
+                         MediaInfo.checkFile(recordFile);
                     }
                 break;
             case R.id.id_gamevideo_startpreview: //开始预览
@@ -258,6 +263,8 @@ public class GameVideoDemoActivity extends Activity implements OnClickListener {
                         String  path=editor.executeConcatMP4(command);
                         DemoUtil.startPlayDstVideo(GameVideoDemoActivity.this,path);
                     }
+                }else{
+                    DemoUtil.showToast(getApplication(),"videoList size is 0; 无法拼接;");
                 }
                 break;
             default:

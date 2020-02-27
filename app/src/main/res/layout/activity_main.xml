@@ -79,6 +79,13 @@
 			<TextView  style="@style/main_item_arrow"/>
 		</RelativeLayout>
 
+<!--		<RelativeLayout  android:id="@+id/id_mainlist_concat" style="@style/main_item_reletivelayout2">-->
+<!--			<TextView   android:text="转场拼接[开发中...]" style="@style/main_item_textview"/>-->
+<!--			<TextView  style="@style/main_item_arrow"/>-->
+<!--		</RelativeLayout>-->
+
+
+
 		<RelativeLayout  android:id="@+id/id_mainlist_gamevideo" style="@style/main_item_reletivelayout2">
 			<TextView   android:text="游戏视频  效果" style="@style/main_item_textview"/>
 			<TextView  style="@style/main_item_arrow"/>
@@ -89,10 +96,18 @@
 			<TextView  style="@style/main_item_arrow"/>
 		</RelativeLayout>
 
+
+
 		<RelativeLayout  android:id="@+id/id_mainlist_bitmaps" style="@style/main_item_reletivelayout2">
 				 <TextView   android:text="图片/声音容器" style="@style/main_item_textview"/>
 				<TextView  style="@style/main_item_arrow"/>
 		</RelativeLayout>
+
+
+
+
+
+
 
 		<RelativeLayout  android:id="@+id/id_mainlist_videoplay" style="@style/main_item_reletivelayout2">
 			 <TextView   android:text="直接播放" style="@style/main_item_textview"/>
