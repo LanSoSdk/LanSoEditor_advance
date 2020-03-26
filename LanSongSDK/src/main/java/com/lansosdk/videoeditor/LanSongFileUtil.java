@@ -262,7 +262,7 @@ public class LanSongFileUtil {
         }
 
 //				File file=new File(name);
-//				if(file.exists()==false)
+//				if(!file.exists())
 //				{
 //					try {
 //						file.createNewFile();

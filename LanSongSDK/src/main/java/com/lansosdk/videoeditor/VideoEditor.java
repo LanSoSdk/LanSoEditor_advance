@@ -219,6 +219,10 @@ public class VideoEditor {
     public int executeVideoEditor(String[] array) {
         return execute(array);
     }
+    public int executeVideoEditor2(String[] array) {
+        return execute2(array);
+    }
+
 
 
     public void  postAVLogFromNative(String log){
@@ -279,6 +283,8 @@ public class VideoEditor {
      */
     private native int execute(Object cmdArray);
 
+    private native int execute2(Object cmdArray);
+
 
     protected int durationMs=0;
     /**
@@ -296,105 +302,6 @@ public class VideoEditor {
      * 因为execute是阻塞执行, 你可以判断execute有没有执行完,来判断是否完成.
      */
     public native void cancel();
-
-    //-----------------
-
-    public static String mergeAVDirectly(String audio, String video,boolean deleteVideo) {
-        MediaInfo info=new MediaInfo(audio);
-        if(info.prepare() && info.isHaveAudio()){
-            String retPath=LanSongFileUtil.createMp4FileInBox();
-
-            String inputAudio = audio;
-            List<String> cmdList = new ArrayList<String>();
-
-            cmdList.add("-i");
-            cmdList.add(inputAudio);
-            cmdList.add("-i");
-            cmdList.add(video);
-
-            cmdList.add("-map");
-            cmdList.add("0:a");
-            cmdList.add("-map");
-            cmdList.add("1:v");
-
-            cmdList.add("-acodec");
-            cmdList.add("copy");
-            cmdList.add("-vcodec");
-            cmdList.add("copy");
-
-            cmdList.add("-absf");
-            cmdList.add("aac_adtstoasc");
-
-            cmdList.add("-y");
-            cmdList.add(retPath);
-            String[] command = new String[cmdList.size()];
-            for (int i = 0; i < cmdList.size(); i++) {
-                command[i] = (String) cmdList.get(i);
-            }
-            VideoEditor editor = new VideoEditor();
-            int ret = editor.executeVideoEditor(command);
-            if(ret==0){
-                if(deleteVideo){
-                    LanSongFileUtil.deleteFile(video);
-                }
-                return retPath;
-            }else{
-                return video;
-            }
-        }
-        return video;
-    }
-    public static String videoCopy(String videoPath) {
-        MediaInfo info=new MediaInfo(videoPath);
-        if(info.prepare()){
-            String retPath=LanSongFileUtil.createMp4FileInBox();
-
-            List<String> cmdList = new ArrayList<String>();
-
-            cmdList.add("-i");
-            cmdList.add(videoPath);
-
-
-            if(info.isHaveAudio()){
-                cmdList.add("-acodec");
-                cmdList.add("copy");
-            }
-
-            cmdList.add("-vcodec");
-            cmdList.add("copy");
-
-            if(info.isHaveAudio()) {
-                cmdList.add("-absf");
-                cmdList.add("aac_adtstoasc");
-            }
-
-            cmdList.add("-y");
-            cmdList.add(retPath);
-
-            String[] command = new String[cmdList.size()];
-            for (int i = 0; i < cmdList.size(); i++) {
-                command[i] = (String) cmdList.get(i);
-            }
-            VideoEditor editor = new VideoEditor();
-            int ret = editor.executeVideoEditor(command);
-            if(ret==0){
-                return retPath;
-            }else{
-                LSOLog.e(" VideoEditor videoCopy is error. return original video path.");
-                return videoPath;
-            }
-        }
-        return videoPath;
-    }
-
-    /**
-     * @param filelength 采样点的总长度, 字节数;
-     * @param channel 通道数量,1/2;
-     * @param sampleRate 采样率;
-     * @param bitperSample 每个采样点有几个位, 默认单通道8位,双通道16位;
-     * @param outData 输出这个头文件
-     */
-    public static native void createWavHeader(int filelength, int channel, int sampleRate, int bitperSample, byte[] outData);
     /**
      * 把一张图片变成视频
      *
@@ -440,7 +347,6 @@ public class VideoEditor {
         cmdList.add(srcPach1);
 
         cmdList.add("-f");
-        ;
         cmdList.add("s16le");
         cmdList.add("-ar");
         cmdList.add(String.valueOf(samplerate2));
@@ -2736,7 +2642,7 @@ public class VideoEditor {
             }
 
             if(startX4>=0 && startY4>=0 && width4>0 && height4>0){
-               String filter4 = String.format(Locale.getDefault(), ";[d3]delogo=x=%d:y=%d:w=%d:h=%d",
+                String filter4 = String.format(Locale.getDefault(), ";[d3]delogo=x=%d:y=%d:w=%d:h=%d",
                         startX4,startY4,width4,height4);
                 filter+=filter4;
             }
@@ -2764,11 +2670,11 @@ public class VideoEditor {
     /**
      *删除视频中的最多4处有logo的信息.
      *
-    *  4处logo, 是从1--4;
-    *
-    *  如果只用3处logo,则把startX4=0 startY4=0,width4=0,height4=0;
-    *  如果只用到2处理,则把 3,4 设置为0;
-    *  如果要设置编码后的码率,则用 setEncodeBitRate
+     *  4处logo, 是从1--4;
+     *
+     *  如果只用3处logo,则把startX4=0 startY4=0,width4=0,height4=0;
+     *  如果只用到2处理,则把 3,4 设置为0;
+     *  如果要设置编码后的码率,则用 setEncodeBitRate
      * @param video 输入视频,
      * @param startX1 第一处X坐标开始坐标
      * @param startY1 第一处Y坐标开始坐标
@@ -2797,11 +2703,11 @@ public class VideoEditor {
      * @return
      */
     public String executeDeleteLogoInTimeRange(
-                                    String video,
-                                    int startX1,int startY1,int width1,int height1, float startS1,float endS1,
-                                    int startX2,int startY2,int width2,int height2, float startS2,float endS2,
-                                    int startX3,int startY3,int width3,int height3, float startS3,float endS3,
-                                    int startX4,int startY4,int width4,int height4, float startS4,float endS4){
+            String video,
+            int startX1,int startY1,int width1,int height1, float startS1,float endS1,
+            int startX2,int startY2,int width2,int height2, float startS2,float endS2,
+            int startX3,int startY3,int width3,int height3, float startS3,float endS3,
+            int startX4,int startY4,int width4,int height4, float startS4,float endS4){
         if (fileExist(video)) {
 
             String filter = String.format(Locale.getDefault(), "delogo=x=%d:y=%d:w=%d:h=%d:enable='between(t,%f,%f)' [d1]",
@@ -3037,16 +2943,15 @@ public class VideoEditor {
     /**
      * 把视频转换为gif
      * @param videoPath 视频的完整路径
-     * @param inteval   提取视频间隔, 从视频中一秒钟提取多少帧; 建议为5,10, 15;
+     * @param interval   提取视频间隔, 从视频中一秒钟提取多少帧; 建议为5,10, 15;
      * @param scaleWidth 把视频画面缩放到的宽度
      * @param scaleHeight 缩放到的高度
-     * @param speed 速度. 转换为gif后的,gif播放速度,建议为0.3,0.5,1.0(不变),1.2,1.5;
+     * @param speed 速度. 转换为gif后的,gif播放速度,建议为0.3,0.5,1.0(不变),1.2,1.5,2.0(放慢一倍);
      * @return
      */
-    public String executeConvertVideoToGif(String videoPath,int inteval,int scaleWidth,int scaleHeight,float speed) {
+    public String executeConvertVideoToGif(String videoPath,int interval,int scaleWidth,int scaleHeight,float speed) {
         List<String> cmdList = new ArrayList<String>();
 
-        //ffmpeg -i iphone8Record_HEVC.mp4 -r 5 -vf "setpts=0.5*PTS,scale=720x1280" xi.gif
 
         String dstPath=LanSongFileUtil.createGIFFileInBox();
 
@@ -3064,7 +2969,7 @@ public class VideoEditor {
 
 
         cmdList.add("-r");
-        cmdList.add(String.valueOf(inteval));
+        cmdList.add(String.valueOf(interval));
 
         cmdList.add("-vf");
         cmdList.add(filter);
@@ -3228,7 +3133,7 @@ public class VideoEditor {
      */
     public String executeAddTextToMp4(String srcPath,String text)
     {
-       // ffmpeg -i d1.mp4 -metadata description="LanSon\"g \"Text"
+        // ffmpeg -i d1.mp4 -metadata description="LanSon\"g \"Text"
         //  -acodec copy -vcodec copy t1.mp4
         if(fileExist(srcPath) && text!=null) {
             String retPath = LanSongFileUtil.createMp4FileInBox();
@@ -3346,26 +3251,6 @@ public class VideoEditor {
                 }
             }
         }
-
-//        if(isForceHWEncoder==false && noCheck16Multi==false){ //暂时不加.
-//            for(int i=0;i<cmdList.size();i++){
-//                String cmd=cmdList.get(i);
-//                if("-i".equals(cmd) && i>0){  //  找到第一个输入项;
-//                    String videoPath=cmdList.get(i+1);
-//                    _inputInfo=new MediaInfo(videoPath);
-//                    if(_inputInfo.prepare() && _inputInfo.vFrameRate>0){
-//                        if(_inputInfo.getWidth()%16 !=0 || _inputInfo.getHeight()%16 !=0){
-//                            Log.e(TAG,"您输入的视频分辨率宽度或高度不是16的倍数, 默认切换为软编码");
-//                            useSoftWareEncoder=true;
-//                        }
-//                    }else{
-//                        _inputInfo=null;
-//                    }
-//                }
-//            }
-//        }
-
-
         if(isForceHWEncoder){
             LSOLog.d("开始处理:硬解码+ 硬编码....");
             ret=executeWithEncoder(cmdList, bitrate, dstPath, true);
@@ -3627,7 +3512,7 @@ public class VideoEditor {
         return null;
     }
     private static boolean selectColorFormat(MediaCodecInfo codecInfo,
-                                        String mimeType) {
+                                             String mimeType) {
         MediaCodecInfo.CodecCapabilities capabilities = codecInfo
                 .getCapabilitiesForType(mimeType);
         for (int i = 0; i < capabilities.colorFormats.length; i++) {
@@ -3647,12 +3532,12 @@ public class VideoEditor {
      * 采用的是软缩放的形式.
      */
     public String executeCutScaleVideoExact(String videoFile,
-                                           float startS,
-                                           float durationS,
-                                           int width,
-                                           int height,
-                                           float framerate,
-                                           int bitrate) {
+                                            float startS,
+                                            float durationS,
+                                            int width,
+                                            int height,
+                                            float framerate,
+                                            int bitrate) {
         if (fileExist(videoFile)) {
             List<String> cmdList = new ArrayList<String>();
 
@@ -3691,19 +3576,10 @@ public class VideoEditor {
 
 
     /**
-     *
-     *
-     * 命令是对的, 但可能是ffmpeg不支持loop源,当前暂时只有第一帧; 但4.1版本是可以的.
-     *    VideoEditor editor=new VideoEditor();
-     *         String  bgPic=SDCARD.file("a1280x720.jpg");
-     *         String  maskPic=SDCARD.file("a12801.png");
-     *         String  videoPath=SDCARD.file("TEST_720P_15s.mp4");
-     *         String  str=editor.executeAlphaMaskVideo(bgPic,videoPath,maskPic);
-     *         MediaInfo.checkFileReturnString(str);
      */
     public String executeAlphaMaskVideo(String bgImgPath,
-                                            String videoPath,
-                                            String maskImgPath) {
+                                        String videoPath,
+                                        String maskImgPath) {
         MediaInfo info=new MediaInfo(videoPath);
         if (info.prepare()) {
             List<String> cmdList = new ArrayList<String>();

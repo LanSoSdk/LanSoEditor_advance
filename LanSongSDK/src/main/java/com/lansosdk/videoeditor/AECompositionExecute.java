@@ -278,14 +278,18 @@ public class AECompositionExecute {
      * @param loop 是否循环;
      * @return
      */
-    public AudioLayer addAudioLayer(LSOAudioAsset audioAsset,boolean loop) {
+    public AudioLayer addAudioLayer(LSOAudioAsset audioAsset, boolean loop) {
         if (aeRenderer != null && !aeRenderer.isRunning()) {
             AudioLayer layer= aeRenderer.addAudioLayer(audioAsset.getAudioPath());
-            layer.setLooping(loop);
+            if(layer!=null){
+                layer.setLooping(loop);
+            }
             return layer;
         }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
             AudioLayer layer= drawPadRenderer.addAudioLayer(audioAsset.getAudioPath());
-            layer.setLooping(loop);
+            if(layer!=null){
+                layer.setLooping(loop);
+            }
             return layer;
         } else {
             LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
@@ -320,11 +324,15 @@ public class AECompositionExecute {
     public AudioLayer addAudioLayer(String srcPath, boolean loop) {
         if (aeRenderer != null && !aeRenderer.isRunning()) {
             AudioLayer layer= aeRenderer.addAudioLayer(srcPath);
-            layer.setLooping(loop);
+            if(layer!=null){
+                layer.setLooping(loop);
+            }
             return layer;
         }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
             AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath);
-            layer.setLooping(loop);
+            if(layer!=null){
+                layer.setLooping(loop);
+            }
             return layer;
         } else {
             LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
@@ -344,11 +352,9 @@ public class AECompositionExecute {
      */
     public AudioLayer addAudioLayer(String srcPath, long startFromPadUs) {
         if (aeRenderer != null && !aeRenderer.isRunning()) {
-            AudioLayer layer= aeRenderer.addAudioLayer(srcPath,startFromPadUs,-1);
-            return layer;
+            return aeRenderer.addAudioLayer(srcPath,startFromPadUs,-1);
         }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
-            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,-1);
-            return layer;
+            return drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,-1);
         } else {
             LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
@@ -368,13 +374,11 @@ public class AECompositionExecute {
      * @param durationUs     把这段声音多长插入进去.
      * @return 返回一个AudioLayer对象;
      */
-    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,long durationUs) {
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs, long durationUs) {
         if (aeRenderer != null && !aeRenderer.isRunning()) {
-            AudioLayer layer= aeRenderer.addAudioLayer(srcPath,startFromPadUs,durationUs);
-            return layer;
+            return aeRenderer.addAudioLayer(srcPath,startFromPadUs,durationUs);
         }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
-            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,durationUs);
-            return layer;
+            return drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,durationUs);
         } else {
             LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
@@ -395,11 +399,9 @@ public class AECompositionExecute {
     public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
                                     long startAudioTimeUs, long endAudioTimeUs) {
         if (aeRenderer != null && !aeRenderer.isRunning()) {
-            AudioLayer layer= aeRenderer.addAudioLayer(srcPath,startFromPadUs,startAudioTimeUs,endAudioTimeUs);
-            return layer;
+            return aeRenderer.addAudioLayer(srcPath,startFromPadUs,startAudioTimeUs,endAudioTimeUs);
         }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){
-            AudioLayer layer= drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,startAudioTimeUs,endAudioTimeUs);
-            return layer;
+            return drawPadRenderer.addAudioLayer(srcPath,startFromPadUs,startAudioTimeUs,endAudioTimeUs);
         } else {
             LSOLog.e("AERenderExecute addAudioLayer error. srcPath  is null or render is running.");
             return null;
@@ -473,7 +475,7 @@ public class AECompositionExecute {
                     @Override
                     public void onCompleted(DrawPad v) {
                         if(onAERenderCompletedListener!=null){
-                            LSOLog.d("AERenderExecute use drawPad completed.");
+                            LSOLog.d("AEComposition use drawPad completed.");
                             onAERenderCompletedListener.onCompleted(drawPadOutPath);
                         }
                     }

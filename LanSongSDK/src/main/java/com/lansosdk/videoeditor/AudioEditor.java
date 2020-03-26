@@ -252,6 +252,54 @@ public class AudioEditor {
             return null;
         }
     }
+    public String  executeConvertToPCM(String inputAudio) {
+        if(LanSongFileUtil.fileExist(inputAudio)){
+
+            String dstPath=LanSongFileUtil.createFileInBox("pcm");
+
+            List<String> cmdList = new ArrayList<String>();
+
+
+            cmdList.add("-i");
+            cmdList.add(inputAudio);
+
+            cmdList.add("-vn");
+
+
+            cmdList.add("-f");
+            cmdList.add("s16le");
+
+            cmdList.add("-acodec");
+            cmdList.add("pcm_s16le");
+
+
+            cmdList.add("-ac");
+            cmdList.add("2");
+
+
+
+            cmdList.add("-ar");
+            cmdList.add("44100");
+
+            cmdList.add("-y");
+            cmdList.add(dstPath);
+
+            String[] command = new String[cmdList.size()];
+            for (int i = 0; i < cmdList.size(); i++) {
+                command[i] = (String) cmdList.get(i);
+            }
+            int ret=editor.executeVideoEditor(command);
+            if(ret==0){
+                return dstPath;
+            }else{
+                LSOLog.e("executeConvertToWav 失败, 请查看打印信息");
+                return null;
+            }
+        }else{
+            LSOLog.e("executeConvertToWav 执行失败, 文件不存在");
+            return null;
+        }
+    }
     /**
      * 把输入的音频(或含有音频视频)转为单声道,并可以设置采样率,然后wav格式输出.
      * @param inputAudio    输入原文件的完整路径
@@ -739,6 +787,7 @@ public class AudioEditor {
     public String  executeVideoReplaceAudio(String video,String audio){
         return executeVideoMergeAudio(video,audio,0.0f,1.0f);
     }
+
     /**
      * 把一个音乐合并到视频中;
      *

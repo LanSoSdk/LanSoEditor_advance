@@ -96,11 +96,11 @@ public class DrawPadAEExecute {
      */
     public AudioLayer addAudioLayer(String srcPath, boolean loop) {
         if (renderer != null && !renderer.isRunning()) {
-            AudioLayer source= renderer.addAudioLayer(srcPath);
-            if(source!=null && loop){
-                source.setLooping(loop);
+            AudioLayer audioLayer= renderer.addAudioLayer(srcPath);
+            if(audioLayer!=null){
+                audioLayer.setLooping(loop);
             }
-            return source;
+            return audioLayer;
         } else {
             return null;
         }
@@ -253,7 +253,6 @@ public class DrawPadAEExecute {
             renderer.setDrawPadProgressListener(listener);
         }
     }
-
     /**
      * 完成监听
      * @param listener

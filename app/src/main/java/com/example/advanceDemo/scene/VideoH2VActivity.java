@@ -326,7 +326,7 @@ public class VideoH2VActivity extends Activity implements OnClickListener {
             @Override
             public void onCompleted(DrawPad v) {
                 progressDialog.release();
-                DemoUtil.startPlayDstVideo(VideoH2VActivity.this,dstPath);
+                DemoUtil.startPreviewVideo(VideoH2VActivity.this,dstPath);
             }
         });
         drawPadExport.setDrawPadProgressListener(new onDrawPadProgressListener() {

@@ -185,7 +185,7 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
             if (LanSongFileUtil.fileExist(drawPadRecordPath)) {
                 DemoUtil.showToast(getApplicationContext(),"录制完成, 开始预览");
                 dstPath = AudioEditor.mergeAudioNoCheck(srcVideoPath, drawPadRecordPath, true);
-                DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstPath);
+                DemoUtil.startPreviewVideo(ViewLayerDemoActivity.this, dstPath);
             }else{
                 DemoUtil.showDialog(ViewLayerDemoActivity.this,"录制失败, 请查看打印信息,联系我们.");
             }
@@ -313,7 +313,7 @@ public class ViewLayerDemoActivity extends Activity implements OnClickListener {
                         progressDialog=null;
                     }
                     dstPath=dstVideo;
-                    DemoUtil.startPlayDstVideo(ViewLayerDemoActivity.this, dstVideo);
+                    DemoUtil.startPreviewVideo(ViewLayerDemoActivity.this, dstVideo);
                 }
             });
             progressDialog.show(this);

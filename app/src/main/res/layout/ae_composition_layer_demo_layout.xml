@@ -1,0 +1,27 @@
+<RelativeLayout
+    android:id="@+id/id_DrawPad_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+   
+      <com.lansosdk.videoeditor.DrawPadView
+            android:id="@+id/DrawPad_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+      
+
+      
+      <Button
+          android:id="@+id/id_ae_composition_layer_export"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="40dip"
+          android:background="@drawable/button_btn_bg"
+          android:text="导出"
+          android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

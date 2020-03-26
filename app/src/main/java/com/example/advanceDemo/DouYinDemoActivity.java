@@ -13,9 +13,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
-import com.example.advanceDemo.utils.LSOProgressDialog;
 import com.lansoeditor.advanceDemo.R;
+import com.lansosdk.LanSongFilter.LanSongGaussianBlurFilter;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.DrawPadUpdateMode;
 import com.lansosdk.box.Layer;
@@ -33,7 +34,6 @@ import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.LanSongFilter.LanSongColorInvertFilter;
 import com.lansosdk.LanSongFilter.LanSongLaplacianFilter;
 import com.lansosdk.LanSongFilter.LanSongToonFilter;
-import com.lansosdk.LanSongFilter.LanSongBlurFilter;
 import com.lansosdk.LanSongFilter.LanSongColorEdgeFilter;
 import com.lansosdk.LanSongFilter.LanSongMirrorFilter;
 
@@ -56,7 +56,7 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
     //--------------------------------------------------
     private int outBodyCnt = 0;
     //
-    private float outBodySacle = 1.0f;  //缩放是从1.0到最大.
+    private float outBodyScale = 1.0f;  //缩放是从1.0到最大.
     private SubLayer outBody;
 
     @Override
@@ -64,7 +64,7 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_effect_layout);
 
-        videoPath = getIntent().getStringExtra("videopath");
+        videoPath =DemoApplication.getInstance().currentEditVideo;
 
         mInfo = new MediaInfo(videoPath);
         if (!mInfo.prepare()) {
@@ -74,7 +74,6 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
 
         drawPadView = (DrawPadView) findViewById(R.id.id_videoeffect_drawpadview);
         initView();
-
         // 在手机的默认路径下创建一个文件名,用来保存生成的视频文件,(在onDestroy中删除)
         dstPath = LanSongFileUtil.newMp4PathInBox();
 
@@ -218,10 +217,10 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
 
 
             //一下代码是把视频左边一个画面;右边一个画面;
-//            videoLayer.setScale(0.5f);
+//            videoLayer.setDistortionFactor(0.5f);
 //            videoLayer.setPosition(videoLayer.getScaleX() / 2, videoLayer.getPositionY());
 //            SubLayer layer = videoLayer.addSubLayer();  //子图层默认缩小一倍,以方便参考.
-//            layer.setScale(0.5f);
+//            layer.setDistortionFactor(0.5f);
 //            layer.setPosition(videoLayer.getPositionX() + videoLayer.getScaleX(), videoLayer.getPositionY());
 //            layer.setLayerMirror(true, false);  //把右侧的画面左右镜像;
         }
@@ -230,7 +229,7 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
     private void videoBackGroundBlur() {
         if (videoLayer != null) {
             videoLayer.setScaledValue(videoLayer.getPadWidth(), videoLayer.getPadHeight());
-            videoLayer.switchFilterTo(new LanSongBlurFilter());
+            videoLayer.switchFilterTo(new LanSongGaussianBlurFilter());
 
             //两个画面, 缩放第二个;
             SubLayer layer = videoLayer.addSubLayer();
@@ -361,14 +360,14 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
                 videoLayer.removeSubLayer(outBody);
                 outBody = null;
                 outBodyCnt = 0;
-                outBodySacle = 1.0f;
+                outBodyScale = 1.0f;
             } else {
                 outBody.setVisibility(Layer.VISIBLE);
             }
             if (outBody != null) {
                 outBody.setRGBAPercent(0.3f);
-                outBody.setScaledValue(outBody.getPadWidth() * outBodySacle, outBody.getPadHeight() * outBodySacle);
-                outBodySacle += 0.15f;
+                outBody.setScaledValue(outBody.getPadWidth() * outBodyScale, outBody.getPadHeight() * outBodyScale);
+                outBodyScale += 0.15f;
             }
         }
     }
@@ -452,26 +451,36 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
     boolean isOutBody;
     private String exportPath;
 
-    LSOProgressDialog progressDialog=new LSOProgressDialog();
+    DemoProgressDialog progressDialog=new DemoProgressDialog();
     /**
      * 导出灵魂出窍
      */
     private void exportOutBody(){
         exportPath=LanSongFileUtil.createMp4FileInBox();
+        isOutBody=false;
         execute=new DrawPadVideoExecute(getApplicationContext(),videoPath,exportPath);
         execute.setDrawPadThreadProgressListener(new onDrawPadThreadProgressListener() {
             @Override
             public void onThreadProgress(DrawPad v, long currentTimeUs) {
                 videoOutBody();
-                if(currentTimeUs>3*1000*1000 && !isOutBody) {
+                if(videoLayer!=null && currentTimeUs>3*1000*1000 && !isOutBody) {
                     outBody = videoLayer.addSubLayer();
+                    isOutBody=true;
                 }
+            }
+        });
+        execute.setDrawPadProgressListener(new onDrawPadProgressListener() {
+            @Override
+            public void onProgress(DrawPad v, long currentTimeUs) {
+                int percent= (int)(currentTimeUs*100/mInfo.getDurationUs());
+                DemoProgressDialog.showPercent(DouYinDemoActivity.this,percent);
             }
         });
         execute.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
             @Override
             public void onCompleted(DrawPad v) {
-                DemoUtil.startPlayDstVideo(DouYinDemoActivity.this,exportPath);
+                DemoProgressDialog.releaseDialog();
+                DemoUtil.playDstVideo(DouYinDemoActivity.this,exportPath);
             }
         });
         if(execute.startDrawPad()){
@@ -479,9 +488,6 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
         }
     }
 
-    /**
-     * 导出镜像的例子
-     */
     private void export() {
         if(drawPadView.isRunning()){
             drawPadView.stopDrawPad();
@@ -494,14 +500,20 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        exportMirror();
+                        exportOutBody();
                     }
                 }).show();
     }
+
+    /**
+     * 导出镜像的例子
+     */
     private void exportMirror(){
         progressDialog.show(this);
         exportPath=LanSongFileUtil.createMp4FileInBox();
+
         execute=new DrawPadVideoExecute(getApplicationContext(),videoPath,exportPath);
+
         execute.setDrawPadProgressListener(new onDrawPadProgressListener() {
             @Override
             public void onProgress(DrawPad v, long currentTimeUs) {
@@ -510,11 +522,12 @@ public class DouYinDemoActivity extends Activity implements OnClickListener {
                 progressDialog.setProgress(percent);
             }
         });
+
         execute.setDrawPadCompletedListener(new onDrawPadCompletedListener() {
             @Override
             public void onCompleted(DrawPad v) {
                 progressDialog.release();
-                DemoUtil.startPlayDstVideo(DouYinDemoActivity.this,exportPath);
+                DemoUtil.playDstVideo(DouYinDemoActivity.this,exportPath);
             }
         });
         execute.pauseRecord();

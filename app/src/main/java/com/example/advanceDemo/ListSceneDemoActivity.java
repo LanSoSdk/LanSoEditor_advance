@@ -12,8 +12,6 @@ import com.example.advanceDemo.scene.VideoH2VActivity;
 import com.example.advanceDemo.scene.VideoV2HActivity;
 import com.example.advanceDemo.scene.VideoConcatAcvivity;
 import com.example.advanceDemo.scene.VideoSpeedDemoActivity;
-import com.example.advanceDemo.scene.ExecuteAllDrawpadActivity;
-import com.example.advanceDemo.scene.ExecuteBitmapLayerActivity;
 import com.example.advanceDemo.scene.LayerLayoutDemoActivity;
 import com.example.advanceDemo.scene.MoreLayHeadSeekActivity;
 import com.example.advanceDemo.scene.ParticleDemoActivity;
@@ -37,16 +35,14 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
         videoPath = getIntent().getStringExtra("videopath");
 
         findViewById(R.id.id_screne_pictures).setOnClickListener(this);
-        findViewById(R.id.id_screne_pictures_exe).setOnClickListener(this);
-
 
         findViewById(R.id.id_screne_videotransform).setOnClickListener(this);
-        findViewById(R.id.id_screne_videotransform2).setOnClickListener(this);
         findViewById(R.id.id_screne_videobiansu).setOnClickListener(this);
         findViewById(R.id.id_screne_videoreverse).setOnClickListener(this);
 
         findViewById(R.id.id_screne_cuoluo_layout).setOnClickListener(this);
 
+        findViewById(R.id.id_screne_videoseek).setOnClickListener(this);
         findViewById(R.id.id_screne_video2_layout).setOnClickListener(this);
         //新增;
         findViewById(R.id.id_mainlist_lizi).setOnClickListener(this);
@@ -65,14 +61,8 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
             case R.id.id_screne_pictures: // 图片影集
                 startDemoActivity(PicturesSlideDemoActivity.class);
                 break;
-            case R.id.id_screne_pictures_exe: // 图片影集
-                startDemoActivity(ExecuteBitmapLayerActivity.class);
-                break;
             case R.id.id_screne_videotransform:
                 startDemoActivity(VideoLayerTransformActivity.class);
-                break;
-            case R.id.id_screne_videotransform2:
-                startDemoActivity(ExecuteAllDrawpadActivity.class);
                 break;
             case R.id.id_screne_cuoluo_layout:
                 startDemoActivity(LayerLayoutDemoActivity.class);
@@ -82,6 +72,9 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
                 break;
             case R.id.id_screne_videobiansu:
                 startDemoActivity(VideoSpeedDemoActivity.class);
+                break;
+            case R.id.id_screne_videoseek:
+                startDemoActivity(VideoSeekActivity.class);
                 break;
             case  R.id.id_mainlist_lizi:
                 startDemoActivity(ParticleDemoActivity.class);

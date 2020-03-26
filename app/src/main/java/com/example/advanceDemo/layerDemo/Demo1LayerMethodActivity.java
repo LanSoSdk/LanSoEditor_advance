@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAssets;
-import static com.example.advanceDemo.utils.CopyFileFromAssets.copyShanChu;
 
 /**
  * 平移,旋转,缩放,RGBA值,显示/不显示(闪烁)效果. 实际使用中, 可用这些属性来做些动画,比如平移+RGBA调节,呈现舒缓移除的效果.
@@ -58,6 +57,7 @@ public class Demo1LayerMethodActivity extends Activity implements OnSeekBarChang
     private ArrayList<LSOMVAsset> mvAssetList=new ArrayList<>();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +69,7 @@ public class Demo1LayerMethodActivity extends Activity implements OnSeekBarChang
 
         drawPadView = (DrawPadView) findViewById(R.id.id_drawpad_drawpadview);
         initView();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -276,57 +277,4 @@ public class Demo1LayerMethodActivity extends Activity implements OnSeekBarChang
         }
     }
 
-    /**
-     * 增加YUV图层.
-     */
-    private void addYUVLayer() {
-        mYuvLayer = drawPadView.addYUVLayer(960, 720);
-        mData = readDataFromAssets("data.log");
-        drawPadView.setOnDrawPadThreadProgressListener(new onDrawPadThreadProgressListener() {
-
-            @Override
-            public void onThreadProgress(DrawPad v, long currentTimeUs) {
-                if (mYuvLayer != null) {
-                    /**
-                     * 把外面的数据作为一个图层投递DrawPad中
-                     *
-                     * @param data nv21格式的数据.
-                     * @param rotate  数据渲染到DrawPad中时,是否要旋转角度,
-                     *            可旋转0/90/180/270
-                     * @param flipHorizontal 数据是否要横向翻转, 把左边的放 右边,把右边的放左边.
-                     * @param flipVertical 数据是否要竖向翻转, 把上面的放下面, 把下面的放上边.
-                     */
-                    count++;
-                    if (count > 200) {
-                        // 这里仅仅是演示把yuv push到容器里, 实际使用中,
-                        // 你拿到的byte[]的yuv数据,可以直接push
-                        mYuvLayer.pushNV21DataToTexture(mData.yuv, 270, false, false);
-                    } else if (count > 150) {
-                        mYuvLayer.pushNV21DataToTexture(mData.yuv, 180, false, false);
-                    } else if (count > 100) {
-                        mYuvLayer.pushNV21DataToTexture(mData.yuv, 90, false, false);
-                    } else {
-                        mYuvLayer.pushNV21DataToTexture(mData.yuv, 0, false, false);
-                    }
-                }
-            }
-        });
-    }
-
-    public YUVLayerDemoData readDataFromAssets(String fileName) {
-        int w = 960;
-        int h = 720;
-        byte[] data = new byte[w * h * 3 / 2];
-        try {
-            InputStream is = getAssets().open(fileName);
-            is.read(data);
-            is.close();
-
-            return new YUVLayerDemoData(w, h, data);
-        } catch (IOException e) {
-            System.out.println("IoException:" + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

@@ -455,7 +455,7 @@ public class DrawPadAEPreview extends FrameLayout {
      * @param endAudioTimeUs   裁剪声音的结束时间;
      * @return
      */
-    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,long startAudioTimeUs, long endAudioTimeUs) {
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs, long startAudioTimeUs, long endAudioTimeUs) {
         if (renderer != null && !renderer.isRunning()) {
             AudioLayer layer=renderer.addAudioLayer(srcPath, startFromPadUs,startAudioTimeUs, endAudioTimeUs);
             if(layer==null){

@@ -10,10 +10,11 @@ import com.lansosdk.box.LanSoEditorBox;
 import com.lansosdk.box.OnLanSongLogOutListener;
 
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LanSoEditor {
 
-    private static boolean isLoaded = false;
+    protected static AtomicBoolean isLoadLanSongSDK = new AtomicBoolean(false);
 
     /**
      * 初始化SDK
@@ -21,8 +22,12 @@ public class LanSoEditor {
      * @param str
      */
     public static void initSDK(Context context, String str){
+
+        /**
+         * 加载库文件
+         */
         try {
-            loadLibraries(); // 拿出来单独加载库文件.
+            loadLibraries();
         }catch (UnsatisfiedLinkError error){
             LSOLog.e("load libraries  error. Maybe it is where your app crashes, causing the entire Activity to restart.(你的APP崩溃后被系统再次启动,查看所有的logcat信息)");
             error.printStackTrace();
@@ -58,6 +63,13 @@ public class LanSoEditor {
     public static void setTempFileDir(String tmpDir) {
         LanSoEditorBox.setTempFileDir(tmpDir);
         LanSongFileUtil.FileCacheDir = tmpDir;
+    }
+
+    /**
+     * 设置只使用软解码器, 这样兼容性好, 但处理速度可能会慢一些;
+     */
+    public static void setOnlySoftWareDecoder(boolean is){
+        LanSoEditorBox.setOnlySoftWareDecoder(is);
     }
 
 
@@ -123,6 +135,10 @@ public class LanSoEditor {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
 
+        if (!VideoEditor.getCurrentNativeABI().equalsIgnoreCase("arm64-v8a")){
+            LSOLog.e("当前你使用的so库不是arm64-v8a. 请尽快优化您所有so文件, 以确保支持,我们将在2020年的6月1号之后,不再对64位设备上运行armeabi-v7a库的问题做技术支持.(Please optimize all your SO files as soon as possible to ensure support for arm64-v8a. After June 1, 2020, we will no longer provide technical support for the problem of running armeabi-v7a library on 64-bit devices.)");
+        }
+
         String nativeVersion="* \tnative version:"+VideoEditor.getSDKVersion()+ " ;  ABI: "+VideoEditor.getCurrentNativeABI()+ " ; type:"+VideoEditor.getLanSongSDKType()
                 + "; Limited time: year:"+VideoEditor.getLimitYear()+ " month:" +VideoEditor.getLimitMonth();
 
@@ -187,16 +203,17 @@ public class LanSoEditor {
 
 
     private static synchronized void loadLibraries() throws  UnsatisfiedLinkError{
-        if (isLoaded)
+        if (isLoadLanSongSDK.get())
             return;
 
 
         System.loadLibrary("LanSongffmpeg");
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
+        System.loadLibrary("LanSongSDKDecoder");
 
         LSOLog.d("loaded native libraries.isQiLinSoC:"+isQiLinSoc());
-        isLoaded = true;
+        isLoadLanSongSDK.set(true);
     }
 
     private static void initSo(Context context, String str) {

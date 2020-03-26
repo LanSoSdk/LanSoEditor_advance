@@ -253,7 +253,7 @@ public class GameVideoDemoActivity extends Activity implements OnClickListener {
                     stopDrawPad();  //先停止容器; 也可以不停止;
 
                     if(videoList.size()==1){
-                        DemoUtil.startPlayDstVideo(GameVideoDemoActivity.this,videoList.get(0));
+                        DemoUtil.startPreviewVideo(GameVideoDemoActivity.this,videoList.get(0));
                     }else{
                         VideoEditor editor=new VideoEditor();
                         String[] command = new String[videoList.size()];
@@ -261,7 +261,7 @@ public class GameVideoDemoActivity extends Activity implements OnClickListener {
                             command[i] = (String) videoList.get(i);
                         }
                         String  path=editor.executeConcatMP4(command);
-                        DemoUtil.startPlayDstVideo(GameVideoDemoActivity.this,path);
+                        DemoUtil.startPreviewVideo(GameVideoDemoActivity.this,path);
                     }
                 }else{
                     DemoUtil.showToast(getApplication(),"videoList size is 0; 无法拼接;");

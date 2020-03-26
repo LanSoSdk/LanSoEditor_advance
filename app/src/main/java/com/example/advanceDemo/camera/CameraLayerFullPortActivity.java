@@ -1,9 +1,7 @@
 package com.example.advanceDemo.camera;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.advanceDemo.VideoPlayerActivity;
+import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.view.CameraProgressBar;
 import com.example.advanceDemo.view.FocusImageView;
 import com.lansoeditor.advanceDemo.R;
@@ -24,11 +22,14 @@ import com.lansosdk.LanSongFilter.LanSongIF1977Filter;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.CameraLayer;
 import com.lansosdk.box.DrawPad;
+import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
+import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.ViewLayer;
 import com.lansosdk.box.ViewLayerRelativeLayout;
 import com.lansosdk.box.onDrawPadErrorListener;
 import com.lansosdk.box.onDrawPadProgressListener;
+import com.lansosdk.box.onDrawPadThreadProgressListener;
 import com.lansosdk.videoeditor.BeautyManager;
 import com.example.advanceDemo.utils.CopyFileFromAssets;
 import com.lansosdk.videoeditor.DrawPadCameraView;
@@ -60,7 +61,6 @@ import com.lansosdk.LanSongFilter.LanSongIFWaldenFilter;
 import com.lansosdk.LanSongFilter.LanSongIFXproIIFilter;
 import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
 
-@SuppressLint("SdCardPath")
 public class CameraLayerFullPortActivity extends Activity implements
         OnClickListener {
 
@@ -99,7 +99,6 @@ public class CameraLayerFullPortActivity extends Activity implements
             if (tvTime != null) {
                 float timeF = ((float) currentTimeUs / 1000000);
                 float b = (float) (Math.round(timeF * 10)) / 10; // 保留一位小数.
-
                 if (b >= 0)
                     tvTime.setText(String.valueOf(b));
             }
@@ -165,8 +164,7 @@ public class CameraLayerFullPortActivity extends Activity implements
         startDrawPad();
     }
 
-    private void initData()
-    {
+    private void initData() {
         filters.add(new LanSongFilter("无"));
         filters.add(new LanSongBeautyAdvanceFilter("美颜"));
         filters.add(new LanSongIFAmaroFilter(getApplicationContext(), "1AMARO"));
@@ -187,10 +185,11 @@ public class CameraLayerFullPortActivity extends Activity implements
         filters.add(new LanSongIFLordKelvinFilter(getApplicationContext(), "16LORDKELVIN"));
         filters.add(new LanSongIF1977Filter(getApplicationContext(), "17if1977"));
     }
+
     //Step1:初始化 drawPad 容器
     private void initDrawPad() {
-        int padWidth = 544;
-        int padHeight = 960;
+        int padWidth = 720;
+        int padHeight = 1280;
         int bitrate = 3000 * 1024;
         /**
          * 设置录制时的一些监听和参数.
@@ -198,7 +197,13 @@ public class CameraLayerFullPortActivity extends Activity implements
         drawPadCamera.setRealEncodeEnable(padWidth, padHeight, bitrate, (int) 25, dstPath);
         drawPadCamera.setOnDrawPadProgressListener(drawPadProgressListener);
 
+        drawPadCamera.setOnDrawPadThreadProgressListener(new onDrawPadThreadProgressListener(){
 
+            @Override
+            public void onThreadProgress(DrawPad v, long currentTimeUs) {
+//                animationOutBody();
+            }
+        });
         drawPadCamera.setCameraParam(true, null);
         drawPadCamera.setCameraFocusListener(new doFousEventListener() {
 
@@ -240,13 +245,12 @@ public class CameraLayerFullPortActivity extends Activity implements
                 cameraLayer.setSlideFilterArray(filters);  //增加滑动
             }
         } else {
-            Log.i(TAG, "建立drawpad线程失败.");
+            Log.i(TAG, "建立drawad线程失败.");
         }
     }
 
 
 //--------------------
-
     /**
      * Step3: 停止容器, 停止后,为新的视频文件增加上音频部分.
      */
@@ -302,7 +306,7 @@ public class CameraLayerFullPortActivity extends Activity implements
 
             bmpLayer = drawPadCamera.addBitmapLayer(BitmapFactory.decodeFile(bitmapPath));
             // 把位置放到中间的右侧, 因为获取的高度是中心点的高度.
-            bmpLayer.setPosition(bmpLayer.getPadWidth() - bmpLayer.getLayerWidth() / 2, bmpLayer.getPositionY());
+            bmpLayer.setPosition(bmpLayer.getPadWidth() - bmpLayer.getLayerWidth() / 2.0f, bmpLayer.getPositionY());
         }
     }
 
@@ -333,17 +337,24 @@ public class CameraLayerFullPortActivity extends Activity implements
             drawPadCamera.removeLayer(mvLayer);
             mvLayer = null;
         }
-        String colorMVPath = CopyFileFromAssets.copyAssets(
-                CameraLayerFullPortActivity.this, "mei.mp4");
-        String maskMVPath = CopyFileFromAssets.copyAssets(
-                CameraLayerFullPortActivity.this, "mei_b.mp4");
+        String colorMVPath = CopyFileFromAssets.copyAssets(CameraLayerFullPortActivity.this, "mei.mp4");
+        String maskMVPath = CopyFileFromAssets.copyAssets(CameraLayerFullPortActivity.this, "mei_b.mp4");
 
         mvLayer = drawPadCamera.addMVLayer(colorMVPath, maskMVPath); // <-----增加MVLayer
+        mvLayer.setScaledToPadSize();
+
         /**
          * mv在播放完后, 有3种模式,消失/停留在最后一帧/循环.默认是循环.
          * 	mvLayer.setReachEndMode(MVLayerENDMode.INVISIBLE);
          */
     }
+    private void removeMVLayer(){
+        drawPadCamera.removeLayer(mvLayer);
+        mvLayer=null;
+    }
+
+
+
 //    /**
 //     * 增加效果视频
 //     */
@@ -356,7 +367,7 @@ public class CameraLayerFullPortActivity extends Activity implements
 //             * 从摄像头图层获取一个surface, 作为视频的输出窗口
 //             */
 //            mplayer2.setSurface(new Surface(cameraLayer.getVideoTexture2()));
-//            mplayer2.start();
+//            mplayer2.startPreview();
 //
 //            /**
 //             * 把视频的滤镜 设置到摄像头图层中. 当然您也可以用switchFilterList来增加多个滤镜对象.比如先美颜,
@@ -387,61 +398,51 @@ public class CameraLayerFullPortActivity extends Activity implements
 
     private void initBeautyView() {
         mBeautyMng = new BeautyManager(getApplicationContext());
-        findViewById(R.id.id_camerabeauty_btn).setOnClickListener(
-                new OnClickListener() {
+        findViewById(R.id.id_camerabeauty_btn).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-                        if (beautyLevel == 0.0f) {  //美颜加美颜;
-                            mBeautyMng.addBeauty(drawPadCamera
-                                    .getCameraLayer());
-                            beautyLevel += 0.22f;
-                        } else {
-                            beautyLevel += 0.1f;
-                            mBeautyMng.setWarmCool(beautyLevel);
-                            Log.i(TAG, "调色, 数值是:" + beautyLevel);
-
-                            if (beautyLevel >= 1.0f) {
-                                mBeautyMng.deleteBeauty(drawPadCamera.getCameraLayer());
-                                beautyLevel = 0.0f;
-                            }
-                        }
+                if (beautyLevel == 0.0f) {  //美颜加美颜;
+                    mBeautyMng.addBeauty(drawPadCamera.getCameraLayer());
+                    beautyLevel += 0.22f;
+                } else {
+                    beautyLevel += 0.1f;
+                    mBeautyMng.setWarmCool(beautyLevel);
+                    if (beautyLevel >= 1.0f) {
+                        mBeautyMng.deleteBeauty(drawPadCamera.getCameraLayer());
+                        beautyLevel = 0.0f;
                     }
-                });
-        findViewById(R.id.id_camerabeauty_brightadd_btn).setOnClickListener(
-                new OnClickListener() {
+                }
+            }
+        });
+        findViewById(R.id.id_camerabeauty_brightadd_btn).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        mBeautyMng.increaseBrightness(drawPadCamera.getCameraLayer());
-                    }
-                });
-        findViewById(R.id.id_camerabeaty_brightsub_btn).setOnClickListener(
-                new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBeautyMng.increaseBrightness(drawPadCamera.getCameraLayer());
+            }
+        });
+        findViewById(R.id.id_camerabeaty_brightsub_btn).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        mBeautyMng.discreaseBrightness(drawPadCamera.getCameraLayer());
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                mBeautyMng.discreaseBrightness(drawPadCamera.getCameraLayer());
+            }
+        });
     }
 
     private void playVideo() {
         if (LanSongFileUtil.fileExist(dstPath)) {
-            Intent intent = new Intent(this, VideoPlayerActivity.class);
-            intent.putExtra("videopath", dstPath);
-            startActivity(intent);
+            DemoUtil.playDstVideo(this, dstPath);
         } else {
             Toast.makeText(this, "目标文件不存在", Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.id_fullrecord_cancel:
-
                 this.finish();
                 break;
             case R.id.id_fullrecord_ok:
@@ -470,4 +471,57 @@ public class CameraLayerFullPortActivity extends Activity implements
                 break;
         }
     }
+
+    //-----------------增加 out body -------------------------
+//    private SubLayer outBodySubLayer =null;
+//    /**
+//     * 计数
+//     */
+//    private int outBodyFrameCnt = 0;
+//    /**
+//     * 缩放是从1.0到最大.
+//     */
+//    private float outBodyScale = 1.0f;
+//
+//    /**
+//     * 缩放因子, 每一帧缩放多少, 不建议调节;
+//     */
+//    private float scaleFactor=0.02f;
+//
+//    /**
+//     * 让灵魂出窍执行的总帧数.
+//     * 可调节;
+//     * 一秒钟 30 帧, 如果你要执行 2 秒, 则是 60 帧;时间越长,执行的越慢;
+//     */
+//    private static final int OUT_BODY_TOTAL_FRAMES = 80;
+//
+//    public void addOutBodySublayer(){
+//        if (outBodySubLayer == null) {
+//            outBodySubLayer = cameraLayer.addSubLayer();
+//        }
+//    }
+//    /**
+//     * 视频子图层的每一帧, 要放到进度回调中;
+//     * 是一种运动效果;, 放到进度中
+//     */
+//    private void animationOutBody() {
+//        if (outBodySubLayer != null && cameraLayer != null) {
+//            outBodyFrameCnt++;
+//            if (outBodyFrameCnt > OUT_BODY_TOTAL_FRAMES) {
+//                cameraLayer.removeSubLayer(outBodySubLayer);
+//                outBodySubLayer = null;
+//                outBodyFrameCnt = 0;
+//                outBodyScale = 1.0f;
+//            } else {
+//                outBodySubLayer.setVisibility(Layer.VISIBLE);
+//            }
+//
+//            if (outBodySubLayer != null) {
+//                outBodySubLayer.setRGBAPercent(0.3f);
+//                outBodySubLayer.setScaledValue(outBodySubLayer.getPadWidth() * outBodyScale, outBodySubLayer.getPadHeight() * outBodyScale);
+//                outBodyScale += scaleFactor;
+//            }
+//        }
+//    }
+
 }

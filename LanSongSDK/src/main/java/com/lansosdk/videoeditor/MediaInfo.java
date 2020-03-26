@@ -2,6 +2,7 @@ package com.lansosdk.videoeditor;
 
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.util.Log;
 
 import com.lansosdk.box.LSOLog;
 
@@ -13,15 +14,15 @@ import java.io.IOException;
  * 旋转角度,解码器信息,总时长,总帧数;音频的码率,采样率,解码器信息,总帧数等,为其他各种编辑处理为参考使用.
  * 暂时只支持一个音频和一个视频组成的多媒体文件,如MP4等,如果有多个音频,则音频数据是最后一个音频的info.
  *
-  使用方法是:创建对象, 执行prepare,
+ 使用方法是:创建对象, 执行prepare,
 
  使用结果. 可以在任意线程中执行如下:
 
-  MediaInfo info=new MediaInfo(inputPath);
-  if(info.prepare()){ //<==============主要是这里, 需要执行以下,
-        //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
-  }else{
-        //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
+ MediaInfo info=new MediaInfo(inputPath);
+ if(info.prepare()){ //<==============主要是这里, 需要执行以下,
+ //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
+ }else{
+ //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
  */
 public class MediaInfo {
 
@@ -148,20 +149,11 @@ public class MediaInfo {
     public boolean prepare() {
         int ret = 0;
         if (fileExist(filePath)) { // 这里检测下mfilePath是否是多媒体后缀.
-            ret = nativePrepare(filePath, false);
-            if(!isPngFile && vPixelFmt==null && vWidth>0 && vHeight>0 && vDuration>0 && vFrameRate>0){
-                VideoEditor editor=new VideoEditor();
-                String path2=editor.executeCutVideo(filePath,0,1.0f);
-                float duration=vDuration;
-                if(path2!=null){
-                    nativePrepare(path2,false);
-                }
-                vDuration=duration;
-
-                LanSongFileUtil.deleteFile(path2);
-                LSOLog.d("video pixel format is null, decode  to get frame size");
+            ret = nativePrepare2(filePath, false);
+            if(ret<0){
+                LSOLog.d("new Decoder Media Info  native prepare error. use old.");
+                ret=nativePrepare(filePath,false);
             }
-
             if (ret >= 0) {
                 getSuccess = true;
                 return isSupport();
@@ -178,7 +170,6 @@ public class MediaInfo {
             return false;
         }
     }
-
     /**
      * 是否支持.
      *
@@ -214,10 +205,11 @@ public class MediaInfo {
     }
 
     private static boolean fileExist(String absolutePath) {
-        if (absolutePath == null)
+        if (absolutePath == null){
             return false;
-        else
+        }else{
             return (new File(absolutePath)).exists();
+        }
     }
     /**
      * 获取当前视频在显示的时候, 图像的宽度;
@@ -301,14 +293,15 @@ public class MediaInfo {
     }
 
     public boolean isHaveAudio() {
-        if (aBitRate > 0) // 有音频
+        // 有音频
+        if (aBitRate > 0)
         {
-            if (aChannels == 0)
+            if (aChannels == 0) {
                 return false;
-            if (aCodecName == null || aCodecName.isEmpty())
+            }
+            if (aCodecName == null || aCodecName.isEmpty() || aDuration==0) {
                 return false;
-
-
+            }
             return true;
         } else {
             return false;
@@ -417,9 +410,8 @@ public class MediaInfo {
         // else
         // return "MediaInfo is not ready.or call failed";
     }
-
     public native int nativePrepare(String filepath, boolean checkCodec);
-
+    public native int nativePrepare2(String filepath, boolean checkCodec);
     // used by JNI
     private void setVideoCodecName(String name) {
         this.vCodecName = name;
@@ -465,23 +457,27 @@ public class MediaInfo {
     }
 
     private String getFileNameFromPath(String path) {
-        if (path == null)
+        if (path == null) {
             return "";
+        }
         int index = path.lastIndexOf('/');
-        if (index > -1)
+        if (index > -1) {
             return path.substring(index + 1);
-        else
+        } else {
             return path;
+        }
     }
 
     private String getFileSuffix(String path) {
-        if (path == null)
+        if (path == null) {
             return "";
+        }
         int index = path.lastIndexOf('.');
-        if (index > -1)
+        if (index > -1) {
             return path.substring(index + 1);
-        else
+        } else {
             return "";
+        }
     }
     /**
      * 是否不需要打印.
@@ -560,7 +556,7 @@ public class MediaInfo {
     /**
 
 
-        使用 : MediaInfo创建后, 执行prepare, 则得到各种文件信息;
+     使用 : MediaInfo创建后, 执行prepare, 则得到各种文件信息;
 
      */
 }

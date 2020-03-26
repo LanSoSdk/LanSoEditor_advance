@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAeAssets;
-import static com.example.advanceDemo.utils.CopyFileFromAssets.copyShanChu;
 
 /**
  * 因为我们的SDK不联网, 各种资源都在演示工程的Asset文件夹里,
@@ -38,6 +37,7 @@ import static com.example.advanceDemo.utils.CopyFileFromAssets.copyShanChu;
  *
  * 说明:
  * 如果您要对json加密, 则在解密后,得到InputStream数据流--->输入到我们的LSOLoadAeJsons.loadAsync.其他步骤一致.
+ * @author sno
  */
 public class AEDemoAsset {
 
@@ -87,6 +87,8 @@ public class AEDemoAsset {
     public static final int AE_DEMO_NONE = 109;
 
 
+    public static final int AE_DEMO_JSON_CUT = 110;
+    public static final int AE_DEMO_JSON_CONCAT = 111;
     //两个json叠加
     public static final int AE_DEMO_TWO_JSON_OVERLAY = 112;
 
@@ -134,6 +136,13 @@ public class AEDemoAsset {
             json1Path = copyAeAssets(context, "zaoan.json");
         } else if (inputType == AE_DEMO_MORE_PICTURE) {
             json1Path = copyAeAssets(context, "morePicture.json");
+        }else if(inputType==AE_DEMO_JSON_CUT){
+
+            //json裁剪
+            json1Path = copyAeAssets(context, "json_cut.json");
+        }else if(inputType==AE_DEMO_JSON_CONCAT){  //json拼接
+            json1Path = copyAeAssets(context, "concat_json1.json");
+            json2Path = copyAeAssets(context, "concat_json2.json");
         }else if(inputType==AE_DEMO_TWO_JSON_OVERLAY) {
             json1Path = copyAeAssets(context, "tianQi_c2.json");
         }else if(inputType==AE_DEMO_JSON_GAUSSIAN_BLUR1) {  //高斯模糊1
@@ -265,6 +274,26 @@ public class AEDemoAsset {
                 e.printStackTrace();
                 audioAsset = null;
             }
+        }else if(inputType==AE_DEMO_JSON_CUT){  //json裁剪
+
+            bgVideo=copyAeAssets(context,"json_cut_bg_10s.mp4");
+
+
+        }else if(inputType==AE_DEMO_JSON_CONCAT){  //json拼接
+            bgVideo=copyAeAssets(context,"json_cut_bg_10s.mp4");
+
+
+            json1ReplaceBitmapPaths.put("image_0",copyAeAssets(context,"concat_json1_img_0.jpeg"));
+            json1ReplaceBitmapPaths.put("image_1",copyAeAssets(context,"concat_json1_img_1.jpeg"));
+            json1ReplaceBitmapPaths.put("image_2",copyAeAssets(context,"concat_json1_img_2.jpeg"));
+            json1ReplaceBitmapPaths.put("image_3",copyAeAssets(context,"concat_json1_img_3.jpeg"));
+
+
+            json2ReplaceBitmapPaths.put("image_0",copyAeAssets(context,"concat_json2_img_0.jpeg"));
+            json2ReplaceBitmapPaths.put("image_1",copyAeAssets(context,"concat_json2_img_1.jpeg"));
+            json2ReplaceBitmapPaths.put("image_2",copyAeAssets(context,"concat_json2_img_2.jpeg"));
+            json2ReplaceBitmapPaths.put("image_3",copyAeAssets(context,"concat_json2_img_3.jpeg"));
+
         }else if(inputType==AE_DEMO_TWO_JSON_OVERLAY) {
             json1ReplaceBitmapPaths.put("image_0", copyAeAssets(context, "tianQi_c2_img_0.jpeg"));
 
@@ -338,8 +367,51 @@ public class AEDemoAsset {
     public void replaceJsonAsset() {
 
         if (drawable1 != null) {
+            if (inputType == AE_DEMO_JSON_CUT) {
+                /**
+                 *
+                 * 裁剪主要用在 用户先选择图片, 然后根据图片来选择模板, 但模板用到的图片有可能比用户选择的多, 这是,就用到了裁剪模板;
+                 *  如果选择的模板用到的图片数量, 少于用户选择的图片, 就需要用到拼接;
+                 *
+                 * 因为这里演示,从第5张图,截取到12张图片, 故先找到image_4这个id的开始时间, 然后找到image_12这个id的结束时间;
+                 *
+                 * */
+                ArrayList<LSOAeImageLayer> imageLayers= drawable1.getAllAeImageLayer();
+                for (LSOAeImageLayer layer: imageLayers){
+
+                    if("image_4".equals(layer.imgId)){
+                        startFrameIndex=(int)layer.startFrame;
+                    }
+
+                    if("image_12".equals(layer.imgId)){
+                        endFrameIndex=(int)layer.endFrame;
+                    }
+                }
+
+                if(startFrameIndex>endFrameIndex){  //如果模板id小的在下面,则顺序调换下.
+                    int tmp=endFrameIndex;
+                    endFrameIndex=startFrameIndex;
+                    startFrameIndex=tmp;
+                }
+
+
+                DemoLog.i("演示json裁剪: 裁剪范围是:"+startFrameIndex+ " -- "+ endFrameIndex);
+
+                json1ReplaceBitmapPaths.put("image_4", copyAeAssets(context, "json_cut_img_4.jpeg"));
+                json1ReplaceBitmapPaths.put("image_5", copyAeAssets(context, "json_cut_img_5.jpeg"));
+                json1ReplaceBitmapPaths.put("image_6", copyAeAssets(context, "json_cut_img_6.jpeg"));
+                json1ReplaceBitmapPaths.put("image_7", copyAeAssets(context, "json_cut_img_7.jpeg"));
+                json1ReplaceBitmapPaths.put("image_8", copyAeAssets(context, "json_cut_img_8.jpeg"));
+                json1ReplaceBitmapPaths.put("image_9", copyAeAssets(context, "json_cut_img_9.jpeg"));
+                json1ReplaceBitmapPaths.put("image_10", copyAeAssets(context, "json_cut_img_10.jpeg"));
+                json1ReplaceBitmapPaths.put("image_11", copyAeAssets(context, "json_cut_img_11.jpeg"));
+                json1ReplaceBitmapPaths.put("image_12", copyAeAssets(context, "json_cut_img_12.jpeg"));
+            }
+        }
+        if (drawable1 != null) {
             replaceJsonAsset(drawable1, json1ReplaceBitmapPaths, json1ReplaceVideos, json1ReplaceTexts);
         }
+
 
         if (drawable2 != null) {
             replaceJsonAsset(drawable2, json2ReplaceBitmapPaths, json2ReplaceVideos, json2ReplaceTexts);
@@ -465,12 +537,5 @@ public class AEDemoAsset {
     }
 
     private void testJson(){
-        bgVideo=copyShanChu(context,"bgVideo.mp4");
-        json1Path = copyShanChu(context, "data2.json");
-//        for(int i=0;i<4;i++){
-//            String key="image_"+i;
-//            String name="kadian_img_"+(i+4)+".jpeg";
-//            putBitmapToMap(key, name);
-//        }
     }
 }

@@ -11,7 +11,6 @@ import com.lansosdk.box.DataLayer;
 import com.lansosdk.box.DrawPadVideoRunnable;
 import com.lansosdk.box.GifLayer;
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.LSOTimeRange;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.VideoLayer;
@@ -20,13 +19,11 @@ import com.lansosdk.box.onDrawPadErrorListener;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.box.onDrawPadThreadProgressListener;
 
-import java.util.List;
-
 /**
  * 对单个视频做VideoOneDo2无法完成的工作.
  * 视频容器, 仅作为单个视频使用.
- *
  */
+@Deprecated
 public class DrawPadVideoExecute {
 
     protected boolean isCheckBitRate = true;
@@ -316,7 +313,7 @@ public class DrawPadVideoExecute {
      * @return 返回一个AudioLayer对象;
      */
     public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
-                                  long durationUs) {
+                                    long durationUs) {
         if (render != null && !render.isRunning()) {
             return render.addAudioLayer(srcPath, startFromPadUs, durationUs);
         } else {
@@ -336,7 +333,7 @@ public class DrawPadVideoExecute {
      * @return
      */
     public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,
-                                  long startAudioTimeUs, long endAudioTimeUs) {
+                                    long startAudioTimeUs, long endAudioTimeUs) {
         if (render != null && !render.isRunning()) {
             return render.addAudioLayer(srcPath, startFromPadUs,
                     startAudioTimeUs, endAudioTimeUs);
@@ -345,99 +342,6 @@ public class DrawPadVideoExecute {
             return null;
         }
     }
-
-    /**
-     * 增加时间冻结,即在视频的什么时间段开始冻结, 静止的结束时间; 为了统一: 这里用结束时间; 比如你要从原视频的5秒地方开始静止, 静止3秒钟,
-     * 则这里是3*1000*1000 , 8*1000*1000 (画面停止的过程中, 可以做一些缩放,移动等特写等)
-     *
-     * @param startTimeUs 从输入的视频/音频的哪个时间点开始冻结,
-     * @param endTimeUs   (这里理解为:冻结的时长+开始时间);
-     */
-    public void addTimeFreeze(long startTimeUs, long endTimeUs) {
-        if (render != null && !render.isRunning()) {
-            render.addTimeFreeze(startTimeUs, endTimeUs);
-        } else {
-            LSOLog.e("addTimeFreeze error, drawPad is :"+toString());
-        }
-    }
-
-    /**
-     * 给这个主视频的音频部分和视频部分,分别做时间拉伸(某一段的速度调节)
-     * <p>
-     * 这个设置等于分别给当前视频的 VideoLayer和AudioLayer分别设置 时间拉伸;
-     * <p>
-     * 可以被多次调用.
-     * <p>
-     * 在DrawPad容器开始前调用
-     *
-     * @param rate        拉伸的速度, 范围0.5--2.0; 0.5是放慢1倍, 2.0是加快一倍; 1.0f是默认,
-     *                    没有设置的时间段,默认是1.0f;
-     * @param startTimeUs
-     * @param endTimeUs
-     */
-    public void addTimeStretch(float rate, long startTimeUs, long endTimeUs) {
-        if (render != null && !render.isRunning()) {
-            render.addTimeStretch(rate, startTimeUs, endTimeUs);
-        } else {
-            LSOLog.e("addSpeedTimeRange error,drawPad is :"+toString());
-        }
-    }
-
-    /**
-     * 增加时间重复;
-     * <p>
-     * 类似综艺节目中, 当好玩的画面发生的时候, 多次重复的效果.
-     * <p>
-     * 在DrawPad容器开始前调用
-     *
-     * @param startUs 相对原视频/原音频的开始时间;
-     * @param endUs   相对原视频/原音频的结束时间;
-     * @param loopcnt 重复的次数;
-     */
-    public void addTimeRepeat(long startUs, long endUs, int loopcnt) {
-        if (render != null && !render.isRunning()) {
-            render.addTimeRepeat(startUs, endUs, loopcnt);
-        } else {
-            LSOLog.e("addRepeatRange error, drawPad is :"+toString());
-        }
-    }
-
-    /**
-     * 增加时间拉伸
-     * 在给视频图层设置一个时间快慢的效果
-     */
-    public void addTimeStretch(List<LSOTimeRange> list) {
-        if (render != null && !render.isRunning()) {
-            render.addTimeStretch(list);
-        } else {
-            LSOLog.e("addSpeedTimeRange error,drawPad is :"+toString());
-        }
-    }
-
-    /**
-     * 时间冻结
-     * 在给视频图层设置一个时间冻结的效果
-     */
-    public void addTimeFreeze(List<LSOTimeRange> list) {
-        if (render != null && !render.isRunning()) {
-            render.addTimeFreeze(list);
-        } else {
-            LSOLog.e("addTimeFreeze error, drawPad is :"+toString());
-        }
-    }
-
-    /**
-     * 时间重复.
-     * 在给视频图层设置一个时间重复的效果
-     */
-    public void addTimeRepeat(List<LSOTimeRange> list) {
-        if (render != null && !render.isRunning()) {
-            render.addTimeRepeat(list);
-        } else {
-            LSOLog.e("addRepeatRange error, drawPad is :"+toString());
-        }
-    }
-
     /**
      * 增加图片图层.
      * 在DrawPad容器开始后调用;

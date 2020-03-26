@@ -379,7 +379,7 @@ public class Demo3LayerFilterActivity extends Activity {
                     videoOneDo = null;
 
                     if (LanSongFileUtil.fileExist(dstVideo)) {
-                        DemoUtil.startPlayDstVideo(Demo3LayerFilterActivity.this, dstVideo);
+                        DemoUtil.startPreviewVideo(Demo3LayerFilterActivity.this, dstVideo);
                     } else {
                         DemoUtil.showDialog(Demo3LayerFilterActivity.this, "生成的文件错误,请联系我们");
                     }

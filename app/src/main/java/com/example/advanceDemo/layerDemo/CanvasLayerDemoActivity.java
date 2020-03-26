@@ -73,7 +73,7 @@ public class CanvasLayerDemoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (LanSongFileUtil.fileExist(dstPath)) {
-                    DemoUtil.startPlayDstVideo(CanvasLayerDemoActivity.this,dstPath);
+                    DemoUtil.startPreviewVideo(CanvasLayerDemoActivity.this,dstPath);
                 } else {
                     Toast.makeText(CanvasLayerDemoActivity.this, "目标文件不存在", Toast.LENGTH_SHORT).show();
                 }

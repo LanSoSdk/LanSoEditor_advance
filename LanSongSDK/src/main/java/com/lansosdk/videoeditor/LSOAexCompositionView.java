@@ -12,59 +12,57 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.lansosdk.box.AudioPreviewLayer;
-import com.lansosdk.box.BitmapLayer;
-import com.lansosdk.box.CanvasLayer;
-import com.lansosdk.box.DrawPadConcatViewRender;
-import com.lansosdk.box.GifLayer;
+import com.lansosdk.aex.LSOAexDrawable;
+import com.lansosdk.box.LSOAexCompositionRunnable;
 import com.lansosdk.box.LSOAudioAsset;
-import com.lansosdk.box.LSOBitmapAsset;
-import com.lansosdk.box.LSOGifAsset;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LSOMVAsset;
 import com.lansosdk.box.LSOVideoAsset;
-import com.lansosdk.box.LSOVideoOption2;
-import com.lansosdk.box.Layer;
-import com.lansosdk.box.MVCacheLayer;
-import com.lansosdk.box.MVLayer;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
-import com.lansosdk.box.VideoConcatLayer;
+import com.lansosdk.box.OnLanSongSDKThreadProgressListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 
 
-public class DrawPadConcatView extends FrameLayout {
+/**
+ * 多个图层拼接 预览类
+ * 在拼接的过程中, 可以增加动画, 即实现转场, 拼接默认在图层的最后一秒的下方叠加另一个图层; 两个图层有重叠的一秒时间;
+ * 2019年9--10.18
+ */
+public class LSOAexCompositionView extends FrameLayout {
 
     /**
      * 渲染类;
      */
-    private DrawPadConcatViewRender renderer;
+    private LSOAexCompositionRunnable renderer;
 
-
+    /**
+     * 渲染窗口;
+     */
     private TextureRenderView textureRenderView;
     private SurfaceTexture mSurfaceTexture = null;
     private int drawPadWidth, drawPadHeight;
     private onViewAvailable mViewAvailable = null;
     private boolean isLayoutOk=false;
     // ----------------------------------------------
-    public DrawPadConcatView(Context context) {
+    public LSOAexCompositionView(Context context) {
         super(context);
         initVideoView(context);
     }
 
-    public DrawPadConcatView(Context context, AttributeSet attrs) {
+    public LSOAexCompositionView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initVideoView(context);
     }
 
-    public DrawPadConcatView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LSOAexCompositionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initVideoView(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public DrawPadConcatView(Context context, AttributeSet attrs, int defStyleAttr,int defStyleRes) {
+    public LSOAexCompositionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initVideoView(context);
     }
@@ -122,7 +120,7 @@ public class DrawPadConcatView extends FrameLayout {
         return null;
     }
     public interface onViewAvailable {
-        void viewAvailable(DrawPadConcatView v);
+        void viewAvailable(LSOAexCompositionView v);
     }
 
     private class SurfaceCallback implements TextureView.SurfaceTextureListener {
@@ -275,12 +273,12 @@ public class DrawPadConcatView extends FrameLayout {
     public int getDrawPadHeight() {
         return drawPadHeight;
     }
-    //---------------------------------------------容器代码--------------------------------------------------------
+   //---------------------------------------------容器代码--------------------------------------------------------
 
 
     private void createRender(){
         if(renderer==null){
-            renderer =new DrawPadConcatViewRender(getContext());
+            renderer =new LSOAexCompositionRunnable(getContext());
             renderer.setCompositionBackGroundColor(padBGRed,padBGGreen,padBGBlur,padBGAlpha);
             setupSuccess=false;
         }
@@ -294,7 +292,7 @@ public class DrawPadConcatView extends FrameLayout {
     public void setPreviewLooping(boolean is){
         createRender();
         if(renderer !=null) {
-            renderer.setPreviewLooping(is);
+           renderer.setPreviewLooping(is);
         }
     }
     //---------------------------容器背景颜色;
@@ -306,6 +304,7 @@ public class DrawPadConcatView extends FrameLayout {
      * 设置容器的背景颜色;
      * @param color
      */
+    @Override
     public void setBackgroundColor(int color) {
         int red = Color.red(color);  //<---拷贝这里的代码;3行
         int green = Color.green(color);
@@ -338,272 +337,46 @@ public class DrawPadConcatView extends FrameLayout {
 
     private boolean setupSuccess;
 
-
-
-    public void setDurationUs(long durationUs){
+    public boolean addFirstLayer(LSOVideoAsset videoAsset){
         createRender();
-        if (renderer != null && !isRunning()) {
-            renderer.setDrawPadDurationUs(durationUs);
-        }
-    }
-    public BitmapLayer addBitmapLayer(LSOBitmapAsset asset) {
-        createRender();
-        if (renderer != null && setup()) {
-            return renderer.addBitmapLayer(asset,0,Long.MAX_VALUE);
+        if (renderer != null &&  setup() && videoAsset!=null) {
+            return renderer.addFirstLayer(videoAsset);
         }else{
-            return null;
+            return false;
         }
     }
-    public BitmapLayer addBitmapLayer(LSOBitmapAsset asset, long startTimeUs, long endTimeUs) {
+    public boolean addSecondLayer(LSOAexDrawable drawable){
         createRender();
-        if (renderer != null && setup()) {
-            return renderer.addBitmapLayer(asset,startTimeUs,endTimeUs);
+        if (renderer != null &&  setup() && drawable!=null) {
+            return renderer.addSecondLayer(drawable);
         }else{
-            return null;
+            return false;
         }
     }
-    public CanvasLayer addCanvasLayer() {
+    
+    public boolean addMVLayer(LSOMVAsset asset){
         createRender();
-        if (renderer != null && setup()) {
-            return renderer.addCanvasLayer();
+        if (renderer != null &&  setup() && asset!=null) {
+            return renderer.addMVLayer(asset);
         }else{
-            return null;
+            return false;
         }
     }
-    @Deprecated
-    public GifLayer addGifLayer(String gifPath, long startTimeUs, long endTimeUs) {
-        createRender();
-        if (renderer != null && setup()) {
-            return renderer.addGifLayer(gifPath,startTimeUs,endTimeUs);
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * 增加gif图层
-     * @param asset
-     * @param startTimeUs  从容器的什么位置增加
-     * @param endTimeUs 加到容器的什么位置, 如果把gif全部增加,则这里填入Long.MAX_VALUE
-     * @return
-     */
-    public GifLayer addGifLayer(LSOGifAsset asset, long startTimeUs, long endTimeUs) {
-        createRender();
-        if (renderer != null && setup()) {
-            return renderer.addGifLayer(asset,startTimeUs,endTimeUs);
-        }else{
-            return null;
-        }
-    }
-    /**
-     * 增加透明图片
-     * 暂时不支持透明视频里的声音
-     * @param colorPath
-     * @param maskPath
-     * @param startTimeUs 从容器的什么位置增加
-     * @param endTimeUs 增加到容器的什么位置, 如果把mv全部增加,则这里填入Long.MAX_VALUE
-     * @return
-     */
-    @Deprecated
-    public MVCacheLayer addMVLayer(String colorPath, String maskPath, long startTimeUs, long endTimeUs) {
-        createRender();
-        if (renderer != null && setup()) {
-            return renderer.addMVLayer(colorPath,maskPath,startTimeUs,endTimeUs);
-        }else{
-            return null;
-        }
-    }
-    public MVLayer addMVLayer(LSOMVAsset asset) {
-        createRender();
-        if (renderer != null && asset!=null  && !asset.isReleased() && setup()) {
-            return renderer.addMVLayer(asset,0,Long.MAX_VALUE);
-        }else{
-            return null;
-        }
-    }
-    public MVLayer addMVLayer(LSOMVAsset asset, long startTimeUs, long endTimeUs) {
-        createRender();
-        if (renderer != null && asset!=null  && !asset.isReleased() && setup()) {
-            return renderer.addMVLayer(asset,startTimeUs,endTimeUs);
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * 删除一个图层
-     * @param layer
-     */
-    public void removeLayer(Layer layer){
-        if (renderer != null &&  renderer.isRunning()) {
-            renderer.removeLayer(layer);
-        }
-    }
-
-    /**
-     * 删除所有的图层, (不包括音频图层)
-     */
-    public void removeAllLayers(){
-        if (renderer != null &&  renderer.isRunning()) {
-            renderer.removeAllLayers();
-        }
-    }
-
-    /**
-     * 删除音频图层
-     * @param layer
-     */
-    public void removeAudioLayer(AudioPreviewLayer layer){
-        if (renderer != null &&  renderer.isRunning()) {
-            renderer.removeAudioLayer(layer);
-        }
-    }
-
-    /**
-     * 删除所有音频图层;
-     */
-    public void removeAllAudioLayers(){
-        if (renderer != null &&  renderer.isRunning()) {
-            renderer.removeALLAudioLayer();
-        }
-    }
-
     //------------------增加音频图层---------------------------------
     /**
      * 增加声音图层;
      * @param audioAsset 声音文件对象;
      * @return
      */
-    public AudioPreviewLayer addAudioLayer(LSOAudioAsset audioAsset) {
+    public boolean addAudioAsset(LSOAudioAsset audioAsset) {
         if (renderer != null && audioAsset!=null) {
-            AudioPreviewLayer layer= renderer.addAudioLayer(audioAsset,0,0,Long.MAX_VALUE);
-            if(layer==null){
-                LSOLog.e("DrawPadConcatExecute addAudioLayer 1 error. path:"+audioAsset);
-            }
-            return layer;
+             return renderer.addAudioAsset(audioAsset);
         } else {
-            LSOLog.e("DrawPadConcatExecute addAudioLayer error. path:"+audioAsset);
-            return null;
+            LSOLog.e(" addAudioAsset error. path:"+audioAsset);
+            return false;
         }
     }
-
-    /**
-     * 增加音频图层.
-     * @param audioAsset 音频资源
-     * @param loop 是否循环;
-     * @return
-     */
-    public AudioPreviewLayer addAudioLayer(LSOAudioAsset audioAsset,boolean loop) {
-        if (renderer != null&& audioAsset!=null) {
-            AudioPreviewLayer layer= renderer.addAudioLayer(audioAsset,0,0,Long.MAX_VALUE);
-            if(layer==null){
-                LSOLog.e("DrawPadConcatExecute addAudioLayer 2 error. path:"+audioAsset);
-            }else{
-                layer.setLooping(loop);
-            }
-            return layer;
-        } else {
-            LSOLog.e("DrawPadConcatExecute addAudioLayer error. path:"+audioAsset);
-            return null;
-        }
-    }
-    /**
-     * 增加音频图层,;
-     * 所有图层增加后 调用;
-     * @param audioAsset
-     * @param volume  音频音量, 1.0是正常音量,0.5是降低一倍; 2.0是提高一倍;
-     * @return
-     */
-    public AudioPreviewLayer addAudioLayer(LSOAudioAsset audioAsset, float volume) {
-        if (renderer != null&& audioAsset!=null) {
-            AudioPreviewLayer layer=  renderer.addAudioLayer(audioAsset, 0,0, Long.MAX_VALUE);
-            if(layer==null){
-                layer.setVolume(volume);
-                LSOLog.e("DrawPadConcatExecute addAudioLayer 3 error. path:"+audioAsset);
-            }
-            return layer;
-        } else {
-            LSOLog.e("DrawPadConcatExecute addAudioLayer error. path:"+audioAsset);
-            return null;
-        }
-    }
-
-    /**
-     *  增加其他声音;
-     *  所有图层增加后 调用;
-     *
-     * @param audioAsset
-     * @param startFromPadUs 从容器的什么位置开始增加
-     * @return
-     */
-    public AudioPreviewLayer addAudioLayer(LSOAudioAsset audioAsset, long startFromPadUs) {
-        if (renderer != null&& audioAsset!=null) {
-            AudioPreviewLayer layer=  renderer.addAudioLayer(audioAsset,startFromPadUs, 0, Long.MAX_VALUE);
-            if(layer==null){
-                LSOLog.e("DrawPadConcatExecute addAudioLayer 4 error. path:"+audioAsset);
-            }
-            return layer;
-        } else {
-            LSOLog.e("DrawPadConcatExecute addAudioLayer error. path:"+audioAsset);
-            return null;
-        }
-    }
-
-    /**
-     * 如果要调节音量, 则增加拿到对象后, 开始调节.
-     *
-     * 所有图层增加后 调用;
-     * @param audioAsset
-     * @param startFromPadUs   从容器的什么位置开始增加
-     * @param startAudioTimeUs 裁剪声音的开始时间
-     * @param endAudioTimeUs   裁剪声音的结束时间;
-     * @return
-     */
-    public AudioPreviewLayer addAudioLayer(LSOAudioAsset audioAsset, long startFromPadUs,long startAudioTimeUs, long endAudioTimeUs) {
-        if (renderer != null && audioAsset!=null) {
-            AudioPreviewLayer layer=renderer.addAudioLayer(audioAsset, startFromPadUs,
-                    startAudioTimeUs, endAudioTimeUs);
-            if(layer==null){
-                LSOLog.e("DrawPadConcatExecute addAudioLayer  5 error. path:"+audioAsset);
-            }
-            return layer;
-        } else {
-            LSOLog.e("DrawPadConcatExecute addAudioLayer error. path:"+audioAsset);
-            return null;
-        }
-    }
-
     //------------------------拼接类------------------------------
-    /**
-     * 拼接图片;
-     * @param asset
-     * @param durationUs
-     * @return
-     */
-    public BitmapLayer concatBitmapLayer(LSOBitmapAsset asset, long durationUs) {
-        createRender();
-        if (renderer != null && asset!=null && setup()) {
-            return renderer.concatBitmapLayer(asset,durationUs);
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * 拼接一个视频层
-     * 先调用的在前面, 后调用的在后面;
-     * @param asset
-     * @param option2
-     * @return
-     */
-    public VideoConcatLayer concatVideoLayer(LSOVideoAsset asset, LSOVideoOption2 option2){
-        createRender();
-        if (renderer != null && asset!=null && setup()) {
-            return renderer.concatVideoLayer(asset,option2);
-        }else{
-            return null;
-        }
-    }
     public boolean isRunning(){
         return renderer!=null && renderer.isRunning();
     }
@@ -616,6 +389,13 @@ public class DrawPadConcatView extends FrameLayout {
             renderer.setOnLanSongSDKProgressListener(listener);
         }
     }
+    public void setOnLanSongSDKThreadProgressListener(OnLanSongSDKThreadProgressListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.setOnLanSongSDKThreadProgressListener(listener);
+        }
+    }
+
     /**
      * 完成回调.
      * 2. 预览后, 导出完成.
@@ -638,27 +418,11 @@ public class DrawPadConcatView extends FrameLayout {
 
 
     public boolean startPreview(){
+
         if(renderer!=null && setupSuccess){
             return renderer.startPreview();
         }else{
             return false;
-        }
-    }
-
-    /**
-     * 如果设置为is, 则
-     * 如果您seek完毕后, 需要再次调用resumePreview 画面才真正开始播放;
-     * @param is
-     */
-    public void setSeekMode(boolean is){
-        if(renderer!=null){
-            renderer.setSeekMode(is);
-        }
-    }
-
-    public void seekToTimeUs(long timeUs){
-        if(renderer!=null &&renderer.isRunning()){
-            renderer.seekToUs(timeUs);
         }
     }
     public long getDurationUs(){
@@ -679,8 +443,8 @@ public class DrawPadConcatView extends FrameLayout {
 
 
 
-    public boolean isPreviewing(){
-        return renderer!=null && renderer.isPreviewing();
+    public boolean isPlaying(){
+        return renderer!=null && renderer.isPlaying();
     }
     public void pausePreview(){
         if(renderer!=null){
@@ -693,6 +457,49 @@ public class DrawPadConcatView extends FrameLayout {
         }
     }
 
+    /**
+     * @param index
+     */
+    public void seekToFrameIndex(int index){
+        if(renderer!=null){
+            renderer.seekToFrameIndex(index);
+        }
+    }
+
+    public int getCurrentFrameIndex(){
+        if(renderer!=null){
+            return renderer.getCurrentFrameIndex();
+        }else{
+            return 0;
+        }
+    }
+    /**
+     * @param seekUs
+     */
+    public void seekToTimeUs(long seekUs){
+        if(renderer!=null){
+            renderer.seekToTimeUs(seekUs);
+        }
+    }
+
+    /**
+     */
+    public void seekToNextFrame(){
+        if(renderer!=null){
+            renderer.showNextFrame();
+        }
+    }
+
+    /**
+     */
+    public void seekToPreviousFrame(){
+        if(renderer!=null){
+            renderer.showPreviousFrame();
+        }
+    }
+
+
+
     private boolean setup(){
         if(setupSuccess){
             return true;
@@ -701,7 +508,6 @@ public class DrawPadConcatView extends FrameLayout {
             renderer.updateDrawPadSize(drawPadWidth,drawPadHeight);
             renderer.setSurface(new Surface(mSurfaceTexture));
             setupSuccess= renderer.setup();
-            LSOLog.e("AEComposition startPreview.ret:"+setupSuccess);
             return setupSuccess;
         }else{
             return  false;
@@ -724,7 +530,7 @@ public class DrawPadConcatView extends FrameLayout {
      */
     public void release(){
         if(renderer!=null){
-            renderer.release();
+           renderer.release();
             renderer=null;
         }
         setupSuccess=false;

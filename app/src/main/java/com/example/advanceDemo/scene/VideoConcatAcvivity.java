@@ -236,7 +236,7 @@ public class VideoConcatAcvivity extends Activity {
                 @Override
                 public void onCompleted(DrawPad v) {
                     progressDialog.release();
-                    DemoUtil.startPlayDstVideo(VideoConcatAcvivity.this,exportPath);
+                    DemoUtil.startPreviewVideo(VideoConcatAcvivity.this,exportPath);
                 }
             });
             concatVideo.setDrawPadProgressListener(new onDrawPadProgressListener() {

@@ -207,9 +207,6 @@ public class CameraLayerFullSegmentActivity extends Activity implements
         if (!drawPadCamera.isRunning() && drawPadCamera.setupDrawpad()) {
             mCameraLayer = drawPadCamera.getCameraLayer();
 
-
-
-            addMVLayer();
             drawPadCamera.startPreview();
         }
     }
@@ -217,30 +214,6 @@ public class CameraLayerFullSegmentActivity extends Activity implements
     MVLayer  mvLayer;
     MediaPlayer mvAudioPlayer;
     String mvAudioPath;
-    private void addMVLayer()
-    {
-        String color=CopyFileFromAssets.copyShanChu(getApplicationContext(),"daomengxing_c3_mvColor.mp4");
-        String mask=CopyFileFromAssets.copyShanChu(getApplicationContext(),"daomengxing_c3_mvMask.mp4");
-
-        mvLayer=drawPadCamera.addMVLayer(color,mask);
-        mvLayer.setEndMode(MVLayerENDMode.LOOP);
-        mvLayer.setScaledValue(mvLayer.getPadWidth(),mvLayer.getPadHeight());
-
-
-        VideoEditor editor=new VideoEditor();
-        mvAudioPath=editor.executeGetAudioTrack(color);
-        if(mvAudioPath!=null){
-            try {
-                mvAudioPlayer=new MediaPlayer();
-                mvAudioPlayer.setDataSource(mvAudioPath);
-                mvAudioPlayer.prepare();
-                mvAudioPlayer.setLooping(true);
-                mvAudioPlayer.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     private void removeMVLayer()
     {
           if(mvLayer!=null && drawPadCamera!=null){

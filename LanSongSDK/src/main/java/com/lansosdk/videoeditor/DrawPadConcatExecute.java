@@ -106,10 +106,10 @@ public class DrawPadConcatExecute {
         }
     }
     /**
-     * 拼接一个视频
-     * 先增加的第一个位置, 后增加的,依次向后排列;
+     * 拼接一个视频 先增加的第一个位置, 后增加的,依次向后排列;
      * @param asset 视频, 如果你要增加拼接动画,则拿到VideoConcatLayer对象后, 可以在指定点增加LanSongAnimation对象;
-     * @return 图层对象;
+     * @param option 资源的一些选项,比如裁剪,循环等;
+     * @return
      */
     public VideoConcatLayer concatVideoLayer(LSOVideoAsset asset, LSOVideoOption2 option) {
         if (renderer != null && asset!=null && setup()) {
@@ -324,7 +324,7 @@ public class DrawPadConcatExecute {
             renderer.setOnLanSongSDKErrorListener(listener);
         }
     }
-//-------------------------listener end -------------------------------------------
+    //-------------------------listener end -------------------------------------------
     public boolean isRunning() {
         if(renderer !=null){
             return renderer.isRunning();
@@ -414,7 +414,7 @@ public class DrawPadConcatExecute {
         padBGBlur=b;
         padBGAlpha=a;
         if(renderer !=null){
-            renderer.setDrawPadBackGroundColor(r,g,b,a);
+            renderer.setCompositionBackGroundColor(r,g,b,a);
         }
     }
     //---------------------------test Demo测试例子------------------------------------------------

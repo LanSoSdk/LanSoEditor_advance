@@ -608,7 +608,7 @@ public class AECompositionView extends FrameLayout {
      * @param loop 是否循环;
      * @return
      */
-    public AudioLayer addAudioLayer(LSOAudioAsset audioAsset,boolean loop) {
+    public AudioLayer addAudioLayer(LSOAudioAsset audioAsset, boolean loop) {
         if (renderer != null && !renderer.isRunning()) {
             AudioLayer layer= renderer.addAudioLayer(audioAsset);
             if(layer==null){
@@ -720,7 +720,7 @@ public class AECompositionView extends FrameLayout {
      * @param endAudioTimeUs   裁剪声音的结束时间;
      * @return
      */
-    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs,long startAudioTimeUs, long endAudioTimeUs) {
+    public AudioLayer addAudioLayer(String srcPath, long startFromPadUs, long startAudioTimeUs, long endAudioTimeUs) {
         if (renderer != null && !renderer.isRunning()) {
             AudioLayer layer=renderer.addAudioLayer(srcPath, startFromPadUs,
                     startAudioTimeUs, endAudioTimeUs);

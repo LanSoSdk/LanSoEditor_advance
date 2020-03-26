@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/red">
 
     <com.lansosdk.videoeditor.AECompositionView
         android:id="@+id/id_ae_preview2"

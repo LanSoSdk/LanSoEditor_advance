@@ -188,6 +188,7 @@ public class VideoOneDO2Activity extends Activity {
                 }
                 break;
                 case R.id.id_onedo_gif_btn:
+
                     videoOneDo.addGifLayer(R.drawable.g06,LSOLayerPosition.LeftBottom);
                     break;
                 case R.id.id_onedo_canvas_btn:

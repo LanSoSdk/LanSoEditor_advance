@@ -31,7 +31,6 @@ import com.lansosdk.box.onDrawPadProgressListener;
 public class AERenderExecute {
     public AERenderRunnable aeRenderer;
 
-    //是否强制使用DrawPad©
     public DrawPadAERunnable drawPadRenderer;
 
     public static  boolean forceUseDrawPad=false;
@@ -42,14 +41,14 @@ public class AERenderExecute {
      * @param ctx
      */
     public AERenderExecute(Context ctx){
-        if(!forceUseDrawPad && VideoEditor.isSupportNV21ColorFormat()){
-            aeRenderer =new AERenderRunnable(ctx);
-            LSOLog.d("AERenderExecute use AERenderRunnable...");
-        }else{
+//        if(!forceUseDrawPad && VideoEditor.isSupportNV21ColorFormat()){
+//            aeRenderer =new AERenderRunnable(ctx);
+//            LSOLog.d("AERenderExecute use AERenderRunnable...");
+//        }else{
             drawPadOutPath=LanSongFileUtil.createMp4FileInBox();
             drawPadRenderer=new DrawPadAERunnable(ctx,drawPadOutPath);
             LSOLog.d("AERenderExecute use DrawPadAERunnable...");
-        }
+//        }
     }
 
     /**
@@ -212,7 +211,6 @@ public class AERenderExecute {
      */
     public AudioLayer addAudioLayer(String srcPath, boolean loop) {
         AudioLayer layer=null;
-
         if (aeRenderer != null && !aeRenderer.isRunning()) {
             layer= aeRenderer.addAudioLayer(srcPath);
         }else if(drawPadRenderer!=null && !drawPadRenderer.isRunning()){

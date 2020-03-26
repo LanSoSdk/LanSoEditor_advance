@@ -104,6 +104,8 @@ public class EditModeVideo {
         return null;
     }
 
+
+
     public void release() {
         if (decoderHandler != 0) {
             AVDecoder.decoderRelease(decoderHandler);

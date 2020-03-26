@@ -67,7 +67,9 @@ public class VideoOneDo2 {
     }
 
     /**
-     * 设置背景颜色; 只有在
+     * 设置背景颜色;
+     * 当视频画面和最终生成的视频不一致的时候, 这是会有容器的背景显示出来
+     * 是设置背景的颜色;
      * @param color
      */
     public void setBackGroundColor(int color){
@@ -109,11 +111,16 @@ public class VideoOneDo2 {
      */
     public void  setCropRect(int startX, int startY, int cropW, int cropH) {
 
-
         if(cropH<32 || cropW<32){
             LSOLog.e("setCropRect error  min Size is 32x 32");
             return;
         }
+
+        if(cropH * cropW<=192*160){ //麒麟处理器的裁剪区域是176x144
+            LSOLog.e("setCropRect error. qi lin SoC is192*160");
+            return;
+        }
+
 
         if(mediaInfo!=null && startX>=0 && startY>=0 && startX<mediaInfo.getWidth() && startY<mediaInfo.getHeight())
         {
@@ -383,6 +390,13 @@ public class VideoOneDo2 {
             runnable.addFilterList(filterList);
         }
     }
+
+    /**
+     * 增加一张图片,
+     * 返回给你根据这张图片创建好的一个图层对象
+     * @param bmp 图片
+     * @return 返回一个图层对象;
+     */
     public BitmapLayer addBitmapLayer(Bitmap bmp) {
         if(runnable!=null){
             return runnable.addBitmapLayer(bmp);
@@ -390,10 +404,12 @@ public class VideoOneDo2 {
             return null;
         }
     }
-
-
     /**
-     * 增加图片图层;
+     * 增加一张图片,
+     * 返回给你根据这张图片创建好的一个图层对象
+     * @param bmp  图片
+     * @param position  图片放置的位置, 枚举类型
+     * @return 返回图片图层对象;
      */
     public BitmapLayer addBitmapLayer(Bitmap bmp , LSOLayerPosition position) {
         if(runnable!=null){

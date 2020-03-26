@@ -93,7 +93,7 @@ public class DrawPadCameraView extends FrameLayout {
     private onDrawPadProgressListener drawpadProgressListener = null;
     private onDrawPadRecordCompletedListener drawPadRecordCompletedListener=null;
     private onDrawPadThreadProgressListener drawPadThreadProgressListener = null;
-    private onDrawPadSnapShotListener drawpadSnapShotListener = null;
+    private onDrawPadSnapShotListener drawPadSnapShotListener = null;
     private onDrawPadOutFrameListener drawPadOutFrameListener = null;
     private int outFrameWidth;
     private int outFrameHeight;
@@ -387,8 +387,7 @@ public class DrawPadCameraView extends FrameLayout {
      *
      * @param listener
      */
-    public void setOnDrawPadThreadProgressListener(
-            onDrawPadThreadProgressListener listener) {
+    public void setOnDrawPadThreadProgressListener(onDrawPadThreadProgressListener listener) {
         if (renderer != null) {
             renderer.setDrawPadThreadProgressListener(listener);
         }
@@ -400,12 +399,14 @@ public class DrawPadCameraView extends FrameLayout {
      * 设置 获取当前DrawPad这一帧的画面的监听, 注意,因为Camera是全速运行, 会根据手机cpu的速度来执行, 可能一秒钟执行50帧,
      * 或60帧, 也可能一秒钟执行30帧. 设置截图监听,当截图完成后, 返回当前图片的btimap格式的图片. 此方法工作在主线程.
      * 请不要在此方法里做图片的处理,以免造成拥堵; 建议获取到bitmap后,放入到一个链表中,在外面或另开一个线程处理.
+     *
+     * 一般用在拍照的场合.
      */
     public void setOnDrawPadSnapShotListener(onDrawPadSnapShotListener listener) {
         if (renderer != null) {
-            renderer.setDrawpadSnapShotListener(listener);
+            renderer.setDrawPadSnapShotListener(listener);
         }
-        drawpadSnapShotListener = listener;
+        drawPadSnapShotListener = listener;
     }
 
     /**
@@ -459,8 +460,7 @@ public class DrawPadCameraView extends FrameLayout {
      * 此方法,仅在前台工作时有效. (注意:截取的仅仅是各种图层的内容, 不会截取DrawPad的黑色背景)
      */
     public void toggleSnatShot() {
-        if (drawpadSnapShotListener != null && renderer != null
-                && renderer.isRunning()) {
+        if (drawPadSnapShotListener != null && renderer != null && renderer.isRunning()) {
             renderer.toggleSnapShot(padWidth, padHeight);
         } else {
             LSOLog.e( "toggle snap shot failed!!!");
@@ -468,7 +468,7 @@ public class DrawPadCameraView extends FrameLayout {
     }
 
     public void toggleSnatShot(int width, int height) {
-        if (drawpadSnapShotListener != null && renderer != null
+        if (drawPadSnapShotListener != null && renderer != null
                 && renderer.isRunning()) {
             renderer.toggleSnapShot(width, height);
         } else {
@@ -582,7 +582,7 @@ public class DrawPadCameraView extends FrameLayout {
                     renderer.setEditModeVideo(isEditModeVideo);
                 }
                 // 设置DrawPad处理的进度监听, 回传的currentTimeUs单位是微秒.
-                renderer.setDrawpadSnapShotListener(drawpadSnapShotListener);
+                renderer.setDrawPadSnapShotListener(drawPadSnapShotListener);
                 renderer.setDrawpadOutFrameListener(outFrameWidth,outFrameHeight, outFrameType, drawPadOutFrameListener);
                 renderer.setDrawPadProgressListener(drawpadProgressListener);
                 renderer.setDrawPadCompletedListener(drawpadCompletedListener);

@@ -20,10 +20,12 @@ import com.example.advanceDemo.view.RecyclerViewAdapter;
 import com.example.advanceDemo.view.SpacesItemDecoration;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.LanSongAe.LSOAeDrawable;
+import com.lansosdk.LanSongAe.LSOAeText;
 import com.lansosdk.LanSongAe.LSOLoadAeJsons;
 import com.lansosdk.LanSongAe.OnLSOAeJsonLoadedListener;
 import com.lansosdk.box.BitmapLayer;
 import com.lansosdk.box.LSOLayerPosition;
+import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKExportProgressListener;
@@ -67,8 +69,6 @@ public class AECompositionActivity extends Activity {
         initView();
 
         inputType = getIntent().getIntExtra("AEType", AEDemoAsset.AE_DEMO_NONE);
-
-
         //创建素材;
         demoAsset =new AEDemoAsset(getApplicationContext(),inputType);
         if (demoAsset.json1Path != null) {
@@ -139,6 +139,7 @@ public class AECompositionActivity extends Activity {
             return;
         }
         demoAsset.replaceJsonAsset();
+
         //第一层:视频层
         if (demoAsset.bgVideo != null) {
             try {
@@ -150,7 +151,13 @@ public class AECompositionActivity extends Activity {
         }
         //第二层:json层;
         if (demoAsset.drawable1 != null) {
+            if(inputType==AEDemoAsset.AE_DEMO_JSON_CUT) {  //json裁剪
+                aeCompositionView.addSecondLayer(demoAsset.drawable1, demoAsset.startFrameIndex, demoAsset.endFrameIndex);
+            }else  if(inputType ==AEDemoAsset.AE_DEMO_JSON_CONCAT){  //json拼接;
+                aeCompositionView.addSecondLayer(Arrays.asList(demoAsset.drawable1,demoAsset.drawable2));  //两个json拼接.
+            }else {
                 aeCompositionView.addSecondLayer(demoAsset.drawable1);
+            }
         }
 
         //第三层:mv图层;
@@ -159,7 +166,7 @@ public class AECompositionActivity extends Activity {
         }
 
         //第四层:json图层[通常用不到]
-        if (demoAsset.drawable2 != null) {
+        if (demoAsset.drawable2 != null && inputType!=AEDemoAsset.AE_DEMO_JSON_CONCAT) {
             aeCompositionView.addForthLayer(demoAsset.drawable2);
         }
 
@@ -172,6 +179,21 @@ public class AECompositionActivity extends Activity {
         if (demoAsset.audioAsset != null) {
             aeCompositionView.addAeModuleAudio(demoAsset.audioAsset);  //<--------注意,这里更新为单独增加Ae的音乐;
         }
+
+
+        int index=0;
+        List<LSOAeText> texts = demoAsset.drawable1.getJsonTexts();
+        for(LSOAeText text: texts){
+
+            if(index++==0){
+                demoAsset.drawable1.updateTextWithJsonText(text.text,text.text);
+            }else{
+                demoAsset.drawable1.updateTextWithJsonText(text.text,text.text);
+            }
+        }
+
+
+
 
 //        AudioLayer layer=aeCompositionView.addAudioLayer(copyAssets(getApplicationContext(),"hongdou10s.mp3"),true);
 //        if(layer!=null){

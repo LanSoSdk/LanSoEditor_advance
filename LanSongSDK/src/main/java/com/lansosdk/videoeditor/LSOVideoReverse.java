@@ -20,7 +20,6 @@ public class LSOVideoReverse {
      */
     public LSOVideoReverse(String  path) throws  Exception{
 
-
         if(!LSOVideoReverseRunnable.isSupport()){
             throw  new Exception("LSOVideoReverseRunnable not support this video.");
         }
@@ -28,9 +27,6 @@ public class LSOVideoReverse {
         if(!runnable.prepare()){
             throw  new Exception("LSOVideoReverseRunnable not support this video." + path);
         }
-
-
-
     }
     /**
      * 开始执行

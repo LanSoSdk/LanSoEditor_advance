@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,19 +16,37 @@ import android.widget.Toast;
 
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
+import com.example.advanceDemo.aeDemo.AECompositionActivity;
+import com.example.advanceDemo.aeDemo.VideoConcatAnimationActivity;
+import com.example.advanceDemo.camera.CameraLayerFullPortActivity;
+import com.example.advanceDemo.layerDemo.PhotoAlbumLayerDemoActivity;
 import com.example.advanceDemo.scene.GameVideoDemoActivity;
 import com.example.advanceDemo.utils.ConvertToEditModeDialog;
 import com.example.advanceDemo.utils.CopyDefaultVideoAsyncTask;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.utils.FileExplorerActivity;
 import com.lansoeditor.advanceDemo.R;
+import com.lansosdk.box.LSOLayerPosition;
+import com.lansosdk.box.LSOPhotoAlbumAsset;
 import com.lansosdk.box.LSOVideoAsset;
+import com.lansosdk.box.LSOVideoOption;
+import com.lansosdk.box.MicRecorder;
+import com.lansosdk.box.OnLanSongSDKCompletedListener;
+import com.lansosdk.box.OnLanSongSDKFrameOutListener;
+import com.lansosdk.box.OnLanSongSDKProgressListener;
+import com.lansosdk.box.VideoFrameLayer;
+import com.lansosdk.videoeditor.DrawPadAllExecute2;
 import com.lansosdk.videoeditor.EditModeVideo;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.MediaInfo;
+import com.lansosdk.videoeditor.VideoOneDo2;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAeAssets;
 
 
 public class ListMainActivity extends Activity implements OnClickListener {
@@ -74,9 +93,11 @@ public class ListMainActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         if (!isPermissionOk) {
             testPermission();
         }
+
         if (isPermissionOk && checkPath()) {
             switch (v.getId()) {
                 case R.id.id_mainlist_camerarecord:
@@ -124,6 +145,7 @@ public class ListMainActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_mainlist_videoplay).setOnClickListener(this);
         findViewById(R.id.id_mainlist_gamevideo).setOnClickListener(this);
 
+//        findViewById(R.id.id_mainlist_concat).setOnClickListener(this);
         //---------------------
         findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
             @Override
@@ -228,7 +250,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
                     public void onGranted() {
                         isPermissionOk = true;
                     }
-
                     @Override
                     public void onDenied(String permission) {
                         isPermissionOk = false;

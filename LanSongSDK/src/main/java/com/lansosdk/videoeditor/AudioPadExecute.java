@@ -12,7 +12,7 @@ import com.lansosdk.box.onAudioPadThreadProgressListener;
  * 音频容器;
  *
  * 使用1:
- *          给视频增加其他声音,并设置各自的音量,循环,快慢,变声等.
+ *          给视频增加其他声音,并设置各自的音量,循环.
  *          视频可以有声音,或无声音.
  * 使用2:
  *          先设置容器的固定时长, 分别在指定的时间点增加上声音.
@@ -48,31 +48,6 @@ public class AudioPadExecute {
         }
     }
 
-    /**
-     * 因为其他add都是long类型, 废弃这个长度是秒的构造方法;
-     * @param ctx
-     * @param durationS
-     */
-    @Deprecated
-    public AudioPadExecute(Context ctx, float durationS) {
-        if(render==null){
-            render=new AudioPadRunnable(ctx,durationS);
-        }
-    }
-
-    /**
-     * 因为其他add都是long类型, 废弃这个长度是秒的构造方法;
-     * 请用 AudioPadRunnable(Context ctx, long durationUS);
-     * @param ctx
-     * @param durationS
-     * @param sampleRate
-     */
-    @Deprecated
-    public AudioPadExecute(Context ctx, float durationS, int sampleRate) {
-        if(render==null){
-            render=new AudioPadRunnable(ctx,durationS,sampleRate);
-        }
-    }
 
     /**
      * 构造方法
@@ -170,7 +145,7 @@ public class AudioPadExecute {
      * @param srcPath      音频文件路径, 可以是有音频的视频路径;
      * @param offsetPadUs  从容器的什么时间开始增加.相对容器偏移多少.
      * @param startAudioUs 该音频的开始时间
-     * @param endAudioUs   该音频的结束时间. 如果要增加到文件尾,则可以直接填入-1;
+     * @param endAudioUs   该音频的结束时间. 如果要增加到文件尾,则填入Long.MAX_VALUE
      * @return 返回增加后音频层, 可以用来设置音量,快慢,变声等.
      */
     public AudioLayer addAudioLayer(String srcPath, long offsetPadUs,

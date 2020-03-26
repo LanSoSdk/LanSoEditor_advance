@@ -90,6 +90,6 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 27 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: __local_aars__:/Users/sno/000temp/pushToGithub/LanSoEditor_advance/LanSongSDK/libs/lansongeditor_hx.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:/Users/sno/000temp/workTemp/LanSongSDK_KeHu_test/LanSongSDK/libs/lansongeditor_hx.jar:unspecified@jar" level="project" />
   </component>
 </module>

@@ -33,7 +33,7 @@ public class AVDecoder {
     /**
      * 释放当前音频解码器
      *
-     * @param handle 暂时没有用到
+     * @param handle 暂时没有用到0
      * @return
      */
     public static native int audioRelease(long handle);

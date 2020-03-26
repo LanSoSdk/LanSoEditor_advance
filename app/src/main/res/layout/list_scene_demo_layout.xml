@@ -21,18 +21,10 @@
 			<TextView  style="@style/main_item_arrow"/> 
 	</RelativeLayout>
 	
-	<RelativeLayout  android:id="@+id/id_screne_pictures_exe" style="@style/main_item_reletivelayout">
-           	 <TextView   android:text="图片影集(后台)" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
-     
+
 
 	 <RelativeLayout  android:id="@+id/id_screne_videotransform" style="@style/main_item_reletivelayout">
            	 <TextView   android:text="多图层转换(前台转场)" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
-	 <RelativeLayout  android:id="@+id/id_screne_videotransform2" style="@style/main_item_reletivelayout">
-           	 <TextView   android:text="后台转场" style="@style/main_item_textview"/>
 			<TextView  style="@style/main_item_arrow"/> 
 	</RelativeLayout>
 

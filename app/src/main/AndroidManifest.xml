@@ -261,6 +261,8 @@
         <activity android:name="com.example.advanceDemo.TestAdjustAnimationActivity" />
         <activity android:name="com.example.advanceDemo.aeDemo.VideoConcatAnimationActivity" />
         <activity android:name="com.example.advanceDemo.TestSomeFunctionActivity" />
+        <activity android:name="com.example.advanceDemo.layerDemo.PhotoAlbumLayerDemoActivity" />
+        <activity android:name="com.example.advanceDemo.test3VideoPreviewActivity" />
     </application>
 
 </manifest>
