@@ -63,9 +63,6 @@
 ## 下载地址: 
 *  https://github.com/LanSoSdk/LanSoEditor_advance
 
-## 我们有基本视频编辑,以方便您项目中基本需求：
-*	https://github.com/LanSoSdk/LanSoEditor_common
-
 ## 我们的IOS版本， 欢迎您的使用：
 *	https://github.com/LanSoSdk/LanSongEditor_IOS
 
