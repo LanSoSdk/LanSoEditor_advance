@@ -52,12 +52,6 @@ public class ListAEActivity extends Activity implements OnClickListener {
             case R.id.id_aemain_more_picture:
                 showActivity(AEDemoAsset.AE_DEMO_MORE_PICTURE);
                 break;
-            case R.id.id_aemain_json_cut:
-                showActivity(AEDemoAsset.AE_DEMO_JSON_CUT);
-                break;
-            case R.id.id_aemain_json_concat:
-                showActivity(AEDemoAsset.AE_DEMO_JSON_CONCAT);
-                break;
             case R.id.id_aemain_json_overlay:
                 showActivity(AEDemoAsset.AE_DEMO_TWO_JSON_OVERLAY);
                 break;
@@ -124,8 +118,6 @@ public class ListAEActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_aemain_more_picture).setOnClickListener(this);
 
 
-        findViewById(R.id.id_aemain_json_cut).setOnClickListener(this);
-        findViewById(R.id.id_aemain_json_concat).setOnClickListener(this);
 
         findViewById(R.id.id_aemain_json_overlay).setOnClickListener(this);
         findViewById(R.id.id_aemain_json_blur1).setOnClickListener(this);

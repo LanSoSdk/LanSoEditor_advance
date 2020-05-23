@@ -308,12 +308,12 @@ public class Demo3LayerFilterActivity extends Activity {
         if (info.prepare()) {
             decoderHandler = AVDecoder.decoderInit(src);
             if (decoderHandler != 0) {
-                mGLRgbBuffer = IntBuffer.allocate(info.vWidth * info.vHeight);
+                mGLRgbBuffer = IntBuffer.allocate(info.getWidth() * info.getHeight());
                 mGLRgbBuffer.position(0);
                 AVDecoder.decoderFrame(decoderHandler, -1, mGLRgbBuffer.array());
                 AVDecoder.decoderRelease(decoderHandler);
                 // 转换为bitmap
-                Bitmap bmp = Bitmap.createBitmap(info.vWidth, info.vHeight,
+                Bitmap bmp = Bitmap.createBitmap(info.getWidth(), info.getHeight(),
                         Bitmap.Config.ARGB_8888);
                 bmp.copyPixelsFromBuffer(mGLRgbBuffer);
                 decoderHandler = 0;

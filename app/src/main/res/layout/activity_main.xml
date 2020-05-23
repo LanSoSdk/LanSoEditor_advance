@@ -79,17 +79,7 @@
 			<TextView  style="@style/main_item_arrow"/>
 		</RelativeLayout>
 
-<!--		<RelativeLayout  android:id="@+id/id_mainlist_concat" style="@style/main_item_reletivelayout2">-->
-<!--			<TextView   android:text="转场拼接[开发中...]" style="@style/main_item_textview"/>-->
-<!--			<TextView  style="@style/main_item_arrow"/>-->
-<!--		</RelativeLayout>-->
 
-
-
-		<RelativeLayout  android:id="@+id/id_mainlist_gamevideo" style="@style/main_item_reletivelayout2">
-			<TextView   android:text="游戏视频  效果" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/>
-		</RelativeLayout>
 
 
 		<RelativeLayout  android:id="@+id/id_mainlist_videoonedo" style="@style/main_item_reletivelayout2">
@@ -105,9 +95,10 @@
 		</RelativeLayout>
 
 
-
-
-
+		<RelativeLayout  android:id="@+id/id_main_list_lso_layer" style="@style/main_item_reletivelayout2">
+			<TextView   android:text="4.0版本拼接类演示" style="@style/main_item_textview"/>
+			<TextView  style="@style/main_item_arrow"/>
+		</RelativeLayout>
 
 
 		<RelativeLayout  android:id="@+id/id_mainlist_videoplay" style="@style/main_item_reletivelayout2">

@@ -159,7 +159,7 @@ public class CameraHePaiActivity extends Activity implements
         if (LanSongUtil.isFullScreenRatio(drawPadCamera.getViewWidth(), drawPadCamera.getViewHeight())) {
             drawPadCamera.setRealEncodeEnable(544, 1088, 3500 * 1024, (int) 25, dstPath);
         }
-        if (drawPadCamera.setupDrawpad()) // 建立容器
+        if (drawPadCamera.setupDrawPad()) // 建立容器
         {
             cameraLayer = drawPadCamera.getCameraLayer();
             if (cameraLayer != null) {

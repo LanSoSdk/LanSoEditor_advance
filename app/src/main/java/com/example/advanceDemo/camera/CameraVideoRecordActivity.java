@@ -191,7 +191,7 @@ public class CameraVideoRecordActivity extends Activity implements
             drawPadCamera.setRealEncodeEnable(544, 1088, 3500 * 1024, (int) 25,dstPath);
         }
 
-        if (drawPadCamera.setupDrawpad()) {
+        if (drawPadCamera.setupDrawPad()) {
             cameraLayer = drawPadCamera.getCameraLayer();
             drawPadCamera.startPreview();
 

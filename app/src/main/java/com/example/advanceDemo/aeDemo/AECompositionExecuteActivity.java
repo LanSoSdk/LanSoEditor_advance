@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.example.advanceDemo.utils.DemoLog;
@@ -39,9 +39,6 @@ public class AECompositionExecuteActivity extends Activity {
         inputType = getIntent().getIntExtra("AEType", AEDemoAsset.AE_DEMO_NONE);
         //创建素材;
 
-        if(inputType ==AEDemoAsset.AE_DEMO_JSON_CONCAT){
-            DemoUtil.showDialog(AECompositionExecuteActivity.this,"后台暂时不支持多个json拼接");
-        }else{
             //开始执行
             demoAsset =new AEDemoAsset(getApplicationContext(),inputType);
             findViewById(R.id.id_only_ae_export_button).setOnClickListener(new View.OnClickListener() {
@@ -50,9 +47,6 @@ public class AECompositionExecuteActivity extends Activity {
                     parseAeJson();
                 }
             });
-
-
-        }
     }
     /**
      * 解析AE中的json
@@ -88,7 +82,6 @@ public class AECompositionExecuteActivity extends Activity {
      */
     private void startAEExport() {
 
-
         if(isRunning){
             return;
         }
@@ -96,7 +89,11 @@ public class AECompositionExecuteActivity extends Activity {
         isRunning=true;
 
         DemoProgressDialog.showPercent(AECompositionExecuteActivity.this,0);
-        aeExecute=new AECompositionExecute(getApplicationContext());
+        try {
+            aeExecute=new AECompositionExecute(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //第一层:视频层
         if (demoAsset.bgVideo != null) {
@@ -105,12 +102,7 @@ public class AECompositionExecuteActivity extends Activity {
 
         //第二层:json层;
         if (demoAsset.drawable1 != null) {
-            if(inputType==AEDemoAsset.AE_DEMO_JSON_CUT) {  //json裁剪
-                aeExecute.addSecondLayer(demoAsset.drawable1, demoAsset.startFrameIndex, demoAsset.endFrameIndex);
-            }else  if(inputType ==AEDemoAsset.AE_DEMO_JSON_CONCAT){  //json拼接;
-            }else {
                 aeExecute.addSecondLayer(demoAsset.drawable1);
-            }
         }
 
         //第三层:mv图层;
@@ -120,7 +112,7 @@ public class AECompositionExecuteActivity extends Activity {
 
 
         //第四层:json图层[通常用不到]
-        if (demoAsset.drawable2 != null && inputType!=AEDemoAsset.AE_DEMO_JSON_CONCAT) {
+        if (demoAsset.drawable2 != null) {
             aeExecute.addForthLayer(demoAsset.drawable2);
         }
 
@@ -169,7 +161,7 @@ public class AECompositionExecuteActivity extends Activity {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         BitmapLayer bmpLayer = aeExecute.addBitmapLayer(bmp);
         bmpLayer.setScale(1.0f);
-        bmpLayer.setPosition(LSOLayerPosition.RightTop);
+        bmpLayer.setPosition(LSOLayerPosition.RIGHT_TOP);
 
         //开始执行
         if (aeExecute.startExport()) {

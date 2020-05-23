@@ -20,6 +20,7 @@ import com.lansosdk.box.OnLayerAlreadyListener;
 import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.VideoOneDoRunnable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -46,6 +47,9 @@ public class VideoOneDo2 {
      * @throws IOException
      */
     public VideoOneDo2(Context ctx, String path) throws Exception {
+        if(!LanSoEditor.isLoadLanSongSDK.get()){
+            throw  new Exception("没有加载SDK, 或你的APP崩溃后,重新启动当前Activity,请查看完整的logcat:(No SDK is loaded, or the current activity is restarted after your app crashes, please see the full logcat)");
+        }
         runnable=new VideoOneDoRunnable(ctx,path);
         mediaInfo=runnable.getMediaInfo();
         padWidth=mediaInfo.getWidth();
@@ -465,8 +469,6 @@ public class VideoOneDo2 {
             return null;
         }
     }
-
-
     //----------增加图片图层End;
     /**
      * 增加mv图层, mv默认是循环模式.

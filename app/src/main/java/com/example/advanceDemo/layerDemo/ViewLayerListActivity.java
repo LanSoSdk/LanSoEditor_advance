@@ -3,13 +3,11 @@ package com.example.advanceDemo.layerDemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
-import com.example.advanceDemo.ListMainActivity;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.box.ViewLayer;
 
 public class ViewLayerListActivity extends Activity {
 

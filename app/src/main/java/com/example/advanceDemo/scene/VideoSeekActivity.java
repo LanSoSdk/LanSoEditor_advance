@@ -224,7 +224,7 @@ public class VideoSeekActivity extends Activity {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     // 因为是竖屏.宽度小于高度.
-                    if (screenWidth > mediaInfo.vWidth) {
+                    if (screenWidth > mediaInfo.getWidth()) {
                         textureView.setDispalyRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
                     } else { // 大于屏幕的宽度
                         textureView.setDispalyRatio(IRenderView.AR_ASPECT_FIT_PARENT);

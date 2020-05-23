@@ -40,15 +40,19 @@ public class AERenderExecute {
      * 构造方法
      * @param ctx
      */
-    public AERenderExecute(Context ctx){
-//        if(!forceUseDrawPad && VideoEditor.isSupportNV21ColorFormat()){
-//            aeRenderer =new AERenderRunnable(ctx);
-//            LSOLog.d("AERenderExecute use AERenderRunnable...");
-//        }else{
+    public AERenderExecute(Context ctx) throws  Exception{
+        if(!LanSoEditor.isLoadLanSongSDK.get()){
+            throw  new Exception("没有加载SDK, 或你的APP崩溃后,重新启动当前Activity,请查看完整的logcat:(No SDK is loaded, or the current activity is restarted after your app crashes, please see the full logcat)");
+        }
+
+        if(!forceUseDrawPad && VideoEditor.isSupportNV21ColorFormat()){
+            aeRenderer =new AERenderRunnable(ctx);
+            LSOLog.d("AERenderExecute use AERenderRunnable...");
+        }else{
             drawPadOutPath=LanSongFileUtil.createMp4FileInBox();
             drawPadRenderer=new DrawPadAERunnable(ctx,drawPadOutPath);
             LSOLog.d("AERenderExecute use DrawPadAERunnable...");
-//        }
+        }
     }
 
     /**

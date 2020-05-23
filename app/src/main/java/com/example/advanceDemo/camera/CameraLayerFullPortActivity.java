@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.opengl.EGLContext;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
@@ -24,6 +25,8 @@ import com.lansosdk.box.CameraLayer;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVLayer;
+import com.lansosdk.box.MVLayer2;
+import com.lansosdk.box.OnCameraDataToTextureListener;
 import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.ViewLayer;
 import com.lansosdk.box.ViewLayerRelativeLayout;
@@ -108,7 +111,7 @@ public class CameraLayerFullPortActivity extends Activity implements
         }
     };
     private BitmapLayer bmpLayer;
-    private MVLayer mvLayer;
+    private MVLayer2 mvLayer;
     private MediaPlayer mplayer2 = null;
     private BeautyManager mBeautyMng;
     private float beautyLevel = 0.0f;
@@ -237,15 +240,16 @@ public class CameraLayerFullPortActivity extends Activity implements
         if (LanSongUtil.isFullScreenRatio(drawPadCamera.getViewWidth(), drawPadCamera.getViewHeight())) {
             drawPadCamera.setRealEncodeEnable(544, 1088, 3500 * 1024, (int) 25, dstPath);
         }
-        if (drawPadCamera.setupDrawpad()) // 建立容器
+        if (drawPadCamera.setupDrawPad()) // 建立容器
         {
             cameraLayer = drawPadCamera.getCameraLayer();
             if (cameraLayer != null) {
                 drawPadCamera.startPreview();
                 cameraLayer.setSlideFilterArray(filters);  //增加滑动
+
             }
         } else {
-            Log.i(TAG, "建立drawad线程失败.");
+            Log.i(TAG, "建立draw pad线程失败.");
         }
     }
 
@@ -329,56 +333,6 @@ public class CameraLayerFullPortActivity extends Activity implements
         }
     }
 
-    /**
-     * 增加MV图层;
-     */
-    private void addMVLayer() {
-        if (mvLayer != null) {
-            drawPadCamera.removeLayer(mvLayer);
-            mvLayer = null;
-        }
-        String colorMVPath = CopyFileFromAssets.copyAssets(CameraLayerFullPortActivity.this, "mei.mp4");
-        String maskMVPath = CopyFileFromAssets.copyAssets(CameraLayerFullPortActivity.this, "mei_b.mp4");
-
-        mvLayer = drawPadCamera.addMVLayer(colorMVPath, maskMVPath); // <-----增加MVLayer
-        mvLayer.setScaledToPadSize();
-
-        /**
-         * mv在播放完后, 有3种模式,消失/停留在最后一帧/循环.默认是循环.
-         * 	mvLayer.setReachEndMode(MVLayerENDMode.INVISIBLE);
-         */
-    }
-    private void removeMVLayer(){
-        drawPadCamera.removeLayer(mvLayer);
-        mvLayer=null;
-    }
-
-
-
-//    /**
-//     * 增加效果视频
-//     */
-//    private void addEffectVideo() {
-//        mplayer2 = new MediaPlayer();
-//        try {
-//            mplayer2.setDataSource("/sdcard/taohua.mp4");
-//            mplayer2.prepare();
-//            /**
-//             * 从摄像头图层获取一个surface, 作为视频的输出窗口
-//             */
-//            mplayer2.setSurface(new Surface(cameraLayer.getVideoTexture2()));
-//            mplayer2.startPreview();
-//
-//            /**
-//             * 把视频的滤镜 设置到摄像头图层中. 当然您也可以用switchFilterList来增加多个滤镜对象.比如先美颜,
-//             * 最后增加效果视频.
-//             */
-//            cameraLayer.switchFilterTo(cameraLayer.getEffectFilter());
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void initView() {
         findViewById(R.id.id_fullrecord_cancel).setOnClickListener(this);

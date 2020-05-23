@@ -61,7 +61,6 @@ public class DemoProgressDialog {
             e.printStackTrace();
             DemoLog.e("DemoProgress cancel error.");
         }
-
     }
 
 
@@ -73,6 +72,13 @@ public class DemoProgressDialog {
             demoProgressDialog.show(activity);
         }
         demoProgressDialog.setProgress(percent);
+    }
+    public  static void showMessage(Activity activity,String message){
+        if(demoProgressDialog==null){
+            demoProgressDialog=new DemoProgressDialog();
+            demoProgressDialog.show(activity);
+        }
+        demoProgressDialog.setMessage(message);
     }
     public static void releaseDialog(){
         if(demoProgressDialog!=null){

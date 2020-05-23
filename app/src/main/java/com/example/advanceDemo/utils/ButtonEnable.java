@@ -1,14 +1,13 @@
 package com.example.advanceDemo.utils;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 
 import com.lansoeditor.advanceDemo.R;
 
-public class ButtonEnable extends android.support.v7.widget.AppCompatButton implements View.OnClickListener {
+public class ButtonEnable extends androidx.appcompat.widget.AppCompatButton implements View.OnClickListener {
 
     private boolean isEnable=false;
     public ButtonEnable(Context context) {

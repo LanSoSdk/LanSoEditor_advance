@@ -52,9 +52,6 @@ public final class MeasureHelper {
      * @param heightMeasureSpec
      */
     public void doMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // Log.i("@@@@", "onMeasure(" + MeasureSpec.toString(widthMeasureSpec) +
-        // ", "
-        // + MeasureSpec.toString(heightMeasureSpec) + ")");
         if (mVideoRotationDegree == 90 || mVideoRotationDegree == 270) {
             int tempSpec = widthMeasureSpec;
             widthMeasureSpec = heightMeasureSpec;

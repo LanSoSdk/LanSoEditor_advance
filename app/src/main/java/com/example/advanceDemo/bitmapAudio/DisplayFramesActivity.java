@@ -87,8 +87,8 @@ public class DisplayFramesActivity extends Activity {
          * 初始化.
          */
         mExtractFrame = new ExtractVideoFrame(DisplayFramesActivity.this,videoPath);
-        if (mInfo.vWidth * mInfo.vHeight > 960 * 540) {
-            mExtractFrame.setBitmapWH(mInfo.vWidth / 2, mInfo.vHeight / 2); // 视频分辨率过大,则缩小一倍.
+        if (mInfo.getWidth() * mInfo.getHeight() > 960 * 540) {
+            mExtractFrame.setBitmapWH(mInfo.getWidth() / 2, mInfo.getHeight() / 2); // 视频分辨率过大,则缩小一倍.
         }
 
         if (mTpye == FRAME_TYPE_25) {

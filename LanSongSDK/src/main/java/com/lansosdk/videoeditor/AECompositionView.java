@@ -543,6 +543,12 @@ public class AECompositionView extends FrameLayout {
         }
     }
 
+    /**
+     * 增加一个图片图片logo
+     * @param bmp
+     * @param position
+     * @return
+     */
     public BitmapLayer addLogoLayer(Bitmap bmp, LSOLayerPosition position){
         createRender();
         if(renderer !=null && bmp!=null){
@@ -667,7 +673,7 @@ public class AECompositionView extends FrameLayout {
      * 在AE线程开始前 + 所有图层增加后 调用;
      *
      * 音频采样率必须和视频的声音采样率一致
-     * @param srcPath
+     * @param srcPath 声音路径文件, 声音支持mp3, wav, mp4,m4a
      * @param startFromPadTime 从Ae模板的什么时间开始增加
      * @return  返回增加后音频层, 可以用来设置音量,快慢,变声等.
      */
@@ -685,9 +691,7 @@ public class AECompositionView extends FrameLayout {
 
     /**
      * 增加其他声音;
-     *
-     *在AE线程开始前 和 所有图层增加后 调用;
-     *
+     * 在AE线程开始前 和 所有图层增加后 调用;
      *
      * 音频采样率必须和视频的声音采样率一致
      *
@@ -900,16 +904,30 @@ public class AECompositionView extends FrameLayout {
     }
 
     /**
-     * 开始运行
-     * @return 开启返回true; 失败返回false
+     * 直接播放预览.
+     * 不暂停;
+     * @return
      */
     public  boolean startPreview(){
+        return startPreview(false);
+    }
+    /**
+     * 开始运行
+     * @param pauseAfterFirstFrame 显示第一帧后, 是否要暂停;
+     * @return 开启返回true; 失败返回false
+     */
+    public  boolean startPreview(boolean pauseAfterFirstFrame){
+        if(!LanSoEditor.isLoadLanSongSDK.get()){
+            LSOLog.e("没有加载SDK, 或你的APP崩溃后,重新启动当前Activity,请查看完整的logcat:" +
+                    "(No SDK is loaded, or the current activity is restarted after your app crashes, please see the full logcat)");
+            return false;
+        }
 
         if(renderer!=null && mSurfaceTexture!=null && !renderer.isRunning()){
 
             renderer.updateDrawPadSize(drawPadWidth,drawPadHeight);
             renderer.setSurface(new Surface(mSurfaceTexture));
-            isStarted= renderer.startPreview();
+            isStarted= renderer.startPreview(pauseAfterFirstFrame);
             LSOLog.i("AEComposition startPreview.ret:"+isStarted);
             secondLayerAdd=!isStarted;
             return isStarted;
@@ -948,7 +966,8 @@ public class AECompositionView extends FrameLayout {
     /**
      * 暂停后的恢复预览画面.
      *
-     * 注意: 不能用在Activity的onResume中,因为onPause时会销毁TextureView,从而整个OpenGL语境就没有了.
+     * 注意: 不能用在Activity的onResume中,
+     * 因为onPause时会销毁TextureView,从而整个OpenGL语境就没有了.
      * 使用请参考demo;
      */
     public void resumePreview(){

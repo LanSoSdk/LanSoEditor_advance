@@ -64,7 +64,7 @@ public class BeautyManager {
                 mlookupFilter.setBitmap(bmp);
                 filters.add(mlookupFilter);
             } else {
-                LSOLog.e("无法获取lansongbeauty图片文件");
+                LSOLog.e("无法获取lan song beauty图片文件");
             }
 
             camlayer.switchFilterList(filters);

@@ -20,9 +20,15 @@ import java.io.IOException;
 
  MediaInfo info=new MediaInfo(inputPath);
  if(info.prepare()){ //<==============主要是这里, 需要执行以下,
- //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
+
+    //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
+
  }else{
- //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
+
+    //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
+
+
+ }
  */
 public class MediaInfo {
 
@@ -35,25 +41,20 @@ public class MediaInfo {
     public final String fileName; // 视频的文件名, 路径的最后一个/后的字符串.
     public final String fileSuffix; // 文件的后缀名.
     public final long fileLength; // 文件的总大小, 单位字节;
+    protected int vWidth;
+
     /**
-     * 视频的显示高度,即正常视频高度. 如果视频旋转了90度或270度,则这里等于实际视频的宽度!!
+     * 视频编码高度
+     * 不建议使用
      */
-    public int vHeight;
+    protected int vHeight;
+
+
+    protected int vCodecHeight;
+    protected int vCodecWidth;
     /**
-     * 视频的显示宽度, 即正常视频宽度. 如果视频旋转了90度或270度,则这里等于实际视频的高度,请注意!!
-     */
-    public int vWidth;
-    /**
-     * 视频在编码时的高度, 编码是以宏块为单位,默认是16的倍数; MediaCodec在使用中,也需要视频的宽高是16的倍数,
-     * 这两个宽高用来使用到MediaCodec中. 如果视频旋转了90度或270度,则这里等于编码高度和宽度调换
-     * <p>
-     * 如果没有获取到 vCodecHeight或vCodecWidth,说明当前文件中没有视频流,
-     * 但能获取vHeight/vWidth说明可能是一个mp3
-     */
-    public int vCodecHeight;
-    public int vCodecWidth;
-    /**
-     * 视频的码率,注意,一般的视频编码时采用的是动态码率VBR,故这里得到的是平均值, 建议在使用时,乘以1.2后使用.
+     * 视频的码率,
+     * 如是动态码率VBR,故这里得到的是平均值;
      */
     public int vBitRate;
     /**
@@ -61,33 +62,31 @@ public class MediaInfo {
      */
     public int vTotalFrames;
     /**
-     * mp4文件中的视频轨道的总时长, 注意,一个mp4文件可能里面的音频和视频时长不同.//单位秒.
+     * mp4文件中的视频轨道的总时长
      */
     public float vDuration;
     /**
-     * 视频帧率,可能有浮点数, 如用到MediaCodec中, 则需要(int)转换一下. 但如果要依此来计算时间戳, 尽量采用float类型计算,
-     * 这样可减少误差.
+     * 视频帧率,可能有浮点数
      */
     public float vFrameRate;
     /**
-     * 视频旋转角度, 比如android手机拍摄的竖屏视频, 后置摄像头270度, 前置摄像头旋转了90度, 可以通过这个获取到.
-     * 如果需要进行画面处理, 需要测试下,是否需要宽度和高度对换下. 正常的网上视频, 是没有旋转的.
+     * 视频旋转角度
      */
     public float vRotateAngle;
-
-    /******************** audio track info ******************/
     /**
-     * 该视频是否有B帧, 即双向预测帧, 如果有的话, 在裁剪时需要注意, 目前大部分的视频不存在B帧.
+     * 该视频是否有B帧,
      */
     public boolean vHasBFrame;
     /**
-     * 视频可以使用的解码器,用来设置到{@link VideoEditor}中的各种需要编码器的场合使用.
+     * 视频可以使用的解码器
      */
     public String vCodecName;
     /**
      * 视频的 像素格式.
      */
     public String vPixelFmt;
+
+    /******************** audio track info ******************/
     /**
      * 音频采样率
      */
@@ -101,29 +100,23 @@ public class MediaInfo {
      */
     public int aTotalFrames;
     /**
-     * 音频的码率,可用来检测视频文件中是否
+     * 音频的码率
      */
     public int aBitRate;
-    /**
-     * 音频的最大码率, 这里暂时没有用到.
-     */
     public int aMaxBitRate;
     /**
      * 多媒体文件中的音频总时长
      */
     public float aDuration;
     /**
-     * 音频可以用的 解码器, 由此可以判定音频是mp3格式,还是aac格式,如果是mp3则这里"mp3"; 如果是aac则这里"aac";
+     * 编码格式的名字;
      */
     public String aCodecName;
     private boolean getSuccess = false;
     private boolean isPngFile;
 
-    /**
-     * 构造方法, 输入文件路径; 注意: 创建对象后, 需要执行 {@link #prepare()}后才可以使用.
-     *
-     * @param path
-     */
+
+
     public MediaInfo(String path) {
         filePath = path;
         fileName = getFileNameFromPath(path);
@@ -149,11 +142,7 @@ public class MediaInfo {
     public boolean prepare() {
         int ret = 0;
         if (fileExist(filePath)) { // 这里检测下mfilePath是否是多媒体后缀.
-            ret = nativePrepare2(filePath, false);
-            if(ret<0){
-                LSOLog.d("new Decoder Media Info  native prepare error. use old.");
-                ret=nativePrepare(filePath,false);
-            }
+            ret=nativePrepare(filePath,false);
             if (ret >= 0) {
                 getSuccess = true;
                 return isSupport();
@@ -228,8 +217,7 @@ public class MediaInfo {
     }
 
     /**
-     * 获取当前视频在显示的时候, 图像的高度; 因为有些视频是90度或270度旋转显示的, 旋转的话, 就宽高对调了
-     *
+     * 获取当前视频在显示的时候
      * @return
      */
     public int getHeight() {
@@ -266,6 +254,9 @@ public class MediaInfo {
         }else{
             return 1;
         }
+    }
+    public String getVideoPath(){
+        return  filePath;
     }
 
     public void release() {
@@ -344,7 +335,7 @@ public class MediaInfo {
      * @return
      */
     public boolean isSupport() {
-        if(isHaveVideo() && vPixelFmt!=null){
+        if(isHaveVideo()){
             return true;
         }else if(isInAudioSupportList()){
             return  isHaveAudio();
@@ -352,7 +343,6 @@ public class MediaInfo {
             return false;
         }
     }
-
     int flvWidth;
     int flvHeight;
     long flvDurationUs;

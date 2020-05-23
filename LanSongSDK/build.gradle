@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -22,9 +22,19 @@ android {
 //}
 //}
 //}
+//}
+//}
+//}
+//}
+//}
+//}
+//}
+//}
+//}
     }
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/lansongeditor_hx.jar')
 }

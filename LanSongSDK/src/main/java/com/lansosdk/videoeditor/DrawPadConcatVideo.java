@@ -13,14 +13,11 @@ import com.lansosdk.box.onDrawPadProgressListener;
 
 import java.util.List;
 
+
 /**
- * 多个视频拼接[后台执行]
- *
- * 1. 内部会对每个视频进行编码,尽管是硬件编码,但速度还是没有不解码快.
- * 2. 使用场景是: 多个不同来源,不同分辨率的视频拼接.
- * 3, 如果是相同分辨率,都是我们SDK生成的视频, 请直接用VideoEditor.executeConcatVideo;
- *
+ * 请用DrawPadAllExecute2
  */
+@Deprecated
 public class DrawPadConcatVideo {
     DrawPadConcatVideoRunnable renderer;
 

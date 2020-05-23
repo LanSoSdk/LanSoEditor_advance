@@ -22,7 +22,7 @@ import com.lansosdk.box.LSOBitmapAsset;
 import com.lansosdk.box.LSOGifAsset;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LSOMVAsset;
-import com.lansosdk.box.LSOVideoAsset;
+import com.lansosdk.box.LSOVideoAssetOld;
 import com.lansosdk.box.LSOVideoOption2;
 import com.lansosdk.box.Layer;
 import com.lansosdk.box.MVCacheLayer;
@@ -35,7 +35,6 @@ import com.lansosdk.box.onDrawPadSizeChangedListener;
 
 
 public class DrawPadConcatView extends FrameLayout {
-
     /**
      * 渲染类;
      */
@@ -97,13 +96,13 @@ public class DrawPadConcatView extends FrameLayout {
         if (mSurfaceTexture != null) {
             if(drawPadHeight>0 && drawPadWidth>0 && desireWidth>0 && desireHeight>0){
 
-                float acpect = (float) desireWidth / (float) desireHeight;
-                float padAcpect = (float) drawPadWidth / (float) drawPadHeight;
+                float ratio = (float) desireWidth / (float) desireHeight;
+                float padRatio = (float) drawPadWidth / (float) drawPadHeight;
 
-                if (acpect == padAcpect) { // 如果比例已经相等,不需要再调整,则直接显示.
+                if (ratio == padRatio) { // 如果比例已经相等,不需要再调整,则直接显示.
                     isLayoutOk=true;
                     mViewAvailable.viewAvailable(this);
-                } else if (Math.abs(acpect - padAcpect) * 1000 < 16.0f) {
+                } else if (Math.abs(ratio - padRatio) * 1000 < 16.0f) {
                     isLayoutOk=true;
                     mViewAvailable.viewAvailable(this);
                 }else{
@@ -275,7 +274,7 @@ public class DrawPadConcatView extends FrameLayout {
     public int getDrawPadHeight() {
         return drawPadHeight;
     }
-    //---------------------------------------------容器代码--------------------------------------------------------
+   //---------------------------------------------容器代码--------------------------------------------------------
 
 
     private void createRender(){
@@ -294,7 +293,7 @@ public class DrawPadConcatView extends FrameLayout {
     public void setPreviewLooping(boolean is){
         createRender();
         if(renderer !=null) {
-            renderer.setPreviewLooping(is);
+           renderer.setPreviewLooping(is);
         }
     }
     //---------------------------容器背景颜色;
@@ -362,6 +361,7 @@ public class DrawPadConcatView extends FrameLayout {
             return null;
         }
     }
+
     public CanvasLayer addCanvasLayer() {
         createRender();
         if (renderer != null && setup()) {
@@ -596,7 +596,7 @@ public class DrawPadConcatView extends FrameLayout {
      * @param option2
      * @return
      */
-    public VideoConcatLayer concatVideoLayer(LSOVideoAsset asset, LSOVideoOption2 option2){
+    public VideoConcatLayer concatVideoLayer(LSOVideoAssetOld asset, LSOVideoOption2 option2){
         createRender();
         if (renderer != null && asset!=null && setup()) {
             return renderer.concatVideoLayer(asset,option2);
@@ -724,7 +724,7 @@ public class DrawPadConcatView extends FrameLayout {
      */
     public void release(){
         if(renderer!=null){
-            renderer.release();
+           renderer.release();
             renderer=null;
         }
         setupSuccess=false;

@@ -2,11 +2,9 @@ package com.lansosdk.videoplayer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 import android.view.Surface;
 
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.LSOVideoAsset;
 import com.lansosdk.videoeditor.MediaInfo;
 
 import java.io.FileNotFoundException;
@@ -48,12 +46,13 @@ public class VPlayer {
             throw new FileNotFoundException(" input path is not found.mediaInfo is:" + mediaInfo.toString());
         }
     }
-    public void setVideoAsset(LSOVideoAsset asset) {
+    public void setVideoAsset(String path) {
 
-        if(asset!=null){
-            if( asset.getWidth() * asset.getHeight()<=1088*1920){
+        MediaInfo info=new MediaInfo(path);
+        if(info.prepare()){
+            if( info.getWidth() * info.getHeight()<=1088*1920){
                 try {
-                    vPlayer.setVideoPath(asset.getVideoPath());
+                    vPlayer.setVideoPath(info.getVideoPath());
                     mediaPlayer=null;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -64,7 +63,7 @@ public class VPlayer {
                 vPlayer=null;
                 mediaPlayer =new MediaPlayer();
                 try {
-                    mediaPlayer.setDataSource(asset.getVideoPath());
+                    mediaPlayer.setDataSource(info.getVideoPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

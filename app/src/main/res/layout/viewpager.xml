@@ -7,20 +7,20 @@
 
  
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" > 
         
-        <android.support.v4.view.PagerTitleStrip
+        <androidx.viewpager.widget.PagerTitleStrip
             android:id="@+id/pagertitle"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="bottom"
             android:background="#0000"
             android:textColor="#ffff" />
-    </android.support.v4.view.ViewPager>  
+    </androidx.viewpager.widget.ViewPager>
     
     <LinearLayout
         android:layout_width="match_parent"

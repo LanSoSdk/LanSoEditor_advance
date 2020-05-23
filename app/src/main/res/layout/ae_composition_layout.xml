@@ -41,7 +41,7 @@
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
             android:descendantFocusability="blocksDescendants">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/id_ae_thumbnail_recycle_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

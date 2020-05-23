@@ -197,7 +197,7 @@ public class CameraSubLayerDemo1Activity extends Activity implements
         if (LanSongUtil.isFullScreenRatio(mDrawPadCamera.getViewWidth(), mDrawPadCamera.getViewHeight())) {
             mDrawPadCamera.setRealEncodeEnable(544, 1088, 3500 * 1024, 25, dstPath);
         }
-        if (mDrawPadCamera.setupDrawpad()) {
+        if (mDrawPadCamera.setupDrawPad()) {
             mDrawPadCamera.startPreview(); // 容器开始预览
             cameraLayer = mDrawPadCamera.getCameraLayer();
             if (cameraLayer != null) {
@@ -260,8 +260,7 @@ public class CameraSubLayerDemo1Activity extends Activity implements
      * 选择滤镜效果,
      */
     private void selectFilter() {
-        Toast.makeText(mContext, "当前演示子图层,主图层滤镜暂时屏蔽", Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(mContext, "当前演示子图层,主图层滤镜暂时屏蔽", Toast.LENGTH_SHORT).show();
         // if(mDrawPadCamera!=null && mDrawPadCamera.isRunning()){
         // LanSongFilterTools.showDialog(this, new
         // OnLanSongFilterChosenListener() {

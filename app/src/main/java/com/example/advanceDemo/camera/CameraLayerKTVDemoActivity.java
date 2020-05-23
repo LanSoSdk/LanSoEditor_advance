@@ -173,7 +173,7 @@ public class CameraLayerKTVDemoActivity extends Activity implements
         if (LanSongUtil.isFullScreenRatio(drawPadCamera.getViewWidth(), drawPadCamera.getViewHeight())) {
             drawPadCamera.setRealEncodeEnable(1088, 544, 3500 * 1024, (int) 25, dstPath);
         }
-        if (drawPadCamera.setupDrawpad()) {
+        if (drawPadCamera.setupDrawPad()) {
             cameraLayer = drawPadCamera.getCameraLayer();
             addVideoLayer();
 
@@ -182,7 +182,6 @@ public class CameraLayerKTVDemoActivity extends Activity implements
             drawPadCamera.startRecord();
         }
     }
-
     /**
      * Step3: 停止容器, 停止后,为新的视频文件增加上音频部分.
      */

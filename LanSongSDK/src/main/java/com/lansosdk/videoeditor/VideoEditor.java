@@ -152,8 +152,8 @@ public class VideoEditor {
         } else if ((looper = Looper.getMainLooper()) != null) {
             mEventHandler = new EventHandler(this, looper);
         } else {
+            LSOLog.e("Unable to obtain the thread Looper, may not be able to send listener;");
             mEventHandler = null;
-            LSOLog.w( "cannot get Looper handler. may be cannot receive video editor progress!!");
         }
     }
 
@@ -2411,12 +2411,7 @@ public class VideoEditor {
 
     /**
      * 视频倒序；
-     * 比如正常的视频画面是一个人从左边走到右边，倒序后，人从右边倒退到左边，即视频画面发生了倒序
-     *
-     *  只是倒序视频, 不倒序声音;
-     *
-     * 如您的视频过大, 则可能导致:Failed to inject frame into filter network: Out of memory;这个是正常的.因为已超过APP可使用的内容范围, 内存不足.
-     *
+     * 请用LSOVideoReverse
      * @param srcPath 　原视频
      * @return
      */
@@ -2448,12 +2443,7 @@ public class VideoEditor {
 
     /**
      * 把一个mp4文件中的音频部分和视频都倒序播放。
-     * <p>
-     * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
-     * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
-     * 如您的视频过大, 则可能导致:Failed to inject frame into filter network: Out of memory;这个是正常的.因为已超过APP可使用的内容范围, 内存不足.
-     *
-     * @param srcPath 　　原mp4文件
+     * 请用LSOVideoReverse
      * @return
      */
     public String executeAVReverse(String srcPath) {
@@ -2477,38 +2467,6 @@ public class VideoEditor {
             return null;
         }
     }
-
-
-//    /**
-//    暂时没有drawtext类
-//     * 不建议使用,因为需要字体,比较麻烦, 建议把文字转图片,然后叠加.
-//     * @param videoPath
-//     * @param fontPath
-//     * @param text
-
-//     * @return
-//     */
-//    public String testVideoAddText(String videoPath,String fontPath,String  text) {
-//        List<String> cmdList = new ArrayList<String>();
-//
-//        //"drawtext=fontfile=/system/fonts/DroidSansFallback.ttf: text='杭州蓝松科技001abc'");
-//        String  filter="drawtext=fontfile="+fontPath+": text= '"+text+ "'";
-//
-//        cmdList.add("-vcodec");
-//        cmdList.add("lansoh264_dec");
-//
-//        cmdList.add("-i");
-//        cmdList.add(videoPath);
-//
-//        cmdList.add("-vf");
-//
-//        cmdList.add(filter);
-//
-//        cmdList.add("-acodec");
-//        cmdList.add("copy");
-//
-//        return executeAutoSwitch(cmdList);
-//    }
 
     /**
      * 删除视频中的logo,比如一般在视频的左上角或右上角有视频logo信息,类似"优酷","抖音"等;
@@ -2562,10 +2520,7 @@ public class VideoEditor {
         MediaInfo info=new MediaInfo(video);
         if(info.prepare()){
 
-
             int dstW=info.getWidth() >(startX + w)? w: (info.getWidth() - startX);
-
-
             int dstH=info.getHeight() > (startY  + h) ? h:(info.getHeight() - startY);
 
             String filter = String.format(Locale.getDefault(), "delogo=x=%d:y=%d:w=%d:h=%d:enable='between(t,%f,%f)'",startX,startY,dstW,dstH,startS,endS);

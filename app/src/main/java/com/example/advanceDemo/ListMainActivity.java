@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,23 +14,17 @@ import android.widget.Toast;
 
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
-import com.example.advanceDemo.aeDemo.AECompositionActivity;
-import com.example.advanceDemo.aeDemo.VideoConcatAnimationActivity;
-import com.example.advanceDemo.camera.CameraLayerFullPortActivity;
 import com.example.advanceDemo.layerDemo.PhotoAlbumLayerDemoActivity;
-import com.example.advanceDemo.scene.GameVideoDemoActivity;
 import com.example.advanceDemo.utils.ConvertToEditModeDialog;
 import com.example.advanceDemo.utils.CopyDefaultVideoAsyncTask;
+import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.utils.FileExplorerActivity;
+import com.example.advanceDemo.utils.GlideEngine;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.box.LSOLayerPosition;
-import com.lansosdk.box.LSOPhotoAlbumAsset;
-import com.lansosdk.box.LSOVideoAsset;
 import com.lansosdk.box.LSOVideoOption;
-import com.lansosdk.box.MicRecorder;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
-import com.lansosdk.box.OnLanSongSDKFrameOutListener;
+import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.box.VideoFrameLayer;
 import com.lansosdk.videoeditor.DrawPadAllExecute2;
@@ -40,13 +32,13 @@ import com.lansosdk.videoeditor.EditModeVideo;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.MediaInfo;
-import com.lansosdk.videoeditor.VideoOneDo2;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAeAssets;
 
 
 public class ListMainActivity extends Activity implements OnClickListener {
@@ -99,37 +91,37 @@ public class ListMainActivity extends Activity implements OnClickListener {
         }
 
         if (isPermissionOk && checkPath()) {
-            switch (v.getId()) {
-                case R.id.id_mainlist_camerarecord:
-                    startDemoActivity(ListCameraRecordActivity.class);
-                    break;
-                case R.id.id_mainlist_somelayer:
-                    startDemoActivity(ListLayerDemoActivity.class);
-                    break;
-                case R.id.id_mainlist_changjing:
-                    startDemoActivity(ListSceneDemoActivity.class);
-                    break;
-                case R.id.id_mainlist_douyin:
-                    startDemoActivity(DouYinDemoActivity.class);
-                    break;
-                case R.id.id_mainlist_weishang:
-                    startDemoActivity(ListAEActivity.class);
-                    break;
-                case R.id.id_mainlist_gamevideo:
-                    startDemoActivity(GameVideoDemoActivity.class);
-                    break;
-                case R.id.id_mainlist_videoonedo:
-                    startDemoActivity(VideoOneDO2Activity.class);
-                    break;
-                case R.id.id_mainlist_bitmaps:
-                    startDemoActivity(ListBitmapAudioActivity.class);
-                    break;
-                case R.id.id_mainlist_videoplay:
-                    startDemoActivity(VideoPlayerActivity.class);
-                    break;
-                default:
-                    break;
-            }
+                switch (v.getId()) {
+                    case R.id.id_mainlist_camerarecord:
+                        startDemoActivity(ListCameraRecordActivity.class);
+                        break;
+                    case R.id.id_mainlist_somelayer:
+                        startDemoActivity(ListLayerDemoActivity.class);
+                        break;
+                    case R.id.id_mainlist_changjing:
+                        startDemoActivity(ListSceneDemoActivity.class);
+                        break;
+                    case R.id.id_mainlist_douyin:
+                        startDemoActivity(DouYinDemoActivity.class);
+                        break;
+                    case R.id.id_mainlist_weishang:
+                        startDemoActivity(ListAEActivity.class);
+                        break;
+                    case R.id.id_mainlist_videoonedo:
+                        startDemoActivity(VideoOneDO2Activity.class);
+                        break;
+                    case R.id.id_mainlist_bitmaps:
+                        startDemoActivity(ListBitmapAudioActivity.class);
+                        break;
+                    case R.id.id_main_list_lso_layer:
+                        startDemoActivity(ConcatCompositionActivity.class);
+                        break;
+                    case R.id.id_mainlist_videoplay:
+                        startDemoActivity(VideoPlayerActivity.class);
+                        break;
+                    default:
+                        break;
+                }
         }
     }
     // -----------------------------
@@ -143,15 +135,24 @@ public class ListMainActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_mainlist_videoonedo).setOnClickListener(this);
         findViewById(R.id.id_mainlist_bitmaps).setOnClickListener(this);
         findViewById(R.id.id_mainlist_videoplay).setOnClickListener(this);
-        findViewById(R.id.id_mainlist_gamevideo).setOnClickListener(this);
 
-//        findViewById(R.id.id_mainlist_concat).setOnClickListener(this);
+        findViewById(R.id.id_main_list_lso_layer).setOnClickListener(this);
+
         //---------------------
         findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListMainActivity.this, FileExplorerActivity.class);
-                startActivityForResult(i, SELECT_FILE_REQUEST_CODE);
+//                Intent i = new Intent(ListMainActivity.this, FileExplorerActivity.class);
+//                startActivityForResult(i, SELECT_FILE_REQUEST_CODE);
+                PictureSelector.create(ListMainActivity.this)
+                        .openGallery(PictureMimeType.ofVideo())
+                        .loadImageEngine(GlideEngine.createGlideEngine())
+                        .isWithVideoImage(false)
+                        .maxVideoSelectNum(1)
+                        .imageSpanCount(4)
+                        .isCamera(false)
+                        .selectionMode(PictureConfig.SINGLE)
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
             }
         });
 
@@ -187,6 +188,18 @@ public class ListMainActivity extends Activity implements OnClickListener {
                     Bundle b = data.getExtras();
                     String selected = b.getString("SELECT_VIDEO");
                     checkConvertDialog(selected);
+                }
+                if (requestCode == PictureConfig.CHOOSE_REQUEST){
+                    //图片视频回掉结果
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    if (selectList != null && selectList.size() > 0) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            checkConvertDialog( selectList.get(0).getAndroidQToPath());
+                        } else {
+                            checkConvertDialog( selectList.get(0).getPath());
+                        }
+                    }
+
                 }
                 break;
             default:
@@ -226,7 +239,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
         }
     }
 
-
     private void startDemoActivity(Class<?> cls) {
         String path = tvVideoPath.getText().toString();
         Intent intent = new Intent(ListMainActivity.this, cls);
@@ -258,5 +270,10 @@ public class ListMainActivity extends Activity implements OnClickListener {
     }
 
     private void testFile() {
+
+
+
     }
+
+
 }

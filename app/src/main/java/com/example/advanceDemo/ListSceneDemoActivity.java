@@ -37,17 +37,6 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
         findViewById(R.id.id_screne_pictures).setOnClickListener(this);
 
         findViewById(R.id.id_screne_videotransform).setOnClickListener(this);
-        findViewById(R.id.id_screne_videobiansu).setOnClickListener(this);
-        findViewById(R.id.id_screne_videoreverse).setOnClickListener(this);
-
-        findViewById(R.id.id_screne_cuoluo_layout).setOnClickListener(this);
-
-        findViewById(R.id.id_screne_videoseek).setOnClickListener(this);
-        findViewById(R.id.id_screne_video2_layout).setOnClickListener(this);
-        //新增;
-        findViewById(R.id.id_mainlist_lizi).setOnClickListener(this);
-        findViewById(R.id.id_mainlist_3d).setOnClickListener(this);
-        findViewById(R.id.id_mainlist_morelay).setOnClickListener(this);
 
 
         findViewById(R.id.id_screne_h2v).setOnClickListener(this);
@@ -64,30 +53,6 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
             case R.id.id_screne_videotransform:
                 startDemoActivity(VideoLayerTransformActivity.class);
                 break;
-            case R.id.id_screne_cuoluo_layout:
-                startDemoActivity(LayerLayoutDemoActivity.class);
-                break;
-            case R.id.id_screne_video2_layout:
-                startDemoActivity(TwoVideoLayoutActivity.class);
-                break;
-            case R.id.id_screne_videobiansu:
-                startDemoActivity(VideoSpeedDemoActivity.class);
-                break;
-            case R.id.id_screne_videoseek:
-                startDemoActivity(VideoSeekActivity.class);
-                break;
-            case  R.id.id_mainlist_lizi:
-                startDemoActivity(ParticleDemoActivity.class);
-                break;
-
-            case  R.id.id_mainlist_3d:
-                startDemoActivity(VViewImage3DDemoActivity.class);
-                break;
-
-            case  R.id.id_mainlist_morelay:
-                startDemoActivity(MoreLayHeadSeekActivity.class);
-                break;
-
             case  R.id.id_screne_h2v:
                 startDemoActivity(VideoH2VActivity.class);
                 break;
@@ -97,23 +62,11 @@ public class ListSceneDemoActivity extends Activity implements OnClickListener {
             case  R.id.id_screne_concat:
                 startDemoActivity(VideoConcatAcvivity.class);
                 break;
-            case R.id.id_screne_videoreverse:
-                showHintDialog("此功能演示在合作后提供");
-                break;
             default:
                 break;
         }
     }
 
-    private void showHintDialog(String hint) {
-        new AlertDialog.Builder(this).setTitle("提示").setMessage(hint)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
-    }
 
     private void startDemoActivity(Class<?> cls) {
         Intent intent = new Intent(ListSceneDemoActivity.this, cls);

@@ -28,6 +28,7 @@ public class LSOVideoReverse {
             throw  new Exception("LSOVideoReverseRunnable not support this video." + path);
         }
     }
+
     /**
      * 开始执行
      * @return
@@ -68,3 +69,34 @@ public class LSOVideoReverse {
         }
     }
 }
+/**
+
+ LSOVideoReverse videoReverse;
+
+ private void testVideoReverse(){
+ try {
+
+ videoReverse=new LSOVideoReverse(SDCARD.tHuaWei_mate9_4k_90du());
+ videoReverse.setOnLanSongSDKCompletedListener(new OnLanSongSDKCompletedListener() {
+@Override
+public void onLanSongSDKCompleted(String dstVideo) {
+MediaInfo.checkFile(dstVideo);
+}
+});
+ videoReverse.setOnLanSongSDKProgressListener(new OnLanSongSDKProgressListener() {
+@Override
+public void onLanSongSDKProgress(long ptsUs, int percent) {
+Log.e("TAG", "-------progress is : " + ptsUs + " percent :"+percent);
+}
+});
+ videoReverse.start();
+
+
+ } catch (Exception e) {
+ e.printStackTrace();
+ DemoUtil.showDialog(this,"视频倒序失败, 当前设备不支持");
+ }
+ }
+
+
+  */

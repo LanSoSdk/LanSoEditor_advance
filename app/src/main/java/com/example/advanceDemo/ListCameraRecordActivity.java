@@ -31,8 +31,7 @@ public class ListCameraRecordActivity extends Activity implements
                 this);
         findViewById(R.id.id_cameralist_camerafulllayer2).setOnClickListener(
                 this);
-        findViewById(R.id.id_cameralist_cameralayer_segment)
-                .setOnClickListener(this);
+        findViewById(R.id.id_cameralist_cameralayer_segment).setOnClickListener(this);
 
         findViewById(R.id.id_cameralist_mp3record).setOnClickListener(this);
         findViewById(R.id.id_cameralist_green_bg_record).setOnClickListener(

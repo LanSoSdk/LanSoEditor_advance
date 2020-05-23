@@ -3,7 +3,6 @@ package com.example.advanceDemo.camera;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,14 +14,15 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.advanceDemo.VideoPlayerActivity;
+import com.example.advanceDemo.utils.DemoUtil;
 import com.example.advanceDemo.view.VideoFocusView;
 import com.example.advanceDemo.view.VideoProgressView;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.AudioLine;
 import com.lansosdk.box.CameraLayer;
 import com.lansosdk.box.DrawPad;
-import com.lansosdk.box.MVLayer;
+import com.lansosdk.box.LSOMVAsset2;
+import com.lansosdk.box.MVLayer2;
 import com.lansosdk.box.MVLayerENDMode;
 import com.lansosdk.box.onDrawPadProgressListener;
 import com.lansosdk.videoeditor.BeautyManager;
@@ -132,6 +132,21 @@ public class CameraLayerFullSegmentActivity extends Activity implements
             }
         });
 
+        findViewById(R.id.id_test_button23).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mvLayer!=null){
+                    removeMVLayer();
+                }else{
+                    try {
+                        addMVLayer();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         dstPath = LanSongFileUtil.newMp4PathInBox();
         initDrawPad(); // 开始录制.
     }
@@ -170,7 +185,6 @@ public class CameraLayerFullSegmentActivity extends Activity implements
             mvAudioPlayer=null;
         }
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -199,37 +213,69 @@ public class CameraLayerFullSegmentActivity extends Activity implements
         });
     }
 
+    LSOMVAsset2 lsomvAsset2=null;
+
+    private void addMVLayer() throws  Exception
+    {
+
+        if(lsomvAsset2==null){
+            String color=CopyFileFromAssets.copyAssets(getApplicationContext(),"kd_mvColor.mp4");
+            String mask=CopyFileFromAssets.copyAssets(getApplicationContext(),"kd_mvMask.mp4");
+            lsomvAsset2=new LSOMVAsset2(color,mask);
+            VideoEditor editor=new VideoEditor();
+            mvAudioPath=editor.executeGetAudioTrack(color);
+        }
+
+        mvLayer=drawPadCamera.addMVLayer(lsomvAsset2);
+        mvLayer.setEndMode(MVLayerENDMode.LOOP);
+        mvLayer.setScaledValue(mvLayer.getPadWidth(),mvLayer.getPadHeight());
+        if(mvAudioPath!=null){
+            try {
+                mvAudioPlayer=new MediaPlayer();
+                mvAudioPlayer.setDataSource(mvAudioPath);
+                mvAudioPlayer.prepare();
+                mvAudioPlayer.setLooping(true);
+                mvAudioPlayer.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void removeMVLayer()
+    {
+        if(mvLayer!=null && drawPadCamera!=null){
+            drawPadCamera.removeLayer(mvLayer);
+            mvLayer=null;
+        }
+        LanSongFileUtil.deleteFile(mvAudioPath);
+        if(mvAudioPlayer!=null){
+            if(mvAudioPlayer.isPlaying()){
+                mvAudioPlayer.stop();
+            }
+            mvAudioPlayer.release();
+            mvAudioPlayer=null;
+        }
+    }
+
 
     /**
      * 开始运行 Drawpad线程.
      */
     private void startDrawPad() {
-        if (!drawPadCamera.isRunning() && drawPadCamera.setupDrawpad()) {
+        if (!drawPadCamera.isRunning() && drawPadCamera.setupDrawPad()) {
             mCameraLayer = drawPadCamera.getCameraLayer();
+
+
 
             drawPadCamera.startPreview();
         }
     }
 
-    MVLayer  mvLayer;
+    MVLayer2 mvLayer;
     MediaPlayer mvAudioPlayer;
     String mvAudioPath;
-    private void removeMVLayer()
-    {
-          if(mvLayer!=null && drawPadCamera!=null){
-              drawPadCamera.removeLayer(mvLayer);
-              mvLayer=null;
-          }
-          LanSongFileUtil.deleteFile(mvAudioPath);
-          if(mvAudioPlayer!=null){
-              if(mvAudioPlayer.isPlaying()){
-                  mvAudioPlayer.stop();
-              }
-              mvAudioPlayer.release();
-              mvAudioPlayer=null;
-          }
-    }
-    private void pausseMVLayer()
+
+    private void pauseMVLayer()
     {
         if(mvAudioPlayer!=null){
             mvAudioPlayer.pause();
@@ -263,8 +309,8 @@ public class CameraLayerFullSegmentActivity extends Activity implements
              * 如果正在录制,则把最后一段增加进来.
              */
             if (drawPadCamera.isRecording()) {
-               String path=drawPadCamera.segmentStop();
-               segmentArray.add(path);
+                String path=drawPadCamera.segmentStop();
+                segmentArray.add(path);
             }
             String musicPath = null;
             if (isRecordMp3) {
@@ -299,9 +345,7 @@ public class CameraLayerFullSegmentActivity extends Activity implements
                 }
 
                 if (LanSongFileUtil.fileExist(dstPath)) {
-                    Intent intent = new Intent(CameraLayerFullSegmentActivity.this,VideoPlayerActivity.class);
-                    intent.putExtra("videopath", dstPath);
-                    startActivity(intent);
+                    DemoUtil.playDstVideo( CameraLayerFullSegmentActivity.this,dstPath);
                 } else {
                     Toast.makeText(CameraLayerFullSegmentActivity.this, "目标文件不存在",Toast.LENGTH_SHORT).show();
                     startDrawPad();  //重新开始
@@ -315,12 +359,25 @@ public class CameraLayerFullSegmentActivity extends Activity implements
     /**
      * 开始录制一段视频.
      */
+    private boolean isFirst =true;
     private void segmentStart() {
+        if (!drawPadCamera.isRecording()) {
+            if (isFirst) {
+                isFirst = false;
+                removeMVLayer();
+                try {
+                    addMVLayer();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         if (!drawPadCamera.isRecording()) {
             if (!isRecordMp3) {
                 drawPadCamera.setRecordMic(true); // 如果不是录制音乐,则认为是录制外音.
             } else if (mAudioLine == null) { // 只在第一次
-                String music = CopyFileFromAssets.copyAssets(getApplicationContext(), "hongdou10s.mp3");
+                String music = CopyFileFromAssets.copyAssets(getApplicationContext(), "c_li_c_li_2m8s.mp3");
                 mAudioLine = drawPadCamera.setRecordExtraMp3(music, true);
             }
             resumeMVLayer();
@@ -336,7 +393,7 @@ public class CameraLayerFullSegmentActivity extends Activity implements
         if (drawPadCamera.isRecording()) {
 
 
-            pausseMVLayer();
+            pauseMVLayer();
             String path=drawPadCamera.segmentStop();
             segmentArray.add(path);
             progressView.setCurrentState(VideoProgressView.State.PAUSE);

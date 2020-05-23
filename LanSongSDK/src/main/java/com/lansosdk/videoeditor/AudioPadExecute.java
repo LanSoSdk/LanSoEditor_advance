@@ -277,21 +277,12 @@ public class AudioPadExecute {
      execute.setOnAudioPadThreadProgressListener(new onAudioPadThreadProgressListener() {
     @Override
     public void onProgress(AudioPad v, long currentTimeUs) {
-    //                if(currentTimeUs<2*1000*1000){
-    //                    audioLayer.setVolume(source1Volume);
-    //                    source1Volume-=0.015f;
-    //                    if(source1Volume<0.0){
-    //                        source1Volume=0.0f;
-    //                    }
-    //                }else{
-    //                    audioLayer.setVolume(1.0f);
-    //                }
     }
     });
      execute.setOnAudioPadCompletedListener(new OnAudioPadExecuteCompletedListener() {
     @Override
     public void onCompleted(String path) {
-    MediaInfo.checkFile(path);
+         MediaInfo.checkFile(path);
     }
     });
      execute.start();

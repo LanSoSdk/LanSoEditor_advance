@@ -26,7 +26,6 @@ import com.lansosdk.LanSongFilter.LanSong3x3TextureSamplingFilter;
 import com.lansosdk.LanSongFilter.LanSongAddBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongAlphaBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongBeautyAdvanceFilter;
-import com.lansosdk.LanSongFilter.LanSongBlackMaskBlendFilter;
 import com.lansosdk.LanSongFilter.LanSongBlurFilter;
 import com.lansosdk.LanSongFilter.LanSongBrightnessFilter;
 import com.lansosdk.LanSongFilter.LanSongBulgeDistortionFilter;
@@ -144,7 +143,6 @@ public class FilterLibrary {
         filterList.addFilter("16If1977", FilterType.IF1977);
         filterList.addFilter("17LORDKELVIN", FilterType.LORDKELVIN);
 
-        filterList.addFilter("黑色抠图", FilterType.LanSongBLACKMASK);
         filterList.addFilter("区域透明", FilterType.LanSongMASK);
 
         filterList.addFilter("负片", FilterType.INVERT);
@@ -192,15 +190,12 @@ public class FilterLibrary {
 
         filterList.addFilter("Grayscale灰度", FilterType.GRAYSCALE);
         filterList.addFilter("Contrast对比度", FilterType.CONTRAST);
-
         filterList.addFilter("Saturation饱和度", FilterType.SATURATION);
 
         filterList.addFilter("Blend (Difference)", FilterType.BLEND_DIFFERENCE);
-        filterList.addFilter("Blend (Source Over)",
-                FilterType.BLEND_SOURCE_OVER);
+        filterList.addFilter("Blend (Source Over)", FilterType.BLEND_SOURCE_OVER);
         filterList.addFilter("Blend (Color Burn)", FilterType.BLEND_COLOR_BURN);
-        filterList.addFilter("Blend (Color Dodge)",
-                FilterType.BLEND_COLOR_DODGE);
+        filterList.addFilter("Blend (Color Dodge)",FilterType.BLEND_COLOR_DODGE);
         filterList.addFilter("Blend (Darken)", FilterType.BLEND_DARKEN);
         filterList.addFilter("Blend (Dissolve)", FilterType.BLEND_DISSOLVE);
         filterList.addFilter("Blend (Exclusion)", FilterType.BLEND_EXCLUSION);
@@ -216,8 +211,7 @@ public class FilterLibrary {
         filterList.addFilter("Blend (Hue)", FilterType.BLEND_HUE);
         filterList.addFilter("Blend (Saturation)", FilterType.BLEND_SATURATION);
         filterList.addFilter("Blend (Luminosity)", FilterType.BLEND_LUMINOSITY);
-        filterList.addFilter("Blend (Linear Burn)",
-                FilterType.BLEND_LINEAR_BURN);
+        filterList.addFilter("Blend (Linear Burn)",FilterType.BLEND_LINEAR_BURN);
         filterList.addFilter("Blend (Soft Light)", FilterType.BLEND_SOFT_LIGHT);
         filterList.addFilter("Blend (Subtract)", FilterType.BLEND_SUBTRACT);
         filterList.addFilter("Blend (Chroma Key)", FilterType.BLEND_CHROMA_KEY);
@@ -308,8 +302,6 @@ public class FilterLibrary {
                 centerPoint.y = 0.5f;
                 return new LanSongVignetteFilter(centerPoint, new float[]{0.0f,
                         0.0f, 0.0f}, 0.3f, 0.75f);
-            case LanSongBLACKMASK:
-                return createBlendFilter(context, LanSongBlackMaskBlendFilter.class);
             case LanSongMASK:
                 /**
                  * 这个滤镜的效果是: 把输入源的某区域 处理成透明.
@@ -478,7 +470,7 @@ public class FilterLibrary {
     }
 
     public enum FilterType {
-        NONE, BEAUTIFUL, BEAUTIFUL2, LanSongBLACKMASK, LanSongMASK, LanSongBLUR,GaussionBLUR, CONTRAST, GRAYSCALE, SEPIA,
+        NONE, BEAUTIFUL, BEAUTIFUL2, LanSongMASK, LanSongBLUR,GaussionBLUR, CONTRAST, GRAYSCALE, SEPIA,
         POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION, SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME,
         OPACITY, RGB, WHITE_BALANCE, VIGNETTE,
         BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,

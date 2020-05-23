@@ -51,15 +51,15 @@ public class ExtractVideoFrameDemoActivity extends Activity {
         if (info.prepare()) {
             decoderHandler = AVDecoder.decoderInit(src);
             if (decoderHandler != 0) {
-                mGLRgbBuffer = IntBuffer.allocate(info.vWidth * info.vHeight);
+                mGLRgbBuffer = IntBuffer.allocate(info.getWidth() * info.getHeight());
                 mGLRgbBuffer.position(0);
                 AVDecoder
                         .decoderFrame(decoderHandler, -1, mGLRgbBuffer.array());
                 AVDecoder.decoderRelease(decoderHandler);
 
                 // 转换为bitmap
-                Bitmap stitchBmp = Bitmap.createBitmap(info.vWidth,
-                        info.vHeight, Bitmap.Config.ARGB_8888);
+                Bitmap stitchBmp = Bitmap.createBitmap(info.getWidth(),
+                        info.getHeight(), Bitmap.Config.ARGB_8888);
                 stitchBmp.copyPixelsFromBuffer(mGLRgbBuffer);
 //                /**
 //                 * 这里是保存到文件, 仅仅用来测试, 实际您可以不用保存到文件.
@@ -115,8 +115,8 @@ public class ExtractVideoFrameDemoActivity extends Activity {
          * @param height
          *            缩放高度
          */
-        if (mInfo.vWidth * mInfo.vHeight > 960 * 540) {
-            mExtractFrame.setBitmapWH(mInfo.vWidth / 2, mInfo.vHeight / 2);
+        if (mInfo.getWidth() * mInfo.getHeight() > 960 * 540) {
+            mExtractFrame.setBitmapWH(mInfo.getWidth() / 2, mInfo.getHeight() / 2);
         }
         //
         /**
@@ -153,8 +153,8 @@ public class ExtractVideoFrameDemoActivity extends Activity {
                         if (mInfo != null) {
                             String str = "解码结束:\n" + "解码的视频总帧数:" + frameCount
                                     + "\n" + "解码耗时:" + b + "(秒)" + "\n" + "\n"
-                                    + "\n" + "视频宽高:" + mInfo.vWidth + " x "
-                                    + mInfo.vHeight + "\n" + "解码后图片缩放宽高:"
+                                    + "\n" + "视频宽高:" + mInfo.getWidth() + " x "
+                                    + mInfo.getHeight() + "\n" + "解码后图片缩放宽高:"
                                     + mExtractFrame.getBitmapWidth() + " x "
                                     + mExtractFrame.getBitmapHeight() + "\n";
 

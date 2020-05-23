@@ -1,7 +1,7 @@
 package com.example.advanceDemo.utils;
 
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.util.Log;
 
 public class BitmapLruCache {

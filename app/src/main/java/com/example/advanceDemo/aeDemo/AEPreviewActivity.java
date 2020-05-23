@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
@@ -35,10 +35,6 @@ import com.lansosdk.videoeditor.LanSongFileUtil;
 import java.io.IOException;
 
 public class AEPreviewActivity extends Activity {
-
-
-
-
 
     AEDemoAsset demoAsset;
     DrawPadAEPreview aePreview;
@@ -207,7 +203,7 @@ public class AEPreviewActivity extends Activity {
         //开始执行
         if (aePreview.isLayoutValid() && aePreview.start()) {
             bmpLayer.setScale(1.0f);
-            bmpLayer.setPosition(LSOLayerPosition.RightTop);
+            bmpLayer.setPosition(LSOLayerPosition.RIGHT_TOP);
         } else {
             DemoUtil.showDialog(AEPreviewActivity.this, "AE预览开启失败.");
         }
@@ -230,7 +226,11 @@ public class AEPreviewActivity extends Activity {
         }
 
 
-        aeRenderExecute = new AERenderExecute(getApplication());
+        try {
+            aeRenderExecute = new AERenderExecute(getApplication());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //增加一个背景视频层
         if (demoAsset.bgVideo != null) {
@@ -290,7 +290,7 @@ public class AEPreviewActivity extends Activity {
         });
         //增加logo
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-        BitmapLayer logoLayer = aeRenderExecute.addLogoLayer(bmp, LSOLayerPosition.RightTop);
+        BitmapLayer logoLayer = aeRenderExecute.addLogoLayer(bmp, LSOLayerPosition.RIGHT_TOP);
 
         //开始执行
         if (!aeRenderExecute.start()) {
@@ -302,7 +302,7 @@ public class AEPreviewActivity extends Activity {
             float scaleHeight = bmp.getHeight() * aeRenderExecute.getHeight() * 1.0f / (float) aePreview.getDrawPadHeight();
 
             logoLayer.setScaledValue(scaleWidth, scaleHeight);
-            logoLayer.setPosition(LSOLayerPosition.RightTop);
+            logoLayer.setPosition(LSOLayerPosition.RIGHT_TOP);
         }
     }
 

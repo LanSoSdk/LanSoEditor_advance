@@ -44,7 +44,11 @@ public class AECompositionExecute {
     private BitmapLayer drawPadLogoLayer =null;
     private LSOLayerPosition drawPadLogoPosition;
 
-    public AECompositionExecute(Context context){
+    public AECompositionExecute(Context context) throws Exception{
+        if(!LanSoEditor.isLoadLanSongSDK.get()){
+            throw  new Exception("没有加载SDK, 或你的APP崩溃后,重新启动当前Activity,请查看完整的logcat:(No SDK is loaded, or the current activity is restarted after your app crashes, please see the full logcat)");
+        }
+
         if(VideoEditor.isSupportNV21ColorFormat() &&!forceUseDrawPad){
             aeRenderer =new AERenderRunnable(context);
             LSOLog.d("AERenderExecute use AERenderRunnable...");

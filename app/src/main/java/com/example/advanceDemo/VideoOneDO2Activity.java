@@ -177,7 +177,7 @@ public class VideoOneDO2Activity extends Activity {
                     break;
                 case R.id.id_onedo_logo_btn: //增加logo
                     Bitmap bmp2= BitmapFactory.decodeResource(getResources(),R.drawable.ls_logo);
-                    videoOneDo.setLogoBitmapLayer(bmp2, LSOLayerPosition.LeftTop);
+                    videoOneDo.setLogoBitmapLayer(bmp2, LSOLayerPosition.LEFT_TOP);
                     break;
                 case R.id.id_onedo_mv_btn:  //增加mv图层;
                 {
@@ -189,7 +189,7 @@ public class VideoOneDO2Activity extends Activity {
                 break;
                 case R.id.id_onedo_gif_btn:
 
-                    videoOneDo.addGifLayer(R.drawable.g06,LSOLayerPosition.LeftBottom);
+                    videoOneDo.addGifLayer(R.drawable.g06,LSOLayerPosition.LEFT_BOTTOM);
                     break;
                 case R.id.id_onedo_canvas_btn:
                     addCanvasLayer();
@@ -211,7 +211,7 @@ public class VideoOneDO2Activity extends Activity {
 
             int y = 40;
             canvas.drawText(str1, 0, y, paint);
-            canvas.save(Canvas.ALL_SAVE_FLAG);
+            canvas.save();
             canvas.restore();
             videoOneDo.addBitmapLayer(bitmap);
         }

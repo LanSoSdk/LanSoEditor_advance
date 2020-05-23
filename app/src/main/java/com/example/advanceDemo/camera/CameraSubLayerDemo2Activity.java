@@ -41,7 +41,7 @@ public class CameraSubLayerDemo2Activity extends Activity implements
 
     private static final int RECORD_CAMERA_MIN = 2 * 1000 * 1000; // 定义最小2秒
 
-    private static final String TAG = "CameraSubLayerDemo2Activity";
+    private static final String TAG = "CameraSubLayerDemo";
 
     private DrawPadCameraView mDrawPadCamera;
 
@@ -209,7 +209,7 @@ public class CameraSubLayerDemo2Activity extends Activity implements
      * Step2: 开始运行 Drawpad线程.
      */
     private void startDrawPad() {
-        if (mDrawPadCamera.setupDrawpad()) {
+        if (mDrawPadCamera.setupDrawPad()) {
             mCamLayer = mDrawPadCamera.getCameraLayer();
             mDrawPadCamera.startPreview(); // 容器开始预览
         } else {

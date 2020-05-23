@@ -290,7 +290,7 @@ public class Demo2LayerMothedActivity extends Activity implements OnSeekBarChang
                      *     第一个参数是: 厚度,最大是1.0, 最小是0.0, 推荐是0.01f
                      *     后面4个参数分别是:R,G,B,A 4个颜色分量   RGBA分量中的Red 范围是0.0f---1.0f
                      */
-                    optionLayer.setVisibleCircleeBorder(0.01f, 1.0f, 0.0f, 0.0f,1.0f);
+                    optionLayer.setVisibleCircleBorder(0.01f, 1.0f, 0.0f, 0.0f,1.0f);
                 }
                 break;
             case R.id.id_mothed2_skbar_circle_center:

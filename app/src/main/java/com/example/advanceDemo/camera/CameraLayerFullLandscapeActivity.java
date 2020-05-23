@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -248,7 +248,7 @@ public class CameraLayerFullLandscapeActivity extends AppCompatActivity
             mDrawPadCamera.setRealEncodeEnable(1088, 544, 3500 * 1024,
                     (int) 25, dstPath);
         }
-        if (mDrawPadCamera.setupDrawpad()) {
+        if (mDrawPadCamera.setupDrawPad()) {
             mCameraLayer = mDrawPadCamera.getCameraLayer();
 
             // addViewLayer();

@@ -106,7 +106,6 @@ public class AECompositionLayerDemoActivity extends Activity {
         drawPadView.setOnDrawPadRunTimeListener(new onDrawPadRunTimeListener() {
             @Override
             public void onRunTime(DrawPad v, long currentTimeUs) {
-                Log.e("LSDelete", "----currentTimeUs: " + currentTimeUs);
             }
         });
 

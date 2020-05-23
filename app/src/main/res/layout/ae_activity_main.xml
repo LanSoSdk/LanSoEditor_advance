@@ -81,24 +81,8 @@
             </RelativeLayout>
 
 
-<!--            <RelativeLayout  android:id="@+id/id_aemain_3D_1" style="@style/main_item_reletivelayout2">-->
-<!--                <TextView   android:text="Ae效果&#45;&#45;简单3D动画" style="@style/main_item_textview"/>-->
-<!--                <TextView  style="@style/main_item_arrow"/>-->
-<!--            </RelativeLayout>-->
 
 
-
-            <RelativeLayout  android:id="@+id/id_aemain_json_cut" style="@style/main_item_reletivelayout2">
-                <TextView   android:text="AE模板裁剪(选图片,配模板)" style="@style/main_item_textview"/>
-                <TextView  style="@style/main_item_arrow"/>
-            </RelativeLayout>
-
-
-
-            <RelativeLayout  android:id="@+id/id_aemain_json_concat" style="@style/main_item_reletivelayout2">
-                <TextView   android:text="Ae模板拼接" style="@style/main_item_textview"/>
-                <TextView  style="@style/main_item_arrow"/>
-            </RelativeLayout>
 
 
             <RelativeLayout  android:id="@+id/id_aemain_json_overlay" style="@style/main_item_reletivelayout2">

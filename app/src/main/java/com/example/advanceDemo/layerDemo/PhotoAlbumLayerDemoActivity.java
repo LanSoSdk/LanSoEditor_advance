@@ -12,43 +12,29 @@ import android.view.View;
 import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.lansoeditor.advanceDemo.R;
+import com.lansosdk.LanSongAe.LSOAeDrawable;
+import com.lansosdk.LanSongAe.LSOLoadAeJsons;
 import com.lansosdk.box.DrawPad;
 import com.lansosdk.box.DrawPadUpdateMode;
+import com.lansosdk.box.LSOAECompositionLayer;
+import com.lansosdk.box.LSOAeCompositionAsset;
 import com.lansosdk.box.LSOPhotoAlbumAsset;
 import com.lansosdk.box.OnLanSongSDKCompletedListener;
-import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.box.onDrawPadRunTimeListener;
 import com.lansosdk.box.onDrawPadSizeChangedListener;
 import com.lansosdk.videoeditor.DrawPadAllExecute2;
 import com.lansosdk.videoeditor.DrawPadView;
 import com.lansosdk.videoeditor.DrawPadView.onViewAvailable;
+import com.lansosdk.videoeditor.MediaInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.advanceDemo.utils.CopyFileFromAssets.copyAeAssets;
-
-/**
- * 增加相册影集图层, 只需要用户选择多张图片+ 一个Ae的json文件, 我们内部会自动根据图片数量来裁剪json或拼接json;
-
- 相册影集资源类的两个参数:
- bitmaps: 多张图片列表.
- jsonPath: 用AE导出的json动画;
- LSOPhotoAlbumAsset(List<Bitmap> bitmaps, String jsonPath) throws Exception
+import static com.example.advanceDemo.utils.CopyFileFromAssets.copyShanChu;
 
 
-
- 用AE制作动画的规则:
- 1. 不能使用预合成,
- 2. 每个图层对应一张图片, 不能一张图片应用到多个图层;
- 3. json总时长不能超过20秒,每个图片时间建议是2--3秒,分辨率建议720x1280,帧率是20fps或15fps;
- 4. 图片数量,建议不超过20张.
- 5. 我们内部会根据你的图片多少,和json的时长来裁剪或拼接
- 6. LSOPhotoAlbumAsset在使用完毕后,确认不再使用时, 一定要调用release释放资源,比如在让用户重新选择图片的前一行调用;
- 7.演示例子,见我们的PhotoAlbumLayerDemoActivity.java
-
- */
 public class PhotoAlbumLayerDemoActivity extends Activity {
     boolean destroying = false;
     private DrawPadView drawPadView;
@@ -108,19 +94,15 @@ public class PhotoAlbumLayerDemoActivity extends Activity {
      */
     private void initDrawPad() throws Exception {
 
-        //准备各种资源.
-        String jsonPath = copyAeAssets(getApplicationContext(), "morePicture.json");
+        String jsonPath =copyAeAssets(getApplicationContext(),"morePicture.json");
+
         List<Bitmap> bitmaps=new ArrayList<>();
         for (int i = 0; i <10;i++) {
             String name = "morePicture_img_" + i + ".jpeg";
             bitmaps.add(BitmapFactory.decodeFile(copyAeAssets(getApplicationContext(),name)));
         }
 
-        for (int i = 0; i <3;i++) {
-            String name = "morePicture_img_" + i + ".jpeg";
-            bitmaps.add(BitmapFactory.decodeFile(copyAeAssets(getApplicationContext(),name)));
-        }
-        albumAsset=new LSOPhotoAlbumAsset(bitmaps,jsonPath);
+        albumAsset=new LSOPhotoAlbumAsset(bitmaps,jsonPath,true);
 
         drawPadView.setBackgroundColor(Color.RED);
         drawPadView.setUpdateMode(DrawPadUpdateMode.AUTO_FLUSH, (int) albumAsset.getFrameRate());
@@ -131,7 +113,6 @@ public class PhotoAlbumLayerDemoActivity extends Activity {
         drawPadView.setOnDrawPadRunTimeListener(new onDrawPadRunTimeListener() {
             @Override
             public void onRunTime(DrawPad v, long currentTimeUs) {
-                Log.e("LSDelete", "----currentTimeUs: " + currentTimeUs);
             }
         });
 
@@ -156,7 +137,6 @@ public class PhotoAlbumLayerDemoActivity extends Activity {
         drawPadView.pauseDrawPad();
         if (drawPadView.startDrawPad()) {
 
-
             drawPadView.addPhotoAlbumLayer(albumAsset);
 
             drawPadView.resumeDrawPad();
@@ -169,10 +149,9 @@ public class PhotoAlbumLayerDemoActivity extends Activity {
 
     private void startExport() throws Exception{
 
-        if(albumAsset==null&& allExecute!=null ){
+        if(albumAsset==null ){
             return;
         }
-
         if(drawPadView!=null){
             drawPadView.stopDrawPad();
         }
@@ -180,19 +159,10 @@ public class PhotoAlbumLayerDemoActivity extends Activity {
         allExecute = new DrawPadAllExecute2(getApplicationContext(), albumAsset.getWidth(), albumAsset.getHeight(), albumAsset.getDurationUs());
         allExecute.addPhotoAlbumLayer(albumAsset);
 
-        allExecute.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
-            @Override
-            public void onLanSongSDKError(int i) {
-                allExecute=null;
-                DemoProgressDialog.releaseDialog();
-                DemoUtil.showDialog(PhotoAlbumLayerDemoActivity.this,"导出错误, 请查看logcat信息.");
-            }
-        });
-
         allExecute.setOnLanSongSDKProgressListener(new OnLanSongSDKProgressListener() {
             @Override
             public void onLanSongSDKProgress(long ptsUs, int percent) {
-//                Log.e("TAG", "------ptsUs: "+ptsUs+ " percent :"+percent);
+                Log.e("TAG", "------ptsUs: "+ptsUs+ " percent :"+percent);
                 DemoProgressDialog.showPercent(PhotoAlbumLayerDemoActivity.this,percent);
             }
         });
@@ -200,8 +170,6 @@ public class PhotoAlbumLayerDemoActivity extends Activity {
         allExecute.setOnLanSongSDKCompletedListener(new OnLanSongSDKCompletedListener() {
             @Override
             public void onLanSongSDKCompleted(String dstVideo) {
-//                MediaInfo.checkFile(dstVideo);
-                allExecute=null;
                 DemoProgressDialog.releaseDialog();
                 DemoUtil.startPreviewVideo(PhotoAlbumLayerDemoActivity.this,dstVideo);
             }

@@ -170,7 +170,7 @@ public class VPlayerWrapper {
             videoPlayer.setOnInfoListener(mInfoListener);
             videoPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             videoPlayer.setOnSeekCompleteListener(mOnSeekCompleteListener);
-            videoPlayer.setOnPlayeFrameUpdateListener(mOnPlayerFrameUpdateListener);
+            videoPlayer.setOnPlayerFrameUpdateListener(mOnPlayerFrameUpdateListener);
 
             mCurrentBufferPercentage = 0;
             videoPlayer.setDataSource(mAppContext, mUri);
