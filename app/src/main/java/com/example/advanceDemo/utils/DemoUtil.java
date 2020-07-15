@@ -49,13 +49,6 @@ public class DemoUtil {
 
         if(year>limitYear || month>=limitMonth){
             DemoUtil.showDialog(activity, "SDK 已经过期,请联系我们更新.(time out.)");
-        }else{
-            String timeHint = activity.getResources().getString(R.string.sdk_limit);
-            String version = VideoEditor.getSDKVersion() + ";\n BOX:" + LanSoEditorBox.VERSION_BOX;
-            version += dm.widthPixels + " x" + dm.heightPixels;
-            timeHint = String.format(timeHint, version, limitYear, limitMonth);
-            timeHint+= " ABI: "+VideoEditor.getCurrentNativeABI();
-            DemoUtil.showDialog(activity, timeHint);
         }
     }
 

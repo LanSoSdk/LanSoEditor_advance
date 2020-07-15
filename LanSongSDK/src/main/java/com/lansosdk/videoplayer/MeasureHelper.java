@@ -4,6 +4,10 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * 已经废弃,请不要使用
+ */
+@Deprecated
 public final class MeasureHelper {
     static final int AR_ASPECT_FIT_PARENT = 0; // without clip
     static final int AR_ASPECT_FILL_PARENT = 1; // may clip

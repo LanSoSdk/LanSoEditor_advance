@@ -31,7 +31,7 @@
     </style>
     
         
-     <style name="main_item_reletivelayout">
+     <style name="main_item_relative_layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dip</item>
         <item name="android:gravity">center_vertical</item>
@@ -40,7 +40,7 @@
     </style>
     
 
-    <style name="main_item_reletivelayout2">
+    <style name="main_item_relative_layout2">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dip</item>
         <item name="android:gravity">center_vertical</item>
@@ -50,7 +50,7 @@
           <item name="android:layout_marginRight">6dip</item>
     </style>
            	  
-     <style name="main_item_textview">
+     <style name="main_item_text_view">
               <item name="android:layout_centerInParent">true</item>
               <item name="android:layout_width">match_parent</item>
               <item name="android:layout_height">wrap_content</item>

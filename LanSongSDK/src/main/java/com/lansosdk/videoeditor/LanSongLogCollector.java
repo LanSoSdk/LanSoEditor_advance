@@ -13,13 +13,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * android logcat收集器
- *
- *
- * 杭州蓝松科技有限公司
- * www.lansongtech.com
- */
+
+@Deprecated
 public class LanSongLogCollector implements Runnable {
     private static final String TAG = "LanSongSDK";
 
@@ -46,7 +41,6 @@ public class LanSongLogCollector implements Runnable {
 
     @Override
     public void run() {
-
         try {
             isRunning=false;
             runEntry();

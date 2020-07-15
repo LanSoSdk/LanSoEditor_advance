@@ -1,133 +1,59 @@
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" 
     android:layout_width="match_parent"
      android:layout_height="match_parent"
-    android:background="#FFA500"
-    android:orientation="vertical">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFA500"
-    android:orientation="vertical" >
-
-    <TextView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="请选择视频文件"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"/>
-    
-    <LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    
-         <Button
-             android:id="@+id/id_main_use_default_videobtn"
-             android:layout_width="0dip"
-             android:layout_weight="5"
-             android:layout_height="60dip"
-             android:background="@drawable/rect_button_bg"
-             android:text="使用默认演示视频"
-             />
-         <ImageView
-             android:id="@+id/id_main_select_video"
-             android:layout_width="0dip"
-             android:layout_weight="2"
-             android:layout_height="60dip"
-             android:src="@drawable/ic_menu_archive"
-             />
-	</LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/id_main_tvvideo"/>
-    
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFA500"
-    android:orientation="vertical" >
+    android:background="#FFA500">
 
 
-     <RelativeLayout  android:id="@+id/id_mainlist_camerarecord" style="@style/main_item_reletivelayout2">
-           	 <TextView   android:text="摄像头录制" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
-	
-     	
-     <RelativeLayout  android:id="@+id/id_mainlist_somelayer" style="@style/main_item_reletivelayout2">
-           	 <TextView   android:text="图层" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
+	<TextView
+		android:id="@+id/id_main_text1"
+		android:layout_marginTop="@dimen/dp80"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="这是最简单的演示\n "
+		android:textColor="@color/red"
+		android:layout_marginLeft="@dimen/dp20"
+		/>
 
-    <RelativeLayout  android:id="@+id/id_mainlist_changjing" style="@style/main_item_reletivelayout2">
-           	 <TextView   android:text="场景举例" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
-	
-         
-      <RelativeLayout  android:id="@+id/id_mainlist_douyin" style="@style/main_item_reletivelayout2">
-           	 <TextView   android:text="抖音  效果" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
+	<TextView
+		android:layout_below="@id/id_main_text1"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/dp20"
+		android:text="完整的UI-demo,请从这里下载:\n\n https://www.pgyer.com/L20O"
+		/>
 
-		<RelativeLayout  android:id="@+id/id_mainlist_weishang" style="@style/main_item_reletivelayout2">
-			<TextView   android:text="AE动效/微商  效果" style="@style/main_item_textview"/>
+
+		<RelativeLayout
+			android:id="@+id/id_main_list_lso_layer"
+			android:layout_centerInParent="true"
+			style="@style/main_item_relative_layout2">
+			<TextView   android:text="视频编辑SDK(Video Editor)"
+				style="@style/main_item_text_view"/>
 			<TextView  style="@style/main_item_arrow"/>
 		</RelativeLayout>
 
 
-
-
-		<RelativeLayout  android:id="@+id/id_mainlist_videoonedo" style="@style/main_item_reletivelayout2">
-			<TextView   android:text="背景音乐/压缩/logo等17种常见处理" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/>
-		</RelativeLayout>
-
-
-
-		<RelativeLayout  android:id="@+id/id_mainlist_bitmaps" style="@style/main_item_reletivelayout2">
-				 <TextView   android:text="图片/声音容器" style="@style/main_item_textview"/>
-				<TextView  style="@style/main_item_arrow"/>
-		</RelativeLayout>
-
-
-		<RelativeLayout  android:id="@+id/id_main_list_lso_layer" style="@style/main_item_reletivelayout2">
-			<TextView   android:text="4.0版本拼接类演示" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/>
-		</RelativeLayout>
-
-
-		<RelativeLayout  android:id="@+id/id_mainlist_videoplay" style="@style/main_item_reletivelayout2">
-			 <TextView   android:text="直接播放" style="@style/main_item_textview"/>
-			<TextView  style="@style/main_item_arrow"/>
-		</RelativeLayout>
-</LinearLayout>
- 
-     
-   
-	
-		
-
-	
-    <RelativeLayout 
-	        android:layout_width="match_parent"
-	        android:layout_height="150dip"
-	        android:gravity="center_vertical"
-	        android:background="#FFFFFF"
-	        android:layout_marginTop="20dip"
-	         >
-	         <TextView 
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerVertical="true"
-		        android:layout_marginLeft="10dip"
-		        android:text="@string/adv_hint5"
-		        android:textColor="#0000ff"/>
+	<RelativeLayout
+		android:id="@+id/id_main_list_aex"
+		android:layout_below="@id/id_main_list_lso_layer"
+		android:layout_marginTop="@dimen/dp80"
+		style="@style/main_item_relative_layout2">
+		<TextView   android:text="AE模板SDK(AE Template)" style="@style/main_item_text_view"/>
+		<TextView  style="@style/main_item_arrow"/>
 	</RelativeLayout>
 
-</LinearLayout>
-</ScrollView>
+
+
+	<TextView
+		android:id="@+id/id_main_version_hint"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="@dimen/dp80"
+		android:layout_alignParentBottom="true"
+		android:gravity="center"
+		android:text="version:"
+		/>
+
+</RelativeLayout>

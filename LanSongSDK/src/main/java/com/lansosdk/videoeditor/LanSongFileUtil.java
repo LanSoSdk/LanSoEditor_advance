@@ -22,14 +22,8 @@ import java.io.OutputStream;
 import java.nio.IntBuffer;
 import java.util.Calendar;
 
-/**
- * 各种文件操作.
- *
- *
- * 杭州蓝松科技有限公司
- * www.lansongtech.com
- *
- */
+
+@Deprecated
 public class LanSongFileUtil {
 
     public static final boolean VERBOSE = false;
@@ -338,8 +332,8 @@ public class LanSongFileUtil {
         for (File item : file.listFiles()){
             if(!item.isDirectory()){
                 String path=item.getAbsolutePath();
-                String name=LanSongFileUtil.getFileNameFromPath(path);
-                String subfix2=LanSongFileUtil.getFileSuffix(path);
+                String name= LanSongFileUtil.getFileNameFromPath(path);
+                String subfix2= LanSongFileUtil.getFileSuffix(path);
 
                 if(prefix!=null && subfix!=null){
                     if(name != null && name.contains(prefix) && subfix2.equals(subfix)){

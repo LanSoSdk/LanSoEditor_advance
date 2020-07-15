@@ -26,23 +26,6 @@ import java.util.Locale;
 import static com.lansosdk.videoeditor.LanSongFileUtil.fileExist;
 
 
-/**
- *
- * 所有的execute开头的方法都是阻塞执行, 即耗时严重, 即只有执行完当前executeXXX的功能,才执行下一行语句;
- * 所有的execute开头的方法都是阻塞执行, 即耗时严重, 即只有执行完当前executeXXX的功能,才执行下一行语句;
- * 所有的execute开头的方法都是阻塞执行, 即耗时严重, 即只有执行完当前executeXXX的功能,才执行下一行语句;
- *
- * 简单的调用方法:
- *  //step1. 放在主线程中执行;
- * VideoEditor videoEditor=new VideoEditor();
- * videoEditor.setOnProgressListener(xxx)进度;
- *
- * //step2.
- * 然后在AsyncTask或Thread中执行如下;
- * videoEditor.executeXXXXX();
- *
- *
- */
 public class VideoEditor {
 
     public static final String version="VideoEditor";
@@ -80,7 +63,6 @@ public class VideoEditor {
      *
      */
     private static boolean noCheck16Multi=false;
-
     /**
      * 给当前方法指定码率.
      * 此静态变量, 在execute执行后, 默认恢复为0;
@@ -100,9 +82,8 @@ public class VideoEditor {
     public static final int VIDEO_EDITOR_EXECUTE_FAILED = -101;  //文件不存在。
 
 
-    private final int VIDEOEDITOR_HANDLER_PROGRESS = 203;
-    private final int VIDEOEDITOR_HANDLER_COMPLETED = 204;
-    private final int VIDEOEDITOR_HANDLER_ENCODERCHANGE = 205;
+    private final int VIDEO_EDITOR_HANDLER_PROGRESS = 203;
+    private final int VIDEO_EDITOR_HANDLER_COMPLETED = 204;
 
 
     private static LanSongLogCollector lanSongLogCollector =null;
@@ -138,6 +119,7 @@ public class VideoEditor {
             return null;
         }
     }
+
     /**
      * 构造方法.
      * 如果您想扩展ffmpeg的命令, 可以继承这个类,
@@ -157,15 +139,6 @@ public class VideoEditor {
         }
     }
 
-    public onVideoEditorEncodeChangedListener mEncoderChangeListener=null;
-    public void setOnEncodeChangedListener(onVideoEditorEncodeChangedListener listener) {
-        mEncoderChangeListener = listener;
-    }
-
-    private void doEncoderChangedListener(boolean isSoft) {
-        if (mEncoderChangeListener != null)
-            mEncoderChangeListener.onChanged(this,isSoft);
-    }
 
 
 
@@ -199,20 +172,14 @@ public class VideoEditor {
                 return;
             }
             switch (msg.what) {
-                case VIDEOEDITOR_HANDLER_PROGRESS:
+                case VIDEO_EDITOR_HANDLER_PROGRESS:
                     videoEditor.doOnProgressListener(msg.arg1);
-                    break;
-                case VIDEOEDITOR_HANDLER_ENCODERCHANGE:
-                    videoEditor.doEncoderChangedListener(true);  //暂停只要改变,就变成软编码;
                     break;
                 default:
                     break;
             }
         }
     }
-
-
-
     /**
      * 异步线程执行的代码.
      */
@@ -233,15 +200,8 @@ public class VideoEditor {
     private void postEventFromNative(int what, int arg1, int arg2) {
         LSOLog.i("postEvent from native  is:" + what);
         if (mEventHandler != null) {
-            Message msg = mEventHandler.obtainMessage(VIDEOEDITOR_HANDLER_PROGRESS);
+            Message msg = mEventHandler.obtainMessage(VIDEO_EDITOR_HANDLER_PROGRESS);
             msg.arg1 = what;
-            mEventHandler.sendMessage(msg);
-        }
-    }
-    protected void sendEncoderEnchange()
-    {
-        if (mEventHandler != null) {
-            Message msg = mEventHandler.obtainMessage(VIDEOEDITOR_HANDLER_ENCODERCHANGE);
             mEventHandler.sendMessage(msg);
         }
     }
@@ -335,7 +295,7 @@ public class VideoEditor {
         String filter = String.format(Locale.getDefault(), "[0:a]volume=volume=%f[a1]; [1:a]volume=volume=%f[a2]; " +
                 "[a1][a2]amix=inputs=2:duration=first:dropout_transition=2", value1, value2);
 
-        String  dstPath=LanSongFileUtil.createFileInBox("pcm");
+        String  dstPath= LanSongFileUtil.createFileInBox("pcm");
 
         cmdList.add("-f");
         cmdList.add("s16le");
@@ -383,7 +343,7 @@ public class VideoEditor {
     public String executePcmEncodeAac(String srcPach, int samplerate, int channel) {
         List<String> cmdList = new ArrayList<String>();
 
-        String dstPath=LanSongFileUtil.createM4AFileInBox();
+        String dstPath= LanSongFileUtil.createM4AFileInBox();
         cmdList.add("-f");
         cmdList.add("s16le");
         cmdList.add("-ar");
@@ -430,7 +390,7 @@ public class VideoEditor {
     public String executePcmComposeVideo(String srcPcm, int samplerate, int channel, String srcVideo) {
         List<String> cmdList = new ArrayList<String>();
 
-        String dstPath=LanSongFileUtil.createMp4FileInBox();
+        String dstPath= LanSongFileUtil.createMp4FileInBox();
         cmdList.add("-f");
         cmdList.add("s16le");
         cmdList.add("-ar");
@@ -476,7 +436,7 @@ public class VideoEditor {
     public String executePcmMovToMp4(String srcVideo) {
         List<String> cmdList = new ArrayList<String>();
 
-        String dstPath=LanSongFileUtil.createMp4FileInBox();
+        String dstPath= LanSongFileUtil.createMp4FileInBox();
 
         cmdList.add("-i");
         cmdList.add(srcVideo);
@@ -504,68 +464,16 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 两个音频文件延迟混合, 即把第二个音频延迟多长时间后, 与第一个音频混合.
-     * 混合后的编码为aac格式的音频文件.
-     * 注意,如果两个音频的时长不同, 以第一个音频的音频为准. 如需修改可联系我们或查询ffmpeg命令即可.
-     *
-     * @param audioPath1
-     * @param audioPath2
-     * @param leftDelayMS  第二个音频的左声道 相对 于第一个音频的延迟时间
-     * @param rightDelayMS 第二个音频的右声道 相对 于第一个音频的延迟时间
-     * @return
-     */
-    public String executeAudioDelayMix(String audioPath1, String audioPath2, int leftDelayMS, int rightDelayMS) {
-        List<String> cmdList = new ArrayList<String>();
-        String overlayXY = String.format(Locale.getDefault(), "[1:a]adelay=%d|%d[delaya1]; " +
-                "[0:a][delaya1]amix=inputs=2:duration=first:dropout_transition=2", leftDelayMS, rightDelayMS);
 
 
-        String dstPath=LanSongFileUtil.createM4AFileInBox();
-        cmdList.add("-i");
-        cmdList.add(audioPath1);
-
-        cmdList.add("-i");
-        cmdList.add(audioPath2);
-
-        cmdList.add("-filter_complex");
-        cmdList.add(overlayXY);
-
-        cmdList.add("-acodec");
-        cmdList.add("libfaac");
-
-        cmdList.add("-y");
-        cmdList.add(dstPath);
-        String[] command = new String[cmdList.size()];
-        for (int i = 0; i < cmdList.size(); i++) {
-            command[i] = (String) cmdList.get(i);
-        }
-        int ret= executeVideoEditor(command);
-        if(ret==0){
-            return dstPath;
-        }else{
-            LanSongFileUtil.deleteFile(dstPath);
-            return null;
-        }
-    }
-
-    /**
-     * 两个音频文件混合.
-     * 混合后的文件压缩格式是aac格式, 故需要您dstPath的后缀是aac或m4a.
-     *
-     * @param audioPath1 主音频的完整路径
-     * @param audioPath2 次音频的完整路径
-     * @param value1     主音频的音量, 浮点类型, 大于1.0为放大音量, 小于1.0是减低音量.比如设置0.5则降低一倍.
-     * @param value2     次音频的音量, 浮点类型.
-     * @return 输出保存的完整路径. m4a格式.
-     */
+    @Deprecated
     public String executeAudioVolumeMix(String audioPath1, String audioPath2, float value1, float value2) {
         List<String> cmdList = new ArrayList<String>();
 
         String filter = String.format(Locale.getDefault(), "[0:a]volume=volume=%f[a1]; [1:a]volume=volume=%f[a2]; " +
                 "[a1][a2]amix=inputs=2:duration=first:dropout_transition=2", value1, value2);
 
-        String dstPath=LanSongFileUtil.createM4AFileInBox();
+        String dstPath= LanSongFileUtil.createM4AFileInBox();
         cmdList.add("-i");
         cmdList.add(audioPath1);
 
@@ -630,10 +538,10 @@ public class VideoEditor {
 
                 return executeAutoSwitch(cmdList);
             }
-
         }
         return null;
     }
+
     public String executeGIF2MP4(String srcPath) {
         if (fileExist(srcPath)) {
             MediaInfo info = new MediaInfo(srcPath);
@@ -802,7 +710,7 @@ public class VideoEditor {
 
         if(vInfo.prepare() && aInfo.prepare() && aInfo.isHaveAudio()){
 
-            String retPath=LanSongFileUtil.createMp4FileInBox();
+            String retPath= LanSongFileUtil.createMp4FileInBox();
             boolean isAAC="aac".equals(aInfo.aCodecName);
 
             List<String> cmdList = new ArrayList<String>();
@@ -881,7 +789,7 @@ public class VideoEditor {
 
         if(vInfo.prepare() && aInfo.prepare() && aInfo.isHaveAudio()){
 
-            String retPath=LanSongFileUtil.createMp4FileInBox();
+            String retPath= LanSongFileUtil.createMp4FileInBox();
             boolean isAAC="aac".equals(aInfo.aCodecName);
 
             List<String> cmdList = new ArrayList<String>();
@@ -968,7 +876,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstFile=LanSongFileUtil.createFileInBox(LanSongFileUtil.getFileSuffix(srcFile));
+            String dstFile= LanSongFileUtil.createFileInBox(LanSongFileUtil.getFileSuffix(srcFile));
             cmdList.add("-ss");
             cmdList.add(String.valueOf(startS));
 
@@ -1012,7 +920,7 @@ public class VideoEditor {
     public String executeCutVideo(String videoFile, float startS, float durationS) {
         if (LanSongFileUtil.fileExist(videoFile)) {
             durationMs=((int)(durationS *1000));
-            String dstFile=LanSongFileUtil.createMp4FileInBox();
+            String dstFile= LanSongFileUtil.createMp4FileInBox();
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -1324,7 +1232,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 //
-            String dstPng=LanSongFileUtil.createFileInBox("png");
+            String dstPng= LanSongFileUtil.createFileInBox("png");
             cmdList.add("-i");
             cmdList.add(videoSrcPath);
 
@@ -1366,7 +1274,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstPng=LanSongFileUtil.createFileInBox("png");
+            String dstPng= LanSongFileUtil.createFileInBox("png");
 
             String resolution = String.valueOf(pngWidth);
             resolution += "x";
@@ -1410,7 +1318,7 @@ public class VideoEditor {
     public String executeConvertMp3ToAAC(String mp3Path) {
         if (fileExist(mp3Path)) {
 
-            String dstFile=LanSongFileUtil.createFileInBox("m4a");
+            String dstFile= LanSongFileUtil.createFileInBox("m4a");
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -1442,7 +1350,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String  dstPath=LanSongFileUtil.createM4AFileInBox();
+            String  dstPath= LanSongFileUtil.createM4AFileInBox();
             cmdList.add("-i");
             cmdList.add(mp3Path);
 
@@ -1508,7 +1416,7 @@ public class VideoEditor {
     protected String executeConvertTsToMp4(String[] tsArray) {
         if (LanSongFileUtil.filesExist(tsArray)) {
 
-            String dstFile=LanSongFileUtil.createMp4FileInBox();
+            String dstFile= LanSongFileUtil.createMp4FileInBox();
             String concat = "concat:";
             for (int i = 0; i < tsArray.length - 1; i++) {
                 concat += tsArray[i];
@@ -1611,7 +1519,7 @@ public class VideoEditor {
     public String executeConcatDiffentMp4(ArrayList<String> videos,boolean ignorecheck) {
         if(videos!=null && videos.size()>1){
             if(ignorecheck || checkVideoSizeSame(videos)){
-                String dstPath=LanSongFileUtil.createMp4FileInBox();
+                String dstPath= LanSongFileUtil.createMp4FileInBox();
 
                 String filter = String.format(Locale.getDefault(), "concat=n=%d:v=1:a=1", videos.size());
 
@@ -2084,7 +1992,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstPath=LanSongFileUtil.createMp4FileInBox();
+            String dstPath= LanSongFileUtil.createMp4FileInBox();
             String filter = String.format(Locale.getDefault(), "rotate=%d", angle);
 
 
@@ -2841,7 +2749,7 @@ public class VideoEditor {
     }
     private String executeConvertBmpToGif(String bmpPaths,float framerate)
     {
-        String gifPath=LanSongFileUtil.createGIFFileInBox();
+        String gifPath= LanSongFileUtil.createGIFFileInBox();
 
 
         List<String> cmdList = new ArrayList<String>();
@@ -2883,7 +2791,7 @@ public class VideoEditor {
         String  subfix="jpeg";
         LanSongFileUtil.deleteNameFiles("lansonggif",subfix);
 
-        String bmpPaths=LanSongFileUtil.getCreateFileDir();
+        String bmpPaths= LanSongFileUtil.getCreateFileDir();
         bmpPaths+="/lansonggif_%05d."+subfix;
 
         if(executeExtractFrame(videoInput,inteval,scaleW,scaleH,bmpPaths)){
@@ -2908,7 +2816,7 @@ public class VideoEditor {
         List<String> cmdList = new ArrayList<String>();
 
 
-        String dstPath=LanSongFileUtil.createGIFFileInBox();
+        String dstPath= LanSongFileUtil.createGIFFileInBox();
 
         int width=scaleWidth/2;
         width*=2;
@@ -3046,7 +2954,7 @@ public class VideoEditor {
         List<String> cmdList = new ArrayList<String>();
 
 
-        String gifPath=LanSongFileUtil.createGIFFileInBox();
+        String gifPath= LanSongFileUtil.createGIFFileInBox();
 
         cmdList.add("-i");
         cmdList.add(gifFile);
@@ -3193,7 +3101,7 @@ public class VideoEditor {
             setDurationMs(durationMs);
         }
 
-        String dstPath=LanSongFileUtil.createMp4FileInBox();
+        String dstPath= LanSongFileUtil.createMp4FileInBox();
         if(isForceSoftWareDecoder || checkSoftDecoder()){
             for(int i=0;i<cmdList.size();i++){
                 String cmd=cmdList.get(i);
@@ -3234,7 +3142,6 @@ public class VideoEditor {
                     break;
                 }
             }
-            sendEncoderEnchange();
             LSOLog.d("开始处理:软解码+ 软编码....");
             ret=executeWithEncoder(cmdList, bitrate, dstPath, false);
         }
@@ -3584,7 +3491,7 @@ public class VideoEditor {
         if (fileExist(picturePath)) {
 
 
-            String dstPath=LanSongFileUtil.createFileInBox("png");
+            String dstPath= LanSongFileUtil.createFileInBox("png");
 
             if(startX==0) startX=1;
             if(startY==0) startY=1;

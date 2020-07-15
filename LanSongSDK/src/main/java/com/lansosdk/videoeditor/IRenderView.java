@@ -20,6 +20,6 @@ public interface IRenderView {
 
     void setVideoRotation(int degree);
 
-    void setDispalyRatio(int aspectRatio);
+    void setDisplayRatio(int aspectRatio);
 
 }

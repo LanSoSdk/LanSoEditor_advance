@@ -14,9 +14,9 @@ import java.io.IOException;
 
 
 /**
- * 注意!!!
- * 此代码仅仅是 VideoPlayer 的简易封装, 目的是让代码更清晰一些.
+ * 已经废弃,请不要使用
  */
+@Deprecated
 public class VPlayerWrapper {
     private Uri mUri;
     // all possible internal states
@@ -77,7 +77,7 @@ public class VPlayerWrapper {
                 mUri = Uri.parse(path);
                 mSeekWhenPrepared = 0;
             } else {
-                throw new FileNotFoundException(" input path is not found.mediaInfo is:" + mediaInfo.toString());
+                throw new FileNotFoundException(" input videoPath is not found.mediaInfo is:" + mediaInfo.toString());
             }
         }
     }

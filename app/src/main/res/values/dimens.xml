@@ -12,6 +12,9 @@
     <dimen name="dp5">5dp</dimen>
     <dimen name="dp3">3dp</dimen>
     <dimen name="dp1">1dp</dimen>
+
+    <dimen name="dp2">2dp</dimen>
+
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp20">20dp</dimen>
     <dimen name="dp25">25dp</dimen>

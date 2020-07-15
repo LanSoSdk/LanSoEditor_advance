@@ -12,8 +12,9 @@ import java.io.IOException;
 
 
 /**
- * SDK提供的视频播放器;
+ * 已经废弃,请不要使用
  */
+@Deprecated
 public class VPlayer {
 
     VPlayerWrapper vPlayer;
@@ -39,11 +40,11 @@ public class VPlayer {
                     mediaPlayer.setDataSource(path);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new FileNotFoundException(" input path is not found.mediaInfo is:" + mediaInfo.toString());
+                    throw new FileNotFoundException(" input videoPath is not found.mediaInfo is:" + mediaInfo.toString());
                 }
             }
         }else{
-            throw new FileNotFoundException(" input path is not found.mediaInfo is:" + mediaInfo.toString());
+            throw new FileNotFoundException(" input videoPath is not found.mediaInfo is:" + mediaInfo.toString());
         }
     }
     public void setVideoAsset(String path) {

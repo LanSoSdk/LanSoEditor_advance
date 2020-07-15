@@ -23,10 +23,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/id_palyer_screenhinit"
+            android:id="@+id/id_player_screen_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/blue" />
-    </LinearLayout>
+        <TextView
+            android:id="@+id/id_player_current_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp20"
+            android:textColor="@color/blue" />
 
+    </LinearLayout>
 </RelativeLayout>

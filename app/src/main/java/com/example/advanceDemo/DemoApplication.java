@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.lansosdk.box.LSOAexModule;
+
 public class DemoApplication extends Application {
 
     private static DemoApplication instance;
@@ -36,5 +38,5 @@ public class DemoApplication extends Application {
      */
     public String currentEditVideo;
 
-
+    public LSOAexModule currentModule;
 }

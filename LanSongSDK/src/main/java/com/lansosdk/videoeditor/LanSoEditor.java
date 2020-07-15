@@ -35,16 +35,9 @@ public class LanSoEditor {
 
         initSo(context, str);
 
-        //使用默认包路径下的文件夹; LSDELETE:打开
-        /**
-         * 发布的时,打开;
-         */
         if(Environment.getExternalStorageDirectory()!=null){
             setTempFileDir(context.getFilesDir() + "/lansongBox/");
         }
-
-
-
 
         LSOLog.init();
         LanSoEditorBox.deleteDefaultDirFiles();

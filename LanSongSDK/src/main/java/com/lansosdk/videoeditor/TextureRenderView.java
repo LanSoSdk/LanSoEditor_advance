@@ -82,7 +82,7 @@ public class TextureRenderView extends TextureView implements IRenderView {
      * static final int AR_4_3_FIT_PARENT = 5;
      */
     @Override
-    public void setDispalyRatio(int aspectRatio) {
+    public void setDisplayRatio(int aspectRatio) {
         mMeasureHelper.setAspectRatio(aspectRatio);
         requestLayout();
     }

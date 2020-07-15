@@ -3,30 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/red">
+    android:background="@color/white">
 
 
 
-<!--    视频预览view 和编辑控件 view 的比例 是 3:2 当然您可以调整这个比例.-->
+    <!--    视频预览view 和编辑控件 view 的比例 是 3:2 当然您可以调整这个比例.-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:background="@color/black">
+        android:background="@color/white">
         <com.lansosdk.videoeditor.LSOConcatCompositionView
             android:id="@+id/id_video_comp_composition_view"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"/>
-
-        <com.lansosdk.videoeditor.LSOLayerTouchView
-            android:id="@+id/id_video_comp_touch_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            />
-
     </RelativeLayout>
 
     <TextView
@@ -34,7 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/blue"
+        android:layout_marginLeft="@dimen/dp10"
         android:text="进度:"/>
+
+    <TextView
+        android:id="@+id/id_video_comp_crop_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
     <ScrollView
@@ -72,66 +70,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:orientation="horizontal">
-
-
                 <Button
                     android:id="@+id/id_video_comp_pause_resume"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
                     android:background="@drawable/corners_button_orange_bg"
                     android:text="暂停/回复"/>
-
-
                 <Button
                     android:id="@+id/id_video_comp_concat_add_delete"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
                     android:background="@drawable/corners_button_orange_bg"
-                    android:text="拼接增删"/>
+                    android:text="拼接图层"/>
+
+                <Button
+                    android:id="@+id/id_video_comp_concat_overlay_bitmap"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:background="@drawable/corners_button_orange_bg"
+                    android:text="叠加图片"/>
+
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/id_video_comp_bitmap_add_delete"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/corners_button_orange_bg"
-                    android:text="图片增删"/>
-
-                <Button
-                    android:id="@+id/id_video_comp_bitmap_list_add_delete"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/corners_button_orange_bg"
-                    android:text="多图增删"/>
-
-                <Button
-                    android:id="@+id/id_video_comp_gif_add_delete"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/corners_button_orange_bg"
-                    android:text="gif增删"/>
-                <Button
-                    android:id="@+id/id_video_comp_audio_add_delete"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/corners_button_orange_bg"
-                    android:text="声音增删"/>
-            </LinearLayout>
-
-
 
             <Button
                 android:id="@+id/id_video_comp_export"
@@ -143,6 +110,7 @@
 
         </LinearLayout>
     </ScrollView>
+
 
 
 </LinearLayout>
