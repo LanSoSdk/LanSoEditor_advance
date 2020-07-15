@@ -37,6 +37,6 @@
 - Set different resolution when supporting export.
 
 #### contact us
-email: support@lansongtech.com
-web: www.lansongtech.com
+- email: support@lansongtech.com
+- web: www.lansongtech.com
 
