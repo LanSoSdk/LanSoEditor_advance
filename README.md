@@ -1,39 +1,37 @@
-# gzj_test_android_demo
+### This is the simplest demo of Lansong SDK.
 
-#### 介绍
-{**以下是码云平台说明，您可以替换此简介**
-码云是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用码云实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+#### The current version is 4.2.5
 
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 码云特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- Including: Video editing SDK and AE template SDK;
+- Our complete demo demo apk, you can download it from here:
+- APK link ： https://www.pgyer.com/L20O
+- If you want to test our SDK, you can ask us for all the demo source code.
+ 
+## SDK function introduction.
+#### Video editing SDK:
+  - The name of the class is: LSOConcatComposition: meaning: splicing and synthesis, which can splice the video and the picture together, and can also be superimposed; corresponding to ConcatLayer and overlayLayer respectively;
+  - **Front and back stitching**: Each stitching will return a layer object; use the layer object to adjust various attributes; insert, delete, sort, replace;
+  - **Top and bottom overlay**: While stitching pictures and videos, you can overlay pictures or videos, text, animations and other effects on the stitching. These are called top and bottom overlays; for example, picture-in-picture, you can set the starting position of the overlay , Size, angle, start time point, end time point, looping, support all methods of the layer, can adjust the order of the layer;
+  - **Thumbnail** After each video or picture is added, a corresponding thumbnail will be obtained, and the thumbnail API will be adjusted accordingly after the cut duration or reverse order or variable speed.
+  - **Gesture operation**: after adding pictures and videos, return to a layer, which is a layer-by-layer design. All layers support gestures; can be selected and moved with one finger; zoom and rotate with two fingers ;
+  - **Animation**: There are entrance animation, exit animation, and animation at any point in time; the animation is exported to the json format supported by the SDK after the Adobe After Effect software is completed, so that you can freely play different animations and SDKs Only one export file is needed at the end, and the animation effect can be presented after loading. Can be previewed, deleted, and applied to all;
+  - **Transition**: The exported json format designed by AE can be used for mask transition or mobile rotation zoom transparent transition, which can be deleted, previewed, and applied to all;
+  - **Special effects**: also designed with AE software, and then export the json or MP4 file we specified; the effect time can be adjusted, previewed, adjusted, deleted, and can be applied to all;
+  - **Mask** Produced in Photoshop on the PC, exported as a transparent image, and added to the SDK. With different effects, the SDK automatically adjusts the size of the picture, and adjusts the transparency of different areas of the video according to the transparency of the picture;
+  - **Edit function**: duration cut, frame picture crop, rotation, mirror image, picture zoom, opacity;
+  - **Filters**: Provide 18 common filters; and support customization;
+  - **Adjustment**: Brightness, contrast, saturation, highlight, shadow; hue, white balance;
+  - **Reverse Play**: Reverse playback; reverse play and variable speed can be set at the same time;
+  - **Variable speed**: Support 0.1--10 times sound increase;
+  - **Sound layer**; add music, recording, mp3 sound, sound extracted from video;
+  - **Volume**, the volume can be adjusted from 0 to 8.0 times; 0.0 is silent; 8.0 is almost soundless, 2.0 or 3.0 is recommended;
+  - **Picture layer**, can be used as static stickers, dynamic stickers, Gif stickers;
+  - **Picture in Picture**: Various other videos can be superimposed on the stitching layer, which is called a composite layer;
+  - **Export** can export different resolutions
+    
+#### AE template SDK
+- Designed the entire animation scene with Adobe After Effect on the PC, and allowed the user to replace the corresponding picture on the mobile phone. During the design, the picture can be rotated, zoomed, transparent, Gaussian blur, 3D effect;
+- SDK, which supports replacing pictures with pictures or videos during playback
+- If there is a deviation in the replaced position, you can use one finger to move, two fingers to zoom or rotate during playback.
+- Support for replacing sounds, adding logos, filtering screens, adding other text, etc.
+- Set different resolution when supporting export.
