@@ -34,3 +34,8 @@
 - 如果替换的位置有偏差, 则可以在播放过程中用手指单指移动, 双指缩放或旋转.
 - 支持替换声音,增加logo, 对画面做滤镜, 增加其他文本等. 
 - 支持导出的时候,设置不同的分辨率.
+#### 联系我们
+#### contact us
+- email: support@lansongtech.com
+- web: www.lansongtech.com
+
