@@ -35,3 +35,8 @@
 - If there is a deviation in the replaced position, you can use one finger to move, two fingers to zoom or rotate during playback.
 - Support for replacing sounds, adding logos, filtering screens, adding other text, etc.
 - Set different resolution when supporting export.
+
+#### contact us
+email: support@lansongtech.com
+web: www.lansongtech.com
+
