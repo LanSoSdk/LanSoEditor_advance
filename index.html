@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Lansoeditor advance by LanSoSdk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Lansoeditor advance</h1>
+      <h2 class="project-tagline">android video editor advance sdk .include functions: cut, crop picture in picture; Animation, Filter, Effect, Transition, audioLayer , videoLayer, stick, add logo, delogo, overlay, video composition, gif layer scale, move, rotate, opacity, like tiktok video editor.</h2>
+      <a href="https://github.com/LanSoSdk/LanSoEditor_advance" class="btn">View on GitHub</a>
+      <a href="https://github.com/LanSoSdk/LanSoEditor_advance/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/LanSoSdk/LanSoEditor_advance/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h3>
+<a id="this-is-the-simplest-demo-of-lansong-sdk" class="anchor" href="#this-is-the-simplest-demo-of-lansong-sdk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>This is the simplest demo of Lansong SDK.</h3>
+<h4>
+<a id="the-current-version-is-425" class="anchor" href="#the-current-version-is-425" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The current version is 4.2.5</h4>
+<p><a href="https://github.com/LanSoSdk/LanSoEditor_advance/blob/master/README.cn.md">中文说明</a></p>
+<ul>
+<li>Including: Video editing SDK and AE template SDK;</li>
+<li>Our complete demo demo apk, you can download it from here:</li>
+<li>APK link ： <a href="https://www.pgyer.com/L20O">https://www.pgyer.com/L20O</a>
+</li>
+<li>If you want to test our SDK, you can ask us for all the demo source code.</li>
+</ul>
+<h2>
+<a id="sdk-function-introduction" class="anchor" href="#sdk-function-introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SDK function introduction.</h2>
+<h4>
+<a id="video-editing-sdk" class="anchor" href="#video-editing-sdk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Video editing SDK:</h4>
+<ul>
+<li>The name of the class is: LSOConcatComposition: meaning: splicing and synthesis, which can splice the video and the picture together, and can also be superimposed; corresponding to ConcatLayer and overlayLayer respectively;</li>
+<li>
+<strong>Front and back stitching</strong>: Each stitching will return a layer object; use the layer object to adjust various attributes; insert, delete, sort, replace;</li>
+<li>
+<strong>Top and bottom overlay</strong>: While stitching pictures and videos, you can overlay pictures or videos, text, animations and other effects on the stitching. These are called top and bottom overlays; for example, picture-in-picture, you can set the starting position of the overlay , Size, angle, start time point, end time point, looping, support all methods of the layer, can adjust the order of the layer;</li>
+<li>
+<strong>Thumbnail</strong>:  After each video or picture is added, a corresponding thumbnail will be obtained, and the thumbnail API will be adjusted accordingly after the cut duration or reverse order or variable speed.</li>
+<li>
+<strong>Gesture operation</strong>: after adding pictures and videos, return to a layer, which is a layer-by-layer design. All layers support gestures; can be selected and moved with one finger; zoom and rotate with two fingers ;</li>
+<li>
+<strong>Animation</strong>: There are entrance animation, exit animation, and animation at any point in time; the animation is exported to the json format supported by the SDK after the Adobe After Effect software is completed, so that you can freely play different animations and SDKs Only one export file is needed at the end, and the animation effect can be presented after loading. Can be previewed, deleted, and applied to all;</li>
+<li>
+<strong>Transition</strong>: The exported json format designed by AE can be used for mask transition or mobile rotation zoom transparent transition, which can be deleted, previewed, and applied to all;</li>
+<li>
+<strong>Special effects</strong>: also designed with AE software, and then export the json or MP4 file we specified; the effect time can be adjusted, previewed, adjusted, deleted, and can be applied to all;</li>
+<li>
+<strong>Mask</strong> : Produced in Photoshop on the PC, exported as a transparent image, and added to the SDK. With different effects, the SDK automatically adjusts the size of the picture, and adjusts the transparency of different areas of the video according to the transparency of the picture;</li>
+<li>
+<strong>Edit function</strong> : duration cut, frame picture crop, rotation, mirror image, picture zoom, opacity;</li>
+<li>
+<strong>Filters</strong> : Provide 18 common filters; and support customization;</li>
+<li>
+<strong>Adjustment</strong> : Brightness, contrast, saturation, highlight, shadow; hue, white balance;</li>
+<li>
+<strong>Reverse Play</strong> : Reverse playback; reverse play and variable speed can be set at the same time;</li>
+<li>
+<strong>Variable speed</strong> : Support 0.1--10 times sound increase;</li>
+<li>
+<strong>Sound layer</strong> :  add music, recording, mp3 sound, sound extracted from video;</li>
+<li>
+<strong>Volume</strong>:  the volume can be adjusted from 0 to 8.0 times; 0.0 is silent; 8.0 is almost soundless, 2.0 or 3.0 is recommended;</li>
+<li>
+<strong>Picture layer</strong>:  can be used as static stickers, dynamic stickers, Gif stickers;</li>
+<li>
+<strong>Picture in Picture</strong>: Various other videos can be superimposed on the stitching layer, which is called a composite layer;</li>
+<li>
+<strong>Export</strong>:  can export different resolutions</li>
+</ul>
+<h4>
+<a id="ae-template-sdk" class="anchor" href="#ae-template-sdk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>AE template SDK</h4>
+<ul>
+<li>Designed the entire animation scene with Adobe After Effect on the PC, and allowed the user to replace the corresponding picture on the mobile phone. During the design, the picture can be rotated, zoomed, transparent, Gaussian blur, 3D effect;</li>
+<li>SDK, which supports replacing pictures with pictures or videos during playback</li>
+<li>If there is a deviation in the replaced position, you can use one finger to move, two fingers to zoom or rotate during playback.</li>
+<li>Support for replacing sounds, adding logos, filtering screens, adding other text, etc.</li>
+<li>Set different resolution when supporting export.</li>
+</ul>
+<h4>
+<a id="contact-us" class="anchor" href="#contact-us" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>contact us</h4>
+<ul>
+<li>email: <a href="mailto:support@lansongtech.com">support@lansongtech.com</a>
+</li>
+<li>web: <a href="http://www.lansongtech.com">www.lansongtech.com</a>
+</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/LanSoSdk/LanSoEditor_advance">Lansoeditor advance</a> is maintained by <a href="https://github.com/LanSoSdk">LanSoSdk</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
