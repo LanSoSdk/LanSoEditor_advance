@@ -17,23 +17,16 @@ import java.io.IOException;
 @Deprecated
 public class VPlayer {
 
-    VPlayerWrapper vPlayer;
     MediaPlayer mediaPlayer;
     MediaInfo mediaInfo;
     public VPlayer(Context context) {
-        vPlayer=new VPlayerWrapper(context);
     }
 
     public void setVideoPath(String path) throws FileNotFoundException {
 
         mediaInfo =new MediaInfo(path);
         if(mediaInfo.prepare()){
-            if( mediaInfo.getWidth() * mediaInfo.getHeight()<=1088*1920){
-                vPlayer.setVideoPath(mediaInfo);
-                LSOLog.d("VPlayer:: VPlayer2 used to Play Video.");
-            }else{
-                //大于1080P,则用MediaPlayer播放;
-                vPlayer=null;
+
                 LSOLog.d("VPlayer:: MediaPlayer used to Play Video. video size is :"+ mediaInfo.getWidth() +" x " + mediaInfo.getHeight());
                 mediaPlayer =new MediaPlayer();
                 try {
@@ -43,25 +36,12 @@ public class VPlayer {
                     throw new FileNotFoundException(" input videoPath is not found.mediaInfo is:" + mediaInfo.toString());
                 }
             }
-        }else{
-            throw new FileNotFoundException(" input videoPath is not found.mediaInfo is:" + mediaInfo.toString());
-        }
     }
     public void setVideoAsset(String path) {
 
         MediaInfo info=new MediaInfo(path);
         if(info.prepare()){
-            if( info.getWidth() * info.getHeight()<=1088*1920){
-                try {
-                    vPlayer.setVideoPath(info.getVideoPath());
-                    mediaPlayer=null;
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                //大于1080P,则用MediaPlayer播放;
-                //大于1080P,用videoPlayer播放,会导致内存大量上涨, 不安全. 用系统默认播放器;
-                vPlayer=null;
+
                 mediaPlayer =new MediaPlayer();
                 try {
                     mediaPlayer.setDataSource(info.getVideoPath());
@@ -69,14 +49,11 @@ public class VPlayer {
                     e.printStackTrace();
                 }
             }
-        }
     }
 
 
     public void setSurface(Surface surface) {
-        if(vPlayer!=null){
-            vPlayer.setSurface(surface);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.setSurface(surface);
         }
     }
@@ -88,9 +65,7 @@ public class VPlayer {
 
 
     public void setOnPreparedListener(OnLSOPlayerPreparedListener l) {
-        if(vPlayer!=null){
-            vPlayer.setOnPreparedListener(l);
-        }else if(mediaPlayer!=null){
+            if(mediaPlayer!=null){
 
             onLSOPlayerPreparedListener=l;
 
@@ -106,9 +81,7 @@ public class VPlayer {
     }
 
     public void setOnCompletionListener(OnLSOPlayerCompletionListener l) {
-        if(vPlayer!=null){
-            vPlayer.setOnCompletionListener(l);
-        }else if(mediaPlayer!=null){
+       if(mediaPlayer!=null){
             onLSOPlayerCompletionListener=l;
 
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -123,9 +96,7 @@ public class VPlayer {
     }
 
     public void setOnErrorListener(OnLSOPlayerErrorListener l) {
-        if(vPlayer!=null){
-            vPlayer.setOnErrorListener(l);
-        }else if(mediaPlayer!=null){
+       if(mediaPlayer!=null){
             onLSOPlayerErrorListener=l;
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
@@ -141,9 +112,7 @@ public class VPlayer {
         }
     }
     public void setOnSeekCompleteListener(OnLSOPlayerSeekCompleteListener l) {
-        if(vPlayer!=null){
-            vPlayer.setOnSeekCompleteListener(l);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             onLSOPlayerSeekCompleteListener=l;
             mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                 @Override
@@ -162,27 +131,21 @@ public class VPlayer {
      * @param listener 监听,里面有两个方法, VideoPlayer对象和 currentMs当前播放的进度,单位是毫秒;
      */
     public void setOnFrameUpdateListener(OnLSOPlayeFrameUpdateListener listener) {
-        if(vPlayer!=null){
-            vPlayer.setOnFrameUpateListener(listener);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             LSOLog.e(" MediaPlayer  is not set setOnFrameUpdateListener...LSTODO");
         }
     }
 
 
     public boolean isPlaying(){
-        if(vPlayer!=null){
-            return vPlayer.isPlaying();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             return mediaPlayer.isPlaying();
         }else{
             return false;
         }
     }
     public boolean isLooping(){
-        if(vPlayer!=null){
-            return vPlayer.isLooping();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             return mediaPlayer.isLooping();
         }else{
             return false;
@@ -190,41 +153,21 @@ public class VPlayer {
     }
 
     public void prepareAsync(){
-        if(vPlayer!=null){
-            vPlayer.prepareAsync();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.prepareAsync();
         }
     }
 
     public int getVideoWidth(){
-//        if(vPlayer!=null){
-//            return vPlayer.getVideoWidth();
-//        }else if(mediaPlayer!=null){
-//            return mediaPlayer.getVideoWidth();
-//        }else {
-//            LSOLog.e("VPlayer getVideoWidth ERROR, vPlayer and mediaPlayer is null");
-//            return 320;
-//        }
         return mediaInfo.getWidth();
     }
 
     public int getVideoHeight(){
-//        if(vPlayer!=null){
-//            return vPlayer.getVideoHeight();
-//        }else if(mediaPlayer!=null){
-//            return mediaPlayer.getVideoHeight();
-//        }else{
-//            LSOLog.e("VPlayer getVideoHeight ERROR, vPlayer and mediaPlayer is null");
-//            return 320;
-//        }
         return mediaInfo.getHeight();
     }
 
     public  int getDuration(){
-        if(vPlayer!=null){
-            return vPlayer.getDuration();
-        }else if(mediaPlayer!=null){
+            if(mediaPlayer!=null){
             return mediaPlayer.getDuration();
         }else{
             LSOLog.e("VPlayer getDuration ERROR, vPlayer and mediaPlayer is null");
@@ -232,17 +175,13 @@ public class VPlayer {
         }
     }
     public void setLooping(boolean is){
-        if(vPlayer!=null){
-            vPlayer.setLooping(is);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.setLooping(is);
         }
     }
 
     public void setVolume(float leftVolume, float rightVolume) {
-        if (vPlayer != null){
-            vPlayer.setVolume(leftVolume, rightVolume);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.setVolume(leftVolume,rightVolume);
         }
     }
@@ -252,18 +191,15 @@ public class VPlayer {
      * @param volume
      */
     public void setVolume(float volume) {
-        if (vPlayer != null){
-            vPlayer.setVolume(volume, volume);
-        }else if(mediaPlayer!=null){
+
+        if(mediaPlayer!=null){
             mediaPlayer.setVolume(volume,volume);
         }
     }
 
 
     public void setSpeed(float speed){
-        if(vPlayer!=null){
-            vPlayer.setSpeed(speed);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
            LSOLog.e(" MediaPlayer  is not set speed...LSTODO");
         }
     }
@@ -274,9 +210,7 @@ public class VPlayer {
      * @return
      */
     public int getCurrentPosition(){
-        if(vPlayer!=null){
-            return vPlayer.getCurrentPosition();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             return mediaPlayer.getCurrentPosition();
         }else{
             LSOLog.e("VPlayer getCurrentPositionMS ERROR, vPlayer and mediaPlayer is null");
@@ -292,40 +226,31 @@ public class VPlayer {
         return getCurrentPosition();
     }
     public void start(){
-        if(vPlayer!=null){
-            vPlayer.start();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.start();
         }
     }
     public void pause(){
-        if(vPlayer!=null){
-            vPlayer.pause();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.pause();
         }
     }
     public void seekTo(int  ms){
-        if(vPlayer!=null){
-            vPlayer.seekTo(ms);
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.seekTo(ms);
         }
     }
 
     public void stop(){
-        if(vPlayer!=null){
-            vPlayer.stop();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.stop();
         }
     }
 
     public void release(){
-        if(vPlayer!=null){
-            vPlayer.release();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             mediaPlayer.release();
+            mediaPlayer=null;
         }
     }
     //----------------------
@@ -334,44 +259,6 @@ public class VPlayer {
     public void setSpeedEnable() {  //废弃;
 
     }
-    /**
-     * 调节变声;
-     * 最低:-1.0; (低沉的男声)
-     * 最高: 1.0; (尖锐的女声);
-     *
-     * @param pitch 范围是-1.0 ---1.0;
-     */
-    public void setAudioPitch(float pitch) {
-        if (pitch > 1.0 || pitch < -1.0) {
-            return;
-        }
-
-        if (vPlayer != null) {
-            vPlayer.setAudioPitch(pitch);
-        }
-    }
-
-    public void setAudioPitchPercent(int percent) {
-        if(percent>=0 && percent<=100){
-            float percentF=(float)percent/100f;
-
-            float value = 2 * percentF - 1;
-
-            if (vPlayer != null) {
-                vPlayer.setAudioPitch(value * 12);
-            }
-        }
-    }
-    /**
-     * 当设置seek的时候, 是否要精确定位;
-     *
-     * @param is
-     */
-    public void setExactlySeekEnable(boolean is) {
-        if (vPlayer != null) {
-            vPlayer.setExactlySeekEnable(is);
-        }
-    }
 
 
 
@@ -379,12 +266,6 @@ public class VPlayer {
 
 
 
-
-    public void setOnInfoListener(OnLSOPlayerInfoListener l) {
-       if(vPlayer!=null){
-           vPlayer.setOnInfoListener(l);
-       }
-    }
 
 
 
@@ -404,9 +285,7 @@ public class VPlayer {
 
 
     public boolean canPause() {
-        if(vPlayer!=null){
-            return vPlayer.canPause();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             return true;
         }else{
             return false;
@@ -415,9 +294,7 @@ public class VPlayer {
     }
 
     public boolean canSeekBackward() {
-        if(vPlayer!=null){
-            return vPlayer.canSeekBackward();
-        }else if(mediaPlayer!=null){
+        if(mediaPlayer!=null){
             return true;
         }else{
             return false;
@@ -425,9 +302,7 @@ public class VPlayer {
     }
 
     public boolean canSeekForward() {
-        if(vPlayer!=null){
-            return vPlayer.canSeekForward();
-        }else if(mediaPlayer!=null){
+       if(mediaPlayer!=null){
             return true;
         }else{
             return false;

@@ -23,13 +23,16 @@ import com.lansosdk.box.LSOGifAsset;
 import com.lansosdk.box.LSOGifLayer;
 import com.lansosdk.box.LSOLayer;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.LSOMVAsset;
 import com.lansosdk.box.LSOVideoAsset;
 import com.lansosdk.box.LSOConcatCompositionRender;
 import com.lansosdk.box.OnLanSongSDKAddVideoProgressListener;
+import com.lansosdk.box.OnLanSongSDKBeforeRenderFrameListener;
 import com.lansosdk.box.OnLanSongSDKCompDurationChangedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKExportCompletedListener;
 import com.lansosdk.box.OnLanSongSDKExportProgressListener;
+import com.lansosdk.box.OnLanSongSDKLayerTouchEventListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
@@ -57,7 +60,7 @@ public class LSOConcatCompositionView extends FrameLayout {
     private SurfaceTexture mSurfaceTexture = null;
     private onViewAvailable mViewAvailable = null;
     private boolean isLayoutOk = false;
-    // ----------------------------------------------
+    // --------------------
 
     public LSOConcatCompositionView(Context context) {
         super(context);
@@ -186,6 +189,14 @@ public class LSOConcatCompositionView extends FrameLayout {
 
     private int compWidth, compHeight;
 
+    private int inputWidth, inputHeight;
+
+    public int getInputCompWidth(){
+        return inputWidth;
+    }
+    public int getInputCompHeight(){
+        return inputHeight;
+    }
 
     /**
      * 设置容器的宽度和高度;
@@ -198,26 +209,29 @@ public class LSOConcatCompositionView extends FrameLayout {
      */
     public void setCompositionSizeAsync(int width, int height, OnCompositionSizeReadyListener listener) {
 
+        inputWidth =width;
+        inputHeight =height;
+
+
         if (width * height > 1088 * 1920) {
-            LSOLog.e("setCompositionSizeAsync error. max is1080P. 容器的分辨率当前不支持大于1080P.(输入的视频可以大于,但生成的视频不能大于1080P)");
-            return;
+            LSOLog.e("setCompositionSize too bigger divide by 2 :"+ inputWidth+ " x "+ inputHeight);
+            inputWidth/=2;
+            inputHeight/=2;
         }
 
         requestLayoutCount = 0;
-        compWidth = make16Next(width);
-        compHeight = make16Next(height);
-        if (compWidth != width || compHeight != height) {
-            LSOLog.w("警告:请尽量设置640*640,544*960,720*1280,1088*1920这样的常见. 你当前的设置是:" + width + " x " + height);
-        }
+        compWidth = make16Next(inputWidth);
+        compHeight = make16Next(inputHeight);
+
 
         sizeChangedListener = listener;
-        if (width != 0 && height != 0) {
+        if (inputWidth != 0 && inputHeight != 0) {
             if (viewWidth == 0 || viewHeight == 0) {  //直接重新布局UI
-                textureRenderView.setVideoSize(width, height);
+                textureRenderView.setVideoSize(inputWidth, inputHeight);
                 textureRenderView.setVideoSampleAspectRatio(1, 1);
                 requestLayoutPreview();
             } else {
-                float setRatio = (float) width / (float) height;
+                float setRatio = (float) inputWidth / (float) inputHeight;
                 float setViewRatio = (float) viewWidth / (float) viewHeight;
 
                 if (setRatio == setViewRatio) { // 如果比例已经相等,不需要再调整,则直接显示.
@@ -229,7 +243,7 @@ public class LSOConcatCompositionView extends FrameLayout {
                         sendCompositionSizeListener();
                     }
                 } else if (textureRenderView != null) {
-                    textureRenderView.setVideoSize(width, height);
+                    textureRenderView.setVideoSize(inputWidth, inputHeight);
                     textureRenderView.setVideoSampleAspectRatio(1, 1);
                     sizeChangedListener = listener;
                 }
@@ -311,7 +325,7 @@ public class LSOConcatCompositionView extends FrameLayout {
     }
 
 
-    //---------------------------------------------容器代码--------------------------------------------------------
+    //--------容器代码----------------------
 
     /**
      * 增加 拼接图层, 异步增加,增加过程中,内部会处理
@@ -356,9 +370,6 @@ public class LSOConcatCompositionView extends FrameLayout {
             renderer.insertConcatLayerListAsync(assetArray, atCompUs, listener1);
         }
     }
-
-
-
     /**
      * 替换拼接图层;
      *
@@ -404,6 +415,20 @@ public class LSOConcatCompositionView extends FrameLayout {
         }
     }
 
+
+    /**
+     * 增加透明的mv动画;
+     * @param mvAsset mv资源
+     * @param atCompUs 从容器的什么时间开始
+     * @param listener1
+     */
+    public void addMVLayerAsync(LSOMVAsset mvAsset, long atCompUs,
+                                OnLanSongSDKAddVideoProgressListener listener1) {
+        createRender();
+        if (renderer != null && setup() && mvAsset != null) {
+            renderer.addMVLayerAsync(mvAsset, atCompUs, listener1);
+        }
+    }
     /**
      * 增加一张图片, 增加后返回一个图片图层对象;
      *
@@ -590,7 +615,6 @@ public class LSOConcatCompositionView extends FrameLayout {
         }
     }
     /**
-     * LSNEW : removeLayer 改成removeLayerAsync,删除图层改成异步删除;
      * 异步删除图层;
      * 删除成功后, 会触发容器时长回调, 在回调中你可以重新布局
      * @param layer
@@ -602,7 +626,6 @@ public class LSOConcatCompositionView extends FrameLayout {
     }
 
     /**
-     * LSNEW : removeLayer 改成removeLayerAsync,删除图层改成异步删除;
      * 删除所有的叠加图层.
      * 叠加图层有:图片图层, gif图层, 图片序列图层等;
      */
@@ -614,7 +637,6 @@ public class LSOConcatCompositionView extends FrameLayout {
 
     /**
      * 删除声音图层
-     * LSNEW :  removeAudioLayer ----> removeAudioLayerAsync 删除图层改成异步删除;
      * @param layer
      */
     public void removeAudioLayerAsync(LSOAudioLayer layer) {
@@ -764,7 +786,6 @@ public class LSOConcatCompositionView extends FrameLayout {
         }
     }
     /**
-     *  LSNEW : 增加获取当前容器中的所有叠加图层
      * @return 图层数组, 叠加的图层;
      */
     public List<LSOLayer> getAllOverLayLayers(){
@@ -777,7 +798,6 @@ public class LSOConcatCompositionView extends FrameLayout {
     }
 
     /**
-     * LSNEW:  增加获取当前容器中的所有声音图层
      * @return
      */
     public List<LSOAudioLayer> getAllAudioLayers(){
@@ -788,8 +808,35 @@ public class LSOConcatCompositionView extends FrameLayout {
             return null;
         }
     }
+
     /**
-     * LSNEW : 增加容器的时长改变的监听;
+     * 在每一帧绘制前的回调, 里面没有经过handler, 你增加的代码, 在我们render线程中执行,
+     *
+     * LSNEW
+     * @param listener 返回的是时间戳, 单位us;
+     */
+    public void setOnLanSongSDKBeforeRenderFrameListener(OnLanSongSDKBeforeRenderFrameListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.setOnLanSongBeforeRenderFrameListener(listener);
+        }
+    }
+
+    /**
+     * 当一个图层按下, 抬起, 移动, 旋转,缩放的时候, 会调用这里;
+     * 移动,缩放, 返回的值, 是相对于容器本身宽高而言,是当前时间点的绝对值;
+     * LSNEW
+     * @param listener
+     */
+    public void setOnLanSongSDKLayerTouchEventListener(OnLanSongSDKLayerTouchEventListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.setOnLanSongSDKLayerTouchEventListener(listener);
+        }
+    }
+
+    /**
+     * 容器的总时长改变监听;
      * @param listener 时长改变监听;
      */
     public void setOnLanSongSDKCompDurationChangedListener(OnLanSongSDKCompDurationChangedListener listener){
@@ -989,6 +1036,8 @@ public class LSOConcatCompositionView extends FrameLayout {
             renderer.seekToTimeUs(timeUs);
         }
     }
+
+
     /**
      * 暂停
      */

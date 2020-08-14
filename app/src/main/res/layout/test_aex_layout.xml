@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/black_overlay">
+    android:background="@color/blacktransparent">
 
     <com.lansosdk.videoeditor.LSOAexPlayerView
         android:id="@+id/id_test_ae_gpu_preview2"
@@ -27,16 +27,16 @@
                 android:id="@+id/id_test_ae_gpu_preview_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue"
-                android:text="@string/str_progress"
+                android:textColor="@color/white"
+                android:text="progress"
                 />
 
             <TextView
                 android:id="@+id/id_test_ae_gpu_current_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue"
-                android:text="@string/str_current_image"
+                android:textColor="@color/white"
+                android:text="current"
                 />
 
             <SeekBar
@@ -57,7 +57,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:background="@drawable/corners_button_orange_bg"
-                    android:text="@string/str_pause_resume"/>
+                    android:text="pause"/>
 
                 <Button
                     android:id="@+id/id_test_ae_gpu_replace_video"
@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:background="@drawable/corners_button_orange_bg"
-                    android:text="@string/str_replace_video"/>
+                    android:text="replace video"/>
 
                 <Button
                     android:id="@+id/id_test_ae_gpu_replace_image"
@@ -73,16 +73,16 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:background="@drawable/corners_button_orange_bg"
-                    android:text="@string/str_replace_image"/>
+                    android:text="replace image"/>
             </LinearLayout>
 
             <Button
                 android:id="@+id/id_test_ae_gpu_export"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_margin="40dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/corners_button_orange_bg"
-                android:text="@string/str_export"/>
+                android:text="export"/>
         </LinearLayout>
     </ScrollView>
 

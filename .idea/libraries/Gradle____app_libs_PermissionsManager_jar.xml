@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: __local_aars__:./app/libs/PermissionsManager.jar:unspecified@jar">
+  <library name="Gradle: ./app/libs/PermissionsManager.jar">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/app/libs/PermissionsManager.jar!/" />
     </CLASSES>

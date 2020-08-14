@@ -23,9 +23,9 @@ public class LanSoEditor {
      */
     public static void initSDK(Context context, String str){
 
-        /**
-         * 加载库文件
-         */
+        if (isLoadLanSongSDK.get())
+            return;
+
         try {
             loadLibraries();
         }catch (UnsatisfiedLinkError error){
@@ -38,11 +38,11 @@ public class LanSoEditor {
         if(Environment.getExternalStorageDirectory()!=null){
             setTempFileDir(context.getFilesDir() + "/lansongBox/");
         }
-
         LSOLog.init();
         LanSoEditorBox.deleteDefaultDirFiles();
         LanSongFileUtil.deleteDefaultDir();
         printSDKVersion();
+        isLoadLanSongSDK.set(true);
     }
 
     public static void unInitSDK(){
@@ -185,17 +185,12 @@ public class LanSoEditor {
     }
 
     private static synchronized void loadLibraries() throws  UnsatisfiedLinkError{
-        if (isLoadLanSongSDK.get())
-            return;
-
-
         System.loadLibrary("LanSongffmpeg");
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
         System.loadLibrary("LanSongSDKDecoder");
 
         LSOLog.d("loaded native libraries.isQiLinSoC:"+isQiLinSoc());
-        isLoadLanSongSDK.set(true);
     }
 
     private static void initSo(Context context, String str) {

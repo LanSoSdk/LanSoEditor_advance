@@ -30,7 +30,6 @@ import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
 import com.lansosdk.box.OnLanSongSDKUserSelectedLayerListener;
 import com.lansosdk.videoeditor.LSOConcatCompositionView;
-import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.OnCompositionSizeReadyListener;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ import java.util.List;
 
 public class VideoEditDemoActivity extends Activity implements View.OnClickListener {
 
-    LSOConcatCompositionView concatCompView;
+    LSOConcatCompositionView composition;
 
     TextView textView;
     SeekBar seekBar;
@@ -48,11 +47,11 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.lansongsdk_video_editor_demo_layout2);
-        concatCompView = findViewById(R.id.id_video_comp_composition_view);
+        composition = findViewById(R.id.id_video_comp_composition_view);
 
         initView();
 
-        concatCompView.setCompositionSizeAsync(720, 1280, new OnCompositionSizeReadyListener() {
+        composition.setCompositionSizeAsync(720, 1280, new OnCompositionSizeReadyListener() {
             @Override
             public void onSizeReady() {
                 try {
@@ -73,8 +72,8 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        if (concatCompView != null) {
-            concatCompView.pause();
+        if (composition != null) {
+            composition.pause();
         }
     }
 
@@ -89,7 +88,7 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
         paths.add(new LSOVideoAsset(path));
 
         //异步增加视频图层,
-        concatCompView.addConcatLayerListAsync(paths, new OnLanSongSDKAddVideoProgressListener() {
+        composition.addConcatLayerListAsync(paths, new OnLanSongSDKAddVideoProgressListener() {
 
             @Override
             public void onAddVideoProgress(int percent, int numberIndex, int totalNumber) {
@@ -109,8 +108,8 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
     }
 
     private void startExport() {
-        if (!concatCompView.isExporting()) {
-            concatCompView.startExport();
+        if (!composition.isExporting()) {
+            composition.startExport();
         }
     }
 
@@ -119,72 +118,75 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
      */
     private void setCompListeners() {
 
-        concatCompView.setOnLanSongSDKUserSelectedLayerListener(new OnLanSongSDKUserSelectedLayerListener() {
+        composition.setOnLanSongSDKUserSelectedLayerListener(new OnLanSongSDKUserSelectedLayerListener() {
             @Override
             public void onSelected(LSOLayer layer) {
-                Log.e("LSDelete", "------- 选中了一个图层: " + System.currentTimeMillis());
+                Log.e("LSDelete", "-----select one : " + System.currentTimeMillis());
             }
 
             @Override
             public void onCancel() {
-                Log.e("LSDelete", "---取消了一个图层=======> " + System.currentTimeMillis());
+                Log.e("LSDelete", "--cancel=====> " + System.currentTimeMillis());
             }
         });
 
 
-        concatCompView.setOnLanSongSDKCompDurationChangedListener(new OnLanSongSDKCompDurationChangedListener() {
+        composition.setOnLanSongSDKCompDurationChangedListener(new OnLanSongSDKCompDurationChangedListener() {
             @Override
             public void onLanSongSDKDurationChanged(long ptsUs) {
-                DemoUtil.showDialog(VideoEditDemoActivity.this, "容器总时长改变了,请刷新缩略图");
+                if (textView != null) {
+                    textView.setText(convertTime(ptsUs) + " / " + convertTime(composition.getDurationUs()));
+                }
+                DemoUtil.showToast(VideoEditDemoActivity.this,"duration changed.");
             }
         });
 
-        concatCompView.setOnLanSongSDKTimeChangedListener(new OnLanSongSDKTimeChangedListener() {
+        composition.setOnLanSongSDKTimeChangedListener(new OnLanSongSDKTimeChangedListener() {
             @Override
             public void onLanSongSDKTimeChanged(long ptsUs, int percent) {
                 if (textView != null) {
-                    textView.setText(convertTime(ptsUs) + " / " + convertTime(concatCompView.getDurationUs()));
+                    textView.setText(convertTime(ptsUs) + " / " + convertTime(composition.getDurationUs()));
                 }
             }
         });
-        concatCompView.setOnLanSongSDKPlayProgressListener(new OnLanSongSDKPlayProgressListener() {
+        composition.setOnLanSongSDKPlayProgressListener(new OnLanSongSDKPlayProgressListener() {
             @Override
             public void onLanSongSDKPlayProgress(long ptsUs, int percent) {
                 if (percent <= 100) {
                     seekBar.setProgress(percent);
                 }
                 if (textView != null) {
-                    textView.setText(convertTime(ptsUs) + " / " + convertTime(concatCompView.getDurationUs()));
+                    textView.setText(convertTime(ptsUs) + " / " + convertTime(composition.getDurationUs()));
                 }
             }
         });
 
-        concatCompView.setOnLanSongSDKPlayCompletedListener(new OnLanSongSDKPlayCompletedListener() {
+        composition.setOnLanSongSDKPlayCompletedListener(new OnLanSongSDKPlayCompletedListener() {
             @Override
             public void onLanSongSDKPlayCompleted() {
-                Log.e("LSDelete", "--播放完毕.: ");
+                Log.e("LSDelete", "play complete: ");
             }
         });
 
-        concatCompView.setOnLanSongSDKExportProgressListener(new OnLanSongSDKExportProgressListener() {
+        composition.setOnLanSongSDKExportProgressListener(new OnLanSongSDKExportProgressListener() {
             @Override
             public void onLanSongSDKExportProgress(long ptsUs, int percent) {
-                DemoProgressDialog.showMessage(VideoEditDemoActivity.this, " 正在导出:" + percent);
+                DemoProgressDialog.showMessage(VideoEditDemoActivity.this, "exporting " + percent);
             }
         });
-        concatCompView.setOnLanSongSDKExportCompletedListener(new OnLanSongSDKExportCompletedListener() {
+        composition.setOnLanSongSDKExportCompletedListener(new OnLanSongSDKExportCompletedListener() {
             @Override
             public void onLanSongSDKExportCompleted(String dstVideo) {
                 DemoProgressDialog.releaseDialog();
-                MediaInfo.checkFile(dstVideo);
+                DemoUtil.startPreviewVideo(VideoEditDemoActivity.this,dstVideo);
             }
         });
 
-        concatCompView.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
+        composition.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
             @Override
             public void onLanSongSDKError(int errorCode) {
-                concatCompView.release();
-                DemoUtil.showDialog(VideoEditDemoActivity.this, "AE执行错误,请查看错误信息.我们的TAG是LanSongSDK.");
+                composition.release();
+                DemoUtil.showDialog(VideoEditDemoActivity.this, "Error, TAG is : LanSongSDK.");
             }
         });
     }
@@ -199,18 +201,18 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
      */
     private void startComposition() {
 
-        if (concatCompView.isRunning()) {
+        if (composition.isRunning()) {
             return;
         }
         String path = CopyFileFromAssets.copyAssets(getApplicationContext(), "hongdou10s.mp3");
 
-        concatCompView.printAllConcatLayerTime();
+        composition.printAllConcatLayerTime();
         //开始执行
-        if (concatCompView.isLayoutValid()) {
-            concatCompView.startPreview(true);
+        if (composition.isLayoutValid()) {
+            composition.startPreview(true);
             DemoLog.d("LSOVideoCompositionView running.");
         } else {
-            DemoUtil.showDialog(VideoEditDemoActivity.this, "AE预览开启失败. concatCompView.isLayoutValid():" + concatCompView.isLayoutValid());
+            DemoUtil.showDialog(VideoEditDemoActivity.this, "startPreview error. concatCompView.isLayoutValid():" + composition.isLayoutValid());
         }
 
     }
@@ -219,7 +221,7 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        concatCompView.release();
+        composition.release();
     }
     private LSOLayer concatBmpLayer =null;
     private LSOLayer overlayLayer=null;
@@ -227,16 +229,16 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        if (concatCompView == null) {
+        if (composition == null) {
             return;
         }
 
         switch (v.getId()) {
             case R.id.id_video_comp_pause_resume:
-                if (!concatCompView.isPlaying()) {
-                    concatCompView.resume();
+                if (!composition.isPlaying()) {
+                    composition.resume();
                 } else {
-                    concatCompView.pause();
+                    composition.pause();
                 }
                 break;
             case R.id.id_video_comp_concat_add_delete: {
@@ -244,7 +246,7 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
                 if(concatBmpLayer ==null){
                     String path=CopyFileFromAssets.copyAssets(getApplicationContext(),"pic720x720.jpg");
                     try {
-                        concatCompView.addConcatLayerAsync(new LSOBitmapAsset(path), new OnLanSongSDKAddVideoProgressListener() {
+                        composition.addConcatLayerAsync(new LSOBitmapAsset(path), new OnLanSongSDKAddVideoProgressListener() {
                             @Override
                             public void onAddVideoProgress(int i, int i1, int i2) {
 
@@ -261,7 +263,7 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
                         e.printStackTrace();
                     }
                 }else{
-                    concatCompView.removeLayerAsync(concatBmpLayer);
+                    composition.removeLayerAsync(concatBmpLayer);
                     concatBmpLayer =null;
                 }
             }
@@ -270,10 +272,10 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
             case R.id.id_video_comp_concat_overlay_bitmap:
                     if(overlayLayer==null){
                         Bitmap bmp=BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
-                        overlayLayer=concatCompView.addBitmapLayer(bmp);
+                        overlayLayer= composition.addBitmapLayer(bmp);
                         overlayLayer.setLooping(true);
                     }else{
-                        concatCompView.removeLayerAsync(overlayLayer);
+                        composition.removeLayerAsync(overlayLayer);
                         overlayLayer=null;
                     }
                 break;
@@ -299,10 +301,9 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-
                     float percent = (progress * 1.0f / 100f);
-                    long seekUs = (long) (concatCompView.getDurationUs() * percent);
-                    concatCompView.seekToTimeUs(seekUs);
+                    long seekUs = (long) (composition.getDurationUs() * percent);
+                    composition.seekToTimeUs(seekUs);
                 }
             }
 

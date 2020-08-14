@@ -15,19 +15,30 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.lansosdk.aex.LSOAexImage;
+import com.lansosdk.aex.LSOAexText;
 import com.lansosdk.box.LSOAexModule;
 import com.lansosdk.box.LSOAexPlayerRunnable;
+import com.lansosdk.box.LSOAudioLayer;
+import com.lansosdk.box.LSOBitmapAsset;
+import com.lansosdk.box.LSOBitmapLayer;
+import com.lansosdk.box.LSOBitmapListLayer;
+import com.lansosdk.box.LSOGifAsset;
+import com.lansosdk.box.LSOGifLayer;
+import com.lansosdk.box.LSOLayer;
 import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.OnAexImageSelectedListener;
+import com.lansosdk.box.OnAexTextSelectedListener;
 import com.lansosdk.box.OnLSOAexImageChangedListener;
-import com.lansosdk.box.OnLanSongSDKCompressListener;
+import com.lansosdk.box.OnAexImageSelectedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKExportCompletedListener;
 import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
+import com.lansosdk.box.OnLanSongSDKCompressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
+
+import java.util.List;
 
 
 public class LSOAexPlayerView extends FrameLayout {
@@ -374,7 +385,122 @@ public class LSOAexPlayerView extends FrameLayout {
             renderer.addLogoBitmap(bmp,x,y);
         }
     }
+//    public void setAexModule
 
+    /**
+     * 增加一个声音图层;
+     * @param path 声音路径;
+     * @param startTimeOfComp 从容器的什么位置增加;
+     * @return
+     */
+    public LSOAudioLayer addAudioLayer(String path, long startTimeOfComp) {
+        createRender();
+        if(renderer!=null){
+            return renderer.addAudioLayer(path,startTimeOfComp);
+        }else{
+            return null;
+        }
+    }
+
+
+    /**
+     * 删除指定的声音图层;
+     * @param layer
+     */
+    public void removeAudioLayerAsync(LSOAudioLayer layer) {
+        if(renderer!=null){
+            renderer.removeAudioLayerAsync(layer);
+        }
+    }
+
+    /**
+     * 删除所有声音图层;
+     */
+    public void removeALLAudioLayer() {
+        if(renderer!=null){
+            renderer.removeALLAudioLayer();
+        }
+    }
+
+    /**
+     * 增加图片图层
+     * @param bmp 图片
+     * @param atCompUs 从容器的什么时间点开始增加;
+     * @return
+     */
+    public LSOBitmapLayer addBitmapLayer(Bitmap bmp, long atCompUs) {
+        createRender();
+        if(renderer!=null && setup()){
+            return renderer.addBitmapLayer(bmp,atCompUs);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 增加图片图层
+     * @param asset 图片图层资源
+     * @param atCompUs 从容器的什么时间点开始增加;
+     * @return
+     */
+    public LSOBitmapLayer addBitmapLayer(LSOBitmapAsset asset, long atCompUs) {
+        createRender();
+        if(renderer!=null && setup()){
+            return renderer.addBitmapLayer(asset,atCompUs);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 增加图片序列
+     * @param list 图片序列列表
+     * @param frameIntervalUs  两张图片的间隔
+     * @param atCompUs 从容器的什么时间点开始增加;
+     * @return
+     */
+    public LSOBitmapListLayer addBitmapListLayerFromPaths(List<String> list, long frameIntervalUs, long atCompUs) {
+        createRender();
+        if(renderer!=null && setup()){
+            return renderer.addBitmapListLayerFromPaths(list,frameIntervalUs,atCompUs);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 增加gif图层
+     * @param asset 图层资源;
+     * @param atCompUs
+     * @return
+     */
+    public LSOGifLayer addGifLayer(LSOGifAsset asset, long atCompUs){
+        createRender();
+        if(renderer!=null && setup()){
+            return renderer.addGifLayer(asset,atCompUs);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 异步删除一个增加的图层
+     * @param layer
+     */
+    public void removeLayerAsync(LSOLayer layer) {
+        if(renderer!=null && layer!=null){
+            renderer.removeLayerAsync(layer);
+        }
+    }
+
+    /**
+     * 异步删除所有图层;
+     */
+    public void removeAllOverlayLayersAsync() {
+        if(renderer!=null){
+            renderer.removeAllOverlayLayersAsync();
+        }
+    }
 
     /**
      * 获取当前时间点的图片信息;
@@ -389,6 +515,10 @@ public class LSOAexPlayerView extends FrameLayout {
     }
 
 
+    /**
+     * 内部创建的线程是否在运行;
+     * @return
+     */
     public boolean isRunning(){
         return renderer!=null && renderer.isRunning();
     }
@@ -405,6 +535,18 @@ public class LSOAexPlayerView extends FrameLayout {
             renderer.setOnAexImageSelectedListener(listener);
         }
     }
+
+    /**
+     * 选中的图片;
+     * @param listener
+     */
+    public void setOnAexTextSelectedListener(OnAexTextSelectedListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.setOnAexTextSelectedListener(listener);
+        }
+    }
+
 
     /**
      * 当在播放过程中, 一个图片播放完毕后, 切换到下一张图片, 会触发此监听;
@@ -597,6 +739,27 @@ public class LSOAexPlayerView extends FrameLayout {
     }
 
 
+
+    public void setDisableTouchImage(boolean is){
+        if(renderer!=null){
+            renderer.setDisableTouchImage(is);
+        }
+    }
+    public void setDisableTouchText(boolean is){
+        if(renderer!=null){
+            renderer.setDisableTouchText(is);
+        }
+    }
+
+
+    public boolean isDisableTouchImage(){
+        return renderer!=null && renderer.isDisableTouchImage();
+    }
+    public boolean isDisableTouchText(){
+        return renderer!=null && renderer.isDisableTouchText();
+    }
+
+
     public void setDisableTouchAdjust(boolean is){
         createRender();
         if(renderer!=null){
@@ -619,6 +782,16 @@ public class LSOAexPlayerView extends FrameLayout {
     public void seekToAexImage(LSOAexImage aexImage){
         if(renderer!=null && aexImage!=null){
             renderer.seekToAexImage(aexImage);
+        }
+    }
+
+    /**
+     * seek到指定的AexText对象;
+     * @param aexText 文本对象;
+     */
+    public void seekToAexText(LSOAexText aexText){
+        if(renderer!=null && aexText!=null){
+            renderer.seekToAexText(aexText);
         }
     }
 

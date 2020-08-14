@@ -23,6 +23,7 @@ import java.nio.IntBuffer;
 import java.util.Calendar;
 
 
+
 @Deprecated
 public class LanSongFileUtil {
 
@@ -332,8 +333,8 @@ public class LanSongFileUtil {
         for (File item : file.listFiles()){
             if(!item.isDirectory()){
                 String path=item.getAbsolutePath();
-                String name= LanSongFileUtil.getFileNameFromPath(path);
-                String subfix2= LanSongFileUtil.getFileSuffix(path);
+                String name=LanSongFileUtil.getFileNameFromPath(path);
+                String subfix2=LanSongFileUtil.getFileSuffix(path);
 
                 if(prefix!=null && subfix!=null){
                     if(name != null && name.contains(prefix) && subfix2.equals(subfix)){

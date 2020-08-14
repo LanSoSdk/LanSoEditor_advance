@@ -29,10 +29,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         /**
-         * 初始化SDK
-         */
-        LanSoEditor.initSDK(getApplicationContext(),null);
-        /**
          * 检查权限
          */
         testPermission();

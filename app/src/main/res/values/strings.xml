@@ -7,12 +7,6 @@
     <string name="message_granted">All permissions have been granted.</string>
     <string name="message_denied">Permission \"%1$s\" has been denied.</string>
 
-    <string name="str_progress">进度</string>
-    <string name="str_export">导出</string>
-    <string name="str_replace_image">替换图片</string>
-    <string name="str_replace_video">替换视频</string>
-    <string name="str_pause_resume">暂停/恢复</string>
-    <string name="str_current_image">当前图片</string>
 
 
 </resources>

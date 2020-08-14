@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: __local_aars__:./LanSongSDK/libs/lansongeditor_hx.jar:unspecified@jar">
+  <library name="Gradle: ./LanSongSDK/libs/lansongeditor_hx.jar">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar!/" />
     </CLASSES>

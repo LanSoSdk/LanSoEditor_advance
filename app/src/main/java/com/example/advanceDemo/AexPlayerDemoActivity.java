@@ -134,7 +134,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     private void startAEPreview() throws Exception {
 
         if (aexPlayerView.isRunning()) {
-            LSOLog.e("------- 已经有一个在运行了, 返回====>: ");
+            LSOLog.e("------already running .===>: ");
             return;
         }
 
@@ -146,13 +146,13 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             @Override
             public void onSelected(LSOAexImage aexImage) {
                 if(tvCurrentImage!=null){
-                    tvCurrentImage.setText("当前图片: " + aexImage.index);
+                    tvCurrentImage.setText("current: " + aexImage.index);
                 }
                 currentImageIndex=aexImage.index;
             }
             @Override
             public void onCancel() {
-                Log.e("LSDelete", "------- 选中取消: ");
+                Log.e("LSDelete", "--setOnAexImageSelectedListener cancel...: ");
             }
         });
 
@@ -160,7 +160,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             @Override
             public void onAexPlayerAexImageChanged(int index, LSOAexImage image) {
                 if(tvCurrentImage!=null){
-                    tvCurrentImage.setText("当前图片: " + index);
+                    tvCurrentImage.setText("current: " + index);
                 }
                 currentImageIndex=image.index;
             }
@@ -173,7 +173,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
                     //保留2位小数;
                     int time = (int) (ptsUs * 100 / 1000000L);
                     float timeS = (float) time / 100.0f;
-                    textView.setText("进度是:" + timeS);
+                    textView.setText("progress:" + timeS);
                 }
             }
         });
@@ -190,7 +190,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         aexPlayerView.setOnLanSongSDKPlayCompletedListener(new OnLanSongSDKPlayCompletedListener() {
             @Override
             public void onLanSongSDKPlayCompleted() {
-                DemoUtil.showDialog(AexPlayerDemoActivity.this, "已经播放完毕!");
+                DemoUtil.showDialog(AexPlayerDemoActivity.this, "play complete!");
             }
         });
 
@@ -205,7 +205,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             @Override
             public void onLanSongSDKExportProgress(long ptsUs, int percent) {
 
-                DemoProgressDialog.showMessage(AexPlayerDemoActivity.this, "导出进度是:" + percent);
+                DemoProgressDialog.showMessage(AexPlayerDemoActivity.this, "export :" + percent);
             }
         });
 
@@ -220,7 +220,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         aexPlayerView.setOnLanSongSDKCompressListener(new OnLanSongSDKCompressListener() {
             @Override
             public void onCompressProgress(int percent, int numberIndex, int totalNumber) {
-                DemoProgressDialog.showMessage(AexPlayerDemoActivity.this, "正在准备素材: " + percent + " index:" + numberIndex + "/" + totalNumber);
+                DemoProgressDialog.showMessage(AexPlayerDemoActivity.this, "preparing: " + percent + " index:" + numberIndex + "/" + totalNumber);
             }
 
             @Override
@@ -238,7 +238,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             aexPlayerView.startPreview();
             DemoLog.d(" ae preview is running.");
         } else {
-            DemoUtil.showDialog(AexPlayerDemoActivity.this, "AE预览开启失败. layoutValid:" + aexPlayerView.isLayoutValid());
+            DemoUtil.showDialog(AexPlayerDemoActivity.this, "ae preview failed layoutValid:" + aexPlayerView.isLayoutValid());
         }
 
     }

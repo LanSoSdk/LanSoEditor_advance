@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.lansosdk.box.LSOAexModule;
+import com.lansosdk.videoeditor.LanSoEditor;
 
 public class DemoApplication extends Application {
 
@@ -22,6 +23,7 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        LanSoEditor.initSDK(getApplicationContext(),null);
     }
 
     public Context getContext() {

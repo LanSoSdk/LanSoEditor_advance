@@ -1,8 +1,9 @@
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" 
     android:layout_width="match_parent"
      android:layout_height="match_parent"
-    android:background="#FFA500">
+    android:background="#FFA500"
+	android:orientation="vertical">
 
 
 	<TextView
@@ -10,8 +11,9 @@
 		android:layout_marginTop="@dimen/dp80"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="这是最简单的演示\n "
+		android:text="This is the simplest demo\n "
 		android:textColor="@color/red"
+		android:textSize="@dimen/dp30"
 		android:layout_marginLeft="@dimen/dp20"
 		/>
 
@@ -20,13 +22,16 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="@dimen/dp20"
-		android:text="完整的UI-demo,请从这里下载:\n\n https://www.pgyer.com/L20O"
+		android:text="full Demo App: (google Play)"
 		/>
+	<ImageView
+		android:layout_width="250dp"
+		android:layout_height="250dp"
+		android:src="@drawable/lansong_google_play_link"/>
 
 
 		<RelativeLayout
 			android:id="@+id/id_main_list_lso_layer"
-			android:layout_centerInParent="true"
 			style="@style/main_item_relative_layout2">
 			<TextView   android:text="视频编辑SDK(Video Editor)"
 				style="@style/main_item_text_view"/>
@@ -37,7 +42,6 @@
 	<RelativeLayout
 		android:id="@+id/id_main_list_aex"
 		android:layout_below="@id/id_main_list_lso_layer"
-		android:layout_marginTop="@dimen/dp80"
 		style="@style/main_item_relative_layout2">
 		<TextView   android:text="AE模板SDK(AE Template)" style="@style/main_item_text_view"/>
 		<TextView  style="@style/main_item_arrow"/>
@@ -47,13 +51,12 @@
 
 	<TextView
 		android:id="@+id/id_main_version_hint"
+		android:layout_gravity="center_horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="@dimen/dp80"
-		android:layout_alignParentBottom="true"
+		android:layout_marginTop="@dimen/dp30"
 		android:gravity="center"
 		android:text="version:"
 		/>
 
-</RelativeLayout>
+</LinearLayout>

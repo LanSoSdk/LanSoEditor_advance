@@ -10,562 +10,82 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4f00fe1-c41f-4220-bd10-673a5b9e9f6f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAexPlayerView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LanSongSDK_KeHu_test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/ae_august.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/ae_august_mvColor.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/ae_august_mvMask.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_0.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_1.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_2.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_3.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_4.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_5.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_6.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_7.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_8.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/assets/kadian_img_9.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/AexPlayerDemoActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoEditDemoActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/test_aex_layout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gzj_test_android_demo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/classAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/jarAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/javaCompile.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/jarAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/taskHistory.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AECompositionExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AECompositionView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AERenderExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AVDecoder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioEditor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAEExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAEPreview.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAllExecute2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadCameraView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadConcatVideo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadVideoExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/EditModeVideo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/ExtDrawPadCameraView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/FilterLibrary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/FilterList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOVideoReverse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/OnCompositionSizeRatioListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoOneDo2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/lansong_google_play_link.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/jarAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_asynclayoutinflater_asynclayoutinflater_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_asynclayoutinflater_asynclayoutinflater_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cardview_cardview_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cardview_cardview_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_slidingpanelayout_slidingpanelayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_slidingpanelayout_slidingpanelayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars_____LanSongSDK_libs_lansongeditor_hx_jar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____LanSongSDK_libs_lansongeditor_hx_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars_____app_libs_PermissionsManager_jar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_PermissionsManager_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars_____app_libs_particlelibrary_jar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_particlelibrary_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars_____app_libs_textsurface_jar_unspecified_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_textsurface_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_CymChad_BaseRecyclerViewAdapterHelper_2_9_30_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_CymChad_BaseRecyclerViewAdapterHelper_2_9_30_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_LuckSiege_PictureSelector_picture_library_v2_4_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_LuckSiege_PictureSelector_picture_library_v2_4_2_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_LuckSiege_PictureSelector_ucrop_v2_4_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_LuckSiege_PictureSelector_ucrop_v2_4_2_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_10_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_10_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_10_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_10_0_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_warkiz_widget_indicatorseekbar_1_2_9_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_warkiz_widget_indicatorseekbar_1_2_9_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_2_4_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_2_4_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSoEditor_advance.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LanSoEditor_advance.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/A0Version.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AECompositionExecute.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AECompositionView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AERenderExecute.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AVDecoder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioEditor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AudioPadExecute.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/BeautyManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAEExecute.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAEPreview.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadAllExecute2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadCameraView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadConcatExecute.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadConcatVideo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadConcatView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadPreviewView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadVideoExecute.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/DrawPadView2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/EditModeVideo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/ExtDrawPadCameraView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/FilterLibrary.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/FilterList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/IRenderView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/IRenderView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAexPlayerView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAexPlayerView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOConcatCompositionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOConcatCompositionView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOLayerTouch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOLayerTouchView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOVideoReverse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOView.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSoEditor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongFileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongFileUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongLogCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongLogCollector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSongUtil.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/MediaInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/MediaInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/OnCompositionSizeRatioListener.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/TextureRenderView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/TextureRenderView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoEditor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoLayout.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoLayoutParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoLayoutParam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoOneDo2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/onVideoEditorEncodeChangedListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/MeasureHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/MeasureHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/TextureRenderView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/onVideoEditorProgressListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/onVideoEditorProgressListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayerWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayerWrapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongffmpeg.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongffmpeg.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongplayer.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongplayer.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongffmpeg.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongffmpeg.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongplayer.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongplayer.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK_KeHu_test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.cn.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.cn.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/release/output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/ao_color.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/ao_mask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/aobama.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/aobamaEx.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_4.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_5.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_img_6.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur2_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_img_4.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_img_5.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/gaussianBlur_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_img_4.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/haokan_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat1_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat1_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat1_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat1_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat2_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat2_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat2_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_concat2_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_bg_10s.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_10.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_11.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_12.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_4.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_5.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_6.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_7.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_8.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/json_cut_img_9.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_4.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_5.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_6.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_7.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_8.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kadian_img_9.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kuaishan1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kuaishan_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/kuaishan_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_3.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_4.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_5.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_6.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_7.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_8.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/morePicture_img_9.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/mycolor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/myindex_ae.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/mymask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/mymusic.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/s3d_bgVideo.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/s3d_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/s3d_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/sample3D.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c2_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c3_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c3_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c5_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/tianQi_c5_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/xiaoYa.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/xiaoYa_img_0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/xiaoYa_img_1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/xiaoYa_img_2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/xiaoYa_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/xiaoYa_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zaoan.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zaoan_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zaoan_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zaoan_replace.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zixiaxianzi.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zixiaxianzi_img0.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zixiaxianzi_img1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zixiaxianzi_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/AeAssets/zixiaxianzi_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/aac20s.aac" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/alpha_corners.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/bg10s.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/bgMusic20s.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/bgPicture.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/chongjibo_a_music.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/d3_5s.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/d6_720x1280.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/fonts/Roboto-Black.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/honor30s2.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/kd_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/kd_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/ku7s.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/mask_animation_cycle_out.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/mask_animation_xing_out.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/mei.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/mei_b.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_001.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_002.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_003.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_004.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_005.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_006.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_007.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_008.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_009.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_010.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_011.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_012.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_013.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_014.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_015.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_016.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_017.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_018.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_019.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_020.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_021.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_022.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_023.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_024.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_025.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_026.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_027.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_028.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/necklace_029.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/photo_album.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/ping25s.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/ping5s.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/summer10s.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/taohua.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/thrid50s.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/videobg.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/yelang_mvColor.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/yelang_mvMask.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ConcatCompositionActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/AexPlayerDemoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/AexPlayerDemoActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/DemoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/DemoApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/DouYinDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListAEActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListBitmapAudioActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListCameraRecordActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListLayerDemoActivity.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListSceneDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoOneDO2Activity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/aeDemo/AECompositionActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/aeDemo/AECompositionExecuteActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/aeDemo/AEDemoAsset.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/aeDemo/AEPositionDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/aeDemo/AEPreviewActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/bitmapAudio/BitmapEditDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/bitmapAudio/BitmapLayerFilterDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/bitmapAudio/DisplayFramesActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/bitmapAudio/ExtractVideoFrameDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraHePaiActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraLayerFullLandscapeActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraLayerFullPortActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraLayerFullPortWithMp3Activity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraLayerFullSegmentActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraLayerKTVDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraSubLayerDemo1Activity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraSubLayerDemo2Activity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/camera/CameraVideoRecordActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/AECompositionLayerDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/BitmapLayerMarkActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/CanvasLayerDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/Demo1LayerMethodActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/Demo2LayerMothedActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/Demo3LayerFilterActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/ExecuteVideoLayerActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/MVLayerDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/PhotoAlbumLayerDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/TwoVideoLayerActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/ViewLayerDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/ViewLayerListActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/layerDemo/ViewLayerOnlyActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/GameVideoDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/LayerLayoutDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/MoreLayHeadSeekActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/ParticleDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/PicturesSlideDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/TwoVideoLayoutActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VViewImage3DDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoConcatAcvivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoH2VActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoLayerAutoUpdateActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoLayerTransformActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoSeekActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoSpeedDemoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/scene/VideoV2HActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/ConvertToEditModeDialog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/CopyDefaultVideoAsyncTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/CopyFileFromAssets.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/CopyFileFromAssets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DemoUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DemoUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DiskLruCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DrawPadViewWapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/FileExplorerActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/FileExplorerAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/GlideEngine.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/MemoryDiskCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/StartActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/YUVLayerDemoData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/BitmapCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/BitmapUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/CameraProgressBar.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/FaceView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/FilterDemoAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/FocusImageView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/HorizontalListView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/ImageTouchView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/LanSongLoveText.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/MarkArrowView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/PaintConstants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/RangeSeekBar.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/RectUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/RecyclerViewAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/ShowHeart.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/SlidingLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/SpacesItemDecoration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/StereoView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/StickerItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/StickerView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/TextStickerView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/ThumbnailView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/VideoFocusView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/VideoPreviewView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/view/VideoProgressView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/confeti2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/confeti3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/dust.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/heart.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_menu_archive.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_menu_back.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_menu_block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_menu_gallery.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/mask.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/mianju2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/range_seek_bar_bg_l.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/range_seek_bar_bg_m.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/range_seek_bar_bg_r.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/range_seek_bar_imb.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/range_seek_bar_imb_pressed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/range_seek_bar_progress.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/stick2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/stick3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/stick4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/stick5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/sticker_delete.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/sticker_normal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/sticker_pressed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/sticker_rotate.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/camera_choice.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/camera_close.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_backspace.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_delete.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_image_focus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_light_off_normal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_ok.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_start_btn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_start_btn_pressed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/video_record_switch_camera.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/animated_confetti.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/p10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/p11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/p12.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/p14.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/video_record_start_btn_selector.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoEditDemoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoEditDemoActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_test.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_activity_main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_composition_layer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_composition_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_input_three_line_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_only_export_hint_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_play_aedemofile_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_position_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_preview_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_recordfile_hint_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/ae_video_slide_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/aetext_preview_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/bitmap2bitmap_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/bitmap_animation_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/bitmaplayer_filter_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/bitmaplayer_tuao_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/camera_demo_list_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/camera_full_record_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/camera_fullport_mp3_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/camera_sublayerdemo2_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/camera_sublayerdemo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cameralayer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cameralayer_demo_layout2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cameralayer_fullscreen_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cameralayer_fullsegment_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cameralayer_ktv_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cameramasklayer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/canvaslayer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/canvaslayer_demo_layout2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/demo2_layer_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/drawpad_common_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/drawpad_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/drawpad_touch_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/execute_edit_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/extract_video_frame_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/file_explore_item.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/file_explore_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/filter_item.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/filter_layer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/filter_player_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/frame_grid_item.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/game_video_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/get_frames_list_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/horizontal2v_layout.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/lansongsdk_video_editor_demo_layout2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/lansongsdk_video_editor_demo_layout2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_facedetected_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_layers_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_scene_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/lstodo_comp_oneversion_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/lstodo_composition1_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/lstodo_show_cpuinfo.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/mediainfo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/merge_cameabeauty_control.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/mvlayer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_addword_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_compress_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_crop_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_cutduration_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_filter_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_logo_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_music_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/onedo_scale_merge.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/outbody_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/particel_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/picture_set_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/player_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/player_layout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/reverse_play_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/segment_record_full_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/show_one_bitmap_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/start_activity2_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/start_recycler_item.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/test_animation_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/test_seekdrawpad_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/test_some_function_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/test_video_concat.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/texturelayer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/title.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/twovideolayer_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/vertical2horizontal_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_all_frame_grid.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_concat_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_effect_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_one_do_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_one_do_process_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_record_activity.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_scale_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_seek_thumb_topview.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/video_speed_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/videolay_transform_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/videolayer_autoupdate_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/videopicture_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/videoplay_seek_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view7.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/view8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/viewlayer_list_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/viewpager.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/viewpen_preview_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/viewpen_preview_layout2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/vview_drawimage_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/vview_image3d_demo_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/c1080x1920.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/a720p.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/c4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/cc52.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/d7.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/meinv1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/test.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/test_aex_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/test_aex_layout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gzj_test_android_demo.iml" beforeDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -591,42 +111,36 @@
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/layout" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.do.not.ask.upgrade.gradle.plugin" value="3.4.2" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
       <recent name="$PROJECT_DIR$/app/src/main/assets" />
+      <recent name="$PROJECT_DIR$/app/src/main/assets/AeAssets" />
+      <recent name="$PROJECT_DIR$/LanSongSDK/libs" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.lansosdk.videoeditor" />
       <recent name="com.example.advanceDemo" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/assets" />
-      <recent name="$PROJECT_DIR$/app/src/main/assets/AeAssets" />
-      <recent name="$PROJECT_DIR$/LanSongSDK/libs" />
-      <recent name="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -716,6 +230,43 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1398" height="336" key="GridCell.Tab.0.bottom" timestamp="1597396594054">
+      <screen x="0" y="23" width="1440" height="835" />
+    </state>
+    <state width="1398" height="336" key="GridCell.Tab.0.bottom/0.23.1440.835@0.23.1440.835" timestamp="1597396594054" />
+    <state width="1398" height="336" key="GridCell.Tab.0.center" timestamp="1597396594053">
+      <screen x="0" y="23" width="1440" height="835" />
+    </state>
+    <state width="1398" height="336" key="GridCell.Tab.0.center/0.23.1440.835@0.23.1440.835" timestamp="1597396594053" />
+    <state width="1398" height="336" key="GridCell.Tab.0.left" timestamp="1597396594052">
+      <screen x="0" y="23" width="1440" height="835" />
+    </state>
+    <state width="1398" height="336" key="GridCell.Tab.0.left/0.23.1440.835@0.23.1440.835" timestamp="1597396594052" />
+    <state width="1398" height="336" key="GridCell.Tab.0.right" timestamp="1597396594053">
+      <screen x="0" y="23" width="1440" height="835" />
+    </state>
+    <state width="1398" height="336" key="GridCell.Tab.0.right/0.23.1440.835@0.23.1440.835" timestamp="1597396594053" />
+    <state x="450" y="179" width="540" height="524" key="StructurePopup" timestamp="1597396886455">
+      <screen x="0" y="23" width="1440" height="835" />
+    </state>
+    <state x="450" y="179" width="540" height="524" key="StructurePopup/0.23.1440.835@0.23.1440.835" timestamp="1597396886455" />
+    <state x="375" y="182" width="670" height="676" key="search.everywhere.popup" timestamp="1597400523680">
+      <screen x="0" y="23" width="1440" height="835" />
+    </state>
+    <state x="375" y="182" width="670" height="676" key="search.everywhere.popup/0.23.1440.835@0.23.1440.835" timestamp="1597400523680" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoEditDemoActivity.java</url>
+          <line>206</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="masterDetails">
     <states>
