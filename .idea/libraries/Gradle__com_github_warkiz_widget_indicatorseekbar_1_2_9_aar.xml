@@ -1,8 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.warkiz.widget:indicatorseekbar:1.2.9@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bc97fe1e168190e9de15534aaea53534/jetified-indicatorseekbar-1.2.9/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bc97fe1e168190e9de15534aaea53534/jetified-indicatorseekbar-1.2.9/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0ab01e4949e14020ff13801019426807/jetified-indicatorseekbar-1.2.9/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0ab01e4949e14020ff13801019426807/jetified-indicatorseekbar-1.2.9/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0ab01e4949e14020ff13801019426807/jetified-indicatorseekbar-1.2.9/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.warkiz.widget/indicatorseekbar/1.2.9/7ae176aef7d04347953b428cd75c9e4f1cb69fdf/indicatorseekbar-1.2.9-javadoc.jar!/" />

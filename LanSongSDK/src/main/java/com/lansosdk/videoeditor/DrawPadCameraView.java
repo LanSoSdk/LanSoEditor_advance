@@ -100,7 +100,7 @@ public class DrawPadCameraView extends FrameLayout {
     private int pcmChannels = 2; // 音频格式. 音频默认是双通道.
     private String recordExtMp3 = null;
     private long recordOffsetUs = 0;
-    private AtomicBoolean isStoping = new AtomicBoolean(false);
+    private AtomicBoolean stoping = new AtomicBoolean(false);
     /**
      * 放大缩小画面
      */
@@ -223,36 +223,6 @@ public class DrawPadCameraView extends FrameLayout {
         isFrontCam = front;
         initFilter = filter;
     }
-    /**
-     * 调整在录制时的速度, 比如你想预览的时候是正常的, 录制好后, 一部分要快进或慢放,则可以在这里设置 支持在任意时刻变速;
-     * 甚至你可以设置一个按钮, 长按下的时候, 加快或放慢, 松开时正常. 当前暂时不支持音频, 只是视频的加减速, 请注意!!!
-     *
-     * 1,如果不录制外部音频(麦克风), 则速度建议; 建议5个等级: 0.25f,0.5f,1.0f,1.5f,2.0f; 其中 0.25是放慢2倍;
-     * 0.5是放慢一倍; 1.0是采用和预览同样的速度; 2.0是加快1倍.
-     *
-     * 2,如果录制外部音频(麦克风),则速度范围是0.5--2.0; 0.5是放慢一倍, 1.0是原速; 2.0是放大一倍;
-     *
-     * 3,如果录制mp3,则只是调整视频画面的速度, mp3在录制完成后生成的文件速度不变.
-     *
-     * @param speed 速度系数,
-     */
-    public void adjustEncodeSpeed(float speed) {
-        if (renderer != null) {
-            renderer.adjustEncodeSpeed(speed);
-        }
-        encodeSpeed = speed;
-    }
-
-    /**
-     * 设置录制视频的宽高, 建议和预览的宽高成比例, 比如预览的全屏是16:9则设置的编码宽度和高度也要16:9;
-     * 如果是18:9,则这里的encW:encH也要18:9; 从而保证录制后的视频不变形;
-     *
-     * @param encW    录制宽度
-     * @param encH    录制高度
-     * @param encBr   录制bitrate,
-     * @param encFr   录制帧率
-     * @param outPath 录制 的保存路径. 注意:这个路径在分段录制功能时无效.即调用 {@link #segmentStart()}时无效
-     */
     public void setRealEncodeEnable(int encW, int encH, int encBr, int encFr,
                                     String outPath) {
         if (encW > 0 && encH > 0 && encBr > 0 && encFr > 0) {
@@ -378,13 +348,6 @@ public class DrawPadCameraView extends FrameLayout {
         frameListenerInDrawPad = en;
     }
 
-    /**
-     * 触发一下截取当前DrawPad中的内容. 触发后, 会在DrawPad内部设置一个标志位,DrawPad线程会检测到这标志位后,
-     * 截取DrawPad, 并通过onDrawPadSnapShotListener监听反馈给您. 请不要多次或每一帧都截取DrawPad,
-     * 以免操作DrawPad处理过慢.
-     * <p>
-     * 此方法,仅在前台工作时有效. (注意:截取的仅仅是各种图层的内容, 不会截取DrawPad的黑色背景)
-     */
     public void toggleSnatShot() {
         if (drawPadSnapShotListener != null && renderer != null && renderer.isRunning()) {
             renderer.toggleSnapShot(padWidth, padHeight);
@@ -473,12 +436,9 @@ public class DrawPadCameraView extends FrameLayout {
             return false;
         }
 
-        if (surfaceTexture != null && renderer == null && padWidth > 0
-                && padHeight > 0) {
+        if (surfaceTexture != null && renderer == null && padWidth > 0 && padHeight > 0) {
 
             renderer = new DrawPadCameraRunnable(getContext(), padWidth,padHeight); // <----从这里去建立DrawPad线程.
-
-
             renderer.setCameraParam(isFrontCam, initFilter);
 
             DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -568,9 +528,6 @@ public class DrawPadCameraView extends FrameLayout {
 
     /**
      * 暂停预览
-     * <p>
-     * 不可用来暂停后跳入到别的Activity中. 如果您要跳入到别的Activity, 则应该这里 {@link #stopDrawPad()}
-     * 在回到当前Activity的时候, 调用 {@link #setupDrawPad()}
      */
     public void pausePreview() {
         if (renderer != null) {
@@ -581,9 +538,6 @@ public class DrawPadCameraView extends FrameLayout {
 
     /**
      * 恢复预览
-     * <p>
-     * 不可用来暂停后跳入到别的Activity中. 如果您要跳入到别的Activity, 则应该这里 {@link #stopDrawPad()}
-     * 在回到当前Activity的时候, 调用 {@link #setupDrawPad()}
      */
     public void resumePreview() {
         if (renderer != null) {
@@ -855,15 +809,15 @@ public class DrawPadCameraView extends FrameLayout {
      * 停止DrawPad的渲染线程. 此方法执行后, DrawPad会释放内部所有Layer对象,您外界拿到的各种图层对象将无法再使用.
      */
     public void stopDrawPad() {
-        if (!isStoping.get()) {
-            isStoping.set(true);
+        if (!stoping.get()) {
+            stoping.set(true);
 
             if (renderer != null) {
                 renderer.release();
                 renderer = null;
             }
 
-            isStoping.set(false);
+            stoping.set(false);
             isCameraOpened = false;
         }
     }
@@ -1289,17 +1243,6 @@ public class DrawPadCameraView extends FrameLayout {
 
     private class SurfaceCallback implements SurfaceTextureListener {
 
-        /**
-         * Invoked when a {@link TextureView}'s SurfaceTexture is ready for use.
-         * 当画面呈现出来的时候, 会调用这个回调.
-         * <p>
-         * 当Activity跳入到别的界面后,这时会调用
-         * {@link #onSurfaceTextureDestroyed(SurfaceTexture)} 销毁这个Texture,
-         * 如果您想在再次返回到当前Activity时,再次显示预览画面, 可以在这个方法里重新设置一遍DrawPad,并再次startDrawPad
-         * <p>
-         * 有些手机在从当前Activity进入另一个activity,再次返回时, 不会调用这里,比如魅族MX5.
-         */
-
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface,
                                               int width, int height) {
@@ -1312,13 +1255,6 @@ public class DrawPadCameraView extends FrameLayout {
             }
         }
 
-        /**
-         * Invoked when the {@link SurfaceTexture}'s buffers size changed.
-         * 当创建的TextureView的大小改变后, 会调用回调.
-         * <p>
-         * 当您本来设置的大小是480x480,而DrawPad会自动的缩放到父view的宽度时,会调用这个回调,提示大小已经改变,
-         * 这时您可以开始startDrawPad 如果你设置的大小更好等于当前Texture的大小,则不会调用这个, 详细的注释见
-         */
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface,
                                                 int width, int height) {
@@ -1331,12 +1267,6 @@ public class DrawPadCameraView extends FrameLayout {
             }
         }
 
-        /**
-         * Invoked when the specified {@link SurfaceTexture} is about to be
-         * destroyed.
-         * <p>
-         * 当您跳入到别的Activity的时候, 会调用这个,销毁当前Texture;
-         */
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
             surfaceTexture = null;
@@ -1346,12 +1276,6 @@ public class DrawPadCameraView extends FrameLayout {
             return false;
         }
 
-        /**
-         * Invoked when the specified {@link SurfaceTexture} is updated through
-         * {@link SurfaceTexture#updateTexImage()}.
-         * <p>
-         * 每帧如果更新了, 则会调用这个!!!!
-         */
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
         }

@@ -26,6 +26,7 @@ import java.util.Locale;
 import static com.lansosdk.videoeditor.LanSongFileUtil.fileExist;
 
 
+@Deprecated
 public class VideoEditor {
 
     public static final String version="VideoEditor";
@@ -33,50 +34,20 @@ public class VideoEditor {
             "SM919",
             "SM901"
     };
-    /**
-     * 是否强制使用硬件编码器;
-     *
-     * 全局变量
-     *
-     * 默认先硬件编码,如果无法完成则切换为软编码
-     */
+
     public static boolean  isForceHWEncoder=false;
-    /**
-     * 强制使用软件编码器
-     *
-     * 全局变量
-     * 默认先硬件编码,如果无法完成则切换为软编码
-     */
+
     public static boolean  isForceSoftWareEncoder=false;
 
 
-    /**
-     * 强制使用软解码器
-     *
-     * 全局变量
-     */
+
     public static boolean  isForceSoftWareDecoder=false;
 
 
-    /**
-     * 不检查是否是16的倍数.
-     *
-     */
     private static boolean noCheck16Multi=false;
-    /**
-     * 给当前方法指定码率.
-     * 此静态变量, 在execute执行后, 默认恢复为0;
-     */
+
     public int encodeBitRate=0;
-    /**
-     * 解析参数失败 返回1
-     无输出文件 2；
-     输入文件为空：3
-     sdk未授权 -1；
-     解码器错误：69
-     收到线程的中断信号：255
-     如硬件编码器错误，则返回：26625---26630
-     */
+
     public static final int VIDEO_EDITOR_EXECUTE_SUCCESS1 = 0;
     public static final int VIDEO_EDITOR_EXECUTE_SUCCESS2 = 1;
     public static final int VIDEO_EDITOR_EXECUTE_FAILED = -101;  //文件不存在。
@@ -86,47 +57,13 @@ public class VideoEditor {
     private final int VIDEO_EDITOR_HANDLER_COMPLETED = 204;
 
 
-    private static LanSongLogCollector lanSongLogCollector =null;
 
 
     public void setEncodeBitRate(int bitRate){
         encodeBitRate=bitRate;
     }
-    /**
-     * 使能在ffmpeg执行的时候, 收集错误信息;
-     *
-     * @param ctx
-     */
-    public static void logEnable(Context ctx){
 
-        if(ctx!=null){
-            lanSongLogCollector =new LanSongLogCollector(ctx);
-        }else{
-            if(lanSongLogCollector !=null && lanSongLogCollector.isRunning()){
-                lanSongLogCollector.stop();
-                lanSongLogCollector =null;
-            }
-        }
-    }
-    /**
-     * 当执行失败后,返回错误信息;
-     * @return
-     */
-    public static String getErrorLog(){
-        if(lanSongLogCollector !=null && lanSongLogCollector.isRunning()){
-            return lanSongLogCollector.stop();
-        }else{
-            return null;
-        }
-    }
 
-    /**
-     * 构造方法.
-     * 如果您想扩展ffmpeg的命令, 可以继承这个类,
-     * 在其中像我们的各种executeXXX的举例一样来拼接ffmpeg的命令;
-     *
-     * 不要直接修改我们的这个文件, 以方便以后的sdk更新升级.
-     */
     public VideoEditor() {
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
@@ -180,9 +117,7 @@ public class VideoEditor {
             }
         }
     }
-    /**
-     * 异步线程执行的代码.
-     */
+
     public int executeVideoEditor(String[] array) {
         return execute(array);
     }
@@ -210,65 +145,30 @@ public class VideoEditor {
     public static native int getLimitYear();
 
     public static native int getLimitMonth();
-    /**
-     * 获取当前版本号
-     * @return
-     */
+
     public static native String getSDKVersion();
-    /**
-     * 获取用到的是哪个指令集. armeabi-v7a 还是arm64-v8a
-     * @return
-     */
+
     public static native String  getCurrentNativeABI();
 
     public static native String nativeGetVideoDescription(String videoPath);
 
-    /**
-     * 获取SDK的类型, 是免费,是演示版, 还是基本技术支持,还是专业版;
-     * @return
-     */
+
     public static native int getLanSongSDKType();
 
-    /**
-     * 执行成功,返回0, 失败返回错误码.
-     *
-     * 解析参数失败 返回1
-     sdk未授权 -1；
-     解码器错误：69
-     收到线程的中断信号：255
-     如硬件编码器错误，则返回：26625---26630
 
-     * @param cmdArray ffmpeg命令的字符串数组, 可参考此文件中的各种方法举例来编写.
-     * @return 执行成功, 返回0, 失败返回错误码.
-     */
     private native int execute(Object cmdArray);
 
     private native int execute2(Object cmdArray);
 
 
     protected int durationMs=0;
-    /**
-     * 设置视频总时长,单位毫秒;
-     * @param durationMS
-     * @return
-     */
+
     protected native int setDurationMs(int durationMS);
     private native int setForceColorFormat(int format);
 
-    /**
-     * 新增 在执行过程中取消的方法.
-     * 如果在执行中调用了这个方法, 则会直接终止当前的操作.
-     * 此方法仅仅是在ffmpeg线程中设置一个标志位,当前这一帧处理完毕后, 会检测到这个标志位,从而退出.
-     * 因为execute是阻塞执行, 你可以判断execute有没有执行完,来判断是否完成.
-     */
+
     public native void cancel();
-    /**
-     * 把一张图片变成视频
-     *
-     * @param srcPath
-     * @param duration  形成视频的总时长;
-     * @return  返回处理后的视频;
-     */
+
     public String executePicture2Video(String srcPath, float duration) {
         if (fileExist(srcPath)) {
             List<String> cmdList = new ArrayList<String>();
@@ -376,17 +276,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 把 pcm和视频文件合并在一起, pcm数据会编码成aac格式.
-     * 注意:需要原视频文件里没有音频部分,
-     * 如果有, 则需要先用 {@link #executeGetVideoTrack(String)} 拿到视频轨道, 在输入到这里.
-     *
-     * @param srcPcm     原pcm音频文件,
-     * @param samplerate pcm的采样率
-     * @param channel    pcm的通道数
-     * @param srcVideo   原视频文件, 没有音频部分
-     * @return  输出的视频文件路径, 需后缀是mp4格式.
-     */
+
     public String executePcmComposeVideo(String srcPcm, int samplerate, int channel, String srcVideo) {
         List<String> cmdList = new ArrayList<String>();
 
@@ -428,11 +318,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * mov=(H264+PCM)格式的视频, 转换为MP4;
-     * @param srcVideo
-     * @return
-     */
+
     public String executePcmMovToMp4(String srcVideo) {
         List<String> cmdList = new ArrayList<String>();
 
@@ -509,15 +395,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 视频转码.
-     * 通过调整视频的bitrate来对视频文件大小的压缩,降低视频文件的大小, 注意:压缩可能导致视频画质下降.
-     *
-     *
-     * @param srcPath 源视频
-     * @param percent 压缩百分比.值从0--1
-     * @return
-     */
+
     public String executeVideoCompress(String srcPath, float percent) {
         if (fileExist(srcPath)) {
 
@@ -573,9 +451,7 @@ public class VideoEditor {
         }
         return null;
     }
-    /**
-     * 分离mp4文件中的音频,并返回音频的路径,
-     */
+
     public String executeGetAudioTrack(String srcMp4Path) {
         MediaInfo info = new MediaInfo(srcMp4Path);
         if(info.prepare() && info.isHaveAudio()){
@@ -610,13 +486,7 @@ public class VideoEditor {
         return null;
     }
 
-    /**
-     * 从mp4文件中得到mp3;
-     * @param mp4Path 代码有音频的视频文件
-     * @param startS 可以对获取的mp3做裁剪, 开始时间,单位秒;如果不裁剪,填入-1;
-     * @param durationS 要裁剪的时长, 单位秒; 如果不裁剪,填入0
-     * @return 返回得到mp3的路径, 如果没有音频,则返回null
-     */
+
     public String executeGetMp3FromVideo(String mp4Path,float startS, float durationS){
         MediaInfo info = new MediaInfo(mp4Path);
         if(info.prepare() && info.isHaveAudio()){
@@ -669,13 +539,7 @@ public class VideoEditor {
         return null;
     }
 
-    /**
-     *
-     * 获取视频中的视频轨道.
-     * (一个mp4文件, 里面可能有音频和视频, 这个是获取视频轨道, 获取后的视频里面将没有音频部分)
-     * @param srcMp4Path
-     * @return
-     */
+
     public String executeGetVideoTrack(String srcMp4Path) {
         if(fileExist(srcMp4Path)){
             String videoPath  = LanSongFileUtil.createMp4FileInBox();
@@ -779,9 +643,7 @@ public class VideoEditor {
         }
         return video;
     }
-    /**
-     * 建议用  AudioEditor中的executeVideoMergeAudio
-     */
+
     @Deprecated
     public String executeVideoMergeAudio(String video, String audio,float audiostartS) {
         MediaInfo vInfo=new MediaInfo(video);
@@ -862,9 +724,7 @@ public class VideoEditor {
     }
 
 
-    /**
-     * 用AudioEditor中的方法
-     */
+
     @Deprecated
     public String executeCutAudio(String srcFile, float startS, float durationS) {
         MediaInfo info=new MediaInfo(srcFile);
@@ -906,17 +766,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 剪切mp4文件.
-     * 请用VideoOneDo2
-     * (包括视频文件中的音频部分和视频部分),即把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个1分钟的视频,裁剪其中的10秒钟等.
-     * 注意: 此方法裁剪不是精确裁剪,而是从视频的IDR帧开始裁剪的, 没有精确到您指定的那一帧的时间, 如果您指定的时间不是IDR帧上的时间,则退后到上一个IDR帧开始.
-     *
-     * @param videoFile 原视频文件 文件格式是mp4
-     * @param startS    开始裁剪位置，单位是秒，
-     * @param durationS 需要裁剪的时长，单位秒，比如您可以从原视频的8.9秒出开始裁剪，裁剪2分钟，则这里的参数是120
-     * @return
-     */
+
     public String executeCutVideo(String videoFile, float startS, float durationS) {
         if (LanSongFileUtil.fileExist(videoFile)) {
             durationMs=((int)(durationS *1000));
@@ -954,14 +804,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 请用VideoOneDo2
-     * 精确裁剪
-     * @param videoFile 输入源视频的完整路径
-     * @param startS    开始裁剪时间点, 单位秒
-     * @param durationS 要裁剪的总长度,单位秒
-     * @return 裁剪后返回的目标视频
-     */
+
     public String executeCutVideoExact(String videoFile, float startS, float durationS) {
         MediaInfo info=new MediaInfo(videoFile);
         if (info.prepare()) {
@@ -992,18 +835,7 @@ public class VideoEditor {
 
 
 
-    /**
-     *
-     * 请用VideoOneDo2
-     * 精确裁剪的同时,缩放到指定位置,不同于上面的命令,这个可以设置宽度和高度. 其中宽度和高度是采用缩放来完成.
-     *
-     * @param videoFile
-     * @param startS
-     * @param durationS
-     * @param width     要缩放到的宽度 建议是16的倍数 ,
-     * @param height    要缩放到的高度, 建议是16的倍数
-     * @return
-     */
+
     public String executeCutVideoExact(String videoFile, float startS, float durationS, int width, int height) {
         MediaInfo info=new MediaInfo(videoFile);
         if (info.prepare()) {
@@ -1036,22 +868,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 获取视频的所有帧图片,并保存到指定路径.
-     * 所有的帧会按照后缀名字加上_001.jpeg prefix_002.jpeg的顺序依次生成, 如果发现之前已经有同样格式的文件,则在原来数字后缀的基础上增加, 比如原来有prefix_516.jpeg;则这个方法执行从
-     * prefix_517.jpeg开始生成视频帧.
-     * <p>
-     * <p>
-     * 如果您使用的是专业版,则建议用ExtractVideoFrameDemoActivity来获取视频图片,
-     * 因为直接返回bitmap,不存到文件中,速度相对快很多
-     * <p>
-     * 这条命令是把视频中的所有帧都提取成图片，适用于视频比较短的场合，比如一秒钟是25帧，视频总时长是10秒，则会提取250帧图片，保存到您指定的路径
-     *
-     * @param videoFile
-     * @param dstDir    目标文件夹绝对路径.
-     * @param jpgPrefix 保存图片文件的前缀，可以是png或jpg
-     * @return
-     */
+
     public int executeGetAllFrames(String videoFile, String dstDir, String jpgPrefix) {
         String dstPath = dstDir + jpgPrefix + "_%3d.jpeg";
         if (fileExist(videoFile)) {
@@ -1082,17 +899,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 根据设定的采样,获取视频的几行图片.
-     * 假如视频时长是30秒,想平均取5张图片,则sampleRate=5/30;
-     * 如果您使用的是专业版本,则建议用ExtractVideoFrameDemoActivity来获取视频图片,因为直接返回bitmap,不存到文件中,速度相对快很多
-     *
-     * @param videoFile
-     * @param dstDir
-     * @param jpgPrefix
-     * @param sampeRate 一秒钟采样几张图片. 可以是小数.
-     * @return
-     */
     public int executeGetSomeFrames(String videoFile, String dstDir, String jpgPrefix, float sampeRate) {
         String dstPath = dstDir + jpgPrefix + "_%3d.jpeg";
         if (fileExist(videoFile)) {
@@ -1131,20 +937,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 读取视频中的关键帧(IDR帧), 并把关键帧保存图片. 因是IDR帧, 在编码时没有起帧做参考,故提取的最快.
-     * <p>
-     * <p>
-     * 如果您使用的是专业版本,则建议用ExtractVideoFrameDemoActivity来获取视频图片,因为直接返回bitmap,不存到文件中,速度相对快很多
-     * <p>
-     * <p>
-     * 经过我们SDK编码后的视频, 是一秒钟一个帧,如果您视频大小是30秒,则大约会提取30张图片.
-     *
-     * @param videoFile 视频文件
-     * @param dstDir    保持的文件夹
-     * @param jpgPrefix 文件前缀.
-     * @return
-     */
     public int executeGetKeyFrames(String videoFile, String dstDir, String jpgPrefix) {
         String dstPath = dstDir + "/" + jpgPrefix + "_%3d.png";
         if (fileExist(videoFile)) {
@@ -1173,16 +965,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 来自于网络, 没有全部测试.
-     * 获取视频的缩略图
-     * 提供了一个统一的接口用于从一个输入媒体文件中取得帧和元数据。
-     *
-     * @param path   视频的路径
-     * @param width  缩略图的宽
-     * @param height 缩略图的高
-     * @return 缩略图
-     */
     public static Bitmap createVideoThumbnail(String path, int width, int height) {
         Bitmap bitmap = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -1218,15 +1000,6 @@ public class VideoEditor {
         return bitmap;
     }
 
-    /**
-     *
-     * 从视频的指定位置中获取一帧图片. 因为这个是精确提取视频的一帧,
-     * 不建议作为提取缩略图来使用,用mediametadataRetriever最好.
-     *
-     * @param videoSrcPath 源视频的完整路径
-     * @param postionS     时间点，单位秒，类型float，可以有小数，比如从视频的2.35秒的地方获取一张图片。
-     * @return
-     */
     public String executeGetOneFrame(String videoSrcPath,float postionS) {
         if (fileExist(videoSrcPath)) {
 
@@ -1260,15 +1033,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 从视频的指定位置中获取一帧图片,得到图片后,把图片缩放到指定的宽高. 因为这个是精确提取视频的一帧, 不建议作为提取缩略图来使用.
-     *
-     * @param videoSrcPath 源视频的完整路径
-     * @param postionS     时间点，单位秒，类型float，可以有小数，比如从视频的2.35秒的地方获取一张图片。
-     * @param pngWidth     得到目标图片后缩放的宽度.
-     * @param pngHeight    得到目标图片后需要缩放的高度.
-     * @return 得到目标图片的完整路径名.
-     */
+
     public String executeGetOneFrame(String videoSrcPath, float postionS, int pngWidth, int pngHeight) {
         if (fileExist(videoSrcPath)) {
 
@@ -1310,10 +1075,6 @@ public class VideoEditor {
         return null;
     }
 
-
-    /**
-     * 请用VideoEditor中的方法;
-     */
     @Deprecated
     public String executeConvertMp3ToAAC(String mp3Path) {
         if (fileExist(mp3Path)) {
@@ -1453,14 +1214,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 把分段录制的视频, 拼接在一起;
-     *
-     * 注意:此方法仅仅使用在分段录制的场合
-     * 注意:此方法仅仅使用在分段录制的场合
-     * 注意:此方法仅仅使用在分段录制的场合
-     * @param mp4Array
-     */
+
     public String  executeConcatMP4(String[] mp4Array) {
 
         //第一步,先把所有的mp4转换为ts流
@@ -1507,15 +1261,7 @@ public class VideoEditor {
         }
         return dstVideo;
     }
-    /**
-     * 不同来源的mp4文件进行拼接;
-     * 拼接的所有视频分辨率必须一致;
-     *
-     *
-     * @param videos  所有的视频
-     * @param ignorecheck  是否要忽略检测每个每个视频的分辨率, 如果您确信已经相等,则设为false;
-     * @return  输出视频的路径
-     */
+
     public String executeConcatDiffentMp4(ArrayList<String> videos,boolean ignorecheck) {
         if(videos!=null && videos.size()>1){
             if(ignorecheck || checkVideoSizeSame(videos)){
@@ -1571,17 +1317,6 @@ public class VideoEditor {
     }
 
 
-    /**
-     * 裁剪视频画面
-     *  已废弃, 请用VideoOneDo2.java
-     *
-     * @param videoFile  　需要裁剪的视频文件
-     * @param cropWidth  　裁剪后的目标宽度
-     * @param cropHeight 　裁剪后的目标高度
-     * @param x          　视频画面开始的Ｘ坐标，　从画面的左上角开始是0.0坐标
-     * @param y          视频画面开始的Y坐标，
-     * @return  处理后保存的路径,后缀需要是mp4
-     */
     @Deprecated
     public String executeCropVideoFrame(String videoFile, int cropWidth, int cropHeight, int x, int y) {
         if (fileExist(videoFile)) {
@@ -1609,14 +1344,7 @@ public class VideoEditor {
         return null;
     }
 
-    /**
-     *  缩放视频画面
-     *  已废弃, 请用VideoOneDo2.java
-     * @param videoFile
-     * @param scaleWidth
-     * @param scaleHeight
-     * @return
-     */
+
     @Deprecated
     public String executeScaleVideoFrame(String videoFile, int scaleWidth, int scaleHeight) {
         if (fileExist(videoFile)) {
@@ -1644,18 +1372,6 @@ public class VideoEditor {
         return null;
     }
 
-    /**
-     * 缩放的同时增加logo水印.
-     *  已废弃, 请用VideoOneDo2.java
-     *
-     * @param videoFile 原视频路径
-     * @param pngPath  增加图片路径
-     * @param scaleWidth  要缩放到的宽度
-     * @param scaleHeight 要缩放到的高度
-     * @param overX  图片的左上角 放到视频的 X坐标
-     * @param overY  图片的左上角 放到视频的 坐标
-     * @return
-     */
     @Deprecated
     public String executeScaleOverlay(String videoFile, String pngPath, int scaleWidth, int scaleHeight, int overX,
                                       int overY) {
@@ -1686,16 +1402,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 给视频增加图片
-     *  已废弃, 请用VideoOneDo2.java
-     *
-     * @param videoFile  原视频完整路径
-     * @param picturePath  图片完整路径
-     * @param overX 图片的左上角 放到视频的X坐标
-     * @param overY  图片的左上角 放到视频的X坐标
-     * @return  返回目标文件
-     */
     @Deprecated
     public String  executeOverLayVideoFrame(String videoFile, String picturePath, int overX, int overY)
     {
@@ -1720,22 +1426,6 @@ public class VideoEditor {
         return executeAutoSwitch(cmdList);
     }
 
-    /**
-     * 对视频画面进行裁剪,裁剪后叠加一个png类型的图片,
-     *  已废弃, 请用VideoOneDo2.java
-     * <p>
-     * 等于把裁剪,叠加水印,压缩三条命令放在一次执行, 这样只解码一次,和只编码一次,极大的加快了处理速度.
-     *
-     * @param videoFile  原视频
-     * @param pngPath
-     * @param cropX      画面裁剪的X坐标, 左上角为0:0
-     * @param cropY      画面裁剪的Y坐标
-     * @param cropWidth  画面裁剪宽度. 须小于等于源视频宽度
-     * @param cropHeight 画面裁剪高度, 须小于等于源视频高度
-     * @param overX      画面和png图片开始叠加的X坐标.
-     * @param overY      画面和png图片开始叠加的Y坐标
-     * @return
-     */
     @Deprecated
     public String  executeCropOverlay(String videoFile, String pngPath, int cropX, int cropY, int
             cropWidth, int cropHeight, int overX, int overY)
@@ -1771,18 +1461,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 时长剪切的同时, 做画面裁剪.
-     *  已废弃, 请用VideoOneDo2.java
-     * @param videoFile 输入文件完整路径
-     * @param startTimeS  开始时间,单位秒
-     * @param duationS  要剪切的时长;
-     * @param cropX  画面裁剪的开始X坐标
-     * @param cropY  画面裁剪的开始Y坐标
-     * @param cropWidth  画面裁剪的宽度
-     * @param cropHeight  画面裁剪的高度.
-     * @return
-     */
     @Deprecated
     public String executeCutCrop(String videoFile, float startTimeS, float
             duationS, int cropX, int cropY, int cropWidth, int cropHeight) {
@@ -1815,21 +1493,7 @@ public class VideoEditor {
 
         return executeAutoSwitch(cmdList);
     }
-    /**
-     * 同时执行 视频时长剪切, 画面裁剪和增加水印的功能.
-     *
-     * @param videoFile  源视频文件.
-     * @param pngPath    增加的水印文件路径
-     * @param startTimeS 时长剪切的开始时间
-     * @param duationS   时长剪切的 总长度
-     * @param cropX      画面裁剪的 X坐标,(最左边坐标是0)
-     * @param cropY      画面裁剪的Y坐标,(最上面坐标是0)
-     * @param cropWidth  画面裁剪宽度
-     * @param cropHeight 画面裁剪高度
-     * @param overX      增加水印的X坐标
-     * @param overY      增加水印的Y坐标
-     * @return
-     */
+
     public String executeCutCropOverlay(String videoFile, String pngPath, float startTimeS, float
             duationS, int cropX, int cropY, int cropWidth, int cropHeight, int overX, int overY) {
 
@@ -1866,16 +1530,6 @@ public class VideoEditor {
     }
 
 
-    /**
-     * 把多张图片转换为视频
-     * 注意：　这里的多张图片必须在同一个文件夹下，并且命名需要有规律,比如名字是 r5r_001.jpeg r5r_002.jpeg, r5r_003.jpeg等
-     * 多张图片，需要统一的分辨率，如分辨率不同，则以第一张图片的分辨率为准，后面的分辨率自动缩放到第一张图片的分辨率的大小
-     *
-     * @param picDir    　保存图片的文件夹
-     * @param jpgprefix 　图片的文件名有规律的前缀
-     * @param framerate 　每秒钟需要显示几张图片
-     * @return
-     */
     public String executeConvertPictureToVideo(String picDir, String jpgprefix, float framerate) {
 
         String picSet = picDir + jpgprefix + "_%3d.jpeg";
@@ -1893,16 +1547,7 @@ public class VideoEditor {
 
         return executeAutoSwitch(cmdList);
     }
-    /**
-     * 把视频填充成指定大小的画面, 比视频的宽高 大的部分用黑色来填充.
-     *
-     * @param videoFile 源视频路径
-     * @param padWidth  填充成的目标宽度 , 参数需要是16的倍数
-     * @param padHeight 填充成的目标高度 , 参数需要是16的倍数
-     * @param padX      把视频画面放到填充区时的开始X坐标
-     * @param padY      把视频画面放到填充区时的开始Y坐标
-     * @return
-     */
+
     public String executePadVideo(String videoFile, int padWidth, int padHeight, int padX, int padY) {
         if (fileExist(videoFile)) {
             MediaInfo info = new MediaInfo(videoFile);
@@ -1939,14 +1584,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 给视频旋转角度,
-     *
-     * 注意这里 只是 旋转画面的的角度,而不会调整视频的宽高.
-     * @param srcPath 　需要旋转角度的原视频
-     * @param angle   　　角度
-     * @return
-     */
+
     public String executeRotateAngle(String srcPath, float angle) {
         if (fileExist(srcPath)) {
 
@@ -1974,19 +1612,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 设置多媒体文件中的 视频元数据的角度.
-     * 一个多媒体文件中有很多种元数据, 包括音频轨道, 视频轨道, 各种元数据, 字幕,其他文字等信息,
-     * 这里仅仅更改元数据中的视频播放角度, 当视频播放器播放该视频时, 会得到"要旋转多少度"播放的信息,
-     * 这样在播放时就会旋转后再播放画面
-     * <p>
-     * 此设置不改变音视频的各种参数, 仅仅是告诉播放器,"要旋转多少度"来播放而已.
-     * 适用在拍摄的视频有90度和270的情况, 想更改这个角度参数的场合.
-     *
-     * @param srcPath 原视频
-     * @param angle   需要更改的角度
-     * @return
-     */
     public String executeSetVideoMetaAngle(String srcPath, int angle) {
         if (fileExist(srcPath)) {
 
@@ -2023,17 +1648,7 @@ public class VideoEditor {
             return null;
         }
     }
-//---------------------------
 
-    /**
-     * 叠加并调速;
-     * @param srcPath
-     * @param pngPath
-     * @param overX
-     * @param overY
-     * @param speed  速度值,范围0--1;
-     * @return
-     */
     public String executeOverLaySpeed(String srcPath, String pngPath,int overX,int overY, float speed){
 
         if (fileExist(srcPath)) {
@@ -2066,13 +1681,7 @@ public class VideoEditor {
             return null;
         }
     }
-    /**
-     * 调整视频的播放速度
-     * 范围0.5--2.0；
-     * 0.5:放慢一倍;2:加快一倍
-     * @param srcPath 　　源视频
-     * @return
-     */
+
     public String executeAdjustVideoSpeed(String srcPath, float speed){
         MediaInfo mediaInfo=new MediaInfo(srcPath);
         if (mediaInfo.prepare() && mediaInfo.isHaveVideo()) {
@@ -2107,9 +1716,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 用 executeAdjustVideoSpeed;
-     */
+
     @Deprecated
     public String executeAdjustVideoSpeed2(String srcPath, float speed, int bitrate) {
         if (fileExist(srcPath)) {
@@ -2137,13 +1744,6 @@ public class VideoEditor {
     }
 
 
-    /**
-     * 视频水平镜像，即把视频左半部分镜像显示在右半部分
-     * 【此方法用到编解码】
-     *
-     * @param srcPath 　源视频路径
-     * @return
-     */
     public String executeVideoMirrorH(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2170,12 +1770,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 视频垂直镜像，即把视频上半部分镜像显示在下半部分
-     *
-     * @param srcPath 　源视频路径
-     * @return
-     */
+
     public String executeVideoMirrorV(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2202,11 +1797,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 视频垂直方向反转
-     * @param srcPath 　　原视频
-     * @return
-     */
+
     public String executeVideoRotateVertically(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2230,12 +1821,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 视频水平方向反转
-     *
-     * @param srcPath 　　原视频
-     * @return
-     */
+
     public String executeVideoRotateHorizontally(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2259,12 +1845,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 视频顺时针旋转90度
-     *
-     * @param srcPath 原视频
-     * @return
-     */
     public String  executeVideoRotate90Clockwise(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2288,12 +1868,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 视频逆时针旋转90度,也可以认为是顺时针旋转270度.
-     *
-     * @param srcPath 　原视频
-     * @return
-     */
     public String executeVideoRotate90CounterClockwise(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2317,12 +1891,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 视频倒序；
-     * 请用LSOVideoReverse
-     * @param srcPath 　原视频
-     * @return
-     */
     public String executeVideoReverse(String srcPath) {
         if (fileExist(srcPath)) {
 
@@ -2347,13 +1915,6 @@ public class VideoEditor {
         }
     }
 
-
-
-    /**
-     * 把一个mp4文件中的音频部分和视频都倒序播放。
-     * 请用LSOVideoReverse
-     * @return
-     */
     public String executeAVReverse(String srcPath) {
         if (fileExist(srcPath)) {
             List<String> cmdList = new ArrayList<String>();
@@ -2376,17 +1937,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 删除视频中的logo,比如一般在视频的左上角或右上角有视频logo信息,类似"优酷","抖音"等;
-     * 这里把指定位置的图像删除掉;
-     *
-     * @param video 原视频
-     * @param startX  开始横坐标
-     * @param startY  开始的横坐标
-     * @param w 删除的宽度
-     * @param h 删除的高度
-     * @return
-     */
     public String executeDeleteLogo(String video,int startX,int startY,int w,int h){
         if (fileExist(video)) {
 
@@ -2413,17 +1963,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 模糊指定区域, 指定时间段.
-     * @param video
-     * @param startX
-     * @param startY
-     * @param w
-     * @param h
-     * @param startS 指定时间段的开始时间, 单位秒;
-     * @param endS 指定时间段的介绍时间, 单位秒;
-     * @return
-     */
     public String executeDeleteLogoInTimeRange(String video,int startX,int startY,int w,int h, float startS,float endS){
         MediaInfo info=new MediaInfo(video);
         if(info.prepare()){
@@ -2454,35 +1993,6 @@ public class VideoEditor {
     }
 
 
-
-    /**
-     * 删除视频中的最多4处有logo的信息.
-     *
-     *  4处logo, 是从1--4;
-     *
-     *  如果只用3处logo,则把startX4=0 startY4=0,width4=0,height4=0;
-     *  如果只用到2处理,则把 3,4 设置为0;
-     *  如果只用到3处, 则把startX4设置为0;
-     *  如果要设置编码后的码率,则用 setEncodeBitRate
-     * @param video 输入视频,
-     * @param startX1 第一处X坐标开始坐标
-     * @param startY1 第一处Y坐标开始坐标
-     * @param width1  第一处的宽度
-     * @param height1 第一处的高度
-     * @param startX2
-     * @param startY2
-     * @param width2
-     * @param height2
-     * @param startX3
-     * @param startY3
-     * @param width3
-     * @param height3
-     * @param startX4
-     * @param startY4
-     * @param width4
-     * @param height4
-     * @return
-     */
     public String executeDeleteLogo(String video,int startX1,int startY1,int width1,int height1,
                                     int startX2,int startY2,int width2,int height2,
                                     int startX3,int startY3,int width3,int height3,
@@ -2529,42 +2039,6 @@ public class VideoEditor {
         }
     }
 
-
-    /**
-     *删除视频中的最多4处有logo的信息.
-     *
-     *  4处logo, 是从1--4;
-     *
-     *  如果只用3处logo,则把startX4=0 startY4=0,width4=0,height4=0;
-     *  如果只用到2处理,则把 3,4 设置为0;
-     *  如果要设置编码后的码率,则用 setEncodeBitRate
-     * @param video 输入视频,
-     * @param startX1 第一处X坐标开始坐标
-     * @param startY1 第一处Y坐标开始坐标
-     * @param width1 第一处的宽度
-     * @param height1 第一处的宽度;
-     * @param startS1 第一处的 开始时间,单位秒;
-     * @param endS1  第一处的结束时间, 单位秒;
-     * @param startX2
-     * @param startY2
-     * @param width2
-     * @param height2
-     * @param startS2
-     * @param endS2
-     * @param startX3
-     * @param startY3
-     * @param width3
-     * @param height3
-     * @param startS3
-     * @param endS3
-     * @param startX4
-     * @param startY4
-     * @param width4
-     * @param height4
-     * @param startS4
-     * @param endS4
-     * @return
-     */
     public String executeDeleteLogoInTimeRange(
             String video,
             int startX1,int startY1,int width1,int height1, float startS1,float endS1,
@@ -2615,14 +2089,6 @@ public class VideoEditor {
     }
 
 
-
-    /**
-     * 对视频调整帧率, 码率
-     * @param video
-     * @param framerate 帧率
-     * @param bitrate 码率
-     * @return
-     */
     public String executeAdjustFrameRate(String video,float framerate,int bitrate){
         if (fileExist(video)) {
 
@@ -2648,19 +2114,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     *时长剪切的同时, 做画面裁剪,并调整帧率
-     *
-     * @param videoFile 输入文件完整路径
-     * @param startTimeS  开始时间,单位秒
-     * @param duationS  要剪切的时长;
-     * @param cropX  画面裁剪的开始X坐标
-     * @param cropY  画面裁剪的开始Y坐标
-     * @param cropWidth  画面裁剪的宽度
-     * @param cropHeight  画面裁剪的高度.
-     * @param framerate 要调整的视频帧率, 建议15--30;
-     * @return
-     */
     public String executeCutCropAdjustFps(String videoFile, float startTimeS, float
             duationS, int cropX, int cropY, int cropWidth, int cropHeight,float framerate) {
 
@@ -2695,15 +2148,6 @@ public class VideoEditor {
         return executeAutoSwitch(cmdList);
     }
 
-    /**
-     *
-     * @param input
-     * @param interval 提取帧的间隔; 1秒种提取多少帧;
-     * @param scaleW 提取帧的缩放的宽高, 如果为0, 则不缩放
-     * @param scaleH
-     * @param dstBmp 目标帧序列; 格式:lansonggif_%5d.jpg
-     * @return
-     */
     private boolean executeExtractFrame(String input,float interval, int scaleW, int scaleH,String dstBmp)
     {
         if (fileExist(input)) {
@@ -2779,9 +2223,6 @@ public class VideoEditor {
     }
 
 
-    /**
-     * 请使用  executeConvertVideoToGif
-     */
     @Deprecated
     public String executeConvertToGif(String videoInput, float inteval,int scaleW,int scaleH,float frameRate)
     {
@@ -2803,15 +2244,7 @@ public class VideoEditor {
         }
         return null;
     }
-    /**
-     * 把视频转换为gif
-     * @param videoPath 视频的完整路径
-     * @param interval   提取视频间隔, 从视频中一秒钟提取多少帧; 建议为5,10, 15;
-     * @param scaleWidth 把视频画面缩放到的宽度
-     * @param scaleHeight 缩放到的高度
-     * @param speed 速度. 转换为gif后的,gif播放速度,建议为0.3,0.5,1.0(不变),1.2,1.5,2.0(放慢一倍);
-     * @return
-     */
+
     public String executeConvertVideoToGif(String videoPath,int interval,int scaleWidth,int scaleHeight,float speed) {
         List<String> cmdList = new ArrayList<String>();
 
@@ -2853,19 +2286,6 @@ public class VideoEditor {
         }
     }
 
-
-    /**
-     * 在视频的指定时间范围内增加一张图片,图片从左上角00开始叠加到视频的上面
-     *
-     * 比如给视频的第一帧增加一张图片,时间范围是:0.0 --0.03;
-     * 注意:如果你用这个给视频增加一张封面的话, 增加好后, 分享到QQ或微信或放到mac系统上, 显示的缩略图不一定是第一帧的画面.
-     *
-     * @param srcPath 视频的完整路径
-     * @param picPath 图片的完整的路径, 增加后,会从上左上角覆盖视频的第一帧
-     * @param startTimeS 开始时间,单位秒.float类型,可以有小数
-     * @param endTimeS 结束时间,单位秒.
-     * @return
-     */
     public String executeAddPitureAtTime(String srcPath,String picPath,float startTimeS,float endTimeS)
     {
         if (fileExist(srcPath) && fileExist(picPath)) {
@@ -2896,19 +2316,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 在视频的指定位置,指定时间内叠加一张图片
-     *
-     * 注意:如果你用这个给视频增加一张封面的话, 增加好后, 分享到QQ或微信或放到mac系统上, 显示的缩略图不一定是第一帧的画面.
-     *
-     * @param srcPath 源视频的完整路径
-     * @param picPath 图片的完整路径,png/ jpg
-     * @param x  图片的左上角要叠加到源视频的X坐标哪里, 左上角为0,0
-     * @param y
-     * @param startTimeS 时间范围,开始时间,单位秒
-     * @param endTimeS 时间范围, 结束时间, 单位秒.
-     * @return
-     */
     public String executeAddPitureAtXYTime(String srcPath,String picPath,int x,int y,float startTimeS,float endTimeS)
     {
         if (fileExist(srcPath) && fileExist(picPath)) {
@@ -2939,14 +2346,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 给gif动画增加图片(logo)
-     * @param gifFile gif的完整路径
-     * @param picturePath 图片的完整路径
-     * @param overX 图片左上角放到gif的开始X坐标.
-     * @param overY 图片左上角放到gif的开始Y坐标;
-     * @return
-     */
+
     public String  executeGifOverLayPicture(String gifFile, String picturePath, int overX, int overY)
     {
         String filter = String.format(Locale.getDefault(), "overlay=%d:%d", overX, overY);
@@ -2981,19 +2381,6 @@ public class VideoEditor {
             return null;
         }
     }
-
-
-    /**
-     * 给Mp4文件中增加一些描述文字.
-     *
-     * 比如您可以把一些对该视频的操作信息, 配置信息,服务器的说明信息等放到视频里面,和视频一起传输,
-     * 注意:这个文字信息是携带到mp4文件中, 不会增加到每帧上.
-     *
-     *  这里是写入. 我们有另外的读取
-     * @param srcPath 原视频的完整路径
-     * @param text 要携带的描述文字
-     * @return 增加后的目标文件.
-     */
     public String executeAddTextToMp4(String srcPath,String text)
     {
         // ffmpeg -i d1.mp4 -metadata description="LanSon\"g \"Text"
@@ -3034,11 +2421,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 从视频中获取该视频的描述信息
-     * @param srcPath
-     * @return
-     */
+
     public String executeGetTextFromMp4(String srcPath)
     {
 
@@ -3050,13 +2433,7 @@ public class VideoEditor {
         }
 
     }
-    /**
-     * 获取lansosdk的建议码率;
-     * 这个码率不是唯一的, 仅仅是我们建议这样设置, 如果您对码率理解很清楚或有一定的压缩要求,则完全可以不用我们的建议,自行设置.
-     *
-     * @param wxh 宽度和高度的乘积;
-     * @return
-     */
+
     public static int getSuggestBitRate(int wxh) {
         if (wxh <= 480 * 480) {
             return 1000 * 1024;
@@ -3079,15 +2456,8 @@ public class VideoEditor {
         return bitrate < sugg ? sugg : bitrate;   //如果设置过来的码率小于建议码率,则返回建议码率,不然返回设置码率
     }
 
-    /**
-     * 用在编码方法中;
-     */
     private MediaInfo _inputInfo=null;
-    /**
-     * 编码执行, 如果您有特殊的需求, 可以重载这个方法;
-     * @param cmdList
-     * @return
-     */
+
     public String executeAutoSwitch(List<String> cmdList)
     {
         int ret=0;
@@ -3115,18 +2485,14 @@ public class VideoEditor {
             }
         }
         if(isForceHWEncoder){
-            LSOLog.d("开始处理:硬解码+ 硬编码....");
             ret=executeWithEncoder(cmdList, bitrate, dstPath, true);
         }else if(isForceSoftWareEncoder || useSoftWareEncoder || checkSoftEncoder()) {
-            LSOLog.d("开始处理:硬解码+ 软编码....");
             ret = executeWithEncoder(cmdList, bitrate, dstPath, false);
         }else{
 
-            LSOLog.d("开始处理:硬解码+ 硬编码....");
             ret=executeWithEncoder(cmdList, bitrate, dstPath, true);
 
             if(ret!=0){
-                LSOLog.d("开始处理:硬解码+ 软编码....");
                 ret=executeWithEncoder(cmdList, bitrate, dstPath, false);
             }
         }
@@ -3142,20 +2508,11 @@ public class VideoEditor {
                     break;
                 }
             }
-            LSOLog.d("开始处理:软解码+ 软编码....");
             ret=executeWithEncoder(cmdList, bitrate, dstPath, false);
         }
 
         if(ret!=0){
-            if(lanSongLogCollector !=null){
-                lanSongLogCollector.start();
-            }
-            Log.e("LanSoJni","编码失败, 开始搜集信息...use software decoder and encoder");
-            //再次执行一遍, 读取错误信息;
             ret=executeWithEncoder(cmdList, bitrate, dstPath, false);
-            if(lanSongLogCollector !=null && lanSongLogCollector.isRunning()){
-                lanSongLogCollector.stop();
-            }
             LanSongFileUtil.deleteFile(dstPath);
 
             durationMs=0;
@@ -3165,14 +2522,7 @@ public class VideoEditor {
             return dstPath;
         }
     }
-    /**
-     * 增加编码器,并开始执行;
-     * @param cmdList
-     * @param bitrate
-     * @param dstPath
-     * @param isHWEnc  是否使用硬件编码器; 如果强制了,则以强制为准;
-     * @return
-     */
+
     public int executeWithEncoder(List<String> cmdList,int bitrate, String dstPath, boolean isHWEnc)
     {
         List<String> cmdList2 = new ArrayList<String>();
@@ -3228,10 +2578,7 @@ public class VideoEditor {
         int ret=executeVideoEditor(command);
         return ret;
     }
-    /**
-     * 检测是否需要软编码;
-     * @return
-     */
+
     public boolean checkSoftEncoder()
     {
         if(LanSoEditor.isQiLinSoc() && !isSupportNV21ColorFormat()){
@@ -3246,10 +2593,7 @@ public class VideoEditor {
         }
         return false;
     }
-    /**
-     * 强制软编码器;
-     * @return
-     */
+
     public boolean checkSoftDecoder()
     {
         for(String item: useSoftDecoderlist){
@@ -3262,19 +2606,7 @@ public class VideoEditor {
         return false;
     }
 
-    /**
-     * 当数据不是16的倍数的时候,把他调整成16的倍数, 以最近的16倍数为准;
-     * 举例如下:
-     * 16, 17, 18, 19,20,21,22,23 ==>16;
-     * 24,25,26,27,28,29,30,31,32==>32;
-     *
-     *
-     * 如果是18,19这样接近16,则等于16, 等于缩小了原有的画面,
-     * 如果是25,28这样接近32,则等于32,  等于稍微拉伸了原来的画面,
-     * 因为最多缩小或拉伸8个像素, 还不至于画面严重变形,而又兼容编码器的要求,故可以这样做.
-     *
-     * @return
-     */
+
     public static int make16Closest(int value) {
 
         if (value < 16) {
@@ -3287,15 +2619,6 @@ public class VideoEditor {
         }
     }
 
-    /**
-     * 把数据变成16的倍数, 以大于等于16倍数的为准;
-     * 比如:
-     * 16-->返回16;
-     * 17---31-->返回32;
-     *
-     * @param value
-     * @return
-     */
     public static int make16Next(int value) {
         if(value%16==0){
             return value;
@@ -3338,10 +2661,7 @@ public class VideoEditor {
     private static final String MIME_TYPE_AVC = "video/avc"; // H.264 Advanced
 
     private static boolean isSupportNV21=false;
-    /**
-     * 是否支持NV21的编码;
-     * @return
-     */
+
     public static boolean isSupportNV21ColorFormat()
     {
         if(isSupportNV21){
@@ -3387,12 +2707,7 @@ public class VideoEditor {
         return false;
     }
 
-    /**
-     * 精确裁剪的同时,缩放到指定位置,不同于上面的命令,这个可以设置宽度和高度. 其中宽度和高度是采用缩放来完成.
-     * <p>
-     * <p>
-     * 采用的是软缩放的形式.
-     */
+
     public String executeCutScaleVideoExact(String videoFile,
                                             float startS,
                                             float durationS,
@@ -3436,9 +2751,6 @@ public class VideoEditor {
     }
 
 
-
-    /**
-     */
     public String executeAlphaMaskVideo(String bgImgPath,
                                         String videoPath,
                                         String maskImgPath) {
@@ -3476,17 +2788,7 @@ public class VideoEditor {
         }
     }
 
-    /**
-     *
-     * 把一张图片区域模糊.
-     * [注意,里面没有检查您设置的参数是否大于图片宽高, 如果大于,则返回null]
-     * @param picturePath 图片路径, 可以是png或jpg
-     * @param startX 开始X坐标, 一定要大于0
-     * @param startY 开始Y坐标, 一定要大于0;
-     * @param w 要模糊的宽度
-     * @param h 要模糊的高度
-     * @return 成功返回目标路径
-     */
+
     public String executePictureDeleteLogo(String picturePath,int startX,int startY,int w,int h){
         if (fileExist(picturePath)) {
 
@@ -3610,70 +2912,4 @@ public class VideoEditor {
             return null;
         }
     }
-
-//    0 = "-i"
-//            1 = "/sdcard/zl16别让坏脾气害了你139.aac"
-//            2 = "-ss"
-//            3 = "0.0"
-//            4 = "-t"
-//            5 = "29.492"
-//            6 = "-acodec"
-//            7 = "copy"
-//            8 = "-y"
-//            9 = "/storage/emulated/0/Android/data/com.lejian.shouhui/files/temp/2072817530106.m4a"
-
-
-
-
-//    ffmpeg -loop 1 -i lansong_logo.png -t 3000 -c:v libx264 -r 30 -g 30 -bf 0  xx.mp4
-//public String executeOnePicture2Video(String picturePath,float duration, int fps){
-//    if (fileExist(picturePath)) {
-//
-//
-//
-//        String dstPath=LanSongFileUtil.createMp4FileInBox();
-//
-//        List<String> cmdList = new ArrayList<String>();
-//
-//
-//        cmdList.add("-loop");
-//        cmdList.add("1");
-//
-//        cmdList.add("-i");
-//        cmdList.add(picturePath);
-//
-//        cmdList.add("-t");
-//        cmdList.add(String.valueOf(duration));
-//
-//
-//        cmdList.add("-c:v");
-//        cmdList.add("libx264");
-//
-//        cmdList.add("-r");
-//        cmdList.add(String.valueOf(fps));
-//
-//
-//        cmdList.add("-g");
-//        cmdList.add(String.valueOf(fps));
-//
-//
-//        cmdList.add("-y");
-//        cmdList.add(dstPath);
-//        String[] command = new String[cmdList.size()];
-//        for (int i = 0; i < cmdList.size(); i++) {
-//            command[i] = (String) cmdList.get(i);
-//        }
-//        int ret=executeVideoEditor(command);
-//
-//        if(ret==0){
-//            return dstPath;
-//        }else{
-//            LanSongFileUtil.deleteFile(dstPath);
-//            return null;
-//        }
-//    } else {
-//        return null;
-//    }
-//}
-
 }

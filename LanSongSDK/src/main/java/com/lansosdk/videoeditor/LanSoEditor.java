@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LanSoEditorBox;
@@ -15,13 +16,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LanSoEditor {
 
     protected static AtomicBoolean isLoadLanSongSDK = new AtomicBoolean(false);
+    public static Context context;
 
-    /**
-     * 初始化SDK
-     * @param context android得到Context语境;
-     * @param str
-     */
-    public static void initSDK(Context context, String str){
+    public static void initSDK(Context ctx, String str){
+
+        context=ctx;
 
         if (isLoadLanSongSDK.get())
             return;
@@ -31,17 +30,21 @@ public class LanSoEditor {
         }catch (UnsatisfiedLinkError error){
             LSOLog.e("load libraries  error. Maybe it is where your app crashes, causing the entire Activity to restart.(你的APP崩溃后被系统再次启动,查看所有的logcat信息)");
             error.printStackTrace();
+            return ;
         }
 
         initSo(context, str);
 
+
+        //不再关闭;
         if(Environment.getExternalStorageDirectory()!=null){
             setTempFileDir(context.getFilesDir() + "/lansongBox/");
         }
+
         LSOLog.init();
         LanSoEditorBox.deleteDefaultDirFiles();
         LanSongFileUtil.deleteDefaultDir();
-        printSDKVersion();
+        printSDKVersion(context);
         isLoadLanSongSDK.set(true);
     }
 
@@ -105,7 +108,7 @@ public class LanSoEditor {
     public static void setSDKLogOutListener(OnLanSongLogOutListener listener){
 
         if(listener!=null){
-            printSDKVersion();
+            printSDKVersion(context);
         }
         LSOLog.setLogOutListener(listener);
     }
@@ -124,7 +127,7 @@ public class LanSoEditor {
     }
 
     //----------------------------------------------------------------------------------------
-    private static void printSDKVersion()
+    private static void printSDKVersion(Context ctx)
     {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -137,7 +140,12 @@ public class LanSoEditor {
         String nativeVersion="* \tnative version:"+VideoEditor.getSDKVersion()+ " ;  ABI: "+VideoEditor.getCurrentNativeABI()+ " ; type:"+VideoEditor.getLanSongSDKType()
                 + "; Limited time: year:"+VideoEditor.getLimitYear()+ " month:" +VideoEditor.getLimitMonth();
 
-        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+LanSoEditorBox.getCpuName();
+        DisplayMetrics dm = new DisplayMetrics();
+              dm = ctx.getResources().getDisplayMetrics();
+
+        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+LanSoEditorBox.getCpuName()+
+                " display screen size:"+ dm.widthPixels+ " x "+ dm.heightPixels;
+
 
 
         LSOLog.i("********************LanSongSDK**********************");
@@ -189,12 +197,12 @@ public class LanSoEditor {
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
         System.loadLibrary("LanSongSDKDecoder");
-
         LSOLog.d("loaded native libraries.isQiLinSoC:"+isQiLinSoc());
     }
 
     private static void initSo(Context context, String str) {
         nativeInit(context, context.getAssets(), str);
+        nativeInit2(context, context.getAssets(), str);
         LanSoEditorBox.init(context);
     }
     private static void unInitSo() {
@@ -224,10 +232,8 @@ public class LanSoEditor {
         }
         return false;
     }
-
-
-
     private static native void nativeInit(Context ctx, AssetManager ass,String filename);
+    private static native void nativeInit2(Context ctx, AssetManager ass,String filename);
     private static native void nativeUninit();
     private static native void setLanSongSDK1();
 }

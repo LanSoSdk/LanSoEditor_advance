@@ -60,7 +60,7 @@ public class LSOConcatCompositionView extends FrameLayout {
     private SurfaceTexture mSurfaceTexture = null;
     private onViewAvailable mViewAvailable = null;
     private boolean isLayoutOk = false;
-    // --------------------
+    // ----------------------------------------------
 
     public LSOConcatCompositionView(Context context) {
         super(context);
@@ -325,7 +325,7 @@ public class LSOConcatCompositionView extends FrameLayout {
     }
 
 
-    //--------容器代码----------------------
+    //---------容器代码---------------------
 
     /**
      * 增加 拼接图层, 异步增加,增加过程中,内部会处理
@@ -1054,8 +1054,6 @@ public class LSOConcatCompositionView extends FrameLayout {
         if (renderer != null) {
             renderer.startPreview(false);
         }
-
-
     }
 
     /**

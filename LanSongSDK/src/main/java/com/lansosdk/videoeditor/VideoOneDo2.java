@@ -34,7 +34,6 @@ import java.util.List;
  * 增加音乐, 裁剪时长, 裁剪画面, 缩放, 压缩,增加logo,文字, 设置编辑模式,
  * 设置遮罩, 增加滤镜, 增加美颜,增加mv动画, 增加Gif,提取图片.增加Canvas等.
  */
-@Deprecated
 public class VideoOneDo2 {
 
     private VideoOneDoRunnable runnable;

@@ -24,7 +24,6 @@ import java.util.Calendar;
 
 
 
-@Deprecated
 public class LanSongFileUtil {
 
     public static final boolean VERBOSE = false;
@@ -32,19 +31,13 @@ public class LanSongFileUtil {
 
     //可以修改这个路径;
 
+
     private static final String DEFAULT_DIR= Environment.getExternalStorageDirectory().getPath()+"/lansongBox/";
     protected static  String FileCacheDir =DEFAULT_DIR;
     protected static String mTmpFileSubFix="";  //后缀,
     protected static String mTmpFilePreFix="";  //前缀;
 
 
-    /**
-     * 外界不要调用
-     * @param dir
-     */
-    protected static void setTempDIR(String dir){
-        FileCacheDir =dir;
-    }
 
     public static String getPath() {
         File file = new File(FileCacheDir);
