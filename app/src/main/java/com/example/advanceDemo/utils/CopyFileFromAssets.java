@@ -5,7 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.lansosdk.videoeditor.LanSongFileUtil;
+
+import com.lansosdk.videoeditor.archApi.LanSongFileUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;

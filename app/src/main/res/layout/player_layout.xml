@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
-        <com.lansosdk.videoeditor.TextureRenderView
+        <com.lansosdk.videoeditor.oldVersion.TextureRenderView2
             android:id="@+id/surface1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

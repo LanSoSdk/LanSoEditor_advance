@@ -24,6 +24,7 @@ import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.OnAexImageSelectedListener;
 import com.lansosdk.box.OnAexJsonPrepareListener;
+import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLSOAexImageChangedListener;
 import com.lansosdk.box.OnLanSongSDKCompressListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
@@ -32,7 +33,8 @@ import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
-import com.lansosdk.videoeditor.LSOAexPlayerView;
+import com.lansosdk.box.OnResumeListener;
+import com.lansosdk.videoeditor.LSOAexPlayer;
 
 import java.util.Locale;
 
@@ -41,7 +43,7 @@ import java.util.Locale;
  */
 public class AexPlayerDemoActivity extends Activity implements View.OnClickListener {
 
-    private LSOAexPlayerView aexPlayerView;
+    private LSOAexPlayer aexPlayerView;
 
 
     private TextView textView;
@@ -55,7 +57,6 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.test_aex_layout);
         aexPlayerView = findViewById(R.id.id_test_ae_gpu_preview2);
         initView();
-
         //prepare Ae Template;
         prepareOneAeTemplate();
     }
@@ -98,11 +99,9 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         }
 
-
-        //布局预览;
-        aexPlayerView.setAexPlayerViewSizeAsync(module.getWith(), module.getHeight(), new LSOAexPlayerView.OnSizeReadyListener() {
+        aexPlayerView.onCreateAsync(module, new OnCreateListener() {
             @Override
-            public void onSizeReady() {
+            public void onCreate() {
                 try {
                     startAEPreview();
                 } catch (Exception e1) {
@@ -117,7 +116,12 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        aexPlayerView.onResume();
+        aexPlayerView.onResumeAsync(new OnResumeListener() {
+            @Override
+            public void onResume() {
+
+            }
+        });
     }
 
     @Override
@@ -134,7 +138,6 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     private void startAEPreview() throws Exception {
 
         if (aexPlayerView.isRunning()) {
-            LSOLog.e("------already running .===>: ");
             return;
         }
 
@@ -197,7 +200,6 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         aexPlayerView.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
             @Override
             public void onLanSongSDKError(int errorCode) {
-                aexPlayerView.release();
                 DemoUtil.showDialog(AexPlayerDemoActivity.this, "AE执行错误,请查看错误信息.我们的TAG是LanSongSDK.");
             }
         });
@@ -314,9 +316,6 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(aexPlayerView!=null){
-            aexPlayerView.release();
-            aexPlayerView=null;
-        }
+        aexPlayerView.onDestroy();
     }
 }

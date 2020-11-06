@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LanSoEditorBox;
 import com.lansosdk.box.OnLanSongLogOutListener;
+import com.lansosdk.videoeditor.archApi.LanSongFileUtil;
 
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,7 +29,7 @@ public class LanSoEditor {
         try {
             loadLibraries();
         }catch (UnsatisfiedLinkError error){
-            LSOLog.e("load libraries  error. Maybe it is where your app crashes, causing the entire Activity to restart.(你的APP崩溃后被系统再次启动,查看所有的logcat信息)");
+            LSOLog.e("load libraries  error. ");
             error.printStackTrace();
             return ;
         }
@@ -36,9 +37,9 @@ public class LanSoEditor {
         initSo(context, str);
 
 
-        //不再关闭;
         if(Environment.getExternalStorageDirectory()!=null){
-            setTempFileDir(context.getFilesDir() + "/lansongBox/");
+           // setTempFileDir(context.getFilesDir() + "/lansongBox/");
+            setTempFileDir(context.getExternalCacheDir() + "/lansongBox/");  //lsdelete实际删除这个, 保留上一个;
         }
 
         LSOLog.init();
@@ -52,59 +53,19 @@ public class LanSoEditor {
         unInitSo();
     }
 
-    /**
-     * 删除默认文件夹;
-     * 如果您在调用此方法前, 设置了文件夹路径,则会删除您指定的文件夹;
-     * 如果没有调用,则删除我们默认文件夹;
-     */
     public static void deleteDefaultDir() {
         LanSoEditorBox.deleteDefaultDirFiles();
         LanSongFileUtil.deleteDefaultDir();
     }
-    /**
-     * 设置默认产生文件的文件夹,
-     * @param tmpDir  设置临时文件夹的完整路径
-     */
     public static void setTempFileDir(String tmpDir) {
         LanSoEditorBox.setTempFileDir(tmpDir);
-        LanSongFileUtil.FileCacheDir = tmpDir;
+        LanSongFileUtil.FileCacheDir=tmpDir;
     }
 
-    /**
-     * 设置只使用软解码器, 这样兼容性好, 但处理速度可能会慢一些;
-     */
     public static void setOnlySoftWareDecoder(boolean is){
         LanSoEditorBox.setOnlySoftWareDecoder(is);
     }
 
-
-    /**
-     * 设置临时文件夹的路径
-     * 并设置文件名的前缀和后缀 我们默认是以当前时间年月日时分秒毫秒:yymmddhhmmss_ms为当前文件名字.
-     * 你可以给这个名字增加一个前缀和后缀.比如xiaomi5_yymmddhhmmss_ms_version54.mp4等.
-     * @param tmpDir  设置临时文件夹的完整路径
-     * @param prefix  设置文件的前缀
-     * @param subfix  设置文件的后缀.
-     */
-    public static void setTempFileDir(String tmpDir,String prefix,String subfix) {
-        if(tmpDir!=null && prefix!=null && subfix!=null){
-
-            if (!tmpDir.endsWith("/")) {
-                tmpDir += "/";
-            }
-
-            LanSoEditorBox.setTempFileDir(tmpDir,prefix,subfix);
-            LanSongFileUtil.FileCacheDir = tmpDir;
-            LanSongFileUtil.mTmpFilePreFix=prefix;
-            LanSongFileUtil.mTmpFileSubFix=subfix;
-        }
-    }
-
-    /**
-     * 设置SDK的log输出信息回调.
-     * 您可以保存到文本里或打印出来.
-     * @param listener
-     */
     public static void setSDKLogOutListener(OnLanSongLogOutListener listener){
 
         if(listener!=null){
@@ -113,17 +74,13 @@ public class LanSoEditor {
         LSOLog.setLogOutListener(listener);
     }
 
-    public static void setForceLSOLayerHWCompress(boolean is){
-        LanSoEditorBox.setForceHWCompress(is);
-    }
-
     /**
      * 是否打印SDK中的调试信息(Log.d的信息);
      * 默认是打印.
      * @param is
      */
-    public static void setSDKLogOutDebugInfo(boolean is){
-        LSOLog.setSDKLogOutDebugEnable(is);
+    public static void setDebugInfoEnable(boolean is){
+        LSOLog.setDebugEnable(is);
     }
 
     //----------------------------------------------------------------------------------------
@@ -141,7 +98,7 @@ public class LanSoEditor {
                 + "; Limited time: year:"+VideoEditor.getLimitYear()+ " month:" +VideoEditor.getLimitMonth();
 
         DisplayMetrics dm = new DisplayMetrics();
-              dm = ctx.getResources().getDisplayMetrics();
+        dm = ctx.getResources().getDisplayMetrics();
 
         String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+LanSoEditorBox.getCpuName()+
                 " display screen size:"+ dm.widthPixels+ " x "+ dm.heightPixels;
@@ -210,11 +167,7 @@ public class LanSoEditor {
         LanSoEditorBox.unInit();
     }
 
-    /**
-     * 是否是麒麟处理器,
-     * 麒麟处理器无法获取到CPU型号, 只能从MODEL判断
-     * @return
-     */
+
     public static boolean isQiLinSoc()
     {
         if(LanSoEditorBox.isQiLinSoC()){
@@ -235,5 +188,4 @@ public class LanSoEditor {
     private static native void nativeInit(Context ctx, AssetManager ass,String filename);
     private static native void nativeInit2(Context ctx, AssetManager ass,String filename);
     private static native void nativeUninit();
-    private static native void setLanSongSDK1();
 }

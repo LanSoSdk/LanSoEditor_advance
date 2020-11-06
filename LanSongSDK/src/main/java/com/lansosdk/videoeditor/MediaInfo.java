@@ -2,34 +2,13 @@ package com.lansosdk.videoeditor;
 
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
-import android.util.Log;
 
 import com.lansosdk.box.LSOLog;
 
 import java.io.File;
 import java.io.IOException;
 
-/**
- * 用来得到当前音视频中的各种信息,比如视频的宽高,码率, 帧率,
- * 旋转角度,解码器信息,总时长,总帧数;音频的码率,采样率,解码器信息,总帧数等,为其他各种编辑处理为参考使用.
- * 暂时只支持一个音频和一个视频组成的多媒体文件,如MP4等,如果有多个音频,则音频数据是最后一个音频的info.
- *
- 使用方法是:创建对象, 执行prepare,
 
- 使用结果. 可以在任意线程中执行如下:
-
- MediaInfo info=new MediaInfo(inputPath);
- if(info.prepare()){ //<==============主要是这里, 需要执行以下,
-
-    //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
-
- }else{
-
-    //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
-
-
- }
- */
 public class MediaInfo {
 
 
@@ -54,7 +33,6 @@ public class MediaInfo {
     protected int vCodecWidth;
     /**
      * 视频的码率,
-     * 如是动态码率VBR,故这里得到的是平均值;
      */
     public int vBitRate;
     /**

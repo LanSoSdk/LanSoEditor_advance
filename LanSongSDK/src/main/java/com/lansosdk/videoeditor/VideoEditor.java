@@ -10,9 +10,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.videoeditor.archApi.LanSongFileUtil;
+import com.lansosdk.videoeditor.oldVersion.LanSongLogCollector;
+import com.lansosdk.videoeditor.oldVersion.onVideoEditorProgressListener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,10 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.lansosdk.videoeditor.LanSongFileUtil.fileExist;
+import static com.lansosdk.videoeditor.archApi.LanSongFileUtil.fileExist;
 
 
-@Deprecated
 public class VideoEditor {
 
     public static final String version="VideoEditor";
@@ -57,12 +58,32 @@ public class VideoEditor {
     private final int VIDEO_EDITOR_HANDLER_COMPLETED = 204;
 
 
+    private static LanSongLogCollector lanSongLogCollector =null;
 
 
     public void setEncodeBitRate(int bitRate){
         encodeBitRate=bitRate;
     }
 
+    public static void logEnable(Context ctx){
+
+        if(ctx!=null){
+            lanSongLogCollector =new LanSongLogCollector(ctx);
+        }else{
+            if(lanSongLogCollector !=null && lanSongLogCollector.isRunning()){
+                lanSongLogCollector.stop();
+                lanSongLogCollector =null;
+            }
+        }
+    }
+
+    public static String getErrorLog(){
+        if(lanSongLogCollector !=null && lanSongLogCollector.isRunning()){
+            return lanSongLogCollector.stop();
+        }else{
+            return null;
+        }
+    }
 
     public VideoEditor() {
         Looper looper;
@@ -163,7 +184,7 @@ public class VideoEditor {
 
     protected int durationMs=0;
 
-    protected native int setDurationMs(int durationMS);
+    public native int setDurationMs(int durationMS);
     private native int setForceColorFormat(int format);
 
 
@@ -181,7 +202,6 @@ public class VideoEditor {
 
             cmdList.add("-t");
             cmdList.add(String.valueOf(duration));
-
             return executeAutoSwitch(cmdList);
         }
         return null;
@@ -195,7 +215,7 @@ public class VideoEditor {
         String filter = String.format(Locale.getDefault(), "[0:a]volume=volume=%f[a1]; [1:a]volume=volume=%f[a2]; " +
                 "[a1][a2]amix=inputs=2:duration=first:dropout_transition=2", value1, value2);
 
-        String  dstPath=LanSongFileUtil.createFileInBox("pcm");
+        String  dstPath= LanSongFileUtil.createFileInBox("pcm");
 
         cmdList.add("-f");
         cmdList.add("s16le");
@@ -2512,7 +2532,13 @@ public class VideoEditor {
         }
 
         if(ret!=0){
+            if(lanSongLogCollector !=null){
+                lanSongLogCollector.start();
+            }
             ret=executeWithEncoder(cmdList, bitrate, dstPath, false);
+            if(lanSongLogCollector !=null && lanSongLogCollector.isRunning()){
+                lanSongLogCollector.stop();
+            }
             LanSongFileUtil.deleteFile(dstPath);
 
             durationMs=0;

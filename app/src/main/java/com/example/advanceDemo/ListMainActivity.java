@@ -14,8 +14,8 @@ import com.example.advanceDemo.utils.DemoUtil;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.box.LanSoEditorBox;
 import com.lansosdk.videoeditor.LanSoEditor;
-import com.lansosdk.videoeditor.LanSongFileUtil;
 import com.lansosdk.videoeditor.VideoEditor;
+import com.lansosdk.videoeditor.archApi.LanSongFileUtil;
 
 
 public class ListMainActivity extends Activity implements OnClickListener {

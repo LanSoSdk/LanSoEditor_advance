@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:background="@color/white">
-        <com.lansosdk.videoeditor.LSOConcatCompositionView
+        <com.lansosdk.videoeditor.LSOEditPlayer
             android:id="@+id/id_video_comp_composition_view"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"

@@ -17,9 +17,9 @@ import android.widget.Toast;
 
 import com.example.advanceDemo.utils.DemoUtil;
 import com.lansoeditor.advanceDemo.R;
-import com.lansosdk.videoeditor.IRenderView;
 import com.lansosdk.videoeditor.MediaInfo;
-import com.lansosdk.videoeditor.TextureRenderView;
+import com.lansosdk.videoeditor.oldVersion.IRenderView;
+import com.lansosdk.videoeditor.oldVersion.TextureRenderView2;
 import com.lansosdk.videoplayer.OnLSOPlayeFrameUpdateListener;
 import com.lansosdk.videoplayer.OnLSOPlayerCompletionListener;
 import com.lansosdk.videoplayer.OnLSOPlayerPreparedListener;
@@ -37,7 +37,7 @@ public class VideoPlayerActivity extends Activity {
     private static final boolean VERBOSE = true;
     private static final String TAG = "VideoPlayerActivity";
     String videoPath = null;
-    private TextureRenderView textureView;
+    private TextureRenderView2 textureView;
     private MediaPlayer mediaPlayer = null;
     private VPlayer vplayer = null;
     private boolean isSupport = false;
@@ -51,7 +51,7 @@ public class VideoPlayerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_layout);
-        textureView = (TextureRenderView) findViewById(R.id.surface1);
+        textureView = (TextureRenderView2) findViewById(R.id.surface1);
 
         videoPath = getIntent().getStringExtra("videopath");
         if(videoPath==null){
