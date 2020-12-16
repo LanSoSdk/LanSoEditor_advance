@@ -1,6 +1,6 @@
-### This is the simplest demo of Lansong SDK.
+### This is the simplest demo of Lansong SDK.(商业,付费, business, paid)
 
-#### The current version is 4.2.8
+#### The current version is 4.3.3
  [中文说明](https://github.com/LanSoSdk/LanSoEditor_advance/blob/master/README.cn.md)
 - Including: Video editing SDK and AE template SDK;
 - Our complete demo demo apk, you can download it from here:
@@ -39,5 +39,5 @@
 #### contact us
 - email: support@lansongtech.com
 - web: www.lansongtech.com
-- WhatsApp : +8618006716739
+- WhatsApp : +8618006716739 (商业, 付费, business, paid)
 
