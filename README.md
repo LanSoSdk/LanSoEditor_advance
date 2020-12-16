@@ -36,8 +36,8 @@
 - Support for replacing sounds, adding logos, filtering screens, adding other text, etc.
 - Set different resolution when supporting export.
 
-#### contact us
+#### contact us (商业, 付费, business, paid)
 - email: support@lansongtech.com
 - web: www.lansongtech.com
-- WhatsApp : +8618006716739 (商业, 付费, business, paid)
+- WhatsApp : +8618006716739
 
