@@ -1,37 +1,36 @@
 package com.lansosdk.videoeditor;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
+
 
 import com.lansosdk.LanSongFilter.LanSongFilter;
-import com.lansosdk.box.BitmapLayer;
-import com.lansosdk.box.CameraLayer;
+import com.lansosdk.box.ILayerInterface;
 import com.lansosdk.box.LSOAsset;
-import com.lansosdk.box.LSOAudioLayer;
-import com.lansosdk.box.LSOCamAudioLayer;
 import com.lansosdk.box.LSOCamLayer;
+import com.lansosdk.box.LSOCamRelativeLayout;
 import com.lansosdk.box.LSOCameraRunnable;
+import com.lansosdk.box.LSOCameraSizeType;
 import com.lansosdk.box.LSOFrameLayout;
-import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.LSORecordFile;
-import com.lansosdk.box.LSOScaleType;
-import com.lansosdk.box.MVLayer2;
+import com.lansosdk.box.OnCameraResumeErrorListener;
 import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnRecordCompletedListener;
 import com.lansosdk.box.OnRecordProgressListener;
 import com.lansosdk.box.OnResumeListener;
 import com.lansosdk.box.OnTakePictureListener;
-import com.lansosdk.box.VideoLayer2;
+import com.lansosdk.box.OnTextureAvailableListener;
 
 import java.util.List;
 
-public class LSOCamera extends LSOFrameLayout {
+public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
 
     private int compWidth = 1080;
     private int compHeight = 1920;
@@ -58,6 +57,11 @@ public class LSOCamera extends LSOFrameLayout {
     protected void sendOnCreateListener() {
         super.sendOnCreateListener();
         if (render != null) {
+
+            DisplayMetrics dm = new DisplayMetrics();
+            dm = getResources().getDisplayMetrics();
+            compWidth=dm.widthPixels;
+            compHeight=dm.heightPixels;
             render.setSurface(compWidth, compHeight, getSurfaceTexture(), getViewWidth(), getViewHeight());
         }
     }
@@ -68,34 +72,50 @@ public class LSOCamera extends LSOFrameLayout {
         if (render != null) {
             render.setSurface(compWidth, compHeight, getSurfaceTexture(), getViewWidth(), getViewHeight());
         }
-
     }
 
     //旋转移动缩放
     public boolean onTextureViewTouchEvent(MotionEvent event) {
-        super.onTextureViewTouchEvent(event);
-//        if(render !=null){
-//            render.onTextureViewTouchEvent(event);
-//        }
-        return true;
+        if(isEnableTouch){
+            super.onTextureViewTouchEvent(event);
+            return onTouchEvent(event);
+        }else{
+            return false;
+        }
     }
 
 
     public void onCreateAsync(OnCreateListener listener) {
-        DisplayMetrics dm = new DisplayMetrics();
-        dm = getResources().getDisplayMetrics();
-
-        LSOLog.d(getClass().getName() +" onCreateAsync  size :" + dm.widthPixels + " x "+ dm.heightPixels);
-
         setup();
-
-        if (dm.widthPixels * dm.heightPixels < 1080 * 1920) {
-            compWidth = 720;
-            compHeight = 1280;
-        }
-
-        setCompositionSizeAsync(compWidth, compHeight, listener);
+        fullscreen=false;
+        setPlayerSizeAsync(compWidth, compHeight, listener);
     }
+
+
+    private OnCreateListener onCreateListener;
+    private boolean fullscreen=false;
+
+    public void onCreateFullScreen(OnCreateListener listener) {
+
+        if(isTextureAvailable() && listener!=null){
+            if (render == null) {
+                render = new LSOCameraRunnable(getContext(), getWidth(), getHeight());
+            }
+            listener.onCreate();
+        }else{
+            onCreateListener=listener;
+            setOnTextureAvailableListener(new OnTextureAvailableListener() {
+                @Override
+                public void onTextureUpdate(int width, int height) {
+                    if (render == null) {
+                        render = new LSOCameraRunnable(getContext(), getWidth(), getHeight());
+                    }
+                    onCreateListener.onCreate();
+                }
+            });
+        }
+    }
+
 
     public void onResumeAsync(OnResumeListener listener) {
         super.onResumeAsync(listener);
@@ -163,12 +183,27 @@ public class LSOCamera extends LSOFrameLayout {
         }
     }
 
+    /**
+     * 设置预览尺寸, 不建议设置.
+     * 如设置,则在start()前设置;
+     * @param type
+     */
+    public void setPreviewSize(LSOCameraSizeType type){
+        if(render!=null && !render.isRunning()){
+            render.setPreviewSize(type);
+        }
+    }
+
 
     public boolean isRunning() {
         return render != null && render.isRunning();
     }
 
 
+    /**
+     * 录制完成监听
+     * @param listener
+     */
     public void setOnRecordCompletedListener(OnRecordCompletedListener listener) {
         if (render != null) {
             render.setOnRecordCompletedListener(listener);
@@ -185,7 +220,21 @@ public class LSOCamera extends LSOFrameLayout {
             render.setOnRecordProgressListener(listener);
         }
     }
+    /**
+     * 当camera从后台回来时, 如果相机被占用则会触发此错误回调;
+     * @param listener
+     */
+    public void setOnCameraResumeErrorListener(OnCameraResumeErrorListener listener){
+        if(render!=null){
+            render.setOnCameraResumeErrorListener(listener);
+        }
+    }
 
+
+    /**
+     * 错误监听
+     * @param listener
+     */
     public void setOnLanSongSDKErrorListener(OnLanSongSDKErrorListener listener) {
         if (render != null) {
             render.setOnLanSongSDKErrorListener(listener);
@@ -206,9 +255,9 @@ public class LSOCamera extends LSOFrameLayout {
                 render.setDisplaySurface(getSurfaceTexture(), getViewWidth(), getViewHeight());
                 isCameraOpened = render.start();
                 if (!isCameraOpened) {
-                    LSOLog.e("open LSOCameraView error.\n");
+                    LSOLog.e("open LSOCamera error.\n");
                 } else {
-                    LSOLog.d("LSOCameraView start preview...");
+                    LSOLog.d("LSOCamera start preview...");
                 }
             }
         } else {
@@ -217,14 +266,12 @@ public class LSOCamera extends LSOFrameLayout {
         return isCameraOpened;
     }
 
-    /**
-     * @param filter
-     */
     public void setFilter(LanSongFilter filter) {
         if (render != null) {
             render.setFilter(filter);
         }
     }
+
 
     /**
      * 美颜, 范围是0.0---1.0; 0.0 不做磨皮, 1.0:完全磨皮;
@@ -278,16 +325,10 @@ public class LSOCamera extends LSOFrameLayout {
 
 
     private String bgPath=null;
-    /**
-     * 设置背景图片;
-     *
-     * @param path
-     */
-    public void setBackGroundBitmapPath(String path) {
-        setBackGroundPath(path);
+
+    public String getBackGroundPath(){
+        return bgPath;
     }
-
-
     /**
      * 设置背景路径, 路径可以是图片或视频
      * path  support  image and video.
@@ -297,10 +338,15 @@ public class LSOCamera extends LSOFrameLayout {
         if(bgPath!=null && bgPath.equals(path)){
             return;
         }
+
         if (render != null && isRunning() && path != null) {
             try {
-                bgPath=path;
-                render.setBackGroundAsset(new LSOAsset(path));
+                String suffix=getFileSuffix(path);
+                if(isBitmapSuffix(suffix)){
+                    setBackGroundBitmapPath(path);
+                }else if(isVideoSuffix(suffix)){
+                    setBackGroundVideoPath(path);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 LSOLog.e("setBackGroundPath error, input is:"+ path);
@@ -308,12 +354,106 @@ public class LSOCamera extends LSOFrameLayout {
         }
     }
 
+    /**
+     * 设置背景图片;
+     * @param path
+     */
+    public void setBackGroundBitmapPath(String path) {
+        if(bgPath!=null && bgPath.equals(path)){
+            return;
+        }
+
+        if (render != null && isRunning() && path != null) {
+            try {
+                bgPath=path;
+                render.setBackGroundBitmapPath(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+                LSOLog.e("setBackGroundPath error, input is:"+ path);
+                bgPath=null;
+            }
+        }
+    }
+
+    public void setBackGroundVideoPath(String path) {
+        if(bgPath!=null && bgPath.equals(path)){
+            return;
+        }
+
+        if (render != null && isRunning() && path != null) {
+            try {
+                bgPath=path;
+                render.setBackGroundVideoPath(path,1.0f);
+            } catch (Exception e) {
+                e.printStackTrace();
+                LSOLog.e("setBackGroundPath error, input is:"+ path);
+                bgPath=null;
+            }
+        }
+    }
+
+    /**
+     * 设置背景视频, 并附带设置音量
+     * @param path 视频路径, 支持mp4和mov视频
+     * @param audioVolume 视频中的声音音量, 如关闭声音, 则设置为0; 1.0是默认声音. 2.0是放大一倍;
+     */
+    public void setBackGroundVideoPath(String path, float audioVolume) {
+        if(bgPath!=null && bgPath.equals(path)){
+            return;
+        }
+        if (render != null && isRunning() && path != null) {
+            try {
+                bgPath=path;
+                render.setBackGroundVideoPath(path,audioVolume);
+            } catch (Exception e) {
+                e.printStackTrace();
+                LSOLog.e("setBackGroundPath error, input is:"+ path);
+            }
+        }
+    }
+
+
+    /**
+     * 获取背景图层.
+     * 在每次setBackGroundPath会更新背景图层对象, 需要重新获取;
+     * 设置后需等待30毫秒后获取
+     * 不建议使用;
+     * @return
+     */
+    public LSOCamLayer getBackGroundLayer(){
+        if (render != null) {
+            return render.getBackGroundLayer();
+        }
+        return null;
+    }
+
+    /**
+     * 删除背景层;
+     */
     public void removeBackGroundLayer() {
         if (render != null) {
             bgPath=null;
             render.removeBackGroundLayer();
         }
     }
+
+
+    public LSOCamLayer getCameraLayer(){
+        if(render!=null){
+            return render.getCameraLayer();
+        }else {
+            return null;
+        }
+    }
+
+    public MediaPlayer getMediaPlayer(){
+        if(render!=null){
+            return render.getMediaPlayer();
+        }else{
+            return null;
+        }
+    }
+
 
 
     private String fgBitmapPath=null;
@@ -329,7 +469,7 @@ public class LSOCamera extends LSOFrameLayout {
             return;
         }
 
-        if (render != null && isRunning()) {
+        if (render != null && isRunning() && !isRecording()) {
             try {
                 fgBitmapPath=path;
                 fgColorPath=null;
@@ -343,7 +483,7 @@ public class LSOCamera extends LSOFrameLayout {
     }
 
     /**
-     * 设置前景透明动画
+     * 设置前景透明动画,
      * @param colorPath mv color path
      * @param maskPath mv mask path
      */
@@ -353,7 +493,7 @@ public class LSOCamera extends LSOFrameLayout {
             return;
         }
 
-        if (render != null && isRunning()) {
+        if (render != null && isRunning() && !isRecording() && getRecordDurationUs()==0) {
             fgBitmapPath=null;
             fgColorPath=colorPath;
             render.setForeGroundVideoPath(colorPath, maskPath);
@@ -361,6 +501,10 @@ public class LSOCamera extends LSOFrameLayout {
             LSOLog.e("add MVLayer error!");
         }
     }
+
+    /**
+     * 删除前景视频
+     */
     public void removeForeGroundLayer() {
         fgBitmapPath=null;
         fgColorPath=null;
@@ -386,11 +530,12 @@ public class LSOCamera extends LSOFrameLayout {
      * change front or back camera;
      */
     public void changeCamera() {
-        if (render != null && !isRecording() && CameraLayer.isSupportFrontCamera()) {
+        if (render != null && !isRecording() && LSOCameraRunnable.isSupportFrontCamera()) {
             frontCamera = !frontCamera;
             render.changeCamera();
         }
     }
+
     /**
      * 是否是前置摄像头
      * @return
@@ -414,11 +559,14 @@ public class LSOCamera extends LSOFrameLayout {
      * 开始录制
      */
     public void startRecord() {
-        if (render != null && !render.isRecording()) {
+        if(fullscreen){
+            LSOLog.e("start record error.  full screen not support record.");
+            return;
+        }
+        if (render != null && !render.isRecording() ) {
             render.startRecord();
         }
     }
-
     /**
      * 是否在录制中.
      * @return
@@ -432,6 +580,10 @@ public class LSOCamera extends LSOFrameLayout {
      * 暂停后, 会录制一段视频, 录制的这段视频在onDestory中释放;
      */
     public void pauseRecord() {
+        if(fullscreen){
+            LSOLog.e("start record error.  full screen not support record.");
+            return;
+        }
         if (render != null && render.isRecording()) {
             render.pauseRecord();
         }
@@ -447,7 +599,6 @@ public class LSOCamera extends LSOFrameLayout {
             render.stopRecordAsync();
         }
     }
-
     /**
      * 删除上一段的录制
      *
@@ -478,52 +629,67 @@ public class LSOCamera extends LSOFrameLayout {
             return null;
         }
     }
+
     /**
-     * add  audio path
-     * 有外部声音的时候, 自动屏蔽mic的声音; 因为mic会存在音乐的声音;故屏蔽mic
-     *
+     * 增加外部声音.
      * @param path
-     * @param looping
+     * @param looping 是否循环;
      * @return
      */
     public void setAudioLayer(String path, boolean looping) {
-        setAudioLayer(path,0,Long.MAX_VALUE,looping);
-    }
-    /**
-     * 增加外部声音.
-     *
-     * @param path
-     * @param cutStartUs
-     * @param cutEndUs
-     * @param looping
-     * @return
-     */
-    public void setAudioLayer(String path, long cutStartUs, long cutEndUs, boolean looping) {
         if (render!=null && !render.isRecording()) {
-            render.removeAudioLayer();
+            render.removeAudio();
             if(path!=null){
-                render.addAudioLayer(path, cutStartUs, cutEndUs,looping);
+                render.addAudio(path,looping);
             }
         }
     }
+
+    /**
+     * 删除声音图层
+     */
     public void removeAudioLayer(){
         if (render!=null && !render.isRecording()) {
-            render.removeAudioLayer();
+            render.removeAudio();
         }
     }
 
 
+
+    private static String getFileSuffix(String path) {
+        if (path == null)
+            return "";
+        int index = path.lastIndexOf('.');
+        if (index > -1)
+            return path.substring(index + 1);
+        else
+            return "";
+    }
+
+
+    private boolean isBitmapSuffix(String suffix) {
+
+        return "jpg".equalsIgnoreCase(suffix)
+                || "JPEG".equalsIgnoreCase(suffix)
+                || "png".equalsIgnoreCase(suffix)
+                || "heic".equalsIgnoreCase(suffix);
+    }
+
+    private boolean isVideoSuffix(String suffix) {
+        return "mp4".equalsIgnoreCase(suffix)
+                || "mov".equalsIgnoreCase(suffix);
+    }
+
+
+
     /**
-     * 如果不设置logo,则不设置或设置为null
-     * @param asset
-     * @param position
-     * @return
+     * 录制一个view的图像
+     * @param layout 录制控件的类, 无论是否enable, 这里都要设置对象;
+     * @param enable 是否使能
      */
-    public LSOCamLayer setLogoLayer(LSOAsset asset, LSOLayerPosition position) {
-        if (render != null && isRunning()) {
-            return render.setLogoLayer(asset, position);
-        } else {
-            return null;
+    public void setRelativeLayout(LSOCamRelativeLayout layout, boolean enable) {
+        if(render!=null){
+            render.setRelativeLayout(layout,enable);
         }
     }
 
@@ -536,15 +702,26 @@ public class LSOCamera extends LSOFrameLayout {
         return (float) Math.sqrt(x * x + y * y);
     }
 
+
     private boolean isEnableTouch = true;
+    public void setTouchEnable(boolean enable) {
+        isEnableTouch = enable;
+    }
+
 
     public void setCameraFocusListener(OnFocusEventListener listener) {
         this.onFocusListener = listener;
     }
 
-    public void setTouchEnable(boolean enable) {
-        isEnableTouch = enable;
+    @Override
+    public ILayerInterface getTouchPointLayer(float x, float y) {
+        if(render!=null){
+            return render.getTouchPointLayer(x,y);
+        }else {
+            return null;
+        }
     }
+
 
     public interface OnFocusEventListener {
         void onFocus(int x, int y);
@@ -554,46 +731,66 @@ public class LSOCamera extends LSOFrameLayout {
     float x2 = 0;
     float y1 = 0;
     float y2 = 0;
+    private long downTimeMs;
+    private boolean isClickEvent = false;
+    private boolean isSlideEvent = false;
     private boolean isZoomEvent = false;
     private float touching;
+    private boolean disableZoom=false;
+    public void setDisableZoom(boolean is){
+        disableZoom=is;
+    }
 
     public boolean onTouchEvent(MotionEvent event) {
-
-        if (!isEnableTouch || render == null) { // 如果禁止了touch事件,则直接返回false;
+        int touchSlop =  ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        if (render == null || !isEnableTouch) { // 如果禁止了touch事件,则直接返回false;
             return false;
         }
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             // 手指压下屏幕
             case MotionEvent.ACTION_DOWN:
                 isZoomEvent = false;
+                isClickEvent = true;
+                isSlideEvent = true;
                 x1 = event.getX();
                 y1 = event.getY();
+                downTimeMs = System.currentTimeMillis();
+
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 // 计算两个手指间的距离
                 if (isRunning()) {
                     touching = spacing(event);
                     isZoomEvent = true;
+                    isClickEvent = false;
+                    isSlideEvent = false;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (isZoomEvent && isRunning()) {
-                    if (event.getPointerCount() >= 2) {// 触屏两个点时才执行
-                        float endDis = spacing(event);// 结束距离
-                        int scale = (int) ((endDis - touching) / 10f); // 每变化10f
-                        // zoom变1, 拉近拉远;
-                        if (scale != 0) {
-                            int zoom = render.getZoom() + scale;
-                            render.setZoom(zoom);
-                            touching = endDis;
-                        }
+                if (isRunning()) {
+                    if (isZoomEvent) {
+//                        if (event.getPointerCount() >= 2 && !disableZoom) {// 触屏两个点时才执行
+//                            float endDis = spacing(event);// 结束距离
+//                            int scale = (int) ((endDis - touching) / 10f); // 每变化10f
+//                            // zoom变1, 拉近拉远;
+//                            if (scale != 0) {
+//                                int zoom = render.getZoom() + scale;
+//                                render.setZoom(zoom);
+//                                touching = endDis;
+//                            }
+//                        }
+                    }
+                    if (isClickEvent && (Math.abs(x1 - event.getX()) > touchSlop||
+                            Math.abs(y1 - event.getY()) > touchSlop) ){
+                        isClickEvent = false;
+                        isSlideEvent = true;
                     }
                 }
                 break;
             // 手指离开屏幕
             case MotionEvent.ACTION_UP:
                 if (isRunning()) {
-                    if (!isZoomEvent) {
+                    if (isClickEvent && System.currentTimeMillis() - downTimeMs < 200 ) {
                         float x = event.getX();
                         float y = event.getY();
                         render.doFocus((int) x, (int) y);
@@ -601,9 +798,53 @@ public class LSOCamera extends LSOFrameLayout {
                         if (onFocusListener != null) {
                             onFocusListener.onFocus((int) x, (int) y);
                         }
+
+                        isClickEvent = false;
                     }
+
+                    if (!isZoomEvent && !isClickEvent && isSlideEvent){
+                        float offsetX = x1 - event.getX();
+                        float offsetY = y1 - event.getY();
+                        if (Math.abs(offsetX) < touchSlop && Math.abs(offsetY) < touchSlop){
+                            break;
+                        }
+
+                        if (Math.abs(Math.abs(offsetX) - Math.abs(offsetY)) < touchSlop){
+                            break;
+                        }
+
+                        if (Math.abs(offsetX) > Math.abs(offsetY)){
+                            if (offsetX > 0){
+                                if (onSlideListener != null ){
+                                    onSlideListener.onHorizontalSlide(true);
+                                }
+                            }else {
+                                if (onSlideListener != null ){
+                                    onSlideListener.onHorizontalSlide(false);
+                                }
+                            }
+
+                        }else {
+                            if (offsetY > 0){
+                                if (onSlideListener != null ){
+                                    onSlideListener.onVerticalSlide(true);
+                                }
+                            }else {
+                                if (onSlideListener != null ){
+                                    onSlideListener.onVerticalSlide(false);
+                                }
+                            }
+                        }
+                    }
+
                 }
                 isZoomEvent = false;
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                isZoomEvent = false;
+                isClickEvent = false;
+                break;
+            default:
                 break;
         }
         return true;
@@ -611,15 +852,39 @@ public class LSOCamera extends LSOFrameLayout {
 
     private void setup() {
         if (render == null) {
+            DisplayMetrics dm = getResources().getDisplayMetrics();
+            if (dm.widthPixels * dm.heightPixels < 1080 * 1920) {
+                compWidth = 720;
+                compHeight = 1280;
+            }
             render = new LSOCameraRunnable(getContext(), compWidth, compHeight);
         }
     }
 
+
     public void cancel() {
         isCameraOpened = false;
+        bgPath=null;
+        fgBitmapPath=null;
+        fgColorPath=null;
+        fullscreen=false;
         if (render != null) {
             render.cancel();
             render = null;
         }
     }
+
+    OnSlideListener onSlideListener;
+
+    public void setOnSlideListener(OnSlideListener onSlideListener) {
+        this.onSlideListener = onSlideListener;
+    }
+
+    public interface OnSlideListener{
+
+        void onHorizontalSlide(boolean slideLeft);
+
+        void onVerticalSlide(boolean slideUp);
+    }
+
 }

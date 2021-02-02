@@ -838,7 +838,6 @@ public class DrawPadCameraView extends FrameLayout {
 
     /**
      * 直接设置容器的宽高, 不让他自动缩放.
-     * <p>
      * 要在容器开始前调用.
      *
      * @param width

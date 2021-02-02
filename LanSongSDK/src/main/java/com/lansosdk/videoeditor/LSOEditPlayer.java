@@ -10,16 +10,15 @@ import android.view.MotionEvent;
 
 import com.lansosdk.box.LSOAsset;
 import com.lansosdk.box.LSOAudioLayer;
+import com.lansosdk.box.LSOEditPlayerRender;
 import com.lansosdk.box.LSOExportType;
 import com.lansosdk.box.LSOFrameLayout;
-import com.lansosdk.box.LSORatioType;
 import com.lansosdk.box.LSOLayer;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.LSORatioType;
 import com.lansosdk.box.LSOSize;
-import com.lansosdk.box.LSOEditPlayerRender;
-import com.lansosdk.box.OnCreateListener;
-
 import com.lansosdk.box.OnAddAssetProgressListener;
+import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLanSongSDKBeforeRenderFrameListener;
 import com.lansosdk.box.OnLanSongSDKDurationChangedListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
@@ -35,7 +34,7 @@ import com.lansosdk.box.OnResumeListener;
 import java.util.List;
 
 
-public class LSOEditPlayer extends LSOFrameLayout {
+public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
     private LSOEditPlayerRender render;
 
     public LSOEditPlayer(Context context) {
@@ -55,7 +54,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    //-----------copy code
     protected void sendOnCreateListener() {
         super.sendOnCreateListener();
         if (render != null) {
@@ -74,29 +72,33 @@ public class LSOEditPlayer extends LSOFrameLayout {
 
     //旋转移动缩放
     public boolean onTextureViewTouchEvent(MotionEvent event) {
-        super.onTextureViewTouchEvent(event);
-
-        if (render != null) {
-            render.onTextureViewTouchEvent(event);
+        if(enableTouch){
+            super.onTextureViewTouchEvent(event);
+            return render!=null && render.onTextureViewTouchEvent(event);
         }
-        return true;
+        return false;
     }
+
+
+    private boolean enableTouch = true;
+    public void setTouchEnable(boolean enable) {
+        enableTouch = enable;
+    }
+
 
     private int firstCompWidth = 0;
     private int firstCompHeight = 0;
 
     public void onCreateAsync(LSORatioType ratio, OnCreateListener listener) {
-        LSOSize size;
-        if(ratio==LSORatioType.RATIO_ORIGINAL && firstCompWidth==0 && firstCompHeight==0){
-            size = getPreviewSizeByRatio(LSORatioType.RATIO_9_16);
-            LSOLog.e("onCreateAsync set LSORatioType.RATIO_ORIGINAL error. because firstWidth is zero.");
-        }else{
-            size = getPreviewSizeByRatio(ratio);
+        if (firstCompWidth == 0 || firstCompHeight == 0) {
+            LSOLog.e("onCreateAsync must first call List<LSOAsset> method.");
+            return;
         }
 
+        LSOSize size = getPreviewSizeByRatio(ratio,firstCompWidth,firstCompHeight);
         if (size.width != getCompWidth() || size.height != getCompHeight()) {
             render.setAdjustSurface(true);
-            setCompositionSizeAsync((int) size.width, (int) size.height, listener);
+            setPlayerSizeAsync((int) size.width, (int) size.height, listener);
         }
     }
 
@@ -108,19 +110,48 @@ public class LSOEditPlayer extends LSOFrameLayout {
             int width = arrays.get(0).getWidth();
             int height = arrays.get(0).getHeight();
 
-            createAssetArray=arrays;
+            createAssetArray = arrays;
 
             if (firstCompWidth == 0 || firstCompHeight == 0) {
                 firstCompWidth = width;
                 firstCompHeight = height;
             }
 
-            setCompositionSizeAsync(width, height, listener);
+            setPlayerSizeAsync(width, height, listener);
         } else {
             listener.onCreate();
         }
     }
 
+
+
+    public void onCreateAsync(List<LSOAsset> arrays,int width,int height, OnCreateListener listener) {
+        if (arrays != null && arrays.size() > 0) {
+            createAssetArray = arrays;
+            if (firstCompWidth == 0 || firstCompHeight == 0) {
+                firstCompWidth = width;
+                firstCompHeight = height;
+            }
+            setPlayerSizeAsync(width, height, listener);
+        } else {
+            listener.onCreate();
+        }
+    }
+
+
+    /**
+     * 调整播放器的预览画布的大小；
+     * @param width
+     * @param height
+     * @param listener
+     */
+    public void onCreateAsync(int width,int height, OnCreateListener listener) {
+        if (firstCompWidth == 0 || firstCompHeight == 0 || width<192 ||height<192) {
+            LSOLog.e("onCreateAsync must first call List<LSOAsset> method.");
+            return;
+        }
+        setPlayerSizeAsync(width, height, listener);
+    }
 
     public void onResumeAsync(OnResumeListener listener) {
         super.onResumeAsync(listener);
@@ -142,21 +173,19 @@ public class LSOEditPlayer extends LSOFrameLayout {
         super.onDestroy();
         release();
     }
+
     //-----------------------------VIEW ADJUST CODE END----------------------------
-
-
     //------------------------------------------------player code-----------------------------------------------
 
     private boolean hasSetConcatAsset = false;
 
     /**
-     * lsnew:
-     * setConcatAssetList 更改为 prepareConcatAssets
      * 设置需要拼接的资源, 只能设置一次.
+     *
      * @param listener
      */
     public void prepareConcatAssets(OnAddAssetProgressListener listener) {
-        if (!hasSetConcatAsset && createAssetArray!=null && createAssetArray.size()>0) {
+        if (!hasSetConcatAsset && createAssetArray != null && createAssetArray.size() > 0) {
             createRender();
             hasSetConcatAsset = true;
             if (render != null && setup()) {
@@ -169,6 +198,7 @@ public class LSOEditPlayer extends LSOFrameLayout {
 
     /**
      * 在当前时间点插入图片或视频
+     *
      * @param assetArray
      * @param listener1
      */
@@ -178,10 +208,9 @@ public class LSOEditPlayer extends LSOFrameLayout {
 
     /**
      * 在指定的时间点插入图片或视频.
-     *
      * 内部流程是:
-     *    1. 先找指定时间点 在某个图层时间段内.
-     *    2.找到图层后, 如果时间点在图层前半部分,则向前插入; 如后半部分,则向后插入;
+     * 1. 先找指定时间点 在某个图层时间段内.
+     * 2.找到图层后, 如果时间点在图层前半部分,则向前插入; 如后半部分,则向后插入;
      *
      * @param assetArray
      * @param atCompUs
@@ -195,8 +224,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
 
     /**
      * 替换拼接图层;
-     * LSNEW replaceConcatLayerListAsync ----> replaceConcatLayerAsync
-     *
      * @param asset        资源
      * @param replaceLayer 被替换的图层
      * @param listener     异步替换;
@@ -207,6 +234,7 @@ public class LSOEditPlayer extends LSOFrameLayout {
             render.replaceConcatLayerListAsync(asset, replaceLayer, listener);
         }
     }
+
     /**
      * 根据合成的时间, 得到对应的图层;
      *
@@ -239,67 +267,78 @@ public class LSOEditPlayer extends LSOFrameLayout {
         }
     }
 
-    public void addMVLayerAsync(LSOAsset asset, long atCompUs,
-                                OnAddAssetProgressListener listener1) {
-        createRender();
-        LSOLog.d("EditPlayer addMVLayerAsync...");
-        if (render != null && setup() && asset != null && asset.isMV()) {
-            render.addMVAsync(asset, atCompUs, listener1);
-        }
-    }
 
     /**
-     * 增加图片图层.
-     *
-     * @param asset 图片资源;
-     * @param atCompUs 在什么位置增加;
-     * @return
+     * 增加视频动画特效, 增加后,返回一个特效图层;
+     * @param asset 增加资源
+     * @param atCompUs 从播放器的什么位置开始增加
+     * @param preview 增加的时候,是否要预览一下;
+     * @param listener1 增加完成后的回调
      */
-    public LSOLayer addBitmapLayer(LSOAsset asset, long atCompUs) {
+    public void addVideoEffectAsync(LSOAsset asset, long atCompUs, boolean preview, OnAddAssetProgressListener listener1) {
         createRender();
-        LSOLog.d("EditPlayer addBitmapLayer...");
-        if (render != null && setup() && asset != null && asset.isBitmap()) {
-            return render.addBitmapLayer(asset, atCompUs);
-        } else {
-            LSOLog.e("addBitmap error, " + asset.toString());
-            return null;
+        if (render != null && setup() && asset != null && asset.isMV()) {
+            render.addVideoEffectAsync(asset, atCompUs,preview, listener1);
         }
     }
 
+    public LSOLayer addBitmapLayer(String path, long atCompUs) {
+        createRender();
+        LSOLog.d("EditPlayer addBitmapLayer...");
+        if (render != null && setup() ) {
+            LSOAsset asset = null;
+            try {
+                asset = new LSOAsset(path);
+                return render.addBitmapLayer(asset, atCompUs);
+            } catch (Exception e) {
+                LSOLog.e("addBitmap error, " + asset.toString());
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 增加图片图层;
+     *
+     * @param bmp      图片
+     * @param atCompUs
+     * @return
+     */
     public LSOLayer addBitmapLayer(Bitmap bmp, long atCompUs) {
         createRender();
-
         LSOLog.d("EditPlayer addBitmapLayer...");
         try {
             if (render != null && setup() && bmp != null && !bmp.isRecycled()) {
                 return render.addBitmapLayer(new LSOAsset(bmp), atCompUs);
-            } else {
-                return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LSOLog.e("add BitmapLayer  error. " ,e);
         }
         LSOLog.e("addBitmap error, ");
         return null;
     }
+
     /**
      * 增加gif图层;
      *
      * @return 返回gif图层对象;
      */
-    public LSOLayer addGifLayer(String gifPath) {
+    public LSOLayer addGifLayer(String gifPath, long atCompUs) {
 
         LSOLog.d("EditPlayer addGifLayer...");
-        if(gifPath!=null){
+        if (gifPath != null) {
             int index = gifPath.lastIndexOf('.');
-            if (index > -1){
-                String suffix= gifPath.substring(index + 1);
-                if("gif".equalsIgnoreCase(suffix)){
+            if (index > -1) {
+                String suffix = gifPath.substring(index + 1);
+                if ("gif".equalsIgnoreCase(suffix)) {
                     try {
-                        return addGifLayer(new LSOAsset(gifPath), 0);
+                        LSOAsset asset=new LSOAsset(gifPath);
+                        if (render != null && setup() && asset.isGif()) {
+                            return render.addGifLayer(asset, atCompUs);
+                        }
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
+                        LSOLog.e("addGifLayer error. " ,e);
                     }
                 }
             }
@@ -307,23 +346,18 @@ public class LSOEditPlayer extends LSOFrameLayout {
         return null;
     }
 
-    /**
-     * 增加gif图层
-     *
-     * @param asset    gif资源
-     * @param atCompUs 从合成的什么时间点开始增加, 单位us;
-     * @return
-     */
     public LSOLayer addGifLayer(LSOAsset asset, long atCompUs) {
-        createRender();
-        LSOLog.d("EditPlayer addGifLayer...");
-        if (render != null && setup() && asset != null && asset.isGif()) {
-            return render.addGifLayer(asset, atCompUs);
-        } else {
-            return null;
-        }
-    }
 
+        LSOLog.d("EditPlayer addGifLayer...");
+        try {
+            if (render != null && setup() && asset.isGif()) {
+                return render.addGifLayer(asset, atCompUs);
+            }
+        } catch (Exception e) {
+            LSOLog.e("addGifLayer error. ", e);
+        }
+        return null;
+    }
     /**
      * 增加声音图层;
      *
@@ -340,6 +374,9 @@ public class LSOEditPlayer extends LSOFrameLayout {
             return null;
         }
     }
+
+
+
     /**
      * 异步删除图层;
      * 删除成功后, 会触发容器时长回调, 在回调中你可以重新布局
@@ -376,6 +413,7 @@ public class LSOEditPlayer extends LSOFrameLayout {
             render.removeAudioLayerAsync(layer);
         }
     }
+
     /**
      * 删除所有的增加的声音图层;
      */
@@ -386,6 +424,13 @@ public class LSOEditPlayer extends LSOFrameLayout {
         }
     }
 
+    public LSOLayer getTouchPointLayer(float x, float y){
+        if(render!=null){
+            return render.getTouchPointLayer(x,y);
+        }else {
+            return null;
+        }
+    }
     /**
      * 打印当前拼接的图层时间信息;
      */
@@ -412,25 +457,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
             render.setBackGroundColor(padBGRed, padBGGreen, padBGBlur, 1.0f);
         }
     }
-
-    /**
-     * 把一张图片作为背景;
-     *
-     * @param bmp
-     * @return
-     */
-    public LSOLayer setBackGroundBitmap(Bitmap bmp) {
-        createRender();
-        if (render != null && setup() && bmp != null) {
-            try {
-                return render.setBackGroundBitmapAsset(new LSOAsset(bmp));
-            } catch (Exception e) {
-                LSOLog.e("setBackGroundBitmap error", e);
-            }
-        }
-        return null;
-    }
-
     /**
      * 增加背景图片资源;
      *
@@ -555,10 +581,10 @@ public class LSOEditPlayer extends LSOFrameLayout {
             render.setOnLanSongBeforeRenderFrameListener(listener);
         }
     }
+
     /**
      * 当一个图层按下, 抬起, 移动, 旋转,缩放的时候, 会调用这里;
      * 移动,缩放, 返回的值, 是相对于容器本身宽高而言,是当前时间点的绝对值;
-     * LSNEW
      *
      * @param listener
      */
@@ -572,6 +598,7 @@ public class LSOEditPlayer extends LSOFrameLayout {
     /**
      * 容器的总时长改变监听;
      * 返回的是当前总时长;
+     *
      * @param listener 时长改变监听;
      */
     public void setOnDurationChangedListener(OnLanSongSDKDurationChangedListener listener) {
@@ -679,13 +706,12 @@ public class LSOEditPlayer extends LSOFrameLayout {
     }
 
     /**
-     * 设置所有的图层禁止/启动 touch事件
-     *
-     * @param is 是否禁止/ 开启
+     * 禁止图层touch
      */
-    public void setAllLayerTouchEnable(boolean is) {
+    public void setDisableTouchEvent(boolean is) {
+        createRender();
         if (render != null) {
-            render.setAllLayerTouchEnable(is);
+            render.setDisableTouchEvent(is);
         }
     }
 
@@ -720,7 +746,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
         }
     }
 
-    //LSNEW : 导出设置
     public void startExport(LSOExportType type) {
         if (render != null) {
             LSOLog.d("EditPlayer startExport...");
@@ -741,6 +766,7 @@ public class LSOEditPlayer extends LSOFrameLayout {
      * @param timeUs time时间
      */
     public void seekToTimeUs(long timeUs) {
+        createRender();
         if (render != null) {
             render.seekToTimeUs(timeUs);
         }
@@ -816,7 +842,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
 
     /**
      * 设置编码时的码率;
-     * LSNEW : setEncoderBitRate ----> setExportBitRate
      *
      * @param bitRate
      */
@@ -872,7 +897,7 @@ public class LSOEditPlayer extends LSOFrameLayout {
     }
 
 
-    private LSOSize getPreviewSizeByRatio(LSORatioType ratio) {
+    public static LSOSize getPreviewSizeByRatio(LSORatioType ratio, int firstCompWidth,int firstCompHeight) {
 
 
         if (ratio == LSORatioType.RATIO_NONE) {
@@ -910,6 +935,13 @@ public class LSOEditPlayer extends LSOFrameLayout {
             //2.35:1
             return new LSOSize(1280, 544);
 
+        } else if (ratio == LSORatioType.RATIO_4_5) {
+            //4:5
+            return new LSOSize(720, 896);
+
+        } else if (ratio == LSORatioType.RATIO_6_7) {
+            //6:7
+            return new LSOSize(720, 848);
         } else if (ratio == LSORatioType.RATIO_185_1) {
             //1.85:1
             return new LSOSize(1280, 688);
@@ -917,7 +949,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
             return new LSOSize(firstCompWidth, firstCompHeight);
         }
     }
-
     /**
      * 释放
      * 如果已经收到完成监听, 则不需要调用;
@@ -928,6 +959,6 @@ public class LSOEditPlayer extends LSOFrameLayout {
             render = null;
         }
         setUpSuccess = false;
-        hasSetConcatAsset=false;
+        hasSetConcatAsset = false;
     }
 }

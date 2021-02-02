@@ -18,6 +18,7 @@ import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKTextureUpdateListener;
 import com.lansosdk.box.OnResumeListener;
+import com.lansosdk.box.OnTextureUpdateListener;
 
 import java.io.IOException;
 
@@ -77,7 +78,7 @@ public class LSOLayerCrop extends LSOFrameLayout {
 
         videoLayer=layer;
         mediaPlayer=new MediaPlayer();
-        setOnLanSongSDKTextureUpdateListener(new OnLanSongSDKTextureUpdateListener() {
+        setOnLanSongSDKTextureUpdateListener(new OnTextureUpdateListener() {
             @Override
             public void onTextureUpdate() {
                 if(mediaPlayer!=null && needPauseFirstFrame){
@@ -107,7 +108,7 @@ public class LSOLayerCrop extends LSOFrameLayout {
             }
 
 
-            setCompositionSizeAsync(inputWidth,inputHeight,listener);
+            setPlayerSizeAsync(inputWidth,inputHeight,listener);
             mediaPlayer.setVolume(0.0f,0.0f);
             mediaPlayer.start();
             needPauseFirstFrame =true;

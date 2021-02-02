@@ -54,7 +54,6 @@ public class ListMainActivity extends Activity implements OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LanSoEditor.unInitSDK();
         LanSongFileUtil.deleteDefaultDir();
     }
 

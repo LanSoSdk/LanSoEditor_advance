@@ -46,10 +46,7 @@ public class DemoUtil {
         int limitYear = VideoEditor.getLimitYear();
         int limitMonth = VideoEditor.getLimitMonth();
 
-
-        Log.e("LanSongSDKLSDelete", "------- : " + year + month + "  limit :" + limitYear + limitMonth);
-
-        if(year<=limitYear &&  month<limitMonth){
+        if(year>limitYear &&  month>=limitMonth){
             DemoUtil.showDialog(activity, "SDK 已经过期,请联系我们更新.(time out.)");
         }
     }

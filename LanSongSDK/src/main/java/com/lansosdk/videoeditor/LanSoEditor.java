@@ -38,8 +38,7 @@ public class LanSoEditor {
 
 
         if(Environment.getExternalStorageDirectory()!=null){
-           // setTempFileDir(context.getFilesDir() + "/lansongBox/");
-            setTempFileDir(context.getExternalCacheDir() + "/lansongBox/");  //lsdelete实际删除这个, 保留上一个;
+            setTempFileDir(context.getExternalCacheDir() + "/lansongBox/");
         }
 
         LSOLog.init();
@@ -49,14 +48,6 @@ public class LanSoEditor {
         isLoadLanSongSDK.set(true);
     }
 
-    public static void unInitSDK(){
-        unInitSo();
-    }
-
-    public static void deleteDefaultDir() {
-        LanSoEditorBox.deleteDefaultDirFiles();
-        LanSongFileUtil.deleteDefaultDir();
-    }
     public static void setTempFileDir(String tmpDir) {
         LanSoEditorBox.setTempFileDir(tmpDir);
         LanSongFileUtil.FileCacheDir=tmpDir;
@@ -74,14 +65,11 @@ public class LanSoEditor {
         LSOLog.setLogOutListener(listener);
     }
 
-    /**
-     * 是否打印SDK中的调试信息(Log.d的信息);
-     * 默认是打印.
-     * @param is
-     */
     public static void setDebugInfoEnable(boolean is){
         LSOLog.setDebugEnable(is);
     }
+
+
 
     //----------------------------------------------------------------------------------------
     private static void printSDKVersion(Context ctx)
@@ -90,20 +78,14 @@ public class LanSoEditor {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
 
-        if (!VideoEditor.getCurrentNativeABI().equalsIgnoreCase("arm64-v8a")){
-            LSOLog.e("当前你使用的so库不是arm64-v8a. 请尽快优化您所有so文件, 以确保支持,我们将在2020年的6月1号之后,不再对64位设备上运行armeabi-v7a库的问题做技术支持.(Please optimize all your SO files as soon as possible to ensure support for arm64-v8a. After June 1, 2020, we will no longer provide technical support for the problem of running armeabi-v7a library on 64-bit devices.)");
-        }
 
-        String nativeVersion="* \tnative version:"+VideoEditor.getSDKVersion()+ " ;  ABI: "+VideoEditor.getCurrentNativeABI()+ " ; type:"+VideoEditor.getLanSongSDKType()
-                + "; Limited time: year:"+VideoEditor.getLimitYear()+ " month:" +VideoEditor.getLimitMonth();
+        String nativeVersion="* \tnative version:"+ VideoEditor.getSDKVersion()+ " ;  ABI: "+ VideoEditor.getCurrentNativeABI()+ " ; type:"+ VideoEditor.getLanSongSDKType()
+                + "; Limited time: year:"+ VideoEditor.getLimitYear()+ " month:" + VideoEditor.getLimitMonth();
 
-        DisplayMetrics dm = new DisplayMetrics();
-        dm = ctx.getResources().getDisplayMetrics();
+        DisplayMetrics dm = ctx.getResources().getDisplayMetrics();
 
-        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+LanSoEditorBox.getCpuName()+
+        String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+ LanSoEditorBox.getCpuName()+
                 " display screen size:"+ dm.widthPixels+ " x "+ dm.heightPixels;
-
-
 
         LSOLog.i("********************LanSongSDK**********************");
         LSOLog.i("* ");
@@ -145,9 +127,6 @@ public class LanSoEditor {
         }
     }
 
-    public static int getCPULevel() {
-        return LanSoEditorBox.getCPULevel();
-    }
 
     private static synchronized void loadLibraries() throws  UnsatisfiedLinkError{
         System.loadLibrary("LanSongffmpeg");

@@ -263,7 +263,7 @@ public class VideoEditor {
     public String executePcmEncodeAac(String srcPach, int samplerate, int channel) {
         List<String> cmdList = new ArrayList<String>();
 
-        String dstPath=LanSongFileUtil.createM4AFileInBox();
+        String dstPath= LanSongFileUtil.createM4AFileInBox();
         cmdList.add("-f");
         cmdList.add("s16le");
         cmdList.add("-ar");
@@ -300,7 +300,7 @@ public class VideoEditor {
     public String executePcmComposeVideo(String srcPcm, int samplerate, int channel, String srcVideo) {
         List<String> cmdList = new ArrayList<String>();
 
-        String dstPath=LanSongFileUtil.createMp4FileInBox();
+        String dstPath= LanSongFileUtil.createMp4FileInBox();
         cmdList.add("-f");
         cmdList.add("s16le");
         cmdList.add("-ar");
@@ -342,7 +342,7 @@ public class VideoEditor {
     public String executePcmMovToMp4(String srcVideo) {
         List<String> cmdList = new ArrayList<String>();
 
-        String dstPath=LanSongFileUtil.createMp4FileInBox();
+        String dstPath= LanSongFileUtil.createMp4FileInBox();
 
         cmdList.add("-i");
         cmdList.add(srcVideo);
@@ -379,7 +379,7 @@ public class VideoEditor {
         String filter = String.format(Locale.getDefault(), "[0:a]volume=volume=%f[a1]; [1:a]volume=volume=%f[a2]; " +
                 "[a1][a2]amix=inputs=2:duration=first:dropout_transition=2", value1, value2);
 
-        String dstPath=LanSongFileUtil.createM4AFileInBox();
+        String dstPath= LanSongFileUtil.createM4AFileInBox();
         cmdList.add("-i");
         cmdList.add(audioPath1);
 
@@ -594,7 +594,7 @@ public class VideoEditor {
 
         if(vInfo.prepare() && aInfo.prepare() && aInfo.isHaveAudio()){
 
-            String retPath=LanSongFileUtil.createMp4FileInBox();
+            String retPath= LanSongFileUtil.createMp4FileInBox();
             boolean isAAC="aac".equals(aInfo.aCodecName);
 
             List<String> cmdList = new ArrayList<String>();
@@ -671,7 +671,7 @@ public class VideoEditor {
 
         if(vInfo.prepare() && aInfo.prepare() && aInfo.isHaveAudio()){
 
-            String retPath=LanSongFileUtil.createMp4FileInBox();
+            String retPath= LanSongFileUtil.createMp4FileInBox();
             boolean isAAC="aac".equals(aInfo.aCodecName);
 
             List<String> cmdList = new ArrayList<String>();
@@ -756,7 +756,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstFile=LanSongFileUtil.createFileInBox(LanSongFileUtil.getFileSuffix(srcFile));
+            String dstFile= LanSongFileUtil.createFileInBox(LanSongFileUtil.getFileSuffix(srcFile));
             cmdList.add("-ss");
             cmdList.add(String.valueOf(startS));
 
@@ -790,7 +790,7 @@ public class VideoEditor {
     public String executeCutVideo(String videoFile, float startS, float durationS) {
         if (LanSongFileUtil.fileExist(videoFile)) {
             durationMs=((int)(durationS *1000));
-            String dstFile=LanSongFileUtil.createMp4FileInBox();
+            String dstFile= LanSongFileUtil.createMp4FileInBox();
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -1025,7 +1025,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 //
-            String dstPng=LanSongFileUtil.createFileInBox("png");
+            String dstPng= LanSongFileUtil.createFileInBox("png");
             cmdList.add("-i");
             cmdList.add(videoSrcPath);
 
@@ -1059,7 +1059,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstPng=LanSongFileUtil.createFileInBox("png");
+            String dstPng= LanSongFileUtil.createFileInBox("png");
 
             String resolution = String.valueOf(pngWidth);
             resolution += "x";
@@ -1099,7 +1099,7 @@ public class VideoEditor {
     public String executeConvertMp3ToAAC(String mp3Path) {
         if (fileExist(mp3Path)) {
 
-            String dstFile=LanSongFileUtil.createFileInBox("m4a");
+            String dstFile= LanSongFileUtil.createFileInBox("m4a");
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -1131,7 +1131,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String  dstPath=LanSongFileUtil.createM4AFileInBox();
+            String  dstPath= LanSongFileUtil.createM4AFileInBox();
             cmdList.add("-i");
             cmdList.add(mp3Path);
 
@@ -1197,7 +1197,7 @@ public class VideoEditor {
     protected String executeConvertTsToMp4(String[] tsArray) {
         if (LanSongFileUtil.filesExist(tsArray)) {
 
-            String dstFile=LanSongFileUtil.createMp4FileInBox();
+            String dstFile= LanSongFileUtil.createMp4FileInBox();
             String concat = "concat:";
             for (int i = 0; i < tsArray.length - 1; i++) {
                 concat += tsArray[i];
@@ -1285,7 +1285,7 @@ public class VideoEditor {
     public String executeConcatDiffentMp4(ArrayList<String> videos,boolean ignorecheck) {
         if(videos!=null && videos.size()>1){
             if(ignorecheck || checkVideoSizeSame(videos)){
-                String dstPath=LanSongFileUtil.createMp4FileInBox();
+                String dstPath= LanSongFileUtil.createMp4FileInBox();
 
                 String filter = String.format(Locale.getDefault(), "concat=n=%d:v=1:a=1", videos.size());
 
@@ -1637,7 +1637,7 @@ public class VideoEditor {
 
             List<String> cmdList = new ArrayList<String>();
 
-            String dstPath=LanSongFileUtil.createMp4FileInBox();
+            String dstPath= LanSongFileUtil.createMp4FileInBox();
             String filter = String.format(Locale.getDefault(), "rotate=%d", angle);
 
 
@@ -2213,7 +2213,7 @@ public class VideoEditor {
     }
     private String executeConvertBmpToGif(String bmpPaths,float framerate)
     {
-        String gifPath=LanSongFileUtil.createGIFFileInBox();
+        String gifPath= LanSongFileUtil.createGIFFileInBox();
 
 
         List<String> cmdList = new ArrayList<String>();
@@ -2252,7 +2252,7 @@ public class VideoEditor {
         String  subfix="jpeg";
         LanSongFileUtil.deleteNameFiles("lansonggif",subfix);
 
-        String bmpPaths=LanSongFileUtil.getCreateFileDir();
+        String bmpPaths= LanSongFileUtil.getCreateFileDir();
         bmpPaths+="/lansonggif_%05d."+subfix;
 
         if(executeExtractFrame(videoInput,inteval,scaleW,scaleH,bmpPaths)){
@@ -2269,7 +2269,7 @@ public class VideoEditor {
         List<String> cmdList = new ArrayList<String>();
 
 
-        String dstPath=LanSongFileUtil.createGIFFileInBox();
+        String dstPath= LanSongFileUtil.createGIFFileInBox();
 
         int width=scaleWidth/2;
         width*=2;
@@ -2374,7 +2374,7 @@ public class VideoEditor {
         List<String> cmdList = new ArrayList<String>();
 
 
-        String gifPath=LanSongFileUtil.createGIFFileInBox();
+        String gifPath= LanSongFileUtil.createGIFFileInBox();
 
         cmdList.add("-i");
         cmdList.add(gifFile);
@@ -2491,7 +2491,7 @@ public class VideoEditor {
             setDurationMs(durationMs);
         }
 
-        String dstPath=LanSongFileUtil.createMp4FileInBox();
+        String dstPath= LanSongFileUtil.createMp4FileInBox();
         if(isForceSoftWareDecoder || checkSoftDecoder()){
             for(int i=0;i<cmdList.size();i++){
                 String cmd=cmdList.get(i);
@@ -2819,7 +2819,7 @@ public class VideoEditor {
         if (fileExist(picturePath)) {
 
 
-            String dstPath=LanSongFileUtil.createFileInBox("png");
+            String dstPath= LanSongFileUtil.createFileInBox("png");
 
             if(startX==0) startX=1;
             if(startY==0) startY=1;
@@ -2863,7 +2863,7 @@ public class VideoEditor {
         if (fileExist(picturePath)) {
 
 
-            String dstPath=LanSongFileUtil.createFileInBox("m4a");
+            String dstPath= LanSongFileUtil.createFileInBox("m4a");
 
             List<String> cmdList = new ArrayList<String>();
 
@@ -2899,7 +2899,7 @@ public class VideoEditor {
         if (fileExist(picturePath)) {
 
 
-            String dstPath=LanSongFileUtil.createFileInBox("m4a");
+            String dstPath= LanSongFileUtil.createFileInBox("m4a");
 
             List<String> cmdList = new ArrayList<String>();
 

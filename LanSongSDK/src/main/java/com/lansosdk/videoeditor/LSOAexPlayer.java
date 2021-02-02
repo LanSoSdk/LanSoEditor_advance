@@ -3,44 +3,32 @@ package com.lansosdk.videoeditor;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.Surface;
-import android.view.TextureView;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import com.lansosdk.aex.LSOAexImage;
 import com.lansosdk.aex.LSOAexText;
 import com.lansosdk.box.LSOAexModule;
 import com.lansosdk.box.LSOAexPlayerRender;
 import com.lansosdk.box.LSOAsset;
-import com.lansosdk.box.LSOAudioLayer;
 import com.lansosdk.box.LSOCamAudioLayer;
 import com.lansosdk.box.LSOFrameLayout;
 import com.lansosdk.box.LSOLayer;
 import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.LSORatioType;
-import com.lansosdk.box.LSOSize;
+import com.lansosdk.box.OnAexImageSelectedListener;
 import com.lansosdk.box.OnAexTextSelectedListener;
 import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLSOAexImageChangedListener;
-import com.lansosdk.box.OnAexImageSelectedListener;
+import com.lansosdk.box.OnLanSongSDKCompressListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKExportCompletedListener;
 import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
-import com.lansosdk.box.OnLanSongSDKCompressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
 import com.lansosdk.box.OnResumeListener;
-
-import java.util.List;
 
 
 public class LSOAexPlayer extends LSOFrameLayout {
@@ -82,20 +70,23 @@ public class LSOAexPlayer extends LSOFrameLayout {
         }
     }
 
-    //旋转移动缩放
-    public boolean onTextureViewTouchEvent(MotionEvent event) {
-        super.onTextureViewTouchEvent(event);
+    private boolean isEnableTouch = true;
+    public void setTouchEnable(boolean enable) {
+        isEnableTouch = enable;
+    }
 
-        if (renderer != null) {
-            renderer.onTextureViewTouchEvent(event);
+    public boolean onTextureViewTouchEvent(MotionEvent event) {
+        if(isEnableTouch){
+            super.onTextureViewTouchEvent(event);
+            return renderer!=null && renderer.onTextureViewTouchEvent(event);
         }
-        return true;
+        return false;
     }
 
     public void onCreateAsync(LSOAexModule module, OnCreateListener listener) {
 
-        if (module!=null && module.getWith()>0 && module.getHeight()>0) {
-            setCompositionSizeAsync(module.getWith(),module.getHeight(), listener);
+        if (module!=null && module.getWidth()>0 && module.getHeight()>0) {
+            setPlayerSizeAsync(module.getWidth(),module.getHeight(), listener);
         }else{
             listener.onCreate();
         }
@@ -121,6 +112,7 @@ public class LSOAexPlayer extends LSOFrameLayout {
         super.onDestroy();
         release();
     }
+
     //-----------------------------VIEW ADJUST CODE END----------------------------
 
     //---------------------------------------------容器代码--------------------------------------------------------
@@ -250,23 +242,6 @@ public class LSOAexPlayer extends LSOFrameLayout {
             return null;
         }
     }
-
-    /**
-     * 增加图片序列
-     * @param list 图片序列列表
-     * @param frameIntervalUs  两张图片的间隔
-     * @param atCompUs 从容器的什么时间点开始增加;
-     * @return
-     */
-    public LSOLayer addBitmapListLayerFromPaths(List<String> list, long frameIntervalUs, long atCompUs) {
-        createRender();
-        if(renderer!=null && setup()){
-            return renderer.addBitmapListLayerFromPaths(list,frameIntervalUs,atCompUs);
-        }else{
-            return null;
-        }
-    }
-
     /**
      * 增加gif图层
      * @param asset 图层资源;
@@ -469,7 +444,6 @@ public class LSOAexPlayer extends LSOFrameLayout {
         }
     }
 
-    //LSNEW : 删除导出分辨率设置.
     /**
      * 视频导出
      */
@@ -626,6 +600,7 @@ public class LSOAexPlayer extends LSOFrameLayout {
         }
         setupSuccess=false;
     }
+
 
     //------内部使用;
     private boolean setup(){

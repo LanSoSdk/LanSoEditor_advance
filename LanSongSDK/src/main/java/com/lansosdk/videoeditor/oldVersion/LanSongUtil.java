@@ -12,7 +12,6 @@ import com.lansosdk.box.LanSoEditorBox;
 
 public class LanSongUtil {
 
-    static int bmtcnt = 0;
 
     /**
      * 检查是否有 摄像头和麦克风的权限.
@@ -24,6 +23,10 @@ public class LanSongUtil {
         boolean ret1 = LanSoEditorBox.cameraIsCanUse();
         boolean ret2 = LanSoEditorBox.checkMicPermission(ctx);
         return ret1 && ret2;
+    }
+
+    public static boolean checkCameraPermission(Context ctx) {
+       return LanSoEditorBox.cameraIsCanUse();
     }
 
     /**
