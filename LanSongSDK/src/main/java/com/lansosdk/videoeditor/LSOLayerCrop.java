@@ -16,7 +16,6 @@ import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
-import com.lansosdk.box.OnLanSongSDKTextureUpdateListener;
 import com.lansosdk.box.OnResumeListener;
 import com.lansosdk.box.OnTextureUpdateListener;
 

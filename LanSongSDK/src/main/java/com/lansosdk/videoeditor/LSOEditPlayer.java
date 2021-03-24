@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.lansosdk.box.LSOAsset;
@@ -27,6 +28,7 @@ import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKLayerTouchEventListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
+import com.lansosdk.box.OnLanSongSDKStateChangedListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
 import com.lansosdk.box.OnLanSongSDKUserSelectedLayerListener;
 import com.lansosdk.box.OnResumeListener;
@@ -124,7 +126,13 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
     }
 
 
-
+    /**
+     *
+     * @param arrays
+     * @param width
+     * @param height
+     * @param listener
+     */
     public void onCreateAsync(List<LSOAsset> arrays,int width,int height, OnCreateListener listener) {
         if (arrays != null && arrays.size() > 0) {
             createAssetArray = arrays;
@@ -137,7 +145,6 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
             listener.onCreate();
         }
     }
-
 
     /**
      * 调整播放器的预览画布的大小；
@@ -431,6 +438,12 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
             return null;
         }
     }
+
+    public void setLayerIndex(LSOLayer layer, int index){
+        if(render!=null){
+            render.setLayerIndex(layer,index);
+        }
+    }
     /**
      * 打印当前拼接的图层时间信息;
      */
@@ -452,9 +465,9 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
 
         padBGRed = (float) red / 255f;
         padBGGreen = (float) green / 255f;
-        padBGBlur = (float) blue / 255f;
+        padBGBlue = (float) blue / 255f;
         if (render != null) {
-            render.setBackGroundColor(padBGRed, padBGGreen, padBGBlur, 1.0f);
+            render.setBackGroundColor(padBGRed, padBGGreen, padBGBlue, 1.0f);
         }
     }
     /**
@@ -620,6 +633,18 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
         createRender();
         if (render != null) {
             render.setOnPlayProgressListener(listener);
+        }
+    }
+
+
+    /**
+     * 当播放状态改变后, 触发回调. 播放有暂停和播放两种状态;
+     * @param listener
+     */
+    public void setOnLanSongSDKStateChangedListener(OnLanSongSDKStateChangedListener listener){
+        createRender();
+        if(render!=null){
+            render.setOnLanSongSDKStateChangedListener(listener);
         }
     }
 
@@ -853,7 +878,7 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
 
     private float padBGRed = 0.0f;
     private float padBGGreen = 0.0f;
-    private float padBGBlur = 0.0f;
+    private float padBGBlue = 0.0f;
     private float padBGAlpha = 1.0f;
 
     //内部使用;
@@ -861,7 +886,7 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
         if (render == null) {
             setUpSuccess = false;
             render = new LSOEditPlayerRender(getContext());
-            render.setBackGroundColor(padBGRed, padBGGreen, padBGBlur, padBGAlpha);
+            render.setBackGroundColor(padBGRed, padBGGreen, padBGBlue, padBGAlpha);
             render.setOnErrorListener(new OnLanSongSDKErrorListener() {
                 @Override
                 public void onLanSongSDKError(int errorCode) {

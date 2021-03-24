@@ -50,6 +50,8 @@ public class VideoEditDemoActivity extends Activity implements View.OnClickListe
 
         initView();
 
+        DemoUtil.showDialog(VideoEditDemoActivity.this,"最简单的工程演示, 完整演示请下载演示APP");
+
         String path = CopyFileFromAssets.copyAssets(getApplicationContext(), "dy_xialu2.mp4");
 
         try {

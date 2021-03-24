@@ -1,15 +1,16 @@
 ### This is the simplest demo of Lansong SDK (business, paid 商业付费.).
 
-#### The current version is 4.3.5
+#### The current version is 4.5.0
  [中文说明](https://github.com/LanSoSdk/LanSoEditor_advance/blob/master/README.cn.md)
 - Including: Video editing SDK and AE template SDK;
 - Our complete demo demo apk, you can download it from here:
-- google play link: https://play.google.com/store/apps/details?id=com.lansong.sdk
+- full demo app link(完整demo下载) : https://www.pgyer.com/L20O
 
+ 
  
 ## SDK function introduction.
 #### Video editing SDK:
-  - The name of the class is: LSOConcatComposition: meaning: splicing and synthesis, which can splice the video and the picture together, and can also be superimposed; corresponding to ConcatLayer and overlayLayer respectively;
+  - The name of the class is: LSOEditPlayer: meaning: splicing and synthesis, which can splice the video and the picture together, and can also be superimposed; corresponding to ConcatLayer and overlayLayer respectively;
   - **Front and back stitching**: Each stitching will return a layer object; use the layer object to adjust various attributes; insert, delete, sort, replace;
   - **Top and bottom overlay**: While stitching pictures and videos, you can overlay pictures or videos, text, animations and other effects on the stitching. These are called top and bottom overlays; for example, picture-in-picture, you can set the starting position of the overlay , Size, angle, start time point, end time point, looping, support all methods of the layer, can adjust the order of the layer;
   - **Thumbnail**:  After each video or picture is added, a corresponding thumbnail will be obtained, and the thumbnail API will be adjusted accordingly after the cut duration or reverse order or variable speed.
@@ -39,6 +40,5 @@
 #### contact us
 - email: support@lansongtech.com
 - web: www.lansongtech.com
-- WhatsApp :  +8618006716739 (business, paid.)
 
 

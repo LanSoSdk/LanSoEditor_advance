@@ -30,7 +30,6 @@ import com.lansosdk.box.OnLanSongSDKProgressListener;
 import com.lansosdk.box.OnLanSongSDKThreadProgressListener;
 import com.lansosdk.box.SubLayer;
 import com.lansosdk.box.VideoFrameLayer;
-import com.lansosdk.box.VideoFrameLayer2;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
@@ -95,7 +94,6 @@ public class DrawPadAllExecute2 {
             pixelRunnable.setFrameRate(rate);
         }
     }
-
     public int getPadWidth(){
         return padWidth;
     }
@@ -245,6 +243,7 @@ public class DrawPadAllExecute2 {
         }
     }
 
+
     public BitmapListLayer addBitmapListLayer(Map<Long, String> bitmapTimes) {
         if (commonRunnable != null && setup()) {
             return commonRunnable.addBitmapListLayer(bitmapTimes);
@@ -255,7 +254,6 @@ public class DrawPadAllExecute2 {
             return null;
         }
     }
-
     public MVCacheLayer addMVLayer(String srcPath, String maskPath) {
         if (commonRunnable != null && setup()) {
             return commonRunnable.addMVLayer(srcPath,maskPath,0,Long.MAX_VALUE,false);
@@ -277,8 +275,6 @@ public class DrawPadAllExecute2 {
             return null;
         }
     }
-
-
     public VideoFrameLayer addVideoLayer(LSOVideoOption option,long startTimeUs,long endTimeUs,boolean holdFirst,boolean holdLast) {
         if (commonRunnable != null && option!=null && setup()) {
             return commonRunnable.addVideoLayer(option,startTimeUs,endTimeUs,holdFirst,holdLast);
@@ -286,17 +282,6 @@ public class DrawPadAllExecute2 {
             return pixelRunnable.addVideoLayer(option,startTimeUs,endTimeUs,holdFirst,holdLast);
         }else {
             LSOLog.e("DrawPadAllExecute2  addVideoLayer error. return null, success status is:"+ success);
-            return null;
-        }
-    }
-
-    public VideoFrameLayer2 addVideoLayer2(LSOVideoOption option, long startTimeUs, long endTimeUs, boolean holdFirst, boolean holdLast) {
-        if (commonRunnable != null && option!=null && setup()) {
-            return commonRunnable.addVideoLayer2(option,startTimeUs,endTimeUs,holdFirst,holdLast);
-        }else if (pixelRunnable != null && option!=null && setup()) {
-            return pixelRunnable.addVideoLayer2(option,startTimeUs,endTimeUs,holdFirst,holdLast);
-        }else {
-            LSOLog.e("DrawPadAllExecute2  addVideoLayer2 error. return null, success status is:"+ success);
             return null;
         }
     }

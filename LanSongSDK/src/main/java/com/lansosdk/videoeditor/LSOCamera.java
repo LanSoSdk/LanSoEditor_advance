@@ -1,6 +1,7 @@
 package com.lansosdk.videoeditor;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -52,16 +53,18 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
     public LSOCamera(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
-
     //---------------------copy code start---------------------
     protected void sendOnCreateListener() {
         super.sendOnCreateListener();
         if (render != null) {
 
-            DisplayMetrics dm = new DisplayMetrics();
-            dm = getResources().getDisplayMetrics();
-            compWidth=dm.widthPixels;
-            compHeight=dm.heightPixels;
+            if(fullscreen){
+                DisplayMetrics dm = new DisplayMetrics();
+                dm = getResources().getDisplayMetrics();
+                compWidth=dm.widthPixels;
+                compHeight=dm.heightPixels;
+            }
+
             render.setSurface(compWidth, compHeight, getSurfaceTexture(), getViewWidth(), getViewHeight());
         }
     }
@@ -97,6 +100,7 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
 
     public void onCreateFullScreen(OnCreateListener listener) {
 
+        fullscreen=true;
         if(isTextureAvailable() && listener!=null){
             if (render == null) {
                 render = new LSOCameraRunnable(getContext(), getWidth(), getHeight());
@@ -229,7 +233,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
             render.setOnCameraResumeErrorListener(listener);
         }
     }
-
 
     /**
      * 错误监听
@@ -392,11 +395,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
         }
     }
 
-    /**
-     * 设置背景视频, 并附带设置音量
-     * @param path 视频路径, 支持mp4和mov视频
-     * @param audioVolume 视频中的声音音量, 如关闭声音, 则设置为0; 1.0是默认声音. 2.0是放大一倍;
-     */
     public void setBackGroundVideoPath(String path, float audioVolume) {
         if(bgPath!=null && bgPath.equals(path)){
             return;
@@ -563,6 +561,7 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
             LSOLog.e("start record error.  full screen not support record.");
             return;
         }
+
         if (render != null && !render.isRecording() ) {
             render.startRecord();
         }
@@ -655,6 +654,71 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
     }
 
 
+    /**
+     * 增加一个纹理图层;
+     * @param width 纹理的宽度
+     * @param height 纹理的高度
+     * @return 返回一个图层对象;
+     */
+    public LSOCamLayer addSurfaceLayer(int width, int height){
+        if(render!=null && render.isRunning()){
+            return render.addSurfaceLayer(width,height);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * LSNEW
+     * 在摄像机上层增加
+     * 用在多机位场合;
+     * @param bmp
+     * @return
+     */
+    public LSOCamLayer addBitmapLayer(Bitmap bmp) {
+        if(render!=null && render.isRunning()){
+            return render.addBitmapLayer(bmp);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * LSNEW
+     * 在背景层上增加一层画面
+     * 用在多机位场合
+     * @param bmp 图片对象
+     * @return 返回的是图层对象;
+     */
+    public LSOCamLayer addBitmapLayerAboveBackGround(Bitmap bmp) {
+        if(render!=null && render.isRunning()){
+            return render.addBitmapLayerAboveBackGround(bmp);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 删除一个图层
+     * @param layer
+     */
+    public void removeLayer(LSOCamLayer layer){
+        if(render!=null && render.isRunning()){
+            render.removeLayer(layer);
+        }
+    }
+
+
+    /**
+     * 是否所有的图层都可以触摸事件;
+     * @param is
+     */
+    public void setAllLayerTouchEnable(boolean is){
+        if(render!=null){
+            render.setAllLayerTouchEnable(is);
+        }
+    }
+
 
     private static String getFileSuffix(String path) {
         if (path == null)
@@ -679,8 +743,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
         return "mp4".equalsIgnoreCase(suffix)
                 || "mov".equalsIgnoreCase(suffix);
     }
-
-
 
     /**
      * 录制一个view的图像

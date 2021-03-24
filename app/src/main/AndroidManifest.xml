@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lansoeditor.advanceDemo"
-    android:versionCode="3760"
-    android:versionName="3.7.6">
+    android:versionCode="450"
+    android:versionName="4.5.0">
 
     <uses-feature android:glEsVersion="0x00020000" />
     <uses-feature android:name="android.hardware.camera" />

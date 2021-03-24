@@ -24,4 +24,5 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/lansongeditor_hx.jar')
     implementation files('libs/lansongeditor_hx.jar')
+
 }

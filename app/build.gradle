@@ -5,7 +5,7 @@ android {
 //    buildToolsVersion "27.0.3"
 
     defaultConfig {
-        applicationId "com.lansoeditor.gzj"
+        applicationId "com.lansongeditor.miniDemo"
         minSdkVersion 18
         targetSdkVersion 29
         compileOptions {
@@ -34,12 +34,9 @@ dependencies {
 
 
     //一下jar均为来自网络的开源库, 仅用作demo的效果演示, 不属于sdk的一部分;
-//    implementation files('libs/android-support-v7-recyclerview.jar')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation files('libs/PermissionsManager.jar')
-    implementation files('libs/textsurface.jar')
-    implementation files('libs/particlelibrary.jar')
 
 
     //演示界面使用了第三方控件;需要在allproject中增加 maven { url 'https://jitpack.io' }

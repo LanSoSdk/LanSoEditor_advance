@@ -127,30 +127,30 @@ public class FilterLibrary {
         filterList.addFilter("无", FilterType.NONE);
         filterList.addFilter("美颜", FilterType.BEAUTIFUL);
 
-        filterList.addFilter("1AMARO", FilterType.AMARO);
-        filterList.addFilter("2RISE", FilterType.RISE);
-        filterList.addFilter("3HUDSON", FilterType.HUDSON);  //
-        filterList.addFilter("4XPROII", FilterType.XPROII);
-        filterList.addFilter("5SIERRA", FilterType.SIERRA);  //
-        filterList.addFilter("6LOMOFI", FilterType.LOMOFI);
-        filterList.addFilter("7EARLYBIRD", FilterType.EARLYBIRD);
-        filterList.addFilter("8SUTRO", FilterType.SUTRO);
-        filterList.addFilter("9TOASTER", FilterType.TOASTER);
-        filterList.addFilter("10BRANNAN", FilterType.BRANNAN);
-        filterList.addFilter("11INKWELL", FilterType.INKWELL);
-        filterList.addFilter("12WALDEN", FilterType.WALDEN);
-        filterList.addFilter("13HEFE", FilterType.HEFE);
-        filterList.addFilter("14VALENCIA", FilterType.VALENCIA);
-        filterList.addFilter("15NASHVILLE", FilterType.NASHVILLE);
-        filterList.addFilter("16If1977", FilterType.IF1977);
-        filterList.addFilter("17LORDKELVIN", FilterType.LORDKELVIN);
+        filterList.addFilter("苦味", FilterType.AMARO);
+        filterList.addFilter("玫瑰", FilterType.RISE);
+        filterList.addFilter("天蓝", FilterType.HUDSON);  //
+        filterList.addFilter("甘菊", FilterType.XPROII);
+        filterList.addFilter("常青树", FilterType.SIERRA);  //
+        filterList.addFilter("湛蓝", FilterType.LOMOFI);
+        filterList.addFilter("早起", FilterType.EARLYBIRD);
+        filterList.addFilter("枫树", FilterType.SUTRO);
+        filterList.addFilter("收获", FilterType.TOASTER);
+        filterList.addFilter("布兰南", FilterType.BRANNAN);
+        filterList.addFilter("黑白", FilterType.INKWELL);
+        filterList.addFilter("华尔兹", FilterType.WALDEN);
+        filterList.addFilter("黄昏", FilterType.HEFE);
+        filterList.addFilter("零点", FilterType.VALENCIA);
+        filterList.addFilter("乳酪", FilterType.NASHVILLE);
+        filterList.addFilter("粉红", FilterType.IF1977);
+        filterList.addFilter("金黄", FilterType.LORDKELVIN);
 
         filterList.addFilter("区域透明", FilterType.LanSongMASK);
 
         filterList.addFilter("负片", FilterType.INVERT);
-        filterList.addFilter("像素方块", FilterType.PIXELATION);
+        filterList.addFilter("马赛克", FilterType.PIXELATION);
 
-        filterList.addFilter("Vignette加轮廓", FilterType.VIGNETTE);
+        filterList.addFilter("黑色轮廓", FilterType.VIGNETTE);
         filterList.addFilter("加减雾", FilterType.HAZE);
         filterList.addFilter("玻璃球效果", FilterType.GLASS_SPHERE);
         filterList.addFilter("球面折射",
@@ -159,7 +159,7 @@ public class FilterLibrary {
         // 新增
         filterList.addFilter("扩散扭曲", FilterType.PINCH_DISTORTION);
         filterList.addFilter("中心扭曲",FilterType.STRETCH_DISTORTION);
-        filterList.addFilter("Bulge Distortion凸凹调节",FilterType.BULGE_DISTORTION);
+        filterList.addFilter("失真",FilterType.BULGE_DISTORTION);
 
         filterList.addFilter("亮度", FilterType.BRIGHTNESS);
 
@@ -180,19 +180,19 @@ public class FilterLibrary {
         filterList.addFilter("颜色平衡", FilterType.COLOR_BALANCE);
         filterList.addFilter("暗色调节",FilterType.LEVELS_FILTER_MIN);
         filterList
-                .addFilter("Lookup (Amatorka)查找表", FilterType.LOOKUP_AMATORKA);
-        filterList.addFilter("Crosshatch交叉阴影网格", FilterType.CROSSHATCH);
+                .addFilter("图片查找表", FilterType.LOOKUP_AMATORKA);
+        filterList.addFilter("阴影线", FilterType.CROSSHATCH);
 
-        filterList.addFilter("CGA Color Space", FilterType.CGA_COLORSPACE);
+        filterList.addFilter("色空间", FilterType.CGA_COLORSPACE);
         filterList.addFilter("Kuwahara", FilterType.KUWAHARA);
-        filterList.addFilter("Halftone棉麻", FilterType.HALFTONE);
+        filterList.addFilter("棉麻", FilterType.HALFTONE);
 
-        filterList.addFilter("Opacity透明度", FilterType.OPACITY);
-        filterList.addFilter("RGB颜色调整", FilterType.RGB);
+        filterList.addFilter("透明度", FilterType.OPACITY);
+        filterList.addFilter("颜色调整", FilterType.RGB);
 
-        filterList.addFilter("Grayscale灰度", FilterType.GRAYSCALE);
-        filterList.addFilter("Contrast对比度", FilterType.CONTRAST);
-        filterList.addFilter("Saturation饱和度", FilterType.SATURATION);
+        filterList.addFilter("灰度", FilterType.GRAYSCALE);
+        filterList.addFilter("对比度", FilterType.CONTRAST);
+        filterList.addFilter("饱和度", FilterType.SATURATION);
 
         filterList.addFilter("Blend (Difference)", FilterType.BLEND_DIFFERENCE);
         filterList.addFilter("Blend (Source Over)", FilterType.BLEND_SOURCE_OVER);
@@ -219,10 +219,10 @@ public class FilterLibrary {
         filterList.addFilter("Blend (Chroma Key)", FilterType.BLEND_CHROMA_KEY);
         filterList.addFilter("Blend (Normal)", FilterType.BLEND_NORMAL);
 
-        filterList.addFilter("EMBOSS粗麻", FilterType.EMBOSS);
+        filterList.addFilter("浮雕", FilterType.EMBOSS);
         filterList.addFilter("3x3转换", FilterType.THREE_X_THREE_CONVOLUTION);
-        filterList.addFilter("Laplacian浮雕", FilterType.LAPLACIAN);
-        filterList.addFilter("Toon", FilterType.TOON);
+        filterList.addFilter("复杂锐化", FilterType.LAPLACIAN);
+        filterList.addFilter("卡通", FilterType.TOON);
     }
 
     public static void showDialog(final Context context, final OnLanSongFilterChosenListener listener) {
@@ -601,8 +601,7 @@ public class FilterLibrary {
             }
         }
 
-        private class BeautyAdvanceAdjuster extends
-                Adjuster<LanSongBeautyAdvanceFilter> {
+        private class BeautyAdvanceAdjuster extends  Adjuster<LanSongBeautyAdvanceFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBeautyLevel(range(percentage, 0.0f, 1.0f));
@@ -759,8 +758,7 @@ public class FilterLibrary {
             }
         }
 
-        private class GlassSphereAdjuster extends
-                Adjuster<LanSongGlassSphereFilter> {
+        private class GlassSphereAdjuster extends  Adjuster<LanSongGlassSphereFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));

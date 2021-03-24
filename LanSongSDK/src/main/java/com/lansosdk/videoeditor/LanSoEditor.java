@@ -70,7 +70,6 @@ public class LanSoEditor {
     }
 
 
-
     //----------------------------------------------------------------------------------------
     private static void printSDKVersion(Context ctx)
     {
@@ -82,7 +81,16 @@ public class LanSoEditor {
         String nativeVersion="* \tnative version:"+ VideoEditor.getSDKVersion()+ " ;  ABI: "+ VideoEditor.getCurrentNativeABI()+ " ; type:"+ VideoEditor.getLanSongSDKType()
                 + "; Limited time: year:"+ VideoEditor.getLimitYear()+ " month:" + VideoEditor.getLimitMonth();
 
-        DisplayMetrics dm = ctx.getResources().getDisplayMetrics();
+
+
+
+
+
+        //LSNEW
+        DisplayMetrics dm = new DisplayMetrics();
+        if (ctx != null && ctx.getResources() != null) {
+            dm = ctx.getResources().getDisplayMetrics();
+        }
 
         String deviceInfo="* \tSystem Time is:Year:"+year+ " Month:"+month + " Build.MODEL:--->" + Build.MODEL+"<---VERSION:"+getAndroidVersion() + " cpuInfo:"+ LanSoEditorBox.getCpuName()+
                 " display screen size:"+ dm.widthPixels+ " x "+ dm.heightPixels;

@@ -57,6 +57,8 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.test_aex_layout);
         aexPlayerView = findViewById(R.id.id_test_ae_gpu_preview2);
         initView();
+        DemoUtil.showDialog(AexPlayerDemoActivity.this,"最简单的工程演示, 完整演示请下载演示APP");
+
         //prepare Ae Template;
         prepareOneAeTemplate();
     }

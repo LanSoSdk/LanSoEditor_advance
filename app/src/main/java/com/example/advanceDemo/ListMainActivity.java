@@ -44,6 +44,7 @@ public class ListMainActivity extends Activity implements OnClickListener {
         String version = VideoEditor.getSDKVersion() + "\n BOX:" + LanSoEditorBox.VERSION_BOX;
 
         textView.setText("version:   " + version);
+        DemoUtil.showDialog(ListMainActivity.this,"最简单的工程演示, 完整演示请下载演示APP");
     }
 
     @Override
