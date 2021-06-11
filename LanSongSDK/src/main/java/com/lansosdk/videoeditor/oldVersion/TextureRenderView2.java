@@ -10,7 +10,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class TextureRenderView2 extends TextureView implements IRenderView {
+public class TextureRenderView2 extends TextureView implements IRenderView2 {
     private MeasureHelper2 mMeasureHelper;
 
     public TextureRenderView2(Context context) {

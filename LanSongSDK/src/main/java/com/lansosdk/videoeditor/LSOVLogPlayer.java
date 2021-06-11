@@ -27,6 +27,7 @@ import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKStateChangedListener;
 import com.lansosdk.box.OnResumeListener;
 import com.lansosdk.box.OnSetCompletedListener;
+import com.lansosdk.box.OnTextureAvailableListener;
 
 
 public class LSOVLogPlayer extends LSOFrameLayout {
@@ -88,6 +89,15 @@ public class LSOVLogPlayer extends LSOFrameLayout {
 
     public void onPause() {
         super.onPause();
+        setOnTextureAvailableListener(new OnTextureAvailableListener() {
+            @Override
+            public void onTextureUpdate(int width, int height) {
+                if (renderer != null) {
+                    renderer.switchCompSurface(getCompWidth(), getCompHeight(), getSurfaceTexture(), getViewWidth(), getViewHeight());
+                }
+            }
+        });
+
         if (renderer != null) {
             renderer.onActivityPaused(true);
         }
@@ -288,7 +298,7 @@ public class LSOVLogPlayer extends LSOFrameLayout {
 
 
     /**
-     * 设置压缩进度, 在视频裁剪的时候被调用;
+     * 设置压缩进度, 在视频裁剪或替换时被调用;
      * @param listener
      */
     public void setOnCompressListener(OnCompressListener listener){
@@ -394,6 +404,8 @@ public class LSOVLogPlayer extends LSOFrameLayout {
     public void prepareAsync(OnPrepareListener listener){
         if(renderer!=null){
             renderer.prepareAsync(listener);
+        }else if(listener!=null){
+            listener.onSuccess(false);
         }
     }
 

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LanSoEditor_advance.iml" filepath="$PROJECT_DIR$/LanSoEditor_advance.iml" group="LanSoEditor_advance" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/LanSongSDK/LanSoEditor_advance-LanSongSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/LanSongSDK/LanSoEditor_advance-LanSongSDK.iml" group="LanSoEditor_advance/LanSongSDK" />
       <module fileurl="file://$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" filepath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" group="LanSoEditor_advance/LanSongSDK" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="LanSoEditor_advance/app" />
     </modules>

@@ -17,13 +17,19 @@ import com.lansosdk.box.LSOCameraRunnable;
 import com.lansosdk.box.LSOCameraSizeType;
 import com.lansosdk.box.LSOFrameLayout;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.OnAddPathListener;
 import com.lansosdk.box.OnCameraResumeErrorListener;
+import com.lansosdk.box.OnCameraSizeChangedListener;
 import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
+import com.lansosdk.box.OnLayerTextureOutListener;
+import com.lansosdk.box.OnRemoveCompletedListener;
 import com.lansosdk.box.OnResumeListener;
 import com.lansosdk.box.OnSetCompletedListener;
 import com.lansosdk.box.OnTakePictureListener;
 import com.lansosdk.box.OnTextureAvailableListener;
+
+import java.io.File;
 
 
 public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface {
@@ -60,7 +66,6 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
                 compWidth = dm.widthPixels;
                 compHeight = dm.heightPixels;
             }
-
             render.setSurface(compWidth, compHeight, getSurfaceTexture(), getViewWidth(), getViewHeight());
         }
     }
@@ -83,12 +88,6 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
-
-    public void onCreateAsync(OnCreateListener listener) {
-        setup();
-        fullscreen = false;
-        setPlayerSizeAsync(compWidth, compHeight, listener);
-    }
 
 
     private OnCreateListener onCreateListener;
@@ -126,6 +125,16 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
 
     public void onPause() {
         super.onPause();
+        setOnTextureAvailableListener(new OnTextureAvailableListener() {
+            @Override
+            public void onTextureUpdate(int width, int height) {
+                if (render != null) {
+                    render.setSurface(compWidth, compHeight, getSurfaceTexture(), getViewWidth(), getViewHeight());
+                }
+            }
+        });
+
+
         if (render != null) {
             render.onActivityPaused(true);
         }
@@ -144,9 +153,8 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
     private OnFocusEventListener onFocusListener;
 
     /**
-     * 设置前置摄像头,在开始前设置;默认是后置摄像头;
-     * Set the front camera, set it before starting; the default is the back camera;
-     *
+     * 设置前置摄像头,在开始前设置
+     * 默认是后置摄像头;
      * @param is
      */
     public void setFrontCamera(boolean is) {
@@ -157,11 +165,8 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
-
     /**
      * 设置预览尺寸, 不建议设置.
-     * 如设置,则在start()前设置;
-     *
      * @param type
      */
     public void setPreviewSize(LSOCameraSizeType type) {
@@ -170,6 +175,29 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
+    /**
+     * 在相机预览过程中, 设置分辨率
+     * @param type 分辨率类型;
+     */
+    public void setCameraSize(LSOCameraSizeType type) {
+        if (render != null && render.isRunning()) {
+            render.setCameraSize(type);
+        }
+    }
+
+    /**
+     * 获取分辨率;
+     * @return
+     */
+    public LSOCameraSizeType getCameraSize(){
+        if (render != null ) {
+            return render.getCameraSize();
+        }else{
+            return LSOCameraSizeType.TYPE_1080P;
+        }
+    }
+
+
 
     public boolean isRunning() {
         return render != null && render.isRunning();
@@ -177,7 +205,8 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
 
 
     /**
-     * 当camera从后台回来时, 如果相机被占用则会触发此错误回调;
+     * 当camera从后台回来时,
+     * 如果相机被占用则会触发此错误回调;
      *
      * @param listener
      */
@@ -203,6 +232,7 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
             LSOLog.d("LSOCamera  start error. is opened...");
             return true;
         }
+
         if (getSurfaceTexture() != null) {
             render.setFrontCamera(frontCamera);
 
@@ -212,7 +242,7 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
                 if (!isCameraOpened) {
                     LSOLog.e("open LSOCamera error.\n");
                 } else {
-                    LSOLog.d("LSOCamera start preview...");
+                    LSOLog.d("LSOCameraLive start preview...");
                 }
             }
         } else {
@@ -229,8 +259,8 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
 
 
     /**
-     * 美颜, 范围是0.0---1.0; 0.0 不做磨皮, 1.0:完全磨皮;
-     *
+     * 美颜, 范围是0.0---1.0;
+     * 0.0 不做磨皮, 1.0:完全磨皮;
      * @param level
      */
     public void setBeautyLevel(float level) {
@@ -238,6 +268,7 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
             render.setBeautyLevel(level);
         }
     }
+
 
     /**
      * 禁止美颜;
@@ -292,10 +323,6 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
      * @param path
      */
     public void setBackGroundBitmapPath(String path) {
-        if (bgPath != null && bgPath.equals(path)) {
-            return;
-        }
-
         if (render != null && isRunning() && path != null) {
             try {
                 bgPath = path;
@@ -308,36 +335,44 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
-
     /**
-     * 设置背景视频
-     * @param path 路径
-     * @param audioVolume 背景视频的音量
-     * @param listener 返回的监听;
+     * 替换背景, 背景可以是图片或视频, 内部通过后缀名区分
+     * @param path
+     * @param audioVolume 音量, 视频时有效, 图片无效
+     * @param listener 设置 好后的监听;
      */
-    public void setBackGroundVideoPath(String path, float audioVolume, OnSetCompletedListener listener) {
+    public void setBackGroundPath(String path, float audioVolume, OnSetCompletedListener listener) {
 
-        if (bgPath != null && bgPath.equals(path)) {
+        if(!fileExist(path)){
             listener.onSuccess(false);
             return;
         }
 
-        if (render != null && isRunning() && path != null) {
+        if (render != null && isRunning()) {
             try {
-                bgPath = path;
-                render.setBackGroundVideoPath(path, audioVolume,listener);
+
+                String suffix=getFileSuffix(path);
+                if(isBitmapSuffix(suffix)){
+                    bgPath = path;
+                    setBackGroundBitmapPath(path);
+                    listener.onSuccess(true);
+                }else if(isVideoSuffix(suffix)){
+                    bgPath = path;
+                    render.setBackGroundVideoPath(path, audioVolume,listener);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 LSOLog.e("setBackGroundPath error, input is:" + path);
+                listener.onSuccess(false);
             }
         }else{
             listener.onSuccess(false);
         }
+
     }
 
     /**
      * 增加一个纹理图层;
-     *
      * @param width  纹理的宽度
      * @param height 纹理的高度
      * @return 返回一个图层对象;
@@ -350,13 +385,47 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
+
     /**
-     * 在摄像机上层增加
-     * 用在多机位场合;
      *
-     * @param bmp
+     *
+     *
+     * @param yuvWidth
+     * @param yuvHeight
+     * @param yuvAngle
      * @return
      */
+    /**
+     *  增加一个yuv数据的图层;
+     *  特定客户使用;
+     * @param yuvWidth yuv图像的宽度;
+     * @param yuvHeight yuv图像的高度
+     * @param yuvAngle yuv图像的角度;
+     * @param isNv12 图像数据是否是nv12; 如果是nv21则输入false;
+     * @return
+     */
+    public LSOCamLayer addNv21Layer(int yuvWidth, int yuvHeight, int yuvAngle, boolean isNv12) {
+        if (render != null && render.isRunning()) {
+            return render.addNv21Layer(yuvWidth,yuvHeight,yuvAngle, isNv12);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 在摄像机上层增加
+     * @return
+     */
+    public LSOCamLayer addBitmapLayer(String path) {
+        if (render != null && render.isRunning()) {
+            return render.addBitmapLayer(path);
+        } else {
+            return null;
+        }
+    }
+
+
+
     public LSOCamLayer addBitmapLayer(Bitmap bmp) {
         if (render != null && render.isRunning()) {
             return render.addBitmapLayer(bmp);
@@ -367,9 +436,6 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
 
     /**
      * 在背景层上增加一层画面
-     * 用在多机位场合
-     *
-     * @param bmp 图片对象
      * @return 返回的是图层对象;
      */
     public LSOCamLayer addBitmapLayerAboveBackGround(Bitmap bmp) {
@@ -383,10 +449,6 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
 
     /**
      * 特定客户使用.
-     * 在背景层上增加一层画面;
-     * @param width
-     * @param height
-     * @return
      */
     public LSOCamLayer addSurfaceLayerAboveBackGround(int width, int height) {
 
@@ -398,14 +460,41 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
     }
 
 
+
+    /**
+     *  增加绿色背景的视频或图片;
+     *  限制: 绿背景视频的分辨率最大1080P, 时长2分钟, 同时可支持最大5个;
+     * @param path 绿色背景的图片或视频,
+     * @param cache 是否需要缓冲, 如果分辨率大于1080P,则默认增加缓冲;其他一般不建议缓冲, 填入false;
+     * @param listener 完成的监听;
+     */
+    public void addGreenFileAsync(String path,boolean cache, OnAddPathListener listener){
+        if (render != null && render.isRunning()) {
+            render.addGreenFileAsync(path,cache, listener);
+        }
+    }
+
+    /**
+     * @param path gif路径;
+     * @return
+     */
+    public LSOCamLayer addGifPath(String path){
+        if (render != null && render.isRunning()) {
+            return render.addGifPath(path);
+        }else{
+            LSOLog.e("addGifPath error. ");
+            return null;
+        }
+    }
+
     /**
      * 删除一个图层
-     *
      * @param layer
+     * @param listener
      */
-    public void removeLayer(LSOCamLayer layer) {
+    public void removeLayer(LSOCamLayer layer, OnRemoveCompletedListener listener) {
         if (render != null && render.isRunning()) {
-            render.removeLayer(layer);
+            render.removeLayer(layer, listener);
         }
     }
 
@@ -435,7 +524,30 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
+    /**
+     * 相机图层的纹理设置监听, 比如在图像流中插入美颜等;
+     * @param listener
+     */
+    public void setOnCameraLayerTextureOutListener(OnLayerTextureOutListener listener){
+        if(render!=null){
+            render.setOnCameraLayerTextureOutListener(listener);
+        }
+    }
 
+    /**
+     * camera的分辨率改变监听; listener返回的是宽度和高度;
+     * @param listener
+     */
+    public void setOnCameraSizeChangedListener(OnCameraSizeChangedListener listener){
+        if(render!=null){
+            render.setOnCameraSizeChangedListener(listener);
+        }
+    }
+
+    /**
+     * 获取相机图层; 如果分辨率改变后, 则应该重新获取;
+     * @return
+     */
     public LSOCamLayer getCameraLayer() {
         if (render != null) {
             return render.getCameraLayer();
@@ -444,6 +556,10 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         }
     }
 
+    /**
+     * 获取背景视频的播放器;
+     * @return
+     */
     public MediaPlayer getMediaPlayer() {
         if (render != null) {
             return render.getMediaPlayer();
@@ -536,6 +652,7 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
             render.changeCamera();
         }
     }
+
 
     /**
      * 是否是前置摄像头
@@ -781,11 +898,76 @@ public class LSOCameraLive extends LSOFrameLayout implements ILSOTouchInterface 
         this.onSlideListener = onSlideListener;
     }
 
+    public static boolean fileExist(String absolutePath) {
+        if (absolutePath == null)
+            return false;
+        else {
+            File file = new File(absolutePath);
+            if (file.exists()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public interface OnSlideListener {
 
         void onHorizontalSlide(boolean slideLeft);
 
         void onVerticalSlide(boolean slideUp);
     }
+    /**
+     * yuv的演示
+     *  private void testYuv(){
+     *         if(lsoCamera.getCameraLayer()!=null){
+     *             lsoCamera.getCameraLayer().setVisibility(false);
+     *
+     *             String nv12Copy= CopyFileFromAssets.copyAssets(getApplicationContext(),"gzj_nv12_1088x1920_oneFrame.yuv");
+     *             byte[] bytes=readFile(nv12Copy);
+     *
+     *             LSOCamLayer layer=lsoCamera.addNv21Layer(1088,1920,0);
+     *             layer.pushNV21Data(bytes,0,false,true);
+     *             layer.setGreenMatting(true);
+     *         }
+     *     }
+
+
+     public static byte[] readFile(String path) {
+     int len= (int) new File(path).length();
+     byte b[] = new byte[len];
+
+
+     StringBuffer result=new StringBuffer();
+     BufferedInputStream bis = null;
+     FileInputStream fi = null;
+     try {
+     fi = new FileInputStream(new File(path));
+     bis = new BufferedInputStream(fi);
+     bis.read(b,0,len);
+
+     } catch (FileNotFoundException e) {
+     e.printStackTrace();
+     } catch (IOException e) {
+     e.printStackTrace();
+     }finally {
+     if (bis != null) {
+     try {
+     bis.close();
+     } catch (IOException e) {
+     e.printStackTrace();
+     }
+     }
+     if (fi != null) {
+     try {
+     fi.close();
+     } catch (IOException e) {
+     e.printStackTrace();
+     }
+     }
+     }
+     return b;
+     }
+
+     */
 
 }

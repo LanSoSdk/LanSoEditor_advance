@@ -10,25 +10,88 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4f00fe1-c41f-4220-bd10-673a5b9e9f6f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/modules/LanSongSDK/LanSoEditor_advance-LanSongSDK.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/AERenderExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAeExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAexSegmentPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOBitmapEditPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOBookPagePlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOSegmentCamera.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOStickerPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/d8.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/jarAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_CymChad_BaseRecyclerViewAdapterHelper_2_9_30_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_CymChad_BaseRecyclerViewAdapterHelper_2_9_30_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_warkiz_widget_indicatorseekbar_1_2_9_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_warkiz_widget_indicatorseekbar_1_2_9_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/LanSongSDK.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libTenLineJni.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libTenLineJni.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/libs/lansongeditor_hx.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/assets/LSResource/glesgm1.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/assets/LSResource/glesgm2.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/assets/LSResource/glesgm3.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/assets/LSResource/glesgm4.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/assets/LSResource/glesgm5.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/assets/LSResource/glessm6.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/segment/LSOSegmentPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/segment/LSOSegmentPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAexPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAexPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOAudioPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOCameraLive.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOCameraLive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOEditPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOEditPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOLayerTouchView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOLayerTouchView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOVLogPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOVLogPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOVideoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LSOVideoView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/LanSoEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/VideoEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/AudioEditor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/DrawPadAllExecute2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/LSOVideoReverse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/LanSongFileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/LanSongFileUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/VideoLayout.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/VideoLayoutParam.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/archApi/VideoOneDo2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/AECompositionExecute.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/AECompositionView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/AERenderExecute.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/AudioPadExecute.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/DrawPadAEExecute.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/DrawPadAEPreview.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/DrawPadCameraView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/DrawPadView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/DrawPadView2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/IRenderView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/TextureRenderView2.java" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoeditor/oldVersion/TextureRenderView2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk/videoplayer/VPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongSDKDecoder.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongSDKDecoder.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongffmpeg.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/arm64-v8a/libLanSongffmpeg.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongSDKDecoder.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongSDKDecoder.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongffmpeg.so" beforeDir="false" afterPath="$PROJECT_DIR$/LanSongSDK/src/main/jniLibs/armeabi-v7a/libLanSongffmpeg.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/res/drawable-hdpi/sticker_delete.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LanSongSDK/src/main/res/drawable-hdpi/sticker_rotate.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/AexPlayerDemoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/AexPlayerDemoActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/ListMainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/VideoPlayerActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DemoCrashHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/advanceDemo/utils/DemoCrashHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="R28M807VCCR" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="ff237144" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -59,7 +122,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/LanSongSDK/libs" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -69,11 +132,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" />
       <recent name="$PROJECT_DIR$/LanSongSDK/libs" />
+      <recent name="$PROJECT_DIR$/app/src/main/assets" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" />
       <recent name="$PROJECT_DIR$/LanSongSDK/src/main/java/com/lansosdk" />
       <recent name="$PROJECT_DIR$/LanSongSDK/src/main" />
-      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.lansosdk.videoeditor" />
@@ -177,26 +240,35 @@
       <screen x="0" y="23" width="2560" height="1374" />
     </state>
     <state x="578" y="547" key="#PSD/0.23.2560.1374@0.23.2560.1374" timestamp="1616559357281" />
-    <state width="1886" height="565" key="GridCell.Tab.0.bottom" timestamp="1616560432921">
-      <screen x="0" y="23" width="2560" height="1374" />
+    <state width="1876" height="535" key="GridCell.Tab.0.bottom" timestamp="1623377243210">
+      <screen x="0" y="25" width="2560" height="1364" />
     </state>
     <state width="1886" height="565" key="GridCell.Tab.0.bottom/0.23.2560.1374@0.23.2560.1374" timestamp="1616560432921" />
-    <state width="1886" height="565" key="GridCell.Tab.0.center" timestamp="1616560432920">
-      <screen x="0" y="23" width="2560" height="1374" />
+    <state width="1876" height="535" key="GridCell.Tab.0.bottom/0.25.2560.1364@0.25.2560.1364" timestamp="1623377243210" />
+    <state width="1876" height="535" key="GridCell.Tab.0.center" timestamp="1623377243209">
+      <screen x="0" y="25" width="2560" height="1364" />
     </state>
     <state width="1886" height="565" key="GridCell.Tab.0.center/0.23.2560.1374@0.23.2560.1374" timestamp="1616560432920" />
-    <state width="1886" height="565" key="GridCell.Tab.0.left" timestamp="1616560432920">
-      <screen x="0" y="23" width="2560" height="1374" />
+    <state width="1876" height="535" key="GridCell.Tab.0.center/0.25.2560.1364@0.25.2560.1364" timestamp="1623377243209" />
+    <state width="1876" height="535" key="GridCell.Tab.0.left" timestamp="1623377243209">
+      <screen x="0" y="25" width="2560" height="1364" />
     </state>
     <state width="1886" height="565" key="GridCell.Tab.0.left/0.23.2560.1374@0.23.2560.1374" timestamp="1616560432920" />
-    <state width="1886" height="565" key="GridCell.Tab.0.right" timestamp="1616560432921">
-      <screen x="0" y="23" width="2560" height="1374" />
+    <state width="1876" height="535" key="GridCell.Tab.0.left/0.25.2560.1364@0.25.2560.1364" timestamp="1623377243209" />
+    <state width="1876" height="535" key="GridCell.Tab.0.right" timestamp="1623377243210">
+      <screen x="0" y="25" width="2560" height="1364" />
     </state>
     <state width="1886" height="565" key="GridCell.Tab.0.right/0.23.2560.1374@0.23.2560.1374" timestamp="1616560432921" />
-    <state x="663" y="482" width="695" height="486" key="find.popup" timestamp="1616560362824">
-      <screen x="0" y="23" width="2560" height="1374" />
+    <state width="1876" height="535" key="GridCell.Tab.0.right/0.25.2560.1364@0.25.2560.1364" timestamp="1623377243210" />
+    <state x="751" y="420" width="675" height="655" key="StructurePopup" timestamp="1623376666671">
+      <screen x="0" y="25" width="2560" height="1364" />
+    </state>
+    <state x="751" y="420" width="675" height="655" key="StructurePopup/0.25.2560.1364@0.25.2560.1364" timestamp="1623376666671" />
+    <state x="663" y="481" width="805" height="574" key="find.popup" timestamp="1623379722137">
+      <screen x="0" y="25" width="2560" height="1364" />
     </state>
     <state x="663" y="482" width="695" height="486" key="find.popup/0.23.2560.1374@0.23.2560.1374" timestamp="1616560362824" />
+    <state x="663" y="481" width="805" height="574" key="find.popup/0.25.2560.1364@0.25.2560.1364" timestamp="1623379722137" />
   </component>
   <component name="masterDetails">
     <states>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.lansosdk.aex.LSOAexImage;
@@ -17,8 +18,10 @@ import com.lansosdk.box.LSOFrameLayout;
 import com.lansosdk.box.LSOLayer;
 import com.lansosdk.box.LSOLayerPosition;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.OnAddPathListener;
 import com.lansosdk.box.OnAexImageSelectedListener;
 import com.lansosdk.box.OnAexTextSelectedListener;
+import com.lansosdk.box.OnCompressListener;
 import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLSOAexImageChangedListener;
 import com.lansosdk.box.OnLanSongSDKCompressListener;
@@ -28,7 +31,10 @@ import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
+import com.lansosdk.box.OnPrepareListener;
 import com.lansosdk.box.OnResumeListener;
+import com.lansosdk.box.OnSetCompletedListener;
+import com.lansosdk.box.OnTextureAvailableListener;
 
 
 public class LSOAexPlayer extends LSOFrameLayout {
@@ -54,14 +60,13 @@ public class LSOAexPlayer extends LSOFrameLayout {
     public LSOAexPlayer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
-
-    //-----------copy code
     protected void sendOnCreateListener() {
         super.sendOnCreateListener();
         if (renderer != null) {
             renderer.switchCompSurface(getCompWidth(), getCompHeight(), getSurfaceTexture(), getViewWidth(), getViewHeight());
         }
     }
+
 
     public void sendOnResumeListener() {
         super.sendOnResumeListener();
@@ -70,16 +75,8 @@ public class LSOAexPlayer extends LSOFrameLayout {
         }
     }
 
-    private boolean isEnableTouch = true;
-    public void setTouchEnable(boolean enable) {
-        isEnableTouch = enable;
-    }
 
     public boolean onTextureViewTouchEvent(MotionEvent event) {
-        if(isEnableTouch){
-            super.onTextureViewTouchEvent(event);
-            return renderer!=null && renderer.onTextureViewTouchEvent(event);
-        }
         return false;
     }
 
@@ -102,6 +99,15 @@ public class LSOAexPlayer extends LSOFrameLayout {
 
     public void onPause() {
         super.onPause();
+        setOnTextureAvailableListener(new OnTextureAvailableListener() {
+            @Override
+            public void onTextureUpdate(int width, int height) {
+                if (renderer != null) {
+                    renderer.switchCompSurface(getCompWidth(), getCompHeight(), getSurfaceTexture(), getViewWidth(), getViewHeight());
+                }
+            }
+        });
+
         if (renderer != null) {
             renderer.onActivityPaused(true);
         }
@@ -113,9 +119,6 @@ public class LSOAexPlayer extends LSOFrameLayout {
         release();
     }
 
-    //-----------------------------VIEW ADJUST CODE END----------------------------
-
-    //---------------------------------------------容器代码--------------------------------------------------------
 
     private void createRender(){
         if(renderer==null){
@@ -171,42 +174,85 @@ public class LSOAexPlayer extends LSOFrameLayout {
             renderer.addLogoBitmap(bmp,x,y);
         }
     }
-//    public void setAexModule
 
     /**
-     * 增加一个声音图层;
-     * @param path 声音路径;
-     * @param startTimeOfComp 从容器的什么位置增加;
+     * 设置模板声音
+     * @param volume 1.0为正常. 0是静音, 2.0是放大一倍;
+     */
+    public void setModuleVolume(float volume) {
+        if(renderer!=null){
+            renderer.setModuleAudioVolume(volume);
+        }
+    }
+
+    /**
+     * 获取模板声音
      * @return
      */
-    public LSOCamAudioLayer addAudioLayer(String path, long startTimeOfComp) {
-        createRender();
+    public float getModuleVolume() {
         if(renderer!=null){
-            return renderer.addAudioLayer(path,startTimeOfComp);
+            return renderer.getModuleAudioVolume();
         }else{
-            return null;
-        }
-    }
-
-
-    /**
-     * 删除指定的声音图层;
-     * @param layer
-     */
-    public void removeAudioLayerAsync(LSOCamAudioLayer layer) {
-        if(renderer!=null){
-            renderer.removeAudioLayerAsync(layer);
+            return 1.0f;
         }
     }
 
     /**
-     * 删除所有声音图层;
+     * 设置外部声音,设置后, 会替换掉之前的声音;
+     * @param path 路径, 支持mp3, 有音乐的mp4或mov视频
+     * @param listener 异步设置后的回调; 设置后, 会替换掉之前的声音;
      */
-    public void removeALLAudioLayer() {
+    public void setAudioPath(String path, OnAddPathListener listener) {
         if(renderer!=null){
-            renderer.removeALLAudioLayer();
+            renderer.setAudioPath(path,1.0f,0,Long.MAX_VALUE, listener);
         }
     }
+
+    /**
+     * 设置外部声音,设置后, 会替换掉之前的声音;
+     * @param path 声音路径
+     * @param volume 声音音量
+     * @param cutStartUs 对声音的裁剪,开始时间
+     * @param cutEndUs 对声音的裁剪结束时间, 如果不裁剪,则为Long.MAX_VALUE
+     * @param listener 声音是异步增加, 异步执行后的回调;
+     */
+    public void setAudioPath(String path, float volume, long cutStartUs, long cutEndUs, OnAddPathListener listener) {
+        if(renderer!=null){
+            renderer.setAudioPath(path,volume,cutStartUs,cutEndUs, listener);
+        }
+    }
+
+    /**
+     * 删除外部增加的声音
+     */
+    public void removeAudioPath(){
+        if(renderer!=null){
+            renderer.setAudioPath(null,0,0,0, null);
+        }
+    }
+
+    /**
+     * 设置增加的声音音量
+     * @param volume 1.0为正常. 0是静音, 2.0是放大一倍;
+     */
+    public void setAddAudioVolume(float volume) {
+        if(renderer!=null){
+            renderer.setAddAudioVolume(volume);
+        }
+    }
+
+    /**
+     * 获取增加的声音音量
+     * @return
+     */
+    public float getAddAudioVolume() {
+        if(renderer!=null){
+            return renderer.getAddAudioVolume();
+        }else{
+            return 1.0f;
+        }
+    }
+
 
     /**
      * 增加图片图层
@@ -242,6 +288,7 @@ public class LSOAexPlayer extends LSOFrameLayout {
             return null;
         }
     }
+
     /**
      * 增加gif图层
      * @param asset 图层资源;
@@ -298,11 +345,6 @@ public class LSOAexPlayer extends LSOFrameLayout {
     }
 
 
-    /**
-     * 当用户点击屏幕, 选中一个图片时, 会返回这个图片的对象;
-     * 监听返回的是 LSOAexImage对象, aexImage对象有index可以得到图片的index;
-     * @param listener
-     */
     public void setOnAexImageSelectedListener(OnAexImageSelectedListener listener){
         createRender();
         if(renderer!=null){
@@ -321,6 +363,13 @@ public class LSOAexPlayer extends LSOFrameLayout {
         }
     }
 
+    public void setOnCompressListener(OnCompressListener listener){
+        createRender();
+        if(renderer!=null){
+            renderer.setOnCompressListener(listener);
+        }
+    }
+
 
     /**
      * 当在播放过程中, 一个图片播放完毕后, 切换到下一张图片, 会触发此监听;
@@ -336,8 +385,6 @@ public class LSOAexPlayer extends LSOFrameLayout {
 
     /**
      * 播放进度回调
-     * 监听中的两个参数是: onLanSongSDKExportProgress(long ptsUs, int percent);
-     * 分别对应 当前处理的时间戳 和百分比;
      * 在seek或pause的时候,此监听不调用;
      * @param listener
      */
@@ -424,25 +471,33 @@ public class LSOAexPlayer extends LSOFrameLayout {
         }
     }
 
+
     /**
-     * 开始预览
+     * 准备一下, 异步执行;
+     * @param listener
      */
-    public void startPreview(){
+    public void prepareAsync(OnPrepareListener listener){
         if(renderer!=null){
-            renderer.startPreview(false);
+            renderer.prepareAsync(listener);
+        }else if(listener!=null){
+            listener.onSuccess(false);
         }
     }
 
 
     /**
-     * 开始预览, 在播放完第一帧的时候, 是否要暂停;
-     * @param pauseAfterFirstFrame
+     * LSNEW startPreview改成 start();
+     * 开始预览;
+     * @return
      */
-    public void startPreview(boolean pauseAfterFirstFrame){
+    public boolean start(){
+        super.start();
         if(renderer!=null){
-            renderer.startPreview(pauseAfterFirstFrame);
+          renderer.start();
         }
+        return true;
     }
+
 
     /**
      * 视频导出
@@ -492,39 +547,20 @@ public class LSOAexPlayer extends LSOFrameLayout {
      * 暂停播放后的恢复;
      */
     public void resume(){
+        start();
+    }
+
+
+    /**
+     * 设置循环
+     * @param is
+     */
+    public void setLooping(boolean is){
         if(renderer!=null){
-            renderer.startPreview(false);
+            renderer.setLooping(is);
         }
     }
 
-
-
-    public void setDisableTouchImage(boolean is){
-        if(renderer!=null){
-            renderer.setDisableTouchImage(is);
-        }
-    }
-    public void setDisableTouchText(boolean is){
-        if(renderer!=null){
-            renderer.setDisableTouchText(is);
-        }
-    }
-
-
-    public boolean isDisableTouchImage(){
-        return renderer!=null && renderer.isDisableTouchImage();
-    }
-    public boolean isDisableTouchText(){
-        return renderer!=null && renderer.isDisableTouchText();
-    }
-
-
-    public void setDisableTouchAdjust(boolean is){
-        createRender();
-        if(renderer!=null){
-            renderer.setDisableTouchAdjust(is);
-        }
-    }
     /**
      * @param seekUs
      */
@@ -590,10 +626,9 @@ public class LSOAexPlayer extends LSOFrameLayout {
         setupSuccess=false;
     }
     /**
-     * 释放
-     * 如果已经收到完成监听, 则不需要调用;
+     * 释放.可以不调用;
      */
-    private void release(){
+    public void release(){
         if(renderer!=null){
             renderer.release();
             renderer=null;

@@ -4,6 +4,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.lansosdk.box.LanSoEditorBox;
+import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.VideoEditor;
 
 import java.io.BufferedReader;
@@ -53,7 +54,7 @@ public class DemoCrashHandler implements UncaughtExceptionHandler {
         trace2[trace.length + 3] = new StackTraceElement("Android",
                 "LanSong box version:", LanSoEditorBox.VERSION_BOX, -1);
         trace2[trace.length + 4] = new StackTraceElement("Android",
-                "LanSong editor version:", VideoEditor.getSDKVersion(), -1);
+                "LanSong editor version:", LanSoEditor.VERSION, -1);
 
         ex.setStackTrace(trace2);
 

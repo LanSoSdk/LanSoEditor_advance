@@ -32,6 +32,7 @@ import com.lansosdk.box.OnLanSongSDKStateChangedListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
 import com.lansosdk.box.OnLanSongSDKUserSelectedLayerListener;
 import com.lansosdk.box.OnResumeListener;
+import com.lansosdk.box.OnTextureAvailableListener;
 
 import java.util.List;
 
@@ -169,6 +170,16 @@ public class LSOEditPlayer extends LSOFrameLayout implements ILSOTouchInterface{
 
     public void onPause() {
         super.onPause();
+
+        setOnTextureAvailableListener(new OnTextureAvailableListener() {
+            @Override
+            public void onTextureUpdate(int width, int height) {
+                if (render != null) {
+                    render.switchCompSurface(getCompWidth(), getCompHeight(), getSurfaceTexture(), getViewWidth(), getViewHeight());
+                }
+            }
+        });
+
         if (render != null) {
             render.onActivityPaused(true);
         }

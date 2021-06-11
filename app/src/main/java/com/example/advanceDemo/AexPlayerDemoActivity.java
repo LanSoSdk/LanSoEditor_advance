@@ -1,7 +1,6 @@
 package com.example.advanceDemo;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,12 +17,11 @@ import com.example.advanceDemo.utils.DemoProgressDialog;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.aex.LSOAexImage;
-import com.lansosdk.aex.LSOAexOption;
 import com.lansosdk.box.LSOAexModule;
 import com.lansosdk.box.LSOLayerPosition;
-import com.lansosdk.box.LSOLog;
 import com.lansosdk.box.OnAexImageSelectedListener;
 import com.lansosdk.box.OnAexJsonPrepareListener;
+import com.lansosdk.box.OnCompressListener;
 import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLSOAexImageChangedListener;
 import com.lansosdk.box.OnLanSongSDKCompressListener;
@@ -33,6 +31,7 @@ import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
 import com.lansosdk.box.OnLanSongSDKTimeChangedListener;
+import com.lansosdk.box.OnPrepareListener;
 import com.lansosdk.box.OnResumeListener;
 import com.lansosdk.videoeditor.LSOAexPlayer;
 
@@ -43,7 +42,7 @@ import java.util.Locale;
  */
 public class AexPlayerDemoActivity extends Activity implements View.OnClickListener {
 
-    private LSOAexPlayer aexPlayerView;
+    private LSOAexPlayer aexPlayer;
 
 
     private TextView textView;
@@ -55,16 +54,16 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.test_aex_layout);
-        aexPlayerView = findViewById(R.id.id_test_ae_gpu_preview2);
+        aexPlayer = findViewById(R.id.id_test_ae_gpu_preview2);
         initView();
         DemoUtil.showDialog(AexPlayerDemoActivity.this,"最简单的工程演示, 完整演示请下载演示APP");
 
-        //prepare Ae Template;
         prepareOneAeTemplate();
     }
 
 
     private void prepareOneAeTemplate(){
+
         String jsonPath=CopyFileFromAssets.copyAssets(getApplicationContext(),"ae_august.json");
         String mvColorPath=CopyFileFromAssets.copyAssets(getApplicationContext(),"ae_august_mvColor.mp4");
         String mvMaskPath=CopyFileFromAssets.copyAssets(getApplicationContext(),"ae_august_mvMask.mp4");
@@ -81,7 +80,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             public void onPrepared(boolean success, String errorCode) {
 
                 if(success){
-                    startPlayAe();
+                    startPlayAE();
                 }else{
                     DemoUtil.showDialog(AexPlayerDemoActivity.this,"解析json错误,请联系我们");
                 }
@@ -89,19 +88,17 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
         });
     }
 
-    private void startPlayAe(){
+    private void startPlayAE(){
         //replace some  picture;
+
         //替换一些图片,实际用相册中选择的;
         for (int i=0;i<module.getAexImageList().size();i++){
             String path= CopyFileFromAssets.copyAssets(getApplicationContext(),String.format(Locale.getDefault(),"kadian_img_%d.jpeg",i));
-            try {
-                module.updatePathAtIndex(i,path);  //<--------here replace  some
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            LSOAexImage image= module.getAexImageList().get(i);
+            image.updatePathWithStartTime(path,0);
         }
 
-        aexPlayerView.onCreateAsync(module, new OnCreateListener() {
+        aexPlayer.onCreateAsync(module, new OnCreateListener() {
             @Override
             public void onCreate() {
                 try {
@@ -118,7 +115,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        aexPlayerView.onResumeAsync(new OnResumeListener() {
+        aexPlayer.onResumeAsync(new OnResumeListener() {
             @Override
             public void onResume() {
 
@@ -129,7 +126,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        aexPlayerView.onPause();
+        aexPlayer.onPause();
     }
 
     private int currentImageIndex=0;
@@ -139,15 +136,15 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
      */
     private void startAEPreview() throws Exception {
 
-        if (aexPlayerView.isRunning()) {
+        if (aexPlayer.isRunning()) {
             return;
         }
 
 
 
-        aexPlayerView.addAeModule(module);
+        aexPlayer.addAeModule(module);
 
-        aexPlayerView.setOnAexImageSelectedListener(new OnAexImageSelectedListener() {
+        aexPlayer.setOnAexImageSelectedListener(new OnAexImageSelectedListener() {
             @Override
             public void onSelected(LSOAexImage aexImage) {
                 if(tvCurrentImage!=null){
@@ -161,7 +158,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         });
 
-        aexPlayerView.setOnAexImageChangedListener(new OnLSOAexImageChangedListener() {
+        aexPlayer.setOnAexImageChangedListener(new OnLSOAexImageChangedListener() {
             @Override
             public void onAexPlayerAexImageChanged(int index, LSOAexImage image) {
                 if(tvCurrentImage!=null){
@@ -171,7 +168,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         });
 
-        aexPlayerView.setOnLanSongSDKTimeChangedListener(new OnLanSongSDKTimeChangedListener() {
+        aexPlayer.setOnLanSongSDKTimeChangedListener(new OnLanSongSDKTimeChangedListener() {
             @Override
             public void onLanSongSDKTimeChanged(long ptsUs, int percent) {
                 if (textView != null) {
@@ -183,7 +180,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         });
 
-        aexPlayerView.setOnLanSongSDKPlayProgressListener(new OnLanSongSDKPlayProgressListener() {
+        aexPlayer.setOnLanSongSDKPlayProgressListener(new OnLanSongSDKPlayProgressListener() {
             @Override
             public void onLanSongSDKPlayProgress(long ptsUs, int percent) {
                 if (progressSeekBar != null) {
@@ -192,20 +189,20 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         });
 
-        aexPlayerView.setOnLanSongSDKPlayCompletedListener(new OnLanSongSDKPlayCompletedListener() {
+        aexPlayer.setOnLanSongSDKPlayCompletedListener(new OnLanSongSDKPlayCompletedListener() {
             @Override
             public void onLanSongSDKPlayCompleted() {
                 DemoUtil.showDialog(AexPlayerDemoActivity.this, "play complete!");
             }
         });
 
-        aexPlayerView.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
+        aexPlayer.setOnLanSongSDKErrorListener(new OnLanSongSDKErrorListener() {
             @Override
             public void onLanSongSDKError(int errorCode) {
                 DemoUtil.showDialog(AexPlayerDemoActivity.this, "AE执行错误,请查看错误信息.我们的TAG是LanSongSDK.");
             }
         });
-        aexPlayerView.setOnLanSongSDKExportProgressListener(new OnLanSongSDKExportProgressListener() {
+        aexPlayer.setOnLanSongSDKExportProgressListener(new OnLanSongSDKExportProgressListener() {
             @Override
             public void onLanSongSDKExportProgress(long ptsUs, int percent) {
 
@@ -213,7 +210,20 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         });
 
-        aexPlayerView.setOnLanSongSDKExportCompletedListener(new OnLanSongSDKExportCompletedListener() {
+        aexPlayer.setOnCompressListener(new OnCompressListener() {
+            @Override
+            public void onPercent(int percent) {
+                DemoProgressDialog.showMessage(AexPlayerDemoActivity.this,"压缩中:"+percent);
+            }
+
+            @Override
+            public void onSuccess(boolean is) {
+               DemoProgressDialog.releaseDialog();
+            }
+        });
+
+
+        aexPlayer.setOnLanSongSDKExportCompletedListener(new OnLanSongSDKExportCompletedListener() {
             @Override
             public void onLanSongSDKExportCompleted(String dstVideo) {
                 DemoProgressDialog.releaseDialog();
@@ -221,7 +231,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
             }
         });
 
-        aexPlayerView.setOnLanSongSDKCompressListener(new OnLanSongSDKCompressListener() {
+        aexPlayer.setOnLanSongSDKCompressListener(new OnLanSongSDKCompressListener() {
             @Override
             public void onCompressProgress(int percent, int numberIndex, int totalNumber) {
                 DemoProgressDialog.showMessage(AexPlayerDemoActivity.this, "preparing: " + percent + " index:" + numberIndex + "/" + totalNumber);
@@ -236,14 +246,28 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
 
         Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 
-        aexPlayerView.addLogoBitmap(bmp, LSOLayerPosition.LEFT_BOTTOM);
+        aexPlayer.addLogoBitmap(bmp, LSOLayerPosition.LEFT_BOTTOM);
 
-        if (aexPlayerView.isLayoutValid()) {
-            aexPlayerView.startPreview();
-            DemoLog.d(" ae preview is running.");
-        } else {
-            DemoUtil.showDialog(AexPlayerDemoActivity.this, "ae preview failed layoutValid:" + aexPlayerView.isLayoutValid());
-        }
+
+        DemoProgressDialog.showMessage(AexPlayerDemoActivity.this,"加载中...");
+        aexPlayer.prepareAsync(new OnPrepareListener() {
+            @Override
+            public void onPercent(int i) {
+                DemoProgressDialog.showMessage(AexPlayerDemoActivity.this,"加载进度 " + i);
+            }
+
+            @Override
+            public void onSuccess(boolean b) {
+                if(b){
+                    DemoProgressDialog.releaseDialog();
+                    aexPlayer.start();
+                    DemoLog.d(" ae preview is running.");
+                }else{
+                    DemoUtil.showDialog(AexPlayerDemoActivity.this, "ae preview failed layoutValid:" + aexPlayer.isLayoutValid());
+                }
+            }
+        });
+
 
     }
 
@@ -266,7 +290,7 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
 
                 if (fromUser) {
                     float percent = (float) progress / 100.0f;
-                    aexPlayerView.seekToTimeUs((long) (percent * aexPlayerView.getDurationUs()));
+                    aexPlayer.seekToTimeUs((long) (percent * aexPlayer.getDurationUs()));
                 }
             }
             @Override
@@ -283,10 +307,10 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.id_test_ae_gpu_pause:
-                if (aexPlayerView.isPlaying()) {
-                    aexPlayerView.pause();
+                if (aexPlayer.isPlaying()) {
+                    aexPlayer.pause();
                 } else {
-                    aexPlayerView.resume();
+                    aexPlayer.resume();
                 }
                 break;
 
@@ -294,21 +318,21 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
                 try {
                     if(currentImageIndex<module.getAexImageList().size()){
                         String path= CopyFileFromAssets.copyAssets(getApplicationContext(),"dy_xialu2.mp4");
-                        module.getAexImageList().get(currentImageIndex).updatePath(path,null);
+                        module.getAexImageList().get(currentImageIndex).updatePathWithStartTime(path,0);
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-
             case R.id.id_test_ae_gpu_replace_image:
                 if(currentImageIndex<module.getAexImageList().size()){
                     String path= CopyFileFromAssets.copyAssets(getApplicationContext(),"pic720x720.jpg");
-                    module.getAexImageList().get(currentImageIndex).updatePath(path,null);
+                    boolean ret=module.getAexImageList().get(currentImageIndex).updatePathWithStartTime(path,0);
                 }
                 break;
             case R.id.id_test_ae_gpu_export:
-                aexPlayerView.startExport();
+                aexPlayer.startExport();
                 break;
             default:
                 break;
@@ -318,6 +342,6 @@ public class AexPlayerDemoActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        aexPlayerView.onDestroy();
+        aexPlayer.onDestroy();
     }
 }

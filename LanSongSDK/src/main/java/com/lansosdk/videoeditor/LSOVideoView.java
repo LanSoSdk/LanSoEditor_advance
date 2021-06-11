@@ -10,6 +10,7 @@ import android.view.Surface;
 
 import com.lansosdk.box.LSOFrameLayout;
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.videoeditor.archApi.LanSongFileUtil;
 
 import java.io.File;
@@ -39,8 +40,6 @@ public class LSOVideoView extends LSOFrameLayout {
     public LSOVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
-
-    //-----------copy code
     protected void sendOnCreateListener() {
         if (mediaPlayer != null  && getSurfaceTexture() != null) {
             mediaPlayer.setSurface(new Surface(getSurfaceTexture()));
@@ -52,17 +51,21 @@ public class LSOVideoView extends LSOFrameLayout {
         super.sendOnResumeListener();
     }
 
+
+
     //旋转移动缩放
     public boolean onTextureViewTouchEvent(MotionEvent event) {
         super.onTextureViewTouchEvent(event);
         return true;
     }
 
+
+
     private   String inputPath;
     private   String copyVideoPath;
     private int inputWidth,inputHeight;
 
-    public void start(String path) {
+    public void start(String path, final OnCreateListener onCreateListener) {
         inputPath=path;
         mediaPlayer=new MediaPlayer();
 
@@ -74,7 +77,7 @@ public class LSOVideoView extends LSOFrameLayout {
                         post(new Runnable() {
                             @Override
                             public void run() {
-                                startPlayer();
+                                startPlayer(onCreateListener);
                             }
                         });
                     } catch (IOException e) {
@@ -84,7 +87,7 @@ public class LSOVideoView extends LSOFrameLayout {
             });
             thread.start();
     }
-    private void startPlayer(){
+    private void startPlayer(OnCreateListener onCreateListener){
         try {
             mediaPlayer.setDataSource(copyVideoPath);
             mediaPlayer.prepare(); //同步;
@@ -97,12 +100,32 @@ public class LSOVideoView extends LSOFrameLayout {
                 inputWidth/=2;
                 inputHeight/=2;
             }
-            setPlayerSizeAsync(inputWidth,inputHeight,null);
+            setPlayerSizeAsync(inputWidth,inputHeight,onCreateListener);
             mediaPlayer.setVolume(0.0f,0.0f);
             mediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();
             mediaPlayer=null;
+        }
+    }
+
+
+    public void pause(){
+        if (mediaPlayer != null){
+            mediaPlayer.pause();
+        }
+    }
+
+    public long getDurationUs(){
+        if (mediaPlayer != null) {
+            return mediaPlayer.getDuration()*1000;
+        }
+        return -1;
+    }
+
+    public void seekTo(long timeUs){
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo((int) (timeUs/1000));
         }
     }
 

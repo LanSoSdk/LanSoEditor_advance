@@ -6,16 +6,14 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.lansosdk.LanSongFilter.LanSongFilter;
 import com.lansosdk.box.LSOAsset;
-import com.lansosdk.box.LSOAudioLayer;
 import com.lansosdk.box.LSOExportType;
 import com.lansosdk.box.LSOFrameLayout;
 import com.lansosdk.box.LSOLayer;
 import com.lansosdk.box.LSOLog;
-import com.lansosdk.box.LSORatioType;
+import com.lansosdk.box.LSOSegmentMode;
 import com.lansosdk.box.LSOSegmentPlayerRunnable;
-import com.lansosdk.box.LSOSegmentVideo;
-import com.lansosdk.box.LSOSize;
 import com.lansosdk.box.OnAddAssetProgressListener;
 import com.lansosdk.box.OnCreateListener;
 import com.lansosdk.box.OnLanSongSDKErrorListener;
@@ -23,14 +21,18 @@ import com.lansosdk.box.OnLanSongSDKExportCompletedListener;
 import com.lansosdk.box.OnLanSongSDKExportProgressListener;
 import com.lansosdk.box.OnLanSongSDKPlayCompletedListener;
 import com.lansosdk.box.OnLanSongSDKPlayProgressListener;
+import com.lansosdk.box.OnLanSongSDKThumbnailBitmapListener;
 import com.lansosdk.box.OnResumeListener;
+import com.lansosdk.box.OnTextureAvailableListener;
 import com.lansosdk.videoeditor.ILSOTouchInterface;
-import com.lansosdk.videoeditor.LSOEditPlayer;
-
-import java.util.List;
 
 
 public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterface {
+
+    public static void initSDKFromAsset(Context context, String key, String modelName) {
+
+        LSOSegmentPlayerRunnable.initSDKFromAsset(context,key,modelName);
+    }
 
     private LSOSegmentPlayerRunnable render;
 
@@ -78,39 +80,40 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
     private int firstCompHeight = 0;
 
 
-    public void onCreateAsync(LSOSegmentVideo video, OnCreateListener listener) {
-        if (video != null) {
-
-            render = new LSOSegmentPlayerRunnable(getContext(), video);
-            render.setBackGroundColor(padBGRed, padBGGreen, padBGBlur, padBGAlpha);
-            render.setOnErrorListener(new OnLanSongSDKErrorListener() {
-                @Override
-                public void onLanSongSDKError(int errorCode) {
-                    setUpSuccess = false;
-                    if (userErrorListener != null) {
-                        userErrorListener.onLanSongSDKError(errorCode);
+    public void onCreateAsync(String path, OnCreateListener listener) {
+        if (path != null) {
+            render = new LSOSegmentPlayerRunnable(getContext(), path);
+            if(render.prepare()){
+                render.setBackGroundColor(padBGRed, padBGGreen, padBGBlur, padBGAlpha);
+                render.setOnErrorListener(new OnLanSongSDKErrorListener() {
+                    @Override
+                    public void onLanSongSDKError(int errorCode) {
+                        setUpSuccess = false;
+                        if (userErrorListener != null) {
+                            userErrorListener.onLanSongSDKError(errorCode);
+                        }
                     }
-                }
-            });
-            setPlayerSizeAsync(video.getWidth(), video.getHeight(), listener);
+                });
+                setPlayerSizeAsync(render.getWidth(), render.getHeight(), listener);
+            }else{
+                listener.onCreate();
+            }
         } else {
             listener.onCreate();
         }
     }
 
-
-    public void onCreateAsync(LSORatioType ratio, OnCreateListener listener) {
-        if (firstCompWidth == 0 || firstCompHeight == 0) {
-            LSOLog.e("onCreateAsync must first call List<LSOAsset> method.");
-            return;
-        }
-
-        LSOSize size = LSOEditPlayer.getPreviewSizeByRatio(ratio, firstCompWidth, firstCompHeight);
-        if (size.width != getCompWidth() || size.height != getCompHeight()) {
-            render.setAdjustSurface(true);
-            setPlayerSizeAsync((int) size.width, (int) size.height, listener);
+    /**
+     * 裁剪的宽度和高度 一定在onCreateAsync之后调用;
+     * @param startTimeUs 开始时间
+     * @param endTimeUs 结束时间; 单位us;
+     */
+    public void setCutDuration(long startTimeUs, long endTimeUs){
+        if(render!=null && !isRunning()){
+            render.setCutDuration(startTimeUs,endTimeUs);
         }
     }
+
 
     /**
      * 复制一个图层
@@ -133,10 +136,18 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
 
     public void onPause() {
         super.onPause();
+        setOnTextureAvailableListener(new OnTextureAvailableListener() {
+            @Override
+            public void onTextureUpdate(int width, int height) {
+                if (render != null) {
+                    render.switchCompSurface(getCompWidth(), getCompHeight(), getSurfaceTexture(), getViewWidth(), getViewHeight());
+                }
+            }
+        });
+
         if (render != null) {
             render.onActivityPaused(true);
         }
-        pause();
     }
 
     public void onDestroy() {
@@ -144,13 +155,9 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
         release();
     }
 
-    //-----------------------------VIEW ADJUST CODE END----------------------------
-
 
     /**
      * 获取原始的分割图层;
-     *
-     * @return
      */
     public LSOLayer getSegmentLayer() {
 
@@ -161,43 +168,27 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
         }
     }
 
+
     /**
-     * 获取分割图层的声音图层;
-     *
-     * @return
+     *  准备以下
      */
-    public LSOAudioLayer getSegmentAudioLayer() {
-        if (render != null) {
-            return render.getSegmentAudioLayer();
-        } else {
-            return null;
-        }
-    }
-
-
     public boolean prepare() {
         return render != null && setup();
     }
 
     /**
-     * 增加视频时, 暂停当前执行;
-     *
-     * @param listener1
-     * @return
      */
-    public void setBackGroundPath(String path, OnAddAssetProgressListener listener1) {
+    public void setBackGroundPath(String path,OnAddAssetProgressListener listener1) {
 
         if (path != null && render != null) {
-            try {
-                LSOAsset asset = new LSOAsset(path);
-                render.setBackGroundPath(asset, listener1);
-            } catch (Exception e) {
-                e.printStackTrace();
-                listener1.onAddAssetCompleted(null,false);
-            }
+            render.setBackGroundPath(path,listener1);
         }
     }
 
+
+    /**
+     * 清空背景;
+     */
     public void clearBackGround() {
         if (render != null) {
             render.clearBackGround();
@@ -205,18 +196,51 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
     }
 
     /**
-     * 增加视频动画特效, 增加后,返回一个特效图层;
-     *
-     * @param asset     增加资源
-     * @param preview   增加的时候,是否要预览一下;
-     * @param listener1 增加完成后的回调
+     * 给抠图背景设置模糊,
+     * @param percent 模糊百分比, 0是不模糊. 100是深度模糊; 建议设置10;
      */
-    public void addVideoEffectAsync(LSOAsset asset, boolean preview, OnAddAssetProgressListener listener1) {
-        createRender();
-        if (render != null && setup() && asset != null && asset.isMV()) {
-            render.addVideoEffectAsync(asset, 0, preview, listener1);
+    public void setBackGroundBlurPercent(int percent) {
+        if (render != null && render.isRunning()) {
+            render.setBackGroundBlurPercent(percent);
         }
     }
+
+    /**
+     * 获取背景模糊百分比;
+     *
+     * @return
+     */
+    public int getBackGroundBlurPercent() {
+        if (render != null) {
+            return render.getBackGroundBlurPercent();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 背景设置滤镜
+     * @param filter 滤镜对象
+     */
+    public void setBackGroundFilter(LanSongFilter filter) {
+        if (render != null) {
+            render.setBackGroundFilter(filter);
+        }
+    }
+
+    /**
+     * 获取背景滤镜对象;
+     * @return
+     */
+    public LanSongFilter getBackGroundFilter() {
+        if (render != null) {
+            return render.getBackGroundFilter();
+        } else {
+            return null;
+        }
+    }
+
+    //-----------------------------------------
 
 
     public LSOLayer addBitmapLayer(String path, long atCompUs) {
@@ -234,32 +258,7 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
         return null;
     }
 
-    /**
-     * 增加gif图层;
-     *
-     * @return 返回gif图层对象;
-     */
-    public LSOLayer addGifLayer(String gifPath, long atCompUs) {
 
-        LSOLog.d("SegmentLayer addGifLayer...");
-        if (gifPath != null) {
-            int index = gifPath.lastIndexOf('.');
-            if (index > -1) {
-                String suffix = gifPath.substring(index + 1);
-                if ("gif".equalsIgnoreCase(suffix)) {
-                    try {
-                        LSOAsset asset = new LSOAsset(gifPath);
-                        if (render != null && setup() && asset.isGif()) {
-                            return render.addGifLayer(asset, atCompUs);
-                        }
-                    } catch (Exception e) {
-                        LSOLog.e("addGifLayer error. ", e);
-                    }
-                }
-            }
-        }
-        return null;
-    }
     /**
      * 异步删除图层;
      * 删除成功后, 会触发容器时长回调, 在回调中你可以重新布局
@@ -274,41 +273,62 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
     }
 
     /**
-     * 增加声音图层;
-     *
-     * @param path            声音的完整路径;
-     * @return 返回声音对象;
+     * 设置外部声音;
+     * @param path
+     * @return
      */
-    public LSOAudioLayer addAudioLayer(String path) {
+    public boolean setAudioPath(String path) {
         createRender();
-        LSOLog.d("SegmentLayer addAudioLayer...");
+        LSOLog.d("SegmentLayer setAudioPath...");
         if (render != null && setup()) {
-            return render.addAudioLayer(path, 0);
+            return render.setAudioPath(path,1.0F,0,Long.MAX_VALUE);
         } else {
-            return null;
+            return false;
         }
     }
+
+
     /**
-     * 删除声音图层
-     *
-     * @param layer
+     * 设置外部声音
+     * @param path 声音路径
+     * @param volume    声音的音量
+     * @param cutStartUs 开始裁剪位置, 最低是0
+     * @param cutEndUs   结束裁剪, 如到文件尾:则是Long.MAX_VALUE
+     * @return
      */
-    public void removeAudioLayerAsync(LSOAudioLayer layer) {
-        if (render != null) {
-            LSOLog.d("SegmentLayer removeAudioLayerAsync...");
-            render.removeAudioLayerAsync(layer);
+    public boolean setAudioPath(String path, float volume, long cutStartUs, long cutEndUs) {
+        createRender();
+        LSOLog.d("SegmentLayer setAudioPath...");
+        if (render != null && setup()) {
+            return render.setAudioPath(path,volume,cutStartUs,cutEndUs);
+        } else {
+            return false;
         }
     }
 
     /**
-     * 删除所有的增加的声音图层;
+     * 获取背景视频或图片的图层对象
+     * @return
      */
-    public void removeALLAudioLayer() {
-        if (render != null) {
-            LSOLog.d("SegmentLayer removeALLAudioLayer...");
-            render.removeALLAudioLayer();
+    public LSOLayer getBackGroundLayer(){
+        if (render != null && setup()) {
+            return render.getBackGroundLayer();
+        }else{
+            return null;
         }
     }
+
+    /**
+     * 设置分割视频的声音大小;
+     * @param volume
+     */
+    public void setSegmentVolume(float volume){
+        if (render != null && setup()) {
+            render.setSegmentVolume(volume);
+        }
+    }
+
+
 
     public LSOLayer getTouchPointLayer(float x, float y) {
         if (render != null) {
@@ -368,50 +388,11 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
         }
     }
 
-    /**
-     * 获取当前时间, 单位微秒;
-     *
-     * @return 当前时间
-     */
-    public long getCurrentTimeUs() {
-        if (render != null) {
-            return render.getCurrentTimeUs();
-        } else {
-            return 0;
-        }
-    }
 
-    /**
-     * @return 图层数组, 叠加的图层;
-     */
-    public List<LSOLayer> getAllOverLayLayers() {
-        if (render != null) {
-            return render.getAllOverLayLayers();
-        } else {
-            LSOLog.e("getOverLayLayers  error.  render is null");
-            return null;
-        }
-    }
 
-    /**
-     * @return
-     */
-    public List<LSOAudioLayer> getAllAudioLayers() {
-        if (render != null) {
-            return render.getAllAudioLayers();
-        } else {
-            LSOLog.e("getAllAudioLayers  error.  render is null");
-            return null;
-        }
-    }
 
     /**
      * 播放进度回调
-     * 监听中的两个参数是: onLanSongSDKExportProgress(long ptsUs, int percent);
-     * 分别对应 当前处理的时间戳 和百分比;
-     * 在seek或pause的时候,此监听不调用;
-     *
-     * @param listener
      */
     public void setOnLanSongSDKPlayProgressListener(OnLanSongSDKPlayProgressListener listener) {
         createRender();
@@ -422,10 +403,6 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
 
     /**
      * 视频播放完成进度;
-     * 如果你设置了循环播放,则这里不会回调;
-     * 一般视频编辑只播放一次,然后seek到指定位置播放;
-     *
-     * @param listener
      */
     public void setOnPlayCompletedListener(OnLanSongSDKPlayCompletedListener listener) {
         createRender();
@@ -474,24 +451,45 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
         userErrorListener = listener;
     }
 
+
     /**
      * 开始预览
      */
     public boolean start() {
         super.start();
         if (render != null) {
-            render.startPreview(false);
+            render.startPreview();
         }
         return true;
     }
 
-    public void start(boolean pauseAfterFirstFrame) {
-        if (render != null) {
-            LSOLog.d("SegmentLayer startPreview...");
-            render.startPreview(pauseAfterFirstFrame);
+
+    /**
+     * 设置分割模式;
+     */
+    public void setSegmentMode(LSOSegmentMode mode){
+        if(render!=null){
+            render.setSegmentModeWhenExport(mode);
         }
     }
 
+
+    /**
+     * 获取分割模式
+     * @return
+     */
+    public LSOSegmentMode getSegmentMode(){
+        if(render!=null){
+            return render.getSegmentModeWhenExport();
+        }else{
+            return LSOSegmentMode.GOOD;
+        }
+    }
+
+
+    /**
+     * 导出
+     */
     public void startExport() {
         if (render != null) {
             LSOLog.d("SegmentLayer startExport...");
@@ -499,35 +497,8 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
         }
     }
 
-    public void startExport(LSOExportType type) {
-        if (render != null) {
-            LSOLog.d("SegmentLayer startExport...");
-            render.startExport(type);
-        }
-    }
 
-    /**
-     * 定位到某个位置.
-     *
-     * @param timeUs time时间
-     */
-    public void seekToTimeUs(long timeUs) {
-        createRender();
-        if (render != null && !isExporting()) {
-            render.seekToTimeUs(timeUs);
-        }
-    }
 
-    /**
-     * 播放预览暂停;
-     * play preview pause.
-     */
-    public void pause() {
-        if (render != null) {
-            LSOLog.d("SegmentLayer pause...");
-            render.pause();
-        }
-    }
 
     /**
      * 获取当前总的合成时间
@@ -544,9 +515,6 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
     }
 
 
-    /**
-     * cancel  export  when exporting.
-     */
     public void cancelExport() {
         if (render != null) {
             render.cancelExport();
@@ -602,7 +570,6 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
     private boolean setup() {
         if (render != null && !setUpSuccess) {
             if (!render.isRunning() && getSurfaceTexture() != null) {
-                render.updateCompositionSize(getCompWidth(), getCompHeight());
                 render.setInputSize(getInputCompWidth(), getInputCompHeight());
                 render.setSurface(getSurfaceTexture(), getViewWidth(), getViewHeight());
                 setUpSuccess = render.setup();
@@ -624,7 +591,6 @@ public class LSOSegmentPlayer extends LSOFrameLayout implements ILSOTouchInterfa
     private void release() {
         if (render != null) {
             render.release();
-            render = null;
         }
         setUpSuccess = false;
     }

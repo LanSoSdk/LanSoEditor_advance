@@ -16,16 +16,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LanSoEditor {
 
+    /**
+     * 蓝松SDK的版本号, 请勿修改;
+     */
+    public static String VERSION = "4.5.6";
+
+
     protected static AtomicBoolean isLoadLanSongSDK = new AtomicBoolean(false);
     public static Context context;
 
     public static void initSDK(Context ctx, String str){
-
         context=ctx;
-
         if (isLoadLanSongSDK.get())
             return;
-
         try {
             loadLibraries();
         }catch (UnsatisfiedLinkError error){
@@ -53,10 +56,6 @@ public class LanSoEditor {
         LanSongFileUtil.FileCacheDir=tmpDir;
     }
 
-    public static void setOnlySoftWareDecoder(boolean is){
-        LanSoEditorBox.setOnlySoftWareDecoder(is);
-    }
-
     public static void setSDKLogOutListener(OnLanSongLogOutListener listener){
 
         if(listener!=null){
@@ -70,6 +69,7 @@ public class LanSoEditor {
     }
 
 
+
     //----------------------------------------------------------------------------------------
     private static void printSDKVersion(Context ctx)
     {
@@ -78,15 +78,9 @@ public class LanSoEditor {
         int month = c.get(Calendar.MONTH) + 1;
 
 
-        String nativeVersion="* \tnative version:"+ VideoEditor.getSDKVersion()+ " ;  ABI: "+ VideoEditor.getCurrentNativeABI()+ " ; type:"+ VideoEditor.getLanSongSDKType()
-                + "; Limited time: year:"+ VideoEditor.getLimitYear()+ " month:" + VideoEditor.getLimitMonth();
+        String nativeVersion="* \t version:"+ VERSION + " ;  ABI: "+ VideoEditor.getCurrentNativeABI()+ "; Limited time: year:"+ VideoEditor.getLimitYear()+ " month:" + VideoEditor.getLimitMonth();
 
 
-
-
-
-
-        //LSNEW
         DisplayMetrics dm = new DisplayMetrics();
         if (ctx != null && ctx.getResources() != null) {
             dm = ctx.getResources().getDisplayMetrics();
@@ -140,15 +134,21 @@ public class LanSoEditor {
         System.loadLibrary("LanSongffmpeg");
         System.loadLibrary("LanSongdisplay");
         System.loadLibrary("LanSongplayer");
+
         System.loadLibrary("LanSongSDKDecoder");
         LSOLog.d("loaded native libraries.isQiLinSoC:"+isQiLinSoc());
     }
 
     private static void initSo(Context context, String str) {
         nativeInit(context, context.getAssets(), str);
+
+        LSOLog.d("loaded native2 ...");
         nativeInit2(context, context.getAssets(), str);
         LanSoEditorBox.init(context);
     }
+
+
+
     private static void unInitSo() {
         nativeUninit();
         LanSoEditorBox.unInit();

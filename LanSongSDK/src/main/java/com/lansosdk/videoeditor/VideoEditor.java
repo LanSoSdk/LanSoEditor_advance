@@ -12,6 +12,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.lansosdk.box.LSOLog;
+import com.lansosdk.box.LanSoEditorBox;
 import com.lansosdk.videoeditor.archApi.LanSongFileUtil;
 import com.lansosdk.videoeditor.oldVersion.LanSongLogCollector;
 import com.lansosdk.videoeditor.oldVersion.onVideoEditorProgressListener;
@@ -28,6 +29,9 @@ import java.util.Locale;
 import static com.lansosdk.videoeditor.archApi.LanSongFileUtil.fileExist;
 
 
+/**
+ * 删除， 不再从这里获取版本号；
+ */
 public class VideoEditor {
 
     public static final String version="VideoEditor";
@@ -162,19 +166,14 @@ public class VideoEditor {
         }
     }
 
-
     public static native int getLimitYear();
 
     public static native int getLimitMonth();
-
-    public static native String getSDKVersion();
 
     public static native String  getCurrentNativeABI();
 
     public static native String nativeGetVideoDescription(String videoPath);
 
-
-    public static native int getLanSongSDKType();
 
 
     private native int execute(Object cmdArray);
@@ -370,8 +369,6 @@ public class VideoEditor {
             return null;
         }
     }
-
-
     @Deprecated
     public String executeAudioVolumeMix(String audioPath1, String audioPath2, float value1, float value2) {
         List<String> cmdList = new ArrayList<String>();
@@ -1479,6 +1476,24 @@ public class VideoEditor {
         } else {
             return null;
         }
+    }
+
+     static boolean isQiLinSoc()
+    {
+        if(LanSoEditorBox.isQiLinSoC()){
+            return true;
+        }
+        if(Build.MODEL!=null) {
+            if (Build.MODEL.contains("-AL")
+                    || Build.MODEL.contains("-CL")
+                    || Build.MODEL.contains("-TL")
+                    || Build.MODEL.contains("-UL")
+                    || Build.MODEL.contains("-DL")
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Deprecated

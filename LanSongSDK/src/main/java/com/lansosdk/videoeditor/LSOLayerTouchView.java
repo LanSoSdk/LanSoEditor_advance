@@ -12,7 +12,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.view.ViewGroup;
 import com.lansosdk.box.ILayerInterface;
 import com.lansosdk.box.LSOPoint;
 import com.lansosdk.box.LSORect;
-import com.lansosdk.box.LSOSize;
 
 import java.util.LinkedHashMap;
 
@@ -38,6 +36,7 @@ public class LSOLayerTouchView extends View {
     private static int STATUS_ROTATE = 3;
     //双指缩放;
     private static int STATUS_POINT_MOVE = 4;
+    private static int STATUS_MIRROR = 5;
 
     private int imageCount;// 已加入照片的数量
     private Context mContext;
@@ -54,7 +53,12 @@ public class LSOLayerTouchView extends View {
 
     private static boolean forceDisableSelectLine=false;
 
+    private boolean isShowMirrorIcon = false;
 
+    public void setShowMirrorIcon(boolean isShowMirrorIcon) {
+        this.isShowMirrorIcon = isShowMirrorIcon;
+        invalidate();
+    }
 
     public LSOLayerTouchView(Context context) {
         super(context);
@@ -201,6 +205,12 @@ public class LSOLayerTouchView extends View {
         void onLayerDeleted(ILayerInterface layer);
 
         /**
+         *
+         * @param layer
+         */
+        void onLayerMirror(ILayerInterface layer);
+
+        /**
          * 点击图层外面;
          */
         void onTouchOutSide();
@@ -261,6 +271,17 @@ public class LSOLayerTouchView extends View {
                 public void run() {
                     LSORect rect=layer.getCurrentRectInView();
                     onLayerTouchListener.onLayerScaleRotate(layer,rect.width,rect.height,layer.getRotation());
+                }
+            });
+        }
+    }
+
+    private void sendMirrorListener(final ILayerInterface layer){
+        if(onLayerTouchListener !=null){
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    onLayerTouchListener.onLayerMirror(layer);
                 }
             });
         }
@@ -337,6 +358,16 @@ public class LSOLayerTouchView extends View {
                             startX = x;
                             startY = y;
                             break;
+                        }else if (item.detectMirrorRect.contains(x,y) && isShowMirrorIcon){
+                            ret = true;
+                            currentItem = item;
+                            drawSelect = true;
+                            startX = x;
+                            startY = y;
+                            currentStatus = STATUS_MIRROR;
+                            sendMirrorListener(item.lsoLayer);
+                            invalidate();
+                            break;
                         } else if (detectInItemContent(item , x , y)) {
                             ret = true;
                             currentItem = item;
@@ -374,7 +405,7 @@ public class LSOLayerTouchView extends View {
                     invalidate();
                 }
 
-                if (deleteId > 0 && currentStatus == STATUS_DELETE) {// 删除选定贴图
+                if (deleteId > 0 && (currentStatus == STATUS_DELETE || currentStatus == STATUS_MIRROR)) {// 删除选定贴图
                     layerMaps.remove(deleteId);
                     currentStatus = STATUS_IDLE;// 返回空闲状态
                     invalidate();
@@ -458,12 +489,16 @@ public class LSOLayerTouchView extends View {
     }
 
     public void updatePos(float dx , float dy){
-        currentItem.updatePosition(dx, dy);
-        invalidate();
+        if (currentItem != null) {
+            currentItem.updatePosition(dx, dy);
+            invalidate();
+        }
     }
 
     public void updateRotate(float angle){
-        currentItem.updateRotate(angle);
+        if (currentItem != null) {
+            currentItem.updateRotate(angle);
+        }
         invalidate();
     }
 
@@ -489,6 +524,7 @@ public class LSOLayerTouchView extends View {
 
     protected static Bitmap scaleBmp;
 
+    protected static Bitmap mirrorBmp;
     //-------------类: item
 
     class LayerItem {
@@ -508,6 +544,7 @@ public class LSOLayerTouchView extends View {
         private Rect helpToolsRect;  //四方框的线;
         public RectF deleteRect;// 删除按钮位置
         public RectF rotateRect;// 旋转按钮位置
+        public RectF mirrorRect; // 镜像按钮位置
 
         public RectF helpBox;
         public Matrix matrix;// 变化矩阵
@@ -524,8 +561,9 @@ public class LSOLayerTouchView extends View {
 
         private Paint debugPaint = new Paint();
         public RectF detectRotateRect;
-
         public RectF detectDeleteRect;
+        public RectF detectMirrorRect;
+
         private int viewWidth, viewHeight;
 
         public LayerItem(Context context, int width, int height) {
@@ -550,12 +588,17 @@ public class LSOLayerTouchView extends View {
             // 导入工具按钮位图
             if (deleteBmp == null) {
                 deleteBmp = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.sticker_delete);
+                        R.drawable.icon_delete);
             }
 
             if (scaleBmp == null) {
                 scaleBmp = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.sticker_rotate);
+                        R.drawable.icon_zoom);
+            }
+
+            if (mirrorBmp == null){
+                mirrorBmp = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.icon_mirror);
             }
         }
 
@@ -597,19 +640,19 @@ public class LSOLayerTouchView extends View {
                     - BUTTON_WIDTH, helpBox.right + BUTTON_WIDTH, helpBox.bottom
                     + BUTTON_WIDTH);
 
+            mirrorRect =  new RectF(helpBox.left - BUTTON_WIDTH, helpBox.bottom
+                    - BUTTON_WIDTH, helpBox.left + BUTTON_WIDTH, helpBox.bottom
+                    + BUTTON_WIDTH);
+
             detectRotateRect = new RectF(rotateRect);
             detectDeleteRect = new RectF(deleteRect);
-
+            detectMirrorRect = new RectF(mirrorRect);
 
             rotateAngle = layer.getRotation();
 
             this.matrix.postRotate(rotateAngle, this.dstRect.centerX(), this.dstRect.centerY());
 
-            rotateRect(this.detectRotateRect, this.dstRect.centerX(),
-                    this.dstRect.centerY(), rotateAngle);
-
-            rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
-                    this.dstRect.centerY(), rotateAngle);
+            rotateAllRect();
         }
 
         private void computeHelpBoxRect() {
@@ -635,10 +678,10 @@ public class LSOLayerTouchView extends View {
             helpBox.offset(dx, dy);
             deleteRect.offset(dx, dy);
             rotateRect.offset(dx, dy);
-
+            mirrorRect.offset(dx,dy);
             this.detectRotateRect.offset(dx, dy);
             this.detectDeleteRect.offset(dx, dy);
-
+            this.detectMirrorRect.offset(dx,dy);
             float x = dstRect.left + dstRect.width() / 2.0f;
             float y = dstRect.top + dstRect.height() / 2.0f;
 
@@ -656,11 +699,7 @@ public class LSOLayerTouchView extends View {
 
             this.matrix.postRotate(angle, this.dstRect.centerX(), this.dstRect.centerY());
 
-            rotateRect(this.detectRotateRect, this.dstRect.centerX(),
-                    this.dstRect.centerY(), rotateAngle);
-
-            rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
-                    this.dstRect.centerY(), rotateAngle);
+            rotateAllRect();
         }
 
         private float startSpace = 0;
@@ -732,12 +771,32 @@ public class LSOLayerTouchView extends View {
 
             computeHelpBoxRect();// 重新计算
 
+            updateRectPosition();
+
+            //------------
+            rotateAllRect();
+        }
+
+        private void rotateAllRect() {
+            rotateRect(this.detectRotateRect, this.dstRect.centerX(),
+                    this.dstRect.centerY(), rotateAngle);
+
+            rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
+                    this.dstRect.centerY(), rotateAngle);
+
+            rotateRect(this.detectMirrorRect, this.dstRect.centerX(),
+                    this.dstRect.centerY(), rotateAngle);
+        }
+
+        private void updateRectPosition() {
             rotateRect.offsetTo(helpBox.right - BUTTON_WIDTH,
                     helpBox.bottom - BUTTON_WIDTH);
 
             deleteRect.offsetTo(helpBox.left - BUTTON_WIDTH,
                     helpBox.top - BUTTON_WIDTH);
 
+            mirrorRect.offsetTo(helpBox.left - BUTTON_WIDTH,
+                    helpBox.bottom - BUTTON_WIDTH);
 
             detectRotateRect.offsetTo(helpBox.right - BUTTON_WIDTH, helpBox.bottom
                     - BUTTON_WIDTH);
@@ -745,13 +804,9 @@ public class LSOLayerTouchView extends View {
             detectDeleteRect.offsetTo(helpBox.left - BUTTON_WIDTH, helpBox.top
                     - BUTTON_WIDTH);
 
+            detectMirrorRect.offsetTo(helpBox.left - BUTTON_WIDTH,helpBox.bottom
+                    - BUTTON_WIDTH);
 
-            //------------
-            rotateRect(this.detectRotateRect, this.dstRect.centerX(),
-                    this.dstRect.centerY(), rotateAngle);
-
-            rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
-                    this.dstRect.centerY(), rotateAngle);
         }
 
         protected boolean updateRotateAndScale(final float oldx, final float oldy,
@@ -802,19 +857,7 @@ public class LSOLayerTouchView extends View {
 
             computeHelpBoxRect();// 重新计算
 
-            rotateRect.offsetTo(helpBox.right - BUTTON_WIDTH,
-                    helpBox.bottom - BUTTON_WIDTH);
-
-            deleteRect.offsetTo(helpBox.left - BUTTON_WIDTH,
-                    helpBox.top - BUTTON_WIDTH);
-
-
-            detectRotateRect.offsetTo(helpBox.right - BUTTON_WIDTH, helpBox.bottom
-                    - BUTTON_WIDTH);
-
-            detectDeleteRect.offsetTo(helpBox.left - BUTTON_WIDTH, helpBox.top
-                    - BUTTON_WIDTH);
-
+            updateRectPosition();
 
             double cos = (xDelta * xb + ya * yb) / (srcLen * curLen);
             if (cos > 1 || cos < -1)
@@ -844,6 +887,9 @@ public class LSOLayerTouchView extends View {
                 canvas.drawRect(helpBox, helpBoxPaint);
                 canvas.drawBitmap(deleteBmp, helpToolsRect, deleteRect, null);
                 canvas.drawBitmap(scaleBmp, helpToolsRect, rotateRect, null);
+                if (isShowMirrorIcon) {
+                    canvas.drawBitmap(mirrorBmp, helpToolsRect, mirrorRect, null);
+                }
             }
 
             canvas.restore();

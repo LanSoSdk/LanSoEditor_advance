@@ -18,12 +18,9 @@ import android.widget.Toast;
 import com.example.advanceDemo.utils.DemoUtil;
 import com.lansoeditor.advanceDemo.R;
 import com.lansosdk.videoeditor.MediaInfo;
-import com.lansosdk.videoeditor.oldVersion.IRenderView;
+import com.lansosdk.videoeditor.oldVersion.IRenderView2;
 import com.lansosdk.videoeditor.oldVersion.TextureRenderView2;
 import com.lansosdk.videoplayer.OnLSOPlayeFrameUpdateListener;
-import com.lansosdk.videoplayer.OnLSOPlayerCompletionListener;
-import com.lansosdk.videoplayer.OnLSOPlayerPreparedListener;
-import com.lansosdk.videoplayer.VPlayer;
 import com.lansosdk.videoplayer.VideoPlayer;
 
 import java.io.FileNotFoundException;
@@ -39,7 +36,6 @@ public class VideoPlayerActivity extends Activity {
     String videoPath = null;
     private TextureRenderView2 textureView;
     private MediaPlayer mediaPlayer = null;
-    private VPlayer vplayer = null;
     private boolean isSupport = false;
     private int screenWidth, screenHeight;
     private MediaInfo mediaInfo;
@@ -80,8 +76,7 @@ public class VideoPlayerActivity extends Activity {
             public void onSurfaceTextureAvailable(SurfaceTexture surface,
                                                   int width, int height) {
                 if (isSupport) {
-//                    play(new Surface(surface)); // 采用系统本身的MediaPlayer播放
-                    startVPlayer(new Surface(surface)); //我们SDK提供的播放器.
+                    play(new Surface(surface)); // 采用系统本身的MediaPlayer播放
                 }
             }
         });
@@ -127,9 +122,9 @@ public class VideoPlayerActivity extends Activity {
             mediaPlayer.prepare();
             mediaPlayer.setLooping(true);
             if(screenWidth>= mediaInfo.getWidth() && screenHeight>= mediaInfo.getHeight()){
-                textureView.setDisplayRatio(IRenderView.AR_ASPECT_FIT_PARENT);
+                textureView.setDisplayRatio(IRenderView2.AR_ASPECT_FIT_PARENT);
             }else{
-                textureView.setDisplayRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
+                textureView.setDisplayRatio(IRenderView2.AR_ASPECT_WRAP_CONTENT);
             }
             textureView.setVideoSize(mediaPlayer.getVideoWidth(),
                     mediaPlayer.getVideoHeight());
@@ -144,47 +139,6 @@ public class VideoPlayerActivity extends Activity {
 
 
 
-    private void startVPlayer(final Surface surface) {
-        vplayer = new VPlayer(this);
-        try {
-            vplayer.setVideoPath(videoPath);
-            String str=tvScreen.getText().toString();
-            tvScreen.setText(String.format("%s;播放器:VPlayer ", str));
-
-            vplayer.setOnPreparedListener(new OnLSOPlayerPreparedListener() {
-
-                @Override
-                public void onPrepared(VideoPlayer mp) {
-                    vplayer.setSurface(surface);
-                    textureView.setVideoSize(mediaInfo.getWidth(), mediaInfo.getHeight());
-                    textureView.setDisplayRatio(IRenderView.AR_ASPECT_FIT_PARENT);
-
-                    textureView.requestLayout();
-                    vplayer.start();
-                    vplayer.setLooping(true);
-                }
-            });
-            vplayer.setOnCompletionListener(new OnLSOPlayerCompletionListener() {
-
-                @Override
-                public void onCompletion(VideoPlayer mp) {
-                    Toast.makeText(VideoPlayerActivity.this, "视频播放完成", Toast.LENGTH_SHORT).show();
-                }
-            });
-            vplayer.setOnFrameUpdateListener(new OnLSOPlayeFrameUpdateListener() {
-                @Override
-                public void onFrameUpdate(VideoPlayer mp, int currentMs) {
-                    if(tvProgress!=null){
-                        tvProgress.setText(String.valueOf(convertTime(currentMs*1000)));
-                    }
-                }
-            });
-
-            vplayer.prepareAsync();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     private float convertTime(long time){
         int time3=(int)(time*100/1000000);
@@ -240,11 +194,6 @@ public class VideoPlayerActivity extends Activity {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
-        }
-        if (vplayer != null) {
-            vplayer.stop();
-            vplayer.release();
-            vplayer = null;
         }
     }
 

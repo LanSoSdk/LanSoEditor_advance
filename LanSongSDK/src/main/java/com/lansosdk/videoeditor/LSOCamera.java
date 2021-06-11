@@ -57,14 +57,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
     protected void sendOnCreateListener() {
         super.sendOnCreateListener();
         if (render != null) {
-
-            if(fullscreen){
-                DisplayMetrics dm = new DisplayMetrics();
-                dm = getResources().getDisplayMetrics();
-                compWidth=dm.widthPixels;
-                compHeight=dm.heightPixels;
-            }
-
             render.setSurface(compWidth, compHeight, getSurfaceTexture(), getViewWidth(), getViewHeight());
         }
     }
@@ -90,35 +82,11 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
 
     public void onCreateAsync(OnCreateListener listener) {
         setup();
-        fullscreen=false;
         setPlayerSizeAsync(compWidth, compHeight, listener);
     }
 
 
     private OnCreateListener onCreateListener;
-    private boolean fullscreen=false;
-
-    public void onCreateFullScreen(OnCreateListener listener) {
-
-        fullscreen=true;
-        if(isTextureAvailable() && listener!=null){
-            if (render == null) {
-                render = new LSOCameraRunnable(getContext(), getWidth(), getHeight());
-            }
-            listener.onCreate();
-        }else{
-            onCreateListener=listener;
-            setOnTextureAvailableListener(new OnTextureAvailableListener() {
-                @Override
-                public void onTextureUpdate(int width, int height) {
-                    if (render == null) {
-                        render = new LSOCameraRunnable(getContext(), getWidth(), getHeight());
-                    }
-                    onCreateListener.onCreate();
-                }
-            });
-        }
-    }
 
 
     public void onResumeAsync(OnResumeListener listener) {
@@ -296,10 +264,10 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
         }
     }
 
+    //--------------
 
     /**
-     * 禁止绿幕抠图
-     * @return
+     * 是否在绿幕抠图
      */
     public boolean isGreenMatting() {
         return render != null && render.isGreenMatting();
@@ -307,6 +275,7 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
 
     /**
      * 设置绿幕抠图
+     * (绿幕抠图需要另外授权才有效)
      */
     public void setGreenMatting() {
         if (render != null) {
@@ -318,7 +287,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
 
     /**
      * 取消绿幕抠图
-     * cancel  green matting;
      */
     public void cancelGreenMatting() {
         if (render != null) {
@@ -557,11 +525,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
      * 开始录制
      */
     public void startRecord() {
-        if(fullscreen){
-            LSOLog.e("start record error.  full screen not support record.");
-            return;
-        }
-
         if (render != null && !render.isRecording() ) {
             render.startRecord();
         }
@@ -579,10 +542,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
      * 暂停后, 会录制一段视频, 录制的这段视频在onDestory中释放;
      */
     public void pauseRecord() {
-        if(fullscreen){
-            LSOLog.e("start record error.  full screen not support record.");
-            return;
-        }
         if (render != null && render.isRecording()) {
             render.pauseRecord();
         }
@@ -669,7 +628,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
     }
 
     /**
-     * LSNEW
      * 在摄像机上层增加
      * 用在多机位场合;
      * @param bmp
@@ -684,7 +642,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
     }
 
     /**
-     * LSNEW
      * 在背景层上增加一层画面
      * 用在多机位场合
      * @param bmp 图片对象
@@ -929,7 +886,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
         bgPath=null;
         fgBitmapPath=null;
         fgColorPath=null;
-        fullscreen=false;
         if (render != null) {
             render.cancel();
             render = null;
@@ -938,9 +894,6 @@ public class LSOCamera extends LSOFrameLayout implements ILSOTouchInterface{
 
     OnSlideListener onSlideListener;
 
-    public void setOnSlideListener(OnSlideListener onSlideListener) {
-        this.onSlideListener = onSlideListener;
-    }
 
     public interface OnSlideListener{
 

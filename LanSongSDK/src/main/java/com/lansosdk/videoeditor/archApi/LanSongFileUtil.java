@@ -82,8 +82,6 @@ public class LanSongFileUtil {
                 name += ".";
             }
             name += suffix;
-
-
             try {
                 Thread.sleep(1); // 保持文件名的唯一性.
             } catch (InterruptedException e) {
