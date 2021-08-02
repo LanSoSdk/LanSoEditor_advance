@@ -19,7 +19,7 @@ public class LanSoEditor {
     /**
      * 蓝松SDK的版本号, 请勿修改;
      */
-    public static String VERSION = "4.5.6";
+    public static String VERSION = "4.5.8";
 
 
     protected static AtomicBoolean isLoadLanSongSDK = new AtomicBoolean(false);

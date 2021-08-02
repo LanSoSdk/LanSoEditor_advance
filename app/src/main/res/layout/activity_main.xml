@@ -11,7 +11,7 @@
 		android:layout_marginTop="@dimen/dp20"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="这是最简单的工程,完整app下载地址请扫二维码:\n "
+		android:text="这是最简单的工程,完整app下载地址:\n "
 		android:textColor="@color/red"
 		android:layout_marginLeft="@dimen/dp20"
 		/>
@@ -20,7 +20,7 @@
 	<ImageView
 		android:layout_width="250dp"
 		android:layout_height="250dp"
-		android:src="@drawable/pgyer_l200_android"/>
+		android:src="@drawable/demo_app_pgyer_android"/>
 
 		<RelativeLayout
 			android:id="@+id/id_main_list_lso_layer"
